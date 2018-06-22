@@ -6,16 +6,19 @@ import ReactDOM from "react-dom";
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import { reducers } from './reducers/index';
+import { BrowserRouter as Router, Route, HashRouter  } from 'react-router-dom';
+import App from './components/App';
 
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-
-import App from './containers/App';
-let store = createStore(reducers);
+//let store = createStore(reducers);
 ReactDOM.render(
- <Provider store={store}>
-    <MuiThemeProvider>
-      <App />
-    </MuiThemeProvider>
+ <Provider>
+      <Router>
+          <div>
+            <HashRouter>
+              <App />
+            </HashRouter>
+          </div>
+      </Router>
    </Provider>,
   document.getElementById('app')
 );
