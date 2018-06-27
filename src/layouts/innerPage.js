@@ -15,12 +15,12 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import { menuItems} from './menuItems';
 import { routeItems} from '../routes/index';
 
-const drawerWidth = 240;
+const drawerWidth = 250;
 
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    height: 430,
+    height: 750,
     zIndex: 1,
     overflow: 'hidden',
     position: 'relative',
