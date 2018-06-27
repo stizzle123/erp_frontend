@@ -6,11 +6,9 @@ import Vendors from '../components/Vendor/index';
 
 const theme = createMuiTheme();
 const App = () => (
-  <div>
     <MuiThemeProvider theme={theme}>
       <InnerPage />
     </MuiThemeProvider>
-  </div>
 )
 
 export default App
