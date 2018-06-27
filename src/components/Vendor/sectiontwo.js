@@ -47,7 +47,7 @@ class SectionTwo extends React.Component {
     currency: 'EUR',
   };
 
-  handleChange = name => event => {
+  handleBizTypeChange = name => event => {
     this.setState({
       [name]: event.target.value,
     });
@@ -113,30 +113,6 @@ class SectionTwo extends React.Component {
         )
         )};
         </FormGroup>
-
-
-        <TextField
-          id="business_type"
-          select
-          required
-          label="Type of business"
-          className={classes.oneThird}
-          value={this.state.currency}
-          onChange={this.handleChange('currency')}
-          SelectProps={{
-            MenuProps: {
-              className: classes.menu,
-            },
-          }}
-          helperText="Please select your type of business"
-          margin="normal"
-        >
-          {biz_types.map(option => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.label}
-            </MenuItem>
-          ))}
-        </TextField>
       </form>
     );
   }
