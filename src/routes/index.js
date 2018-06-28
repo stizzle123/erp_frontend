@@ -6,6 +6,8 @@ import Typography from '@material-ui/core/Typography';
 import  PurchaseRequisitionIndex  from '../components/PurchaseRequisition/index';
 import  PurchaseRequisitionsAdd from '../components/PurchaseRequisition/add';
 import  PurchaseRequisitionsPurchase from '../components/PurchaseRequisition/purchase';
+import  BudgetIndex  from '../components/Budgets/index';
+
 export const routeItems = (
     <Typography noWrap>
         <Route path="/" />
@@ -14,5 +16,7 @@ export const routeItems = (
         <Route path="/PurchaseRequisition" exact component={PurchaseRequisitionIndex} />
         <Route path="/PurchaseRequisition/add" exact  component={PurchaseRequisitionsAdd} />
 	    <Route path="/PurchaseRequisition/purchase" exact  component={PurchaseRequisitionsPurchase} />
+        <Route path="/Budgets" exact  component={BudgetIndex} />
+
 	 </Typography>
 );
