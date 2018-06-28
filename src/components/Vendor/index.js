@@ -44,7 +44,6 @@ function Index(props) {
 
   return (
     <Paper className={classes.root}>
-      <Link to="/vendors/add" >Add Vendor</Link>
       <Table className={classes.table}>
         <TableHead>
           <TableRow>
