@@ -15,12 +15,11 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import { menuItems} from './menuItems';
 import { routeItems} from '../routes/index';
 
-const drawerWidth = 240;
+const drawerWidth = 250;
 
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    height: 430,
     zIndex: 1,
     overflow: 'hidden',
     position: 'relative',
@@ -135,9 +134,7 @@ class InnerPage extends React.Component {
         </Drawer>
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <Typography noWrap>
             {routeItems}
-          </Typography>
         </main>
       </div>
     );

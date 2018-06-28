@@ -11,9 +11,6 @@ import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
 
 
-
-
-
 const styles = theme => ({
   root: {
     width: '100%',
@@ -32,11 +29,11 @@ function createData(name, calories, fat, carbs, protein) {
 }
 
 const data = [
-  createData('Random Company 1', "Abobade Kola", 6.0, 24, 4.0),
-  createData('Random Company 2', "Abobade Kola", 9.0, 37, 4.3),
-  createData('Random Company 3', "Abobade Kola", 16.0, 24, 6.0),
-  createData('Random Company 4', "Abobade Kola", 3.7, 67, 4.3),
-  createData('Random Company 5', "Abobade Kola", 16.0, 49, 3.9),
+  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
+  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
+  createData('Eclair', 262, 16.0, 24, 6.0),
+  createData('Cupcake', 305, 3.7, 67, 4.3),
+  createData('Gingerbread', 356, 16.0, 49, 3.9),
 ];
 
 function Index(props) {
@@ -44,15 +41,15 @@ function Index(props) {
 
   return (
     <Paper className={classes.root}>
-      <Link to="/vendors/add" >Add Vendor</Link>
+      <Link to="/PurchaseRequisition/add" >Add Purchase Requisition</Link>
       <Table className={classes.table}>
         <TableHead>
           <TableRow>
-            <TableCell>Vendor </TableCell>
-            <TableCell numeric>Contact Name</TableCell>
-            <TableCell numeric>Email</TableCell>
-            <TableCell numeric>Telephone</TableCell>
-            <TableCell numeric>Business Type</TableCell>
+            <TableCell>Dessert (100g serving)</TableCell>
+            <TableCell numeric>Calories</TableCell>
+            <TableCell numeric>Fat (g)</TableCell>
+            <TableCell numeric>Carbs (g)</TableCell>
+            <TableCell numeric>Protein (g)</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

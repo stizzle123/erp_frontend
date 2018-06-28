@@ -1,152 +1,70 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import MenuItem from '@material-ui/core/MenuItem';
-import TextField from '@material-ui/core/TextField';
+import Paper from '@material-ui/core/Paper';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import  SectionOne from './sectionone';
+import  SectionTwo from './sectiontwo';
+import { Link } from 'react-router-dom';
+import Typography from '@material-ui/core/Typography';
 
-const styles = theme => ({
-  container: {
-    display: 'flex',
-    flexWrap: 'wrap',
+const styles = {
+  root: {
+    flexGrow: 1,
   },
-  textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
-    width: 200,
-  },
-  menu: {
-    width: 200,
-  },
-});
+};
 
-const biz_types = [
-  {
-    value: '1',
-    label: 'Corporate/Limited',
-  },
-  {
-    value: '2',
-    label: 'Partnership',
-  },
-  {
-    value: '3',
-    label: 'Other',
-  }
-];
+function TabContainer(props) {
+  return (
+    <Typography component="div" style={{ padding: 8 * 3 }}>
+      {props.children}
+    </Typography>
+  );
+}
 
-class TextFields extends React.Component {
+TabContainer.propTypes = {
+  children: PropTypes.node.isRequired,
+};
+class CenteredTabs extends React.Component {
   state = {
-    name: 'Cat in the Hat',
-    age: '',
-    multiline: 'Controlled',
-    currency: 'EUR',
+    value: 0,
   };
-
-  handleChange = name => event => {
-    this.setState({
-      [name]: event.target.value,
-    });
+  handleChange = (event, value) => {
+    this.setState({ value });
   };
 
   render() {
     const { classes } = this.props;
-
+    const { value } = this.state;
+    
     return (
-      <form className={classes.container} noValidate autoComplete="off">
-        <TextField
-          id="name"
-          required
-          label="Name of Company"
-          placeholder="Name of Company"
-          className={classes.textField}
-          margin="normal"
-        />
-        <TextField
-          id="contactname"
-          required
-          label="Contact Person"
-          placeholder="Contact Person"
-          className={classes.textField}
-          margin="normal"
-        />
-         <TextField
-          id="address"
-          required
-          label="Office Address"
-          placeholder="Office Address"
-          helperText="Full business address"
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          id="telephone"
-          required
-          label="Telephone"
-          placeholder="Telephone"
-          className={classes.textField}
-          margin="normal"
-        />
-        <TextField
-          id="email"
-          required
-          label="Email"
-          placeholder="Email"
-          className={classes.textField}
-          margin="normal"
-        />
-        <TextField
-          id="website"
-          required
-          label="Website"
-          placeholder="Website"
-          className={classes.textField}
-          margin="normal"
-        />
-        <TextField
-          id="business_type"
-          select
-          required
-          label="Type of business"
-          className={classes.textField}
-          value={this.state.currency}
-          onChange={this.handleChange('currency')}
-          SelectProps={{
-            MenuProps: {
-              className: classes.menu,
-            },
-          }}
-          helperText="Please select your type of business"
-          margin="normal"
+      <Paper className={classes.root}>
+        <Tabs
+          value={this.state.value}
+          onChange={this.handleChange}
+          indicatorColor="primary"
+          textColor="primary"
+          centered
         >
-          {biz_types.map(option => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.label}
-            </MenuItem>
-          ))}
-        </TextField>
-        <TextField
-          id="year_established"
-          required
-          label="Year Established"
-          placeholder="Year Established"
-          className={classes.textField}
-          margin="normal"
-        />
-        <TextField
-          id="employee_no"
-          required
-          label="No of Employee"
-          placeholder="No of Employee"
-          className={classes.textField}
-          margin="normal"
-        />
-      </form>
+          <Tab label="General Information" />
+          <Tab label="Business Information" />
+          <Tab label="Technical Capabilities" />
+          <Tab label="Work Reference" />
+        </Tabs>
+        <Typography className={classes.typography}>
+          {value === 0 && <TabContainer><SectionOne /></TabContainer>}
+          {value === 1 && <TabContainer><SectionTwo /></TabContainer>}
+          {value === 2 && <TabContainer><SectionThree /></TabContainer>}
+          {value === 3 && <TabContainer><SectionFour /></TabContainer>}
+        </Typography>
+      </Paper>
     );
   }
 }
 
-TextFields.propTypes = {
+CenteredTabs.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(TextFields);
+export default withStyles(styles)(CenteredTabs);
