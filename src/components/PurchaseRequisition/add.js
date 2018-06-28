@@ -1,24 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
 import Checkbox from '@material-ui/core/Checkbox';
-import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
 import Save from '@material-ui/icons/Save';
 import Button from '@material-ui/core/Button';
-import Icon from '@material-ui/core/Icon';
 import classNames from 'classnames';
-import Delete from '@material-ui/icons/Delete';
-import FileUpload from '@material-ui/icons/FileUpload';
-import KeyboardVoice from '@material-ui/icons/KeyboardVoice';
 
 const CustomTableCell = withStyles(theme => ({
   head: {

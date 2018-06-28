@@ -4,8 +4,10 @@ import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import  SectionOne from './sectionone';
-import  SectionTwo from './sectiontwo';
+import GeneralInfo from './generalInfo';
+import BusinessInfo from './businessInfo';
+import WorkReference from './workReferences';
+import TechnicalCapabilities from './technicalCapabilities'
 import { Link } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 
@@ -52,12 +54,12 @@ class CenteredTabs extends React.Component {
           <Tab label="Technical Capabilities" />
           <Tab label="Work Reference" />
         </Tabs>
-        <Typography className={classes.typography}>
-          {value === 0 && <TabContainer><SectionOne /></TabContainer>}
-          {value === 1 && <TabContainer><SectionTwo /></TabContainer>}
-          {value === 2 && <TabContainer><SectionThree /></TabContainer>}
-          {value === 3 && <TabContainer><SectionFour /></TabContainer>}
-        </Typography>
+        <div>
+          {value === 0 && <TabContainer><GeneralInfo /></TabContainer>}
+          {value === 1 && <TabContainer><BusinessInfo /></TabContainer>}
+          {value === 2 && <TabContainer><TechnicalCapabilities /></TabContainer>}
+          {value === 3 && <TabContainer><WorkReference /></TabContainer>}
+        </div>
       </Paper>
     );
   }

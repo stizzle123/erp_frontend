@@ -2,41 +2,65 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import Icon from '@material-ui/core/Icon';
 import Save from '@material-ui/icons/Save';
 import Button from '@material-ui/core/Button';
 import classNames from 'classnames';
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
+
 
 const styles = theme => ({
-  container: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-  oneThird: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
-    width: 300,
-  },  
-  twoThird: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
-    width: 600,
-  },
-  menu: {
-    width: 200,
-  },
   button: {
-    margin: theme.spacing.unit,
-  },
-  leftIcon: {
-    marginRight: theme.spacing.unit,
-  },
-  rightIcon: {
-    marginLeft: theme.spacing.unit,
-  },
-});
+      margin: theme.spacing.unit,
+    },
+    leftIcon: {
+      marginRight: theme.spacing.unit,
+    },
+    oneThird: {
+      marginLeft: theme.spacing.unit,
+      marginRight: theme.spacing.unit,
+      width: 300,
+    },  
+    twoThird: {
+      marginLeft: theme.spacing.unit,
+      marginRight: theme.spacing.unit,
+      width: 600,
+    },
+    rightIcon: {
+      marginLeft: theme.spacing.unit,
+    },
+    iconSmall: {
+      fontSize: 20,
+    },
+  
+    container: {
+      display: 'flex',
+      flexWrap: 'wrap',
+    },
+    checked: {},
+    size: {
+      width: 40,
+      height: 40,
+    },
+    textField: {
+      marginLeft: theme.spacing.unit,
+      marginRight: theme.spacing.unit,
+      width: 300,
+    },
+    menu: {
+      width: 200,
+    },
+     table: {
+      Width: 200,
+    },
+    row: {
+      '&:nth-of-type(odd)': {
+        backgroundColor: theme.palette.background.default,
+      },
+    },
+  });
 
-class SectionOne extends React.Component {
+class GeneralInfo extends React.Component {
   state = {
     name: 'Cat in the Hat',
     age: '',
@@ -133,21 +157,21 @@ class SectionOne extends React.Component {
           className={classes.oneThird}
           margin="normal"
         />
-        <Button variant="contained" size="small" className={classes.button}>
-          <Save className={[classes.leftIcon, classes.iconSmall]} />
-          Save
-        </Button>
-        <Button variant="contained" size="medium"  color="primary" className={classes.button}>
-          Send
-          <Icon className={classes.rightIcon} />
-      </Button>
+        <Grid container spacing={24}>
+          <Grid item xs={12}>
+            <Button variant="contained"  color="secondary" className={classes.button}>
+                Save
+              <Save className={classNames(classes.rightIcon, classes.iconSmall)} />
+            </Button>            
+          </Grid>
+        </Grid>
       </form>
     );
   }
 }
 
-SectionOne.propTypes = {
+GeneralInfo.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(SectionOne);
+export default withStyles(styles)(GeneralInfo);
