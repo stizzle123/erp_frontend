@@ -43,6 +43,7 @@
     "material-expansion-panel": "^1.0.0",
     "material-ui-fields": "^1.0.2",
     "material-ui-table-edit": "^3.0.3",
+    "mui-editable-table": "^0.3.3",
     "prop-types": "^15.6.1",
     "react": "^16.4.0",
     "react-dom": "^16.4.0",
