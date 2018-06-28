@@ -85,16 +85,23 @@ class WorkRefrences extends React.Component {
     const { classes } = this.props;
 
     return (
-      <form className={classes.container} noValidate autoComplete="off">
-     
+      <form className={classes.container} noValidate autoComplete="off">  
+      <div>
         <FormLabel component="legend">Corporate Reference.</FormLabel>
         <TextField id="coy_name" required label="Company Name" placeholder="Company Name" className={classes.oneThird} margin="normal" />
-        <TextField id="coy_address" required label="Company Address" placeholder="Company Address" className={classes.oneThird} margin="normal" />
+        <TextField id="coy_address" required label="Company Address" placeholder="Company Address" className={classes.twoThird} margin="normal" />
         <TextField id="contact_person" required label="Contact Person" placeholder="Contact Person" className={classes.oneThird} margin="normal" />
         <TextField id="contact_designation" required label="Designation" placeholder="Designation" className={classes.oneThird} margin="normal" />
         <TextField id="contact_email" required label="Email" placeholder="Email" className={classes.oneThird} margin="normal" />
         <TextField id="contact_phone" required label="Phone" placeholder="Phone" className={classes.oneThird} margin="normal" />
-   
+       </div>
+        <div>
+        <FormLabel component="legend">Individual Reference.</FormLabel>
+        <TextField id="name" required label="Name" placeholder="Name" className={classes.oneThird} margin="normal" />
+        <TextField id="address" required label="Address" placeholder="Address" className={classes.twoThird} margin="normal" />
+        <TextField id="email" required label="Email" placeholder="Email" className={classes.oneThird} margin="normal" />
+        <TextField id="phone" required label="Phone" placeholder="Phone" className={classes.oneThird} margin="normal" />
+        </div>
         <Grid container spacing={24}>
           <Grid item xs={12}>
             <Button variant="contained"  color="secondary" className={classes.button}>

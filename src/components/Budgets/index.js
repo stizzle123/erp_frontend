@@ -44,11 +44,11 @@ function Index(props) {
       <Table className={classes.table}>
         <TableHead>
           <TableRow>
-            <TableCell>Dessert (100g serving)</TableCell>
+            {/* <TableCell>Dessert (100g serving)</TableCell>
             <TableCell numeric>Calories</TableCell>
             <TableCell numeric>Fat (g)</TableCell>
             <TableCell numeric>Carbs (g)</TableCell>
-            <TableCell numeric>Protein (g)</TableCell>
+            <TableCell numeric>Protein (g)</TableCell> */}
           </TableRow>
         </TableHead>
         <TableBody>

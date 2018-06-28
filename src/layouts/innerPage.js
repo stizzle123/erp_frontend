@@ -12,10 +12,12 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import { menuItems} from './menuItems';
+
+import MenuItems from './MenuItems';
+
 import { routeItems} from '../routes/index';
 
-const drawerWidth = 250;
+const drawerWidth = 278;
 
 const styles = theme => ({
   root: {
@@ -130,11 +132,13 @@ class InnerPage extends React.Component {
             </IconButton>
           </div>
           <Divider />
-          <List>{menuItems}</List>
+      
+       <List><MenuItems/></List>
         </Drawer>
         <main className={classes.content}>
           <div className={classes.toolbar} />
             {routeItems}
+           
         </main>
       </div>
     );

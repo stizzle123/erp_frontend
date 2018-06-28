@@ -5,6 +5,9 @@ import  VendorsAdd from '../components/Vendor/add';
 import Typography from '@material-ui/core/Typography';
 import  PurchaseRequisitionIndex  from '../components/PurchaseRequisition/index';
 import  PurchaseRequisitionsAdd from '../components/PurchaseRequisition/add';
+import  PurchaseRequisitionsPurchase from '../components/PurchaseRequisition/purchase';
+import  BudgetIndex  from '../components/Budgets/index';
+
 export const routeItems = (
     <div>
         <Route path="/" />
@@ -12,5 +15,7 @@ export const routeItems = (
         <Route path="/vendors/add" exact  component={VendorsAdd} />
         <Route path="/PurchaseRequisition" exact component={PurchaseRequisitionIndex} />
         <Route path="/PurchaseRequisition/add" exact  component={PurchaseRequisitionsAdd} />
+	    <Route path="/PurchaseRequisition/purchase" exact  component={PurchaseRequisitionsPurchase} />
+        <Route path="/Budgets" exact  component={BudgetIndex} />
     </div>
 );
