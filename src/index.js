@@ -1,24 +1,21 @@
-import "babel-polyfill";
-import './styles/main.scss';
 import React from "react";
 import ReactDOM from "react-dom";
+import { createBrowserHistory } from "history";
+import { Router, Route, Switch } from "react-router-dom";
 
-import { Provider } from 'react-redux';
-import { createStore } from 'redux';
-import { reducers } from './reducers/index';
-import { BrowserRouter as Router, Route, HashRouter  } from 'react-router-dom';
-import App from './components/App';
+import "./assets/css/material-dashboard-react.css?v=1.3.0";
 
-//let store = createStore(reducers);
+import indexRoutes from "./routes/index.jsx";
+
+const hist = createBrowserHistory();
+
 ReactDOM.render(
- <Provider>
-      <Router>
-          <div>
-            <HashRouter>
-              <App />
-            </HashRouter>
-          </div>
-      </Router>
-   </Provider>,
-  document.getElementById('app')
+  <Router history={hist}>
+    <Switch>
+      {indexRoutes.map((prop, key) => {
+        return <Route path={prop.path} component={prop.component} key={key} />;
+      })}
+    </Switch>
+  </Router>,
+  document.getElementById("app")
 );

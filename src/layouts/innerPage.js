@@ -138,7 +138,6 @@ class InnerPage extends React.Component {
         <main className={classes.content}>
           <div className={classes.toolbar} />
             {routeItems}
-           
         </main>
       </div>
     );

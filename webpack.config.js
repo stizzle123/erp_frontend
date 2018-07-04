@@ -12,7 +12,8 @@ module.exports = {
     output: {
         // CHANGED LINE        
         filename: '[name].bundle.js',
-        path: path.resolve(__dirname, 'public')
+        path: path.resolve(__dirname, 'public'),
+        publicPath: '/'
     },
     optimization: {
         splitChunks: {
@@ -30,8 +31,9 @@ module.exports = {
         contentBase: path.resolve(__dirname, 'public/assets'),
         stats: 'errors-only',
         open: true,
-        port: 8080,
-        compress: true
+        port: 8081,
+        compress: true,
+        historyApiFallback: true,
     },
     plugins: [
         new CleanWebpackPlugin(['public']),
@@ -52,14 +54,14 @@ module.exports = {
                 }
             }]
         }, {
-            test: /\.scss$/,
+            test: /\.(scss|css)$/,
             use: extractPlugin.extract({
              use: ["css-loader", "sass-loader", "postcss-loader"],
              fallback: 'style-loader'
             })
         }, {
-         test: /\.js$/,
-         exclude: /(node_modules|bower_compontents)/,
+         test: /\.(js|jsx)$/,
+         exclude: /(node_modules|bower_components)/,
          use: {
           loader: 'babel-loader',
           options: {
