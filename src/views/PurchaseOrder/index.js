@@ -56,7 +56,7 @@ handleChange = name => event => {
           <form className={classes.container} noValidate autoComplete="off">
             <Card>
               <CardHeader color="info">
-                <h4 className={classes.cardTitleWhite}>Add Purchase Requisition</h4>
+                <h4 className={classes.cardTitleWhite}>Add Purchase Order</h4>
               </CardHeader>
               <CardBody>
               <Grid container>

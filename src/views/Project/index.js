@@ -1,65 +1,168 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
-import Save from '@material-ui/icons/Save';
-import classNames from 'classnames';
-import Paper from '@material-ui/core/Paper';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormLabel from '@material-ui/core/FormLabel';
+import FormControl from '@material-ui/core/FormControl';
+import Checkbox from '@material-ui/core/Checkbox';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
 import Grid from '@material-ui/core/Grid';
 import GridItem from "../../components/Grid/GridItem.jsx";
-import CustomInput from "../../components/CustomInput/CustomInput.jsx";
-import Button from "../../components/CustomButtons/Button.jsx";
 import Card from "../../components/Card/Card.jsx";
 import CardHeader from "../../components/Card/CardHeader.jsx";
 import CardAvatar from "../../components/Card/CardAvatar.jsx";
 import CardBody from "../../components/Card/CardBody.jsx";
 import CardFooter from "../../components/Card/CardFooter.jsx";
-import Checkbox from '@material-ui/core/Checkbox';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Button from "../../components/CustomButtons/Button.jsx";
+import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 
-const styles = {
-  cardCategoryWhite: {
-    color: "rgba(255,255,255,.62)",
-    margin: "0",
-    fontSize: "14px",
-    marginTop: "0",
-    marginBottom: "0"
+const styles = theme => ({
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
   },
-  cardTitleWhite: {
-    color: "#FFFFFF",
-    marginTop: "0px",
-    minHeight: "auto",
-    fontWeight: "300",
-    fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
-    marginBottom: "3px",
-    textDecoration: "none"
-  }
-};
+  oneThird: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 300,
+  },
+  twoThird: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 600,
+  },
+  menu: {
+    width: 200,
+  },
+});
 
-class Project extends React.Component {
+const biz_types = [
+  {value: '1',label: 'Normal Requisition',},
+  {value: '2',label: 'Weekly Requisition',},
+  {value: '3',label: 'Open Market Requisition',},
+  {value:'4', label: 'Project Requisition',}
+];
+
+class BusinessInfo extends React.Component {
   state = {checkedA: false,
 	checkedB: false,
+    biz_type: '',
   };
-
 handleChange = name => event => {
     this.setState({ [name]: event.target.checked });
+  };
+
+  handleBizTypeChange = name=> event => {
+    this.setState({
+      [name]: event.target.value,
+    });
   };
 
   render() {
     const { classes } = this.props;
 
     return (
-      <div>
-        <Grid container>
-          <GridItem xs={12} sm={12} md={12}>
-          <form className={classes.container} noValidate autoComplete="off">
-            <Card>
+	<div>
+	<Grid container>
+    <GridItem xs={12} sm={12} md={12}>
+      <form className={classes.container} noValidate autoComplete="off">
+	 <Card>
               <CardHeader color="info">
-                <h4 className={classes.cardTitleWhite}>Add Project Purchase Requisition</h4>
+                <h4 className={classes.cardTitleWhite}>Choose Project Requisition</h4>
               </CardHeader>
               <CardBody>
-              <Grid container>
+	 <Grid container>
+         <TextField
+          id="business_nature"
+          select
+          required
+          label="Select"
+          className={classes.oneThird}
+          value={this.state.biz_type}
+          onChange={this.handleBizTypeChange('biz_type')}
+          SelectProps={{
+            MenuProps: {
+              className: classes.menu,
+            },
+          }}
+
+        >
+          {biz_types.map(option => (
+            <MenuItem key={option.value} value={option.value}>
+              {option.label}
+            </MenuItem>
+          ))}
+		  </TextField>
+
+          <GridItem xs={12} sm={8} md={8}>
+                  <CustomInput labelText="Vendor Address" id="vendoraddress" required
+                    formControlProps={{
+                    fullWidth: true
+                    }}
+                  />
+                </GridItem>
+
+           <GridItem xs={12} sm={4} md={4}>
+                  <CustomInput labelText="Project Name" id="projectname" required
+                    formControlProps={{
+                    fullWidth: true
+                    }}
+                  />
+                </GridItem>
+
+           <GridItem xs={12} sm={4} md={4}>
+                  <CustomInput labelText="Vendor Name" id="vendorname" required
+                    formControlProps={{
+                    fullWidth: true
+                    }}
+                  />
+                </GridItem>
+
+            <GridItem xs={12} sm={4} md={4}>
+                  <CustomInput labelText="Vendor Contact" id="vendorcontact" required
+                    formControlProps={{
+                    fullWidth: true
+                    }}
+                  />
+                </GridItem>
+
+           <GridItem xs={12} sm={4} md={4}>
+                  <CustomInput labelText="Requested By" id="requestedby" required
+                    formControlProps={{
+                    fullWidth: true
+                    }}
+                  />
+                </GridItem>
+
+           <GridItem xs={12} sm={4} md={4}>
+                  <CustomInput labelText="Shipping Price" id="price" required
+                    formControlProps={{
+                    fullWidth: true
+                    }}
+                  />
+                </GridItem>
+
+           <GridItem xs={12} sm={4} md={4}>
+                  <CustomInput labelText="Transit Time" id="time" required
+                    formControlProps={{
+                    fullWidth: true
+                    }}
+                  />
+                </GridItem>
+
+           <GridItem xs={12} sm={4} md={4}>
+                  <CustomInput labelText="Technical Specification" id="specification" required
+                    formControlProps={{
+                    fullWidth: true
+                    }}
+                  />
+                </GridItem>
+
                 <GridItem xs={12} sm={4} md={4}>
                   <CustomInput labelText="Department" id="departmentname" required
                     formControlProps={{
@@ -169,17 +272,17 @@ handleChange = name => event => {
                 </GridItem>
               </Grid>
             </CardFooter>
-            </Card>
-            </form>
-          </GridItem>
-        </Grid>
-      </div>
+	  </Card>
+      </form>
+</GridItem>
+</Grid>
+</div>
     );
   }
 }
 
-Project.propTypes = {
+BusinessInfo.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Project);
+export default withStyles(styles)(BusinessInfo);
