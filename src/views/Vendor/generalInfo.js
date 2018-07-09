@@ -1,19 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import Save from '@material-ui/icons/Save';
-import classNames from 'classnames';
-import Paper from '@material-ui/core/Paper';
+
 import Grid from '@material-ui/core/Grid';
 import GridItem from "../../components/Grid/GridItem.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import Button from "../../components/CustomButtons/Button.jsx";
 import Card from "../../components/Card/Card.jsx";
 import CardHeader from "../../components/Card/CardHeader.jsx";
-import CardAvatar from "../../components/Card/CardAvatar.jsx";
 import CardBody from "../../components/Card/CardBody.jsx";
 import CardFooter from "../../components/Card/CardFooter.jsx";
+import Progress from "../../components/Progress/Progress.jsx";
+import MiddleWare from "../../middleware/api";
 
 const styles = {
   cardCategoryWhite: {
@@ -35,20 +33,68 @@ const styles = {
 };
 
 class GeneralInfo extends React.Component {
-  state = {};
-
-  handleGeneralInfoSave = name => event => {
-   
+ 
+  state ={
+      data: {
+        company_name:'',
+        reg_no:'',
+        office_address:'',
+        city: '',
+        state: '',
+        country:'',
+        coy_phone:'',
+        coy_email:'',
+        website:'',
+        contact_name:'',
+        designation: '',
+        contact_phone: '',
+        contact_email:''
+      },
+      loading:false,
+      showMsg: false 
   };
 
-  render() {
-    const { classes } = this.props;
 
+  handleChange = event => {
+    let data = this.state.data;
+    data[[event.target.id]] = event.target.value; 
+    this.setState({ 
+      data : data,
+    });
+  };
+
+  componentWillReceiveProps(nextProps){
+    this.setState({data:nextProps.data});
+  }
+
+  handleSave = e=>{
+      e.preventDefault();
+      this.setState({loading:true});
+      let data = {};
+      let middleware = new MiddleWare();
+      data.payload = { general_info:this.state.data};
+      data.key = "user_id";
+      data.value = "1";
+      middleware.makeConnection('/vendors','PUT', data).then(
+        (result)=>{
+          if(!result.ok || result.statusText != "OK" && result.status != 200 ) {
+            
+          }
+          this.setState({loading:false});
+        }
+      ).catch((e)=>{
+        console.log(e);
+      })
+      
+  }
+  render() {
+    const { classes, data } = this.props;
     return (
       <div>
         <Grid container>
           <GridItem xs={12} sm={12} md={12}>
           <form className={classes.container} noValidate autoComplete="off">
+            <Progress loading={this.state.loading}/>
             <Card>
               <CardHeader color="info">
                 <h4 className={classes.cardTitleWhite}>General Information</h4>
@@ -56,9 +102,12 @@ class GeneralInfo extends React.Component {
               <CardBody>
               <Grid container>
                 <GridItem xs={12} sm={12} md={6}>
-                  <CustomInput labelText="Company Name" id="company_name" required
+                  <CustomInput labelText="Company Name" id="coy_name" required
                     formControlProps={{
                       fullWidth: true
+                    }} inputProps={{
+                      onChange: this.handleChange,
+                      value: this.state.data.company_name
                     }}
                   />
                 </GridItem>
@@ -66,47 +115,72 @@ class GeneralInfo extends React.Component {
                   <CustomInput labelText="Registration Number" id="reg_no" required formControlProps={{
                       fullWidth: true
                     }}
+                    onChange={this.handleChange} inputProps={{
+                      onChange: this.handleChange,
+                      value: this.state.data.reg_no
+                    }}
                   />
                 </GridItem>
                 <GridItem xs={12} sm={12} md={12}>
                   <CustomInput labelText="Office Address" helperText="Full business address" id="office_address" required formControlProps={{
                       fullWidth: true
+                    }} inputProps={{
+                      onChange: this.handleChange,
+                      value: this.state.data.office_address
                     }}
                   />                    
                 </GridItem>
                 <GridItem xs={12} sm={12} md={6}>
                   <CustomInput labelText="City" id="city" required formControlProps={{
                       fullWidth: true
+                    }} inputProps={{
+                      onChange: this.handleChange,
+                      value: this.state.data.city
                     }}
                   />
                 </GridItem>
                 <GridItem xs={12} sm={12} md={6}>
                   <CustomInput labelText="State" id="state" required formControlProps={{
                       fullWidth: true
+                    }} inputProps={{
+                      onChange: this.handleChange,
+                      value: this.state.data.state
                     }}
                   />
                 </GridItem>
                 <GridItem xs={12} sm={12} md={6}>
                   <CustomInput labelText="Country" id="country" required formControlProps={{
                       fullWidth: true
+                    }} inputProps={{
+                      onChange: this.handleChange,
+                      value: this.state.data.country
                     }}
                   />
                 </GridItem>
                 <GridItem xs={12} sm={12} md={6}>
                   <CustomInput labelText="Company Telephone" id="coy_phone" required formControlProps={{
                       fullWidth: true
+                    }} inputProps={{
+                      onChange: this.handleChange,
+                      value: this.state.data.coy_phone
                     }}
                   />
                 </GridItem>
                 <GridItem xs={12} sm={12} md={6}>
                   <CustomInput labelText="Company Email" id="coy_email" required formControlProps={{
                       fullWidth: true
+                    }} inputProps={{
+                      onChange: this.handleChange,
+                      value: this.state.data.coy_email
                     }}
                   />
                 </GridItem>
                 <GridItem xs={12} sm={12} md={6}>
                   <CustomInput labelText="Website" id="website" required formControlProps={{
                       fullWidth: true
+                    }} inputProps={{
+                      onChange: this.handleChange,
+                      value: this.state.data.website
                     }}
                   />
                 </GridItem>
@@ -116,27 +190,34 @@ class GeneralInfo extends React.Component {
                 </div>
                 </GridItem>
                 <GridItem xs={12} sm={12} md={6}>
-                  <CustomInput labelText="Contact Person" id="contact_person" required formControlProps={{
+                  <CustomInput labelText="Contact Person" id="contact_name" required formControlProps={{
                       fullWidth: true
+                    }} inputProps={{
+                      onChange: this.handleChange,
+                      value: this.state.data.contact_name
                     }}
                   />
                 </GridItem>
                 <GridItem xs={12} sm={12} md={6}>
                   <CustomInput labelText="Designation" id="designation" required formControlProps={{
                       fullWidth: true
+                    }} inputProps={{
+                      onChange: this.handleChange,
+                      value: this.state.data.designation
                     }}
                   />
                 </GridItem>
                 <GridItem xs={12} sm={12} md={6}>
-                  <CustomInput labelText="Contact Telephone" id="contact_telephone" required formControlProps={{
+                  <CustomInput labelText="Contact Telephone" id="contact_phone" required formControlProps={{
                       fullWidth: true
-                    }}
+                    }} inputProps={{onChange: this.handleChange,
+                      value: this.state.data.contact_phone}}
                   />
                 </GridItem>
                 <GridItem xs={12} sm={12} md={6}>
                   <CustomInput labelText="Contact Email" id="contact_email" required formControlProps={{
-                      fullWidth: true
-                    }}
+                      fullWidth: true }} inputProps={{ onChange: this.handleChange,
+                        value: this.state.data.contact_email}}
                   />
                 </GridItem>
               </Grid>
@@ -144,7 +225,7 @@ class GeneralInfo extends React.Component {
               <CardFooter>
               <Grid container>
                 <GridItem xs={12} sm={6} md={6}>
-                  <Button color="primary" onClick={this.handleGeneralInfoSave}>Save</Button>
+                  <Button color="primary" onClick={this.handleSave}>Save</Button>
                 </GridItem>
                 <GridItem xs={12} sm={12} md={6}>
                   <Button color="info">Submit</Button>
@@ -159,6 +240,7 @@ class GeneralInfo extends React.Component {
     );
   }
 }
+
 
 GeneralInfo.propTypes = {
   classes: PropTypes.object.isRequired,

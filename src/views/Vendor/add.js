@@ -16,6 +16,7 @@ import Grid from "@material-ui/core/Grid";
 import BugReport from "@material-ui/icons/BugReport";
 import Code from "@material-ui/icons/Code";
 import Cloud from "@material-ui/icons/Cloud";
+import MiddleWare from "../../middleware/api";
 
 const styles = {
   root: {
@@ -34,18 +35,23 @@ function TabContainer(props) {
 TabContainer.propTypes = {
   children: PropTypes.node.isRequired,
 };
-class CenteredTabs extends React.Component {
+class AddTabs extends React.Component {
   state = {
     value: 0,
+    data:{}
   };
+  componentDidMount(){
+    let middleware = new MiddleWare();
+    return middleware.makeConnection('/vendors/1','GET').then((response) => response.json()).then((responseJson)=>{
+      this.setState({data : responseJson[0]});
+    });
+  }
   handleChange = (event, value) => {
     this.setState({ value });
   };
 
   render() {
     const { classes } = this.props;
-    const { value } = this.state;
-    
     return (
       <Grid container>
            <GridItem xs={12} sm={12} md={12}>
@@ -57,28 +63,28 @@ class CenteredTabs extends React.Component {
                   tabName: "General Information",
                   tabIcon: BugReport,
                   tabContent: (
-                    <GeneralInfo />
+                    <GeneralInfo data={this.state.data.general_info} />
                   )
                 },
                 {
                   tabName: "Business Information",
                   tabIcon: Code,
                   tabContent: (
-                    <BusinessInfo />
+                    <BusinessInfo  data={this.state.data.business_info}/>
                   )
                 },
                 {
                   tabName: "Technical Capabilities",
                   tabIcon: Cloud,
                   tabContent: (
-                    <TechnicalCapabilities />
+                    <TechnicalCapabilities  data={this.state.data.tech_capability} />
                   )
                 },
                 {
                   tabName: "Work Reference",
                   tabIcon: Cloud,
                   tabContent: (
-                    <WorkReference />
+                    <WorkReference data={this.state.data.work_reference} />
                   )
                 }
               ]}
@@ -89,8 +95,8 @@ class CenteredTabs extends React.Component {
   }
 }
 
-CenteredTabs.propTypes = {
+AddTabs.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(CenteredTabs);
+export default withStyles(styles)(AddTabs);
