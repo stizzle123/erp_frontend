@@ -44,6 +44,7 @@ const styles = theme => ({
 const biz_types = [
   {value: '1',label: 'Purchase Order Log',},
   {value: '2',label: 'Purchase Requisition Tracker',},
+   {value: '3',label: 'Procurement Report',},
 ];
 
 class LogInfo extends React.Component {
@@ -66,12 +67,12 @@ handleChange = name => event => {
 
     return (
 	<div>
-
+    <Grid container>
     <GridItem xs={12} sm={12} md={12}>
       <form className={classes.container} noValidate autoComplete="off">
 	 <Card>
               <CardHeader color="info">
-                <h4 className={classes.cardTitleWhite}>Log / Tracker</h4>
+                <h4 className={classes.cardTitleWhite}>View Report</h4>
               </CardHeader>
               <CardBody>
          <TextField
@@ -99,6 +100,7 @@ handleChange = name => event => {
           </Card>
          </form>
        </GridItem>
+       </Grid>
   </div>
     );
   }
