@@ -1,3 +1,5 @@
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 import React from "react";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -10,6 +12,8 @@ import CardHeader from "../../components/Card/CardHeader.jsx";
 import CardBody from "../../components/Card/CardBody.jsx";
 import Button from "../../components/CustomButtons/Button.jsx";
 import { Link } from 'react-router-dom';
+import PropTypes from "prop-types";
+import * as vendorActions from '../../actions/vendor';
 
 const styles = {
   cardCategoryWhite: {
@@ -41,37 +45,56 @@ const styles = {
   }
 };
 
-function Index(props) {
-  const { classes } = props;
-  return (
-    <Grid container>
-      <GridItem xs={12} sm={12} md={12}>
-        <Card>
-          <CardHeader color="primary">
-            <h4 className={classes.cardTitleWhite}>Simple Table</h4>
-            <p className={classes.cardCategoryWhite}>
-              Here is a subtitle for this table
-            </p>
-            <Button color="primary" to="/vendor/add" component={Link}>Add Vendor</Button>
-          </CardHeader>
-          <CardBody>
-            <Table
-              tableHeaderColor="primary"
-              tableHead={["Name", "Country", "City", "Salary"]}
-              tableData={[
-                ["Dakota Rice", "Niger", "Oud-Turnhout", "$36,738"],
-                ["Minerva Hooper", "Curaçao", "Sinaai-Waas", "$23,789"],
-                ["Sage Rodriguez", "Netherlands", "Baileux", "$56,142"],
-                ["Philip Chaney", "Korea, South", "Overland Park", "$38,735"],
-                ["Doris Greene", "Malawi", "Feldkirchen in Kärnten", "$63,542"],
-                ["Mason Porter", "Chile", "Gloucester", "$78,615"]
-              ]}
-            />
-          </CardBody>
-        </Card>
-      </GridItem>
-    </Grid>
-  );
+class Index extends React.Component {
+
+componentDidMount(){
+  this.props.vendorActions.findAllVendors();
 }
 
-export default withStyles(styles)(Index);
+render(){
+    const { classes } = this.props;
+    console.log();
+    return (
+      <Grid container>
+        <GridItem xs={12} sm={12} md={12}>
+          <Card>
+            <CardHeader color="primary">
+              <h4 className={classes.cardTitleWhite}>Vendor List</h4>
+              <Button color="primary" to="/vendor/add" component={Link}>Add Vendor</Button>
+            </CardHeader>
+            <CardBody>
+              {(this.props.data.length < 1)?
+                "No Data"
+              :
+              <Table
+                tableHeaderColor="primary"
+                tableHead={["Company Name", "Contact Person", "Contact Telephone","Contact Email" ,"Status"]}
+                tableData={this.props.data}
+              />}
+            </CardBody>
+          </Card>
+        </GridItem>
+      </Grid>
+    );
+  }
+}
+
+Index.propTypes = {
+  vendorActions:PropTypes.object,
+  data: PropTypes.array
+}
+function mapStateToProps(state) {
+  return {
+    data: state.vendor
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    vendorActions: bindActionCreators(vendorActions, dispatch)
+  };
+}
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(styles)(Index));

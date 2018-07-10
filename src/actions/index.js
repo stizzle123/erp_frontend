@@ -1,3 +1,2 @@
-export default {
-    BASIC_ACTION:'BASIC_ACTION' 
-   }
+export const FETCH_DATA = 'FETCH_ACTION';
+export const RECEIVED_DATA = 'RECEIVED_ACTION';

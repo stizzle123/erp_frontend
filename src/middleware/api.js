@@ -7,18 +7,29 @@ class MiddleWare{
     }
 
     makeConnection(endpoint, httpVerb, body=''){
-        const bodyProp = {};
-        (body)? bodyProp[body] = JSON.stringify(body) : '';
-       return fetch(this.api_root+endpoint, {
-            method: httpVerb,
-            mode: "cors",
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            bodyProp
-        });
+        let option = {};
+        (body)? JSON.stringify(body) : '';
+        if(httpVerb === "GET" || httpVerb === "HEAD"){
+            option =  {
+                method: httpVerb,
+                mode: "cors",
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            }
+        }else{
+            option =  {
+                method: httpVerb,
+                mode: "cors",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(body)
+            }
+        }
+        return fetch(this.api_root+endpoint, option).catch((e)=>{console.log(e)});
     }
+
 }
 
 export default MiddleWare;
