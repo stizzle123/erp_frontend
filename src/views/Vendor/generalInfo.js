@@ -224,10 +224,10 @@ class GeneralInfo extends React.Component {
               </CardBody>
               <CardFooter>
               <Grid container>
-                <GridItem xs={12} sm={6} md={6}>
+                <GridItem xs={12} sm={6} md={2}>
                   <Button color="primary" onClick={this.handleSave}>Save</Button>
                 </GridItem>
-                <GridItem xs={12} sm={12} md={6}>
+                <GridItem xs={12} sm={6} md={2}>
                   <Button color="info">Submit</Button>
                 </GridItem>
               </Grid>

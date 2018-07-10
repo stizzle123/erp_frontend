@@ -11,6 +11,7 @@ import AccountBalance from '@material-ui/icons/AccountBalanceWallet';
 import CreditCard from '@material-ui/icons/CreditCard';
 
 // core components/views
+import LoginPage from "../views/LoginPage/index.js";
 import DashboardPage from "../views/Dashboard/Dashboard.jsx";
 import UserProfile from "../views/UserProfile/UserProfile.jsx";
 import VendorList from "../views/Vendor/index.js";
@@ -19,6 +20,7 @@ import PurchaseRequisition from "../views/PurchaseRequisition/index.js";
 import PurchaseOrder from "../views/PurchaseOrder/index.js";
 import Project from "../views/Project/index.js";
 import Log from "../views/Log/index.js";
+import Registration from "../views/Registration/register.js";
 /* import Typography from "views/Typography/Typography.jsx";
 import Icons from "views/Icons/Icons.jsx";
 import Maps from "views/Maps/Maps.jsx";
@@ -81,12 +83,27 @@ const dashboardRoutes = [
 
   {
     path: "/Log",
-    sidebarName: "Log",
-    navbarName: "Log",
+    sidebarName: "Report",
+    navbarName: "Report",
     icon:  LibraryBooks,
     component: Log
   },
 
+  {
+    path: "/LoginPage",
+    sidebarName: "Login",
+//    navbarName: "Login",
+    icon:  CreditCard,
+    component: LoginPage
+  },
+
+  {
+    path: "/Registration",
+    sidebarName: "Registration",
+//    navbarName: "Login",
+    icon:  LibraryBooks,
+    component: Registration
+  },
 
 /*  {
     path: "/typography",

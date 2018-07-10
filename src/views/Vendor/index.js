@@ -52,7 +52,6 @@ function Index(props) {
             <p className={classes.cardCategoryWhite}>
               Here is a subtitle for this table
             </p>
-            <Button color="primary" to="/vendor/add" component={Link}>Add Vendor</Button>
           </CardHeader>
           <CardBody>
             <Table
