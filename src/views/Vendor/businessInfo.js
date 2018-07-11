@@ -15,13 +15,7 @@ import CardBody from "../../components/Card/CardBody.jsx";
 import CardFooter from "../../components/Card/CardFooter.jsx";
 import Progress from "../../components/Progress/Progress.jsx";
 import MiddleWare from "../../middleware/api";
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormLabel from '@material-ui/core/FormLabel';
-import FormControl from '@material-ui/core/FormControl';
-import Checkbox from '@material-ui/core/Checkbox';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
 
 const styles = theme => ({
 
@@ -83,9 +77,9 @@ class BusinessInfo extends React.Component {
     }else{
       this.biz_nature_state[event.target.name] = "";
     }
-    console.log(this.biz_nature_state); 
+    //console.log(this.biz_nature_state); 
     this.setState({"business_nature": this.biz_nature_state });
-    console.log(this.state);
+    //console.log(this.state);
   };
 
   handleSave = e=>{
@@ -96,6 +90,7 @@ class BusinessInfo extends React.Component {
     data.payload = { business_info:this.state.data};
     data.key = "user_id";
     data.value = "1";
+    console.log(data);
     middleware.makeConnection('/vendors','PUT', data).then(
       (result)=>{
         if(!result.ok || result.statusText != "OK" && result.status != 200 ) {
@@ -125,7 +120,7 @@ class BusinessInfo extends React.Component {
             <Grid container>
               <GridItem xs={12} sm={12} md={6}>
                 <CustomSelect labelText="Corporate/Limited Liability" name="business_type" required
-                                value={this.state.data.year_established} onChange={(e)=>this.handleBizTypeChange(e)}
+                                value={this.state.data.business_type} onChange={(e)=>this.handleBizTypeChange(e)}
                                 formControlProps={{
                                   fullWidth: true
                                 }} 

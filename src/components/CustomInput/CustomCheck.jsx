@@ -26,7 +26,7 @@ function CustomCheck({ ...props }) {
         <FormGroup row>
           {
             collection.map((option, k) => (
-            <FormControlLabel control={
+            <FormControlLabel key={k} control={
                 <Checkbox name={name+"_"+k} checked={state[name+"_"+k]===option.value}
                 {...inputProps}
                 value={option.value} />

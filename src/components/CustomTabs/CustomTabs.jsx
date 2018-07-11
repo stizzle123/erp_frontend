@@ -72,6 +72,7 @@ class CustomTabs extends React.Component {
                   key={key}
                   label={prop.tabName}
                   {...icon}
+                  
                 />
               );
             })}
