@@ -37,6 +37,13 @@ render() {
 		              type:"password"
 		            }}
 		    />
+		    <CustomInput labelText="Confirm password"  id="Cpassword" required formControlProps={{
+                    fullWidth: true
+                    }}
+		       inputProps={{
+		              type:"password"
+		            }}
+		    />
              <br/><br/>
              <Grid container>
                 <GridItem xs={12} sm={12} md={12}>

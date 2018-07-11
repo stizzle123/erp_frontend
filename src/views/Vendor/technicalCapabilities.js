@@ -101,7 +101,7 @@ class TechnicalCapabilities extends React.Component {
 
     return (
       <form className={classes.container} noValidate autoComplete="off">
-        <FormControl component="fieldset" required error className={classNames(classes.formControl, classes.twoThird)}>
+        <FormControl component="fieldset" required error className={classes.formControl}>
           <FormLabel component="legend">Do You Have Proof of Competency/Certification to any relevant Standard ?</FormLabel>
           <RadioGroup
             name="iscompetency"
@@ -148,7 +148,7 @@ class TechnicalCapabilities extends React.Component {
               return <TextField id={i+1} required label={i+1+". Core Goods/Services offered"} placeholder={i+1+". Core Goods/Services offered"} margin="normal" className={classes.twoThird} />
             })}
             <div>
-              <Button variant="fab" color="secondary" aria-label="Add Core Goods/Services Offered" onClick={this.handleAddExtra('core_service_count')} className={classes.button}>
+              <Button variant="fab" color="primary" aria-label="Add Core Goods/Services Offered" onClick={this.handleAddExtra('core_service_count')} className={classes.button}>
                 <AddIcon />
               </Button>
             </div>
@@ -171,7 +171,7 @@ class TechnicalCapabilities extends React.Component {
             </label></div>; 
             })}
             <div>
-              <Button variant="fab" color="secondary" aria-label="Upload manufacturer certification" onClick={this.handleAddExtra('upload_doc_count')} className={classes.button}>
+              <Button variant="fab" color="primary" aria-label="Upload manufacturer certification" onClick={this.handleAddExtra('upload_doc_count')} className={classes.button}>
                 <AddIcon />
               </Button>
             </div>
