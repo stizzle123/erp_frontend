@@ -42,10 +42,10 @@ const styles = theme => ({
 });
 
 const biz_types = [
-  {value: '1',label: 'Normal Requisition',},
-  {value: '2',label: 'Weekly Requisition',},
-  {value: '3',label: 'Open Market Requisition',},
-  {value:'4', label: 'Project Requisition',}
+  {value: '1',label: 'Normal',},
+  {value: '2',label: 'Weekly',},
+  {value: '3',label: 'Open Market',},
+  {value:'4', label: 'Project',}
 ];
 
 class BusinessInfo extends React.Component {
@@ -73,7 +73,7 @@ handleChange = name => event => {
       <form className={classes.container} noValidate autoComplete="off">
 	 <Card>
               <CardHeader color="info">
-                <h4 className={classes.cardTitleWhite}>Choose Project Requisition</h4>
+                <h4 className={classes.cardTitleWhite}>Choose Purchase Requisition</h4>
               </CardHeader>
               <CardBody>
 	 <Grid container>
