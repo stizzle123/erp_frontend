@@ -16,6 +16,7 @@ import CardFooter from "../../components/Card/CardFooter.jsx";
 import Progress from "../../components/Progress/Progress.jsx";
 import MiddleWare from "../../middleware/api";
 import FormLabel from '@material-ui/core/FormLabel';
+import {connect} from 'react-redux';
 
 const styles = theme => ({
 
@@ -38,6 +39,7 @@ class BusinessInfo extends React.Component {
   state = {
     business_nature: {},
     data: {
+    employee_no:'',
     business_type: 0,
     year_established:'',
     vat_no: '',
@@ -47,6 +49,11 @@ class BusinessInfo extends React.Component {
     }
   };
   biz_nature_state = {};
+  
+  componentDidMount(){
+    console.log(this.props);
+    this.setState({ data: this.props.data})
+  }
 
   handleBizTypeChange = event => {
     let data = this.state.data;
@@ -90,7 +97,6 @@ class BusinessInfo extends React.Component {
     data.payload = { business_info:this.state.data};
     data.key = "user_id";
     data.value = "1";
-    console.log(data);
     middleware.makeConnection('/vendors','PUT', data).then(
       (result)=>{
         if(!result.ok || result.statusText != "OK" && result.status != 200 ) {
@@ -106,7 +112,7 @@ class BusinessInfo extends React.Component {
 
   render() {
     const { classes } = this.props;
-
+  
     return (
       <Grid container>
       <GridItem xs={12} sm={12} md={12}>
@@ -124,8 +130,7 @@ class BusinessInfo extends React.Component {
                                 formControlProps={{
                                   fullWidth: true
                                 }} 
-                                inputProps={{
-                                margin:"normal"}}
+                                inputProps={{margin:"normal"}}
                     >
                     {biz_types.map(option => (
                       <MenuItem key={option.value} value={option.value}>
@@ -216,8 +221,9 @@ class BusinessInfo extends React.Component {
   }
 }
 
-BusinessInfo.propTypes = {
-  classes: PropTypes.object.isRequired
-};
-
-export default withStyles(styles)(BusinessInfo);
+function mapStateToProps(state) {
+  return {
+    data: state.vendor.datum.business_info
+  };
+}
+export default connect(mapStateToProps, null)(withStyles(styles)(BusinessInfo));

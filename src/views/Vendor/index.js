@@ -48,12 +48,12 @@ const styles = {
 class Index extends React.Component {
 
 componentDidMount(){
-  this.props.vendorActions.findAllVendors();
+  vendorActions.findAllVendors(this.props);
 }
 
 render(){
     const { classes } = this.props;
-    console.log();
+    console.log(this.props);
     return (
       <Grid container>
         <GridItem xs={12} sm={12} md={12}>
@@ -83,18 +83,17 @@ Index.propTypes = {
   vendorActions:PropTypes.object,
   data: PropTypes.array
 }
+Index.defaultProps = {
+  data: []
+}
 function mapStateToProps(state) {
   return {
-    data: state.vendor
+    data: state.vendor.data
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    vendorActions: bindActionCreators(vendorActions, dispatch)
-  };
-}
+
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  null
 )(withStyles(styles)(Index));

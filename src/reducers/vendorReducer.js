@@ -1,17 +1,19 @@
-import {FETCH_DATA, RECEIVED_DATA} from '../actions/index';
+import * as types from '../actions/index';
 
 
-export default function vendor(state = [], action){
-    let newState;
+export default function vendor(state=[] , action){
     switch(action.type){
-        case FETCH_DATA:
+        case types.FETCH_DATA:
             console.log('FETCH_DATA action')
         return action;
-        case RECEIVED_DATA:
-            newState = action.data;
-            console.log("receive data action");
-            return newState;
+        case types.RECEIVED_DATA:
+            return {...state, data:action.data};
+        case types.VENDOR_DATA:
+            return {...state, datum:action.data};
+        case types.SHOW_VENDOR_PART:
+            console.log(state, action)
+            return {...state};
         default:
-        return state;
+        return {...state};
     }
 }

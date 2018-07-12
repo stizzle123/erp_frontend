@@ -14,69 +14,32 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import AddIcon from '@material-ui/icons/Add';
+import {connect} from 'react-redux';
 
 
-const styles = theme => ({
-  input: {
-    display: 'none',
+const styles = {
+  root: {
+    flexGrow: 1,
   },
-  button: {
-      margin: theme.spacing.unit,
-    },
-    leftIcon: {
-      marginRight: theme.spacing.unit,
-    },
-    oneThird: {
-      marginLeft: theme.spacing.unit,
-      marginRight: theme.spacing.unit,
-      width: '30%',
-    },  
-    twoThird: {
-      marginLeft: theme.spacing.unit,
-      marginRight: theme.spacing.unit,
-      width: '60%',
-    },
-    rightIcon: {
-      marginLeft: theme.spacing.unit,
-    },
-    iconSmall: {
-      fontSize: 20,
-    },
-  
-    container: {
-      display: 'flex',
-      flexWrap: 'wrap',
-    },
-    checked: {},
-    size: {
-      width: 40,
-      height: 40,
-    },
-    textField: {
-      marginLeft: theme.spacing.unit,
-      marginRight: theme.spacing.unit,
-      width: 300,
-    },
-    menu: {
-      width: 200,
-    },
-     table: {
-      Width: 200,
-    },
-    row: {
-      '&:nth-of-type(odd)': {
-        backgroundColor: theme.palette.background.default,
-      },
-    },
-  });
+};
 
 class TechnicalCapabilities extends React.Component {
   state = {
     core_service_count : 0,
+    data:{
+      competency:'',
+      certification:'',
+      supplier:'',
+    }
   };
 
   core_service = ['0'];
   upload_doc = ['0'];
+
+  componentDidMount(){
+    this.setState({ data: this.props.data})
+  }
+
   handleChange = name => event => {
     this.setState({
       [name]: event.target.value,
@@ -104,9 +67,9 @@ class TechnicalCapabilities extends React.Component {
         <FormControl component="fieldset" required error className={classNames(classes.formControl, classes.twoThird)}>
           <FormLabel component="legend">Do You Have Proof of Competency/Certification to any relevant Standard ?</FormLabel>
           <RadioGroup
-            name="iscompetency"
+            id="competency"
             className={classes.group}
-            value={this.state.value}
+            value={this.state.data.competency}
             onChange={this.handleChange}
             row
           >
@@ -117,9 +80,9 @@ class TechnicalCapabilities extends React.Component {
         <FormControl component="fieldset" required error className={classes.formControl}>
           <FormLabel component="legend">Do You Have a Valid Quality Assurance Certification (e.g. ISO 9001 or Equivalent)?</FormLabel>
           <RadioGroup
-            name="iscertification"
+            name="certification"
             className={classes.group}
-            value={this.state.value}
+            value={this.state.data.certification}
             onChange={this.handleChange}
             row
           >
@@ -131,9 +94,9 @@ class TechnicalCapabilities extends React.Component {
             <FormControl component="fieldset" required error className={classes.formControl}>
               <FormLabel component="legend">Do Your Goods Offered for Supply Conform to National/International Quality Standards?</FormLabel>
               <RadioGroup
-                name="iscompetency"
+                id="supplier"
                 className={classes.group}
-                value={this.state.value}
+                value={this.state.data.supplier}
                 onChange={this.handleChange}
                 row
               >
@@ -196,4 +159,9 @@ TechnicalCapabilities.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(TechnicalCapabilities);
+function mapStateToProps(state) {
+  return {
+    data: state.vendor.datum.tech_capability
+  };
+}
+export default connect(mapStateToProps, null)(withStyles(styles)(TechnicalCapabilities));

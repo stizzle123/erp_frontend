@@ -6,8 +6,10 @@ import { Router, Route, Switch } from "react-router-dom";
 import configureStore from './store/configureStore';
 
 import "./assets/css/material-dashboard-react.css?v=1.3.0";
-
 import indexRoutes from "./routes/index.jsx";
+import PrivateRoute from "./layouts/PrivateRoute.jsx";
+import LoginPage from "./views/LoginPage/index.js";
+import RegistrationPage from "./views/RegistrationPage/index.js";
 
 const hist = createBrowserHistory();
 const store = configureStore();
@@ -16,8 +18,10 @@ ReactDOM.render(
   <Provider store={store}>
     <Router history={hist}>
       <Switch>
+        <Route path="/login" exact component={LoginPage} />
+        <Route path="/register" exact component={RegistrationPage} />
         {indexRoutes.map((prop, key) => {
-          return <Route path={prop.path} component={prop.component} key={key} />;
+          return <PrivateRoute path={prop.path} component={prop.component} key={key} />;
         })}
       </Switch>
     </Router>
