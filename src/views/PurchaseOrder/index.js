@@ -138,6 +138,7 @@ handleChange = name => event => {
               </Grid>
               </CardBody>
               <CardFooter>
+
               <Grid container>
                 <GridItem xs={12} sm={12} md={2}>
                   <Button color="primary" onClick={this.handleGeneralInfoSave}>Save</Button>
