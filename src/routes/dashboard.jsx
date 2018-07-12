@@ -13,6 +13,7 @@ import CreditCard from '@material-ui/icons/CreditCard';
 // core components/views
 import LoginPage from "../views/LoginPage/index.js";
 import DashboardPage from "../views/Dashboard/Dashboard.jsx";
+import VendorDashboard from "../views/VendorDashboard/index.js";
 import UserProfile from "../views/UserProfile/UserProfile.jsx";
 import VendorList from "../views/Vendor/index.js";
 import AddVendor from "../views/Vendor/add.js";
@@ -31,9 +32,16 @@ const dashboardRoutes = [
   {
     path: "/dashboard",
     sidebarName: "Dashboard",
-    navbarName: "Material Dashboard",
+    navbarName: "Dashboard",
     icon: HomeIcon,
     component: DashboardPage
+  },
+  {
+    path: "/VendorDashboard",
+    sidebarName: "Vendor Dashboard",
+    navbarName: "Dashboard",
+    icon: HomeIcon,
+    component: VendorDashboard
   },
    {
     path: "/user",
@@ -67,8 +75,8 @@ const dashboardRoutes = [
 
   {
     path: "/Project",
-    sidebarName: "Project",
-    navbarName: "Project Requisition",
+    sidebarName: "Purchase Requisition",
+    navbarName: "Purchase Requisition",
     icon: CreditCard,
     component: Project
   },

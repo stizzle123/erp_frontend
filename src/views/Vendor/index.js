@@ -70,8 +70,9 @@ render(){
                 tableHeaderColor="primary"
                 tableHead={["Company Name", "Contact Person", "Contact Telephone","Contact Email" ,"Status"]}
                 tableData={this.props.data}
-              />}
-            </CardBody>
+              />
+               }
+			</CardBody>
           </Card>
         </GridItem>
       </Grid>
