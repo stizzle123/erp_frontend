@@ -21,7 +21,7 @@ import PurchaseRequisition from "../views/PurchaseRequisition/index.js";
 import PurchaseOrder from "../views/PurchaseOrder/index.js";
 import Project from "../views/Project/index.js";
 import Log from "../views/Log/index.js";
-import Registration from "../views/Registration/register.js";
+import Registration from "../views/RegistrationPage/index.js";
 /* import Typography from "views/Typography/Typography.jsx";
 import Icons from "views/Icons/Icons.jsx";
 import Maps from "views/Maps/Maps.jsx";
@@ -96,23 +96,6 @@ const dashboardRoutes = [
     icon:  LibraryBooks,
     component: Log
   },
-
-  {
-    path: "/LoginPage",
-    sidebarName: "Login",
-//    navbarName: "Login",
-    icon:  CreditCard,
-    component: LoginPage
-  },
-
-  {
-    path: "/Registration",
-    sidebarName: "Registration",
-//    navbarName: "Login",
-    icon:  LibraryBooks,
-    component: Registration
-  },
-
 /*  {
     path: "/typography",
     sidebarName: "Typography",

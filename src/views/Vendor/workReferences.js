@@ -8,7 +8,7 @@ import classNames from 'classnames';
 import Grid from '@material-ui/core/Grid';
 import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
-
+import {connect} from 'react-redux';
 
 const styles = theme => ({
   button: {
@@ -63,10 +63,18 @@ const styles = theme => ({
 
 class WorkRefrences extends React.Component {
   state = {
-    name: 'Cat in the Hat',
-    age: '',
-    multiline: 'Controlled',
-    currency: 'EUR',
+    data:{
+      coy_name:'',
+      coy_address:'',
+      contact_person:'',
+      contact_designation:'',
+      contact_email:'',
+      contact_phone:'',
+      name:'',
+      phone:'',
+      address:'',
+      email:''
+    }
   };
 
   handleChange = name => event => {
@@ -119,4 +127,9 @@ WorkRefrences.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(WorkRefrences);
+function mapStateToProps(state) {
+  return {
+    data: state.vendor.datum.business_info
+  };
+}
+export default connect(mapStateToProps, null)(withStyles(styles)(WorkRefrences));

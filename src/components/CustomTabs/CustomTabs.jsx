@@ -12,6 +12,8 @@ import Tab from "@material-ui/core/Tab";
 import Card from "../Card/Card.jsx";
 import CardBody from "../Card/CardBody.jsx";
 import CardHeader from "../Card/CardHeader.jsx";
+import {SHOW_VENDOR_PART} from '../../actions/index';
+import { connect } from 'react-redux'
 
 import customTabsStyle from "../../assets/jss/material-dashboard-react/components/customTabsStyle.jsx";
 
@@ -22,6 +24,7 @@ class CustomTabs extends React.Component {
 
   handleChange = (event, value) => {
     this.setState({ value });
+    this.props.dispatch({type: SHOW_VENDOR_PART, value: value });
   };
 
   render() {
@@ -112,4 +115,7 @@ CustomTabs.propTypes = {
   plainTabs: PropTypes.bool
 };
 
-export default withStyles(customTabsStyle)(CustomTabs);
+
+
+
+export default connect()(withStyles(customTabsStyle)(CustomTabs));

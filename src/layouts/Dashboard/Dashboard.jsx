@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React from "react";
 import PropTypes from "prop-types";
-import { Switch, Route, Redirect , HashRouter} from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 // creates a beautiful scrollbar
 import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
@@ -13,9 +13,7 @@ import Footer from "../../components/Footer/Footer.jsx";
 import Sidebar from "../../components/Sidebar/Sidebar.jsx";
 
 import dashboardRoutes from "../../routes/dashboard.jsx";
-
 import dashboardStyle from "../../assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx";
-
 import image from "../../assets/img/sidebar-2.jpg";
 import logo from "../../assets/img/logo1.png";
 
