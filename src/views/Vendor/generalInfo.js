@@ -12,6 +12,7 @@ import CardBody from "../../components/Card/CardBody.jsx";
 import CardFooter from "../../components/Card/CardFooter.jsx";
 import Progress from "../../components/Progress/Progress.jsx";
 import MiddleWare from "../../middleware/api";
+import {connect} from 'react-redux';
 
 const styles = {
   cardCategoryWhite: {
@@ -63,13 +64,12 @@ class GeneralInfo extends React.Component {
     });
   };
 
-  componentWillReceiveProps(nextProps){
-    this.setState({data:nextProps.data});
+  componentDidMount(){
+    this.setState({data:this.props.data.general_info});
   }
 
   handleSave = e=>{
       e.preventDefault();
-      this.setState({loading:true});
       let data = {};
       let middleware = new MiddleWare();
       data.payload = { general_info:this.state.data};
@@ -89,6 +89,7 @@ class GeneralInfo extends React.Component {
   }
   render() {
     const { classes, data } = this.props;
+    console.log(this.props);
     return (
       <div>
         <Grid container>
@@ -246,4 +247,12 @@ GeneralInfo.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(GeneralInfo);
+GeneralInfo.defaultProps = {
+  data: {}
+}
+function mapStateToProps(state) {
+  return {
+    data: state.vendor.datum
+  };
+}
+export default  connect(mapStateToProps, null)(withStyles(styles)(GeneralInfo));

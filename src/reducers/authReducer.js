@@ -8,7 +8,7 @@ export default function auth(state=[], action){
         case types.USER_LOGGED_IN:
             return {...state, user: action.user, redirectToReferrer: true, isAuthenticated : true};
         case types.USER_LOGGED_OUT:
-            del(state);
+            state = undefined;
             return {isAuthenticated:false}
         default:
             return state;

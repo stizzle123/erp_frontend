@@ -53,7 +53,7 @@ class App extends React.Component {
   render() {
     const { classes, ...rest } = this.props;
     return (
-      <div className={classes.wrapper}>
+      <div >
         <Sidebar
           routes={dashboardRoutes}
           logoText={"EDGE X3"}

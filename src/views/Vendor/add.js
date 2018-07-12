@@ -34,7 +34,7 @@ TabContainer.propTypes = {
   children: PropTypes.node.isRequired,
 };
 class AddTabs extends React.Component {
-  componentDidMount(){
+  componentWillMount(){
     const userId = 1;
     vendorActions.findVendorByUserId(this.props, userId);
   }
@@ -55,28 +55,28 @@ class AddTabs extends React.Component {
                   tabName: "General Information",
                   tabIcon: BugReport,
                   tabContent: (
-                    <GeneralInfo data={this.props.data.general_info} />
+                    <GeneralInfo />
                   )
                 },
                 {
                   tabName: "Business Information",
                   tabIcon: Code,
                   tabContent: (
-                    <BusinessInfo  data={this.props.data.business_info} />
+                    <BusinessInfo />
                   )
                 },
                 {
                   tabName: "Technical Capabilities",
                   tabIcon: Cloud,
                   tabContent: (
-                    <TechnicalCapabilities  data={this.props.data.tech_capability} />
+                    <TechnicalCapabilities  />
                   )
                 },
                 {
                   tabName: "Work Reference",
                   tabIcon: Cloud,
                   tabContent: (
-                    <WorkReference data={[this.props.data.work_reference]} />
+                    <WorkReference />
                   )
                 }
               ]}
@@ -90,20 +90,11 @@ class AddTabs extends React.Component {
 AddTabs.propTypes = {
   classes: PropTypes.object.isRequired,
   vendorActions:PropTypes.object,
-  data: PropTypes.array
+  data: PropTypes.object
 }
 
 AddTabs.defaultProps = {
-  data:[]
-}
-function mapStateToProps(state) {
-  return {
-        data: state.vendor.datum
-  };
+  data:{}
 }
 
-
-export default connect(
-  mapStateToProps,
- null
-)(withStyles(styles)(AddTabs));
+export default connect()(withStyles(styles)(AddTabs));

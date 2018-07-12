@@ -10,7 +10,6 @@ import CustomCheck from "../../components/CustomInput/CustomCheck.jsx";
 import Button from "../../components/CustomButtons/Button.jsx";
 import Card from "../../components/Card/Card.jsx";
 import CardHeader from "../../components/Card/CardHeader.jsx";
-import CardAvatar from "../../components/Card/CardAvatar.jsx";
 import CardBody from "../../components/Card/CardBody.jsx";
 import CardFooter from "../../components/Card/CardFooter.jsx";
 import Progress from "../../components/Progress/Progress.jsx";
@@ -51,7 +50,6 @@ class BusinessInfo extends React.Component {
   biz_nature_state = {};
   
   componentDidMount(){
-    console.log(this.props);
     this.setState({ data: this.props.data})
   }
 
