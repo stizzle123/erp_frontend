@@ -14,6 +14,7 @@ import CreditCard from '@material-ui/icons/CreditCard';
 import LoginPage from "../views/LoginPage/index.js";
 import DashboardPage from "../views/Dashboard/Dashboard.jsx";
 import VendorDashboard from "../views/VendorDashboard/index.js";
+import IacDashboard from "../views/IacDashboard/index.js";
 import UserProfile from "../views/UserProfile/UserProfile.jsx";
 import VendorList from "../views/Vendor/index.js";
 import AddVendor from "../views/Vendor/add.js";
@@ -42,6 +43,13 @@ const dashboardRoutes = [
     navbarName: "Dashboard",
     icon: HomeIcon,
     component: VendorDashboard
+  },
+   {
+    path: "/IacDashboard",
+    sidebarName: "IAC Dashboard",
+    navbarName: "Dashboard",
+    icon: HomeIcon,
+    component: IacDashboard
   },
    {
     path: "/user",

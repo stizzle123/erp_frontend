@@ -18,6 +18,9 @@ import Accessible from "@material-ui/icons/Accessible";
 import BugReport from "@material-ui/icons/BugReport";
 import Code from "@material-ui/icons/Code";
 import Cloud from "@material-ui/icons/Cloud";
+import Person from "@material-ui/icons/Person";
+import DataUsage from "@material-ui/icons/DataUsage";
+import Cancel from "@material-ui/icons/Cancel";
 // core components
 import GridItem from "../../components/Grid/GridItem.jsx";
 import Table from "../../components/Table/Table.jsx";
@@ -29,6 +32,7 @@ import CardHeader from "../../components/Card/CardHeader.jsx";
 import CardIcon from "../../components/Card/CardIcon.jsx";
 import CardBody from "../../components/Card/CardBody.jsx";
 import CardFooter from "../../components/Card/CardFooter.jsx";
+import Button from "../../components/CustomButtons/Button.jsx";
 
 import dashboardStyle from "../../assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
 
@@ -44,12 +48,48 @@ class Dashboard extends React.Component {
           <GridItem xs={12} sm={6} md={3}>
             <Card>
               <CardHeader color="info" stats icon>
-                <CardIcon color="primary">
+                <CardIcon color="info">
                   <ContentPaste />
                 </CardIcon>
-                <p className={classes.cardCategory}><h1>3</h1></p>
+                <p className={classes.cardCategory}><h1>36</h1></p>
                 </CardHeader>
-              <CardFooter stats>Active RFQs</CardFooter>
+              <CardFooter stats>Pending Approvals</CardFooter>
+            </Card>
+          </GridItem>
+
+		  <GridItem xs={12} sm={6} md={3}>
+            <Card>
+              <CardHeader color="info" stats icon>
+                <CardIcon color="warning">
+                  <Person />
+                </CardIcon>
+                <p className={classes.cardCategory}><h1>620</h1></p>
+                </CardHeader>
+              <CardFooter stats>Active Vendors</CardFooter>
+            </Card>
+          </GridItem>
+
+		 <GridItem xs={12} sm={6} md={3}>
+            <Card>
+              <CardHeader color="info" stats icon>
+                <CardIcon color="gray">
+                  <Cancel />
+                </CardIcon>
+                <p className={classes.cardCategory}><h1>15</h1></p>
+                </CardHeader>
+              <CardFooter stats>Blacklisted Vendors</CardFooter>
+            </Card>
+          </GridItem>
+
+		 <GridItem xs={12} sm={6} md={3}>
+            <Card>
+              <CardHeader color="info" stats icon>
+                <CardIcon color="rose">
+                  <DataUsage />
+                </CardIcon>
+                <p className={classes.cardCategory}><h1>87%</h1></p>
+                </CardHeader>
+              <CardFooter stats>Overall Vendor Performance</CardFooter>
             </Card>
           </GridItem>
 
@@ -79,8 +119,8 @@ class Dashboard extends React.Component {
 
           <GridItem xs={12} sm={6} md={3}>
             <Card>
-              <CardHeader color="info" stats icon>
-                <CardIcon color="info">
+              <CardHeader color="primary" stats icon>
+                <CardIcon color="primary">
                   <Accessible />
                 </CardIcon>
                 <p className={classes.cardCategory}><h1>93%</h1></p>
@@ -93,42 +133,31 @@ class Dashboard extends React.Component {
         <Grid container>
           <GridItem xs={12} sm={12} md={6}>
             <Card>
-              <CardHeader color="danger">
-                <h4 className={classes.cardTitleWhite}>Requests</h4>
+              <CardHeader color="gray">
+                <h4 className={classes.cardTitleWhite}>Pending Vendor Approvals</h4>
               </CardHeader>
               <CardBody>
                 <Table
-                  tableHeaderColor="danger"
-                  tableHead={["Title", "Date"]}
+                  tableHeaderColor="gray"
+                  tableHead={["Company Name", "Category", "City", "Date Submitted"]}
                   tableData={[
-                    ["Supply of LongTech", "14/6/2018"],
-                    ["Cisco Miraki License", "14/6/2018"],
-                    ["Office365 Business Licence", "14/6/2018"]
-
+                    ["Ojako Ltd", "Diesel Supplies", "Lagos","12/6/2018"],
+                    ["RedMark Safety", "PPE Supplies", "Port Harcourt","8/6/2018"],
+                    ["Vesta Nigeria", "IT Equipment", "Lagos","22/6/2018"]
                   ]}
                 />
+
+		       <CardFooter>
+                      <Grid container>
+                          <GridItem xs={12} sm={6} md={6}>
+                                <Button color="gray">View All Pending Approvals</Button>
+                        </GridItem>
+		               </Grid>
+                 </CardFooter>
               </CardBody>
             </Card>
           </GridItem>
-           <GridItem xs={12} sm={12} md={6}>
-            <Card>
-              <CardHeader color="warning">
-                <h4 className={classes.cardTitleWhite}>Purchase Orders</h4>
-              </CardHeader>
-              <CardBody>
-                <Table
-                  tableHeaderColor="warning"
-                  tableHead={["Title", "Date", "Status"]}
-                  tableData={[
-                    ["Supply of LongTech", "14/6/2018", "Payment Due"],
-                    ["Cisco Miraki License", "14/6/2018", "Paid"],
-                    ["Office365 Business Licence", "14/6/2018", "Paid"]
 
-                  ]}
-                />
-              </CardBody>
-            </Card>
-          </GridItem>
         </Grid>
       </div>
     );

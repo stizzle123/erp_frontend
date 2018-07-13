@@ -48,7 +48,7 @@ class LoginInfo extends React.Component {
             <GridItem xs={12} sm={6} md={4}>
             <form>
               <Card>
-                  <CardHeader color="info">
+                  <CardHeader color="primary">
                       <center><h1>Login</h1></center>
                   </CardHeader>
                   <CardBody>
@@ -73,10 +73,10 @@ class LoginInfo extends React.Component {
                     <CardFooter>
                       <Grid container>
                           <GridItem xs={12} sm={6} md={6}>
-                                <Button color="info" onClick={this.login}>Login</Button>
+                                <Button color="primary" onClick={this.login}>Login</Button>
                           </GridItem>
                           <GridItem xs={12} sm={6} md={6}>
-                            <Link to="/register">Are you a Vendor? Click to create and account </Link>
+                            <Link to="/register">Are you a new Vendor? Click to create and account </Link>
                           </GridItem>
                       </Grid>
                     </CardFooter>
