@@ -43,8 +43,8 @@ class BusinessInfo extends React.Component {
     year_established:'',
     vat_no: '',
     tax_no: '',
-    product_related: '',
-    service_related: ''
+    product_related: {},
+    service_related: {}
     }
   };
   biz_nature_state = {};
@@ -82,8 +82,9 @@ class BusinessInfo extends React.Component {
     }else{
       this.biz_nature_state[event.target.name] = "";
     }
-    //console.log(this.biz_nature_state); 
-    this.setState({"business_nature": this.biz_nature_state });
+    let data = this.state.data;
+    data[[event.target.id]] = this.biz_nature_state; 
+    this.setState({data : data});
     //console.log(this.state);
   };
 
@@ -94,7 +95,7 @@ class BusinessInfo extends React.Component {
     let middleware = new MiddleWare();
     data.payload = { business_info:this.state.data};
     data.key = "user_id";
-    data.value = "1";
+    data.value = this.props.user.id;
     middleware.makeConnection('/vendors','PUT', data).then(
       (result)=>{
         if(!result.ok || result.statusText != "OK" && result.status != 200 ) {
@@ -161,7 +162,7 @@ class BusinessInfo extends React.Component {
               <FormLabel component="legend" >Area(s) of Business that you wish to Register For : </FormLabel> 
               </GridItem>
               <GridItem xs={12} sm={12} md={6}>
-                <CustomCheck labelText="Product Related" name="product_related" required state={this.state.business_nature}
+                <CustomCheck labelText="Product Related" name="product_related" required state={(this.state.data.product_related)?this.state.data.product_related: {} }
                       formControlProps={{
                         fullWidth: true
                       }} inputProps={{
@@ -171,7 +172,7 @@ class BusinessInfo extends React.Component {
                     />
               </GridItem>
               <GridItem xs={12} sm={12} md={6}>
-                <CustomCheck labelText="Service Related" name="service_related" required state={this.state.business_nature}
+                <CustomCheck labelText="Service Related" name="service_related" required state={(this.state.data.service_related)?this.state.data.service_related:{}}
                       formControlProps={{
                         fullWidth: true
                       }} inputProps={{
@@ -221,7 +222,8 @@ class BusinessInfo extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    data: state.vendor.datum.business_info
+    data: state.vendor.datum.business_info,
+    user: state.auth.user
   };
 }
 export default connect(mapStateToProps, null)(withStyles(styles)(BusinessInfo));

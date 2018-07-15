@@ -29,6 +29,7 @@ class LoginInfo extends React.Component {
   };
 
   login = (e) => {
+    e.preventDefault();
     AclAuth.authenticate(this.state.data.username, this.state.data.password, (user) => {
       this.props.dispatch({type: USER_LOGGED_IN, user: user });
     })
@@ -46,7 +47,7 @@ class LoginInfo extends React.Component {
           <GridItem xs={12} sm={6} md={4}>
           </GridItem>
             <GridItem xs={12} sm={6} md={4}>
-            <form>
+            <form onSubmit={this.login}>
               <Card>
                   <CardHeader color="info">
                       <center><h1>Login</h1></center>
@@ -73,7 +74,7 @@ class LoginInfo extends React.Component {
                     <CardFooter>
                       <Grid container>
                           <GridItem xs={12} sm={6} md={6}>
-                                <Button color="info" onClick={this.login}>Login</Button>
+                                <Button type="submit" color="info" onClick={this.login}>Login</Button>
                           </GridItem>
                           <GridItem xs={12} sm={6} md={6}>
                             <Link to="/register">Are you a Vendor? Click to create and account </Link>
