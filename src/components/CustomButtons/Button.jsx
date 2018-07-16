@@ -58,6 +58,7 @@ RegularButton.propTypes = {
     "warning",
     "danger",
     "rose",
+	"gray",
     "white",
     "transparent"
   ]),
