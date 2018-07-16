@@ -7,6 +7,8 @@ const AclAuth = {
         user = {id: 2, username:"vendor", role: "vendor", email: "vendor@russelsmithgroup.com"};
       }else if(username === "procurement" && password === "password"){
         user = {id: 3, username:"pr", role: "pr", email: "admin@russelsmithgroup.com"};
+      }else if(username === "iac" && password === "password"){
+        user = {id: 3, username:"iac", role: "iac", email: "iac@russelsmithgroup.com"};
       }
       setTimeout(cb(user), 100) // fake async
     },

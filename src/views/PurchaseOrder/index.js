@@ -55,7 +55,7 @@ handleChange = name => event => {
           <GridItem xs={12} sm={12} md={12}>
           <form className={classes.container} noValidate autoComplete="off">
             <Card>
-              <CardHeader color="info">
+              <CardHeader color="primary">
                 <h4 className={classes.cardTitleWhite}>Add Purchase Order</h4>
               </CardHeader>
               <CardBody>
@@ -68,11 +68,12 @@ handleChange = name => event => {
                   />
                 </GridItem>
 		        <GridItem xs={12} sm={4} md={4}>
-                  <CustomInput labelText="Order Date" id="orderdate" required formControlProps={{
+                  <CustomInput labelText="Order Date"  id="orderdate" required formControlProps={{
                     fullWidth: true
                     }}
 		               inputProps={{
 		               type: "date",
+		               helpertext: "Order Date"
 
 		            }}
 
@@ -84,17 +85,15 @@ handleChange = name => event => {
                     }}
 		               inputProps={{
 		               type: "date",
-
 		            }}
-
-                  />
+ />
                 </GridItem>
 		        <GridItem xs={12} sm={4} md={4}>
                   <CustomInput labelText="Credit Terms" id="credit" required formControlProps={{
 		          fullWidth: true
                     }}
 		              inputProps={{
-		              FormHelperText: "Full Vendor Address",
+		              formhelpertext: "Full Vendor Address",
 		              multiline: true,
                       rows: 2
 		            }}
@@ -105,7 +104,7 @@ handleChange = name => event => {
 		          fullWidth: true
                     }}
 		              inputProps={{
-		              FormHelperText: "Full Vendor Address",
+		              formhelpertext: "Full Vendor Address",
 		              multiline: true,
                       rows: 2
 		            }}
@@ -116,7 +115,7 @@ handleChange = name => event => {
 		         fullWidth: true
                     }}
 		              inputProps={{
-		              helperText: "Full Vendor Address",
+		              helpertext: "Full Vendor Address",
 		              multiline: true,
                       rows: 2
 		            }}

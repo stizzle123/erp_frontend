@@ -62,28 +62,25 @@ const roseColor = "#e91e63";
 const grayColor = "#999999";
 
 const primaryBoxShadow = {
-  boxShadow:
-    "0 12px 20px -10px rgba(156, 39, 176, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(156, 39, 176, 0.2)"
+
 };
 const infoBoxShadow = {
-  boxShadow:
-    "0 12px 20px -10px rgba(0, 188, 212, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(0, 188, 212, 0.2)"
+
 };
 const successBoxShadow = {
-  boxShadow:
-    "0 12px 20px -10px rgba(76, 175, 80, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(76, 175, 80, 0.2)"
+
 };
 const warningBoxShadow = {
-  boxShadow:
-    "0 12px 20px -10px rgba(255, 152, 0, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(255, 152, 0, 0.2)"
+
 };
 const dangerBoxShadow = {
-  boxShadow:
-    "0 12px 20px -10px rgba(244, 67, 54, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(244, 67, 54, 0.2)"
+
 };
 const roseBoxShadow = {
-  boxShadow:
-    "0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(233, 30, 99, 0.4)"
+
+};
+const grayBoxShadow = {
+
 };
 
 const warningCardHeader = {
@@ -99,16 +96,21 @@ const dangerCardHeader = {
   ...dangerBoxShadow
 };
 const infoCardHeader = {
-  background: "linear-gradient(60deg, #00235c, #00235c)",
+  background: "linear-gradient(60deg, #00CCFF, #00CCFF)",
   ...infoBoxShadow
 };
 const primaryCardHeader = {
-  background: "linear-gradient(60deg, #e53935, #F30000)",
+  background: "linear-gradient(60deg, #00235c, #00235c)",
   ...primaryBoxShadow
 };
 const roseCardHeader = {
   background: "linear-gradient(60deg, #ec407a, #d81b60)",
   ...roseBoxShadow
+};
+
+const grayCardHeader = {
+  background: "linear-gradient(60deg, #999999, #999999)",
+  ...grayBoxShadow
 };
 
 const cardActions = {
@@ -200,6 +202,7 @@ export {
   infoCardHeader,
   primaryCardHeader,
   roseCardHeader,
+  grayCardHeader,
   cardActions,
   cardHeader,
   defaultBoxShadow,

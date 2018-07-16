@@ -71,7 +71,7 @@ handleChange = name => event => {
     <GridItem xs={12} sm={12} md={12}>
       <form className={classes.container} noValidate autoComplete="off">
 	 <Card>
-              <CardHeader color="info">
+              <CardHeader color="primary">
                 <h4 className={classes.cardTitleWhite}>View Report</h4>
               </CardHeader>
               <CardBody>

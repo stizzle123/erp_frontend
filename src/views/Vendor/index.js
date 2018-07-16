@@ -60,7 +60,7 @@ render(){
           <Card>
             <CardHeader color="primary">
               <h4 className={classes.cardTitleWhite}>Vendor List</h4>
-              <Button color="primary" to="/vendor/add" component={Link}>Add Vendor</Button>
+              <Button color="danger" to="/vendor/add" component={Link}>Add Vendor</Button>
             </CardHeader>
             <CardBody>
               {(this.props.data.length < 1)?

@@ -14,7 +14,7 @@ import Sidebar from "../../components/Sidebar/Sidebar.jsx";
 import {connect} from 'react-redux';
 import {dashboardRoutes, AdminMenu, VendorMenu} from "../../routes/dashboard.jsx";
 import dashboardStyle from "../../assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx";
-import image from "../../assets/img/sidebar-2.jpg";
+import image from "../../assets/img/sidebars.png";
 import logo from "../../assets/img/logo1.png";
 
 const switchRoutes = (
@@ -64,7 +64,7 @@ class App extends React.Component {
       <div >
         <Sidebar
           routes={menu}
-          logoText={"EDGE X3"}
+          logoText={"EDGE"}
           logo={logo}
           image={image}
           handleDrawerToggle={this.handleDrawerToggle}

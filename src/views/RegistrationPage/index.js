@@ -34,7 +34,7 @@ class LoginInfo extends React.Component {
             <GridItem xs={12} sm={6} md={4}>
             <form>
               <Card>
-                  <CardHeader color="info">
+                  <CardHeader color="primary">
                       <center><h1>Registration</h1></center>
                   </CardHeader>
                   <CardBody>
@@ -53,15 +53,24 @@ class LoginInfo extends React.Component {
                                 }}
                         />
                     </GridItem>
+		            <GridItem xs={12} sm={12} md={12}>
+                      <CustomInput labelText="Confrim password"  id="cpassword" required formControlProps={{
+                              fullWidth: true
+                              }}
+                            inputProps={{
+                            type:"password"
+                                }}
+                        />
+                    </GridItem>
                     </Grid>
                     </CardBody>
                     <CardFooter>
                       <Grid container>
                           <GridItem xs={12} sm={6} md={6}>
-                                <Button color="info">Submit</Button>
+                                <Button color="primary">Submit</Button>
                           </GridItem>
                           <GridItem xs={12} sm={6} md={6}>
-                            <Link to="/login">Are you a Vendor? Click to create and account </Link>
+                            <Link to="/login">Have an Account? Click to Login </Link>
                           </GridItem>
                       </Grid>
                     </CardFooter>

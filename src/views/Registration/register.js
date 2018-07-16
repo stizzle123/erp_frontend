@@ -17,7 +17,7 @@ render() {
           <GridItem xs={12} sm={6} md={6}>
 	    <form>
 		 <Card>
-              <CardHeader color="info">
+              <CardHeader color="primary">
                 <center><h1>Registration</h1></center>
               </CardHeader>
 		      <CardBody>
@@ -47,7 +47,7 @@ render() {
              <br/><br/>
              <Grid container>
                 <GridItem xs={12} sm={12} md={12}>
-                      <center><Button color="info">Sign Up</Button></center>
+                      <center><Button color="primary">Sign Up</Button></center>
 		<br/>
                 </GridItem>
               </Grid>
