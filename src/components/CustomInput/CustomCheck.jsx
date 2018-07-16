@@ -18,7 +18,7 @@ function CustomCheck({ ...props }) {
         state,
         name,
       } = props;
-
+      
     return (
         <FormControl component="fieldset" {...formControlProps}
         className={formControlProps.className + " " + classes.formControl}>
@@ -27,7 +27,7 @@ function CustomCheck({ ...props }) {
           {
             collection.map((option, k) => (
             <FormControlLabel key={k} control={
-                <Checkbox name={name+"_"+k} checked={state[name+"_"+k]===option.value}
+                <Checkbox id={name} name={name+"_"+[k+1]} checked={state[name+"_"+[k+1]]===option.value}
                 {...inputProps}
                 value={option.value} />
               } label={option.label} />

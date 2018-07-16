@@ -12,7 +12,10 @@ import CardBody from "../../components/Card/CardBody.jsx";
 import CardFooter from "../../components/Card/CardFooter.jsx";
 import Progress from "../../components/Progress/Progress.jsx";
 import MiddleWare from "../../middleware/api";
+import CircularProgress from '@material-ui/core/CircularProgress';
+import purple from '@material-ui/core/colors/purple';
 import {connect} from 'react-redux';
+
 
 const styles = {
   cardCategoryWhite: {
@@ -74,7 +77,7 @@ class GeneralInfo extends React.Component {
       let middleware = new MiddleWare();
       data.payload = { general_info:this.state.data};
       data.key = "user_id";
-      data.value = "1";
+      data.value = this.props.user.id;
       middleware.makeConnection('/vendors','PUT', data).then(
         (result)=>{
           if(!result.ok || result.statusText != "OK" && result.status != 200 ) {
@@ -89,7 +92,17 @@ class GeneralInfo extends React.Component {
   }
   render() {
     const { classes, data } = this.props;
-    console.log(this.props);
+    //console.log(this.props);
+    if(this.props.loader.loading){
+      return (
+        <div>
+          <Grid container>
+            <GridItem xs={12} sm={6} md={3} style={{ margin:'20% auto'}}>
+              <CircularProgress className={classes.progress} size={70} style={{ color: purple[500]}} thickness={10} />
+            </GridItem>
+          </Grid>
+        </div>)
+    }else{
     return (
       <div>
         <Grid container>
@@ -238,7 +251,7 @@ class GeneralInfo extends React.Component {
           </GridItem>
         </Grid>
       </div>
-    );
+    );}
   }
 }
 
@@ -248,11 +261,13 @@ GeneralInfo.propTypes = {
 };
 
 GeneralInfo.defaultProps = {
-  data: {}
+  data:{general_info:{}}
 }
 function mapStateToProps(state) {
   return {
-    data: state.vendor.datum
+    data: state.vendor.datum,
+    loader: state.loader,
+    user: state.auth.user
   };
 }
 export default  connect(mapStateToProps, null)(withStyles(styles)(GeneralInfo));

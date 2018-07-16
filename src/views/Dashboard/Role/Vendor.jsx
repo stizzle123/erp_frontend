@@ -6,24 +6,21 @@ import ChartistGraph from "react-chartist";
 import withStyles from "@material-ui/core/styles/withStyles";
 import Grid from "@material-ui/core/Grid";
 // @material-ui/icons
-import ContentCopy from "@material-ui/icons/ContentCopy";
-import Store from "@material-ui/icons/Store";
-import InfoOutline from "@material-ui/icons/InfoOutline";
 import Warning from "@material-ui/icons/Warning";
-import DateRange from "@material-ui/icons/DateRange";
-import LocalOffer from "@material-ui/icons/LocalOffer";
-import Update from "@material-ui/icons/Update";
-import ArrowUpward from "@material-ui/icons/ArrowUpward";
-import AccessTime from "@material-ui/icons/AccessTime";
-import Accessibility from "@material-ui/icons/Accessibility";
 // core components
 import GridItem from "../../../components/Grid/GridItem.jsx";
-import Danger from "../../../components/Typography/Danger.jsx";
 import Card from "../../../components/Card/Card.jsx";
 import CardHeader from "../../../components/Card/CardHeader.jsx";
 import CardIcon from "../../../components/Card/CardIcon.jsx";
 import CardBody from "../../../components/Card/CardBody.jsx";
 import CardFooter from "../../../components/Card/CardFooter.jsx";
+import CircularProgress from '@material-ui/core/CircularProgress';
+import ContentPaste from "@material-ui/icons/ContentPaste";
+import Accessible from "@material-ui/icons/Accessible";
+import AccessAlarms  from "@material-ui/icons/AccessAlarms";
+import purple from '@material-ui/core/colors/purple';
+import SnackbarContent from "../../../components/Snackbar/SnackbarContent.jsx";
+import Table from "../../../components/Table/Table.jsx";
 import {connect} from 'react-redux';
 import { Redirect } from "react-router-dom";
 
@@ -42,8 +39,8 @@ class Vendor extends React.Component {
     value: 0
   };
 
-  componentWillMount(){
-    const userId = this.props.user.user_id;
+  componentDidMount(){
+    const userId = this.props.user.id;
     vendorActions.findVendorByUserId(this.props,userId);
   }
 
@@ -56,167 +53,122 @@ class Vendor extends React.Component {
   };
   render() {
     const { classes } = this.props;
-    return (
-        (this.props.vendor.status)?
-      <div>
-        <Grid container>
-          <GridItem xs={12} sm={6} md={3}>
-            <Card>
-              <CardHeader color="warning" stats icon>
-                <CardIcon color="warning">
-                  <ContentCopy />
+    console.log(this.props);
+    if(this.props.loader.loading){
+      return (
+        <div>
+          <Grid container>
+            <GridItem xs={12} sm={6} md={3} style={{ margin:'20% auto'}}>
+              <CircularProgress className={classes.progress} size={70} style={{ color: purple[500]}} thickness={10} />
+            </GridItem>
+          </Grid>
+        </div>)
+    }else{
+        if(this.props.vendor.status === "PENDING"){
+          return (<Grid container>
+            <GridItem xs={12} sm={12} md={6}>
+              <h5>Notifications</h5>
+              <br />
+              <SnackbarContent message={"Your account is yet to be activated"} close color="warning" />
+            </GridItem>
+          </Grid>);
+        }else if(!this.props.vendor.status){
+          return  <Redirect to="/vendor/add" /> 
+        }else{
+          return (<div>
+            <Grid container>
+              <GridItem xs={12} sm={6} md={3}>
+                <Card>
+                  <CardHeader color="info" stats icon>
+                    <CardIcon color="info">
+                      <ContentPaste />
+                    </CardIcon>
+                    <h1 className={classes.cardCategory}>3</h1>
+                    </CardHeader>
+                  <CardFooter stats>Active RFQs</CardFooter>
+                </Card>
+              </GridItem>
+
+              <GridItem xs={12} sm={6} md={3}>
+                <Card>
+                  <CardHeader color="danger" stats icon>
+                    <CardIcon color="danger">
+                      <Warning />
                 </CardIcon>
-                <p className={classes.cardCategory}>Used Space</p>
-                <h3 className={classes.cardTitle}>
-                  49/50 <small>GB</small>
-                </h3>
-              </CardHeader>
-              <CardFooter stats>
-                <div className={classes.stats}>
-                  <Danger>
-                    <Warning />
-                  </Danger>
-                  <a href="#pablo" onClick={e => e.preventDefault()}>
-                    Get more space
-                  </a>
-                </div>
-              </CardFooter>
-            </Card>
-          </GridItem>
-          <GridItem xs={12} sm={6} md={3}>
-            <Card>
-              <CardHeader color="success" stats icon>
-                <CardIcon color="success">
-                  <Store />
-                </CardIcon>
-                <p className={classes.cardCategory}>Revenue</p>
-                <h3 className={classes.cardTitle}>$34,245</h3>
-              </CardHeader>
-              <CardFooter stats>
-                <div className={classes.stats}>
-                  <DateRange />
-                  Last 24 Hours
-                </div>
-              </CardFooter>
-            </Card>
-          </GridItem>
-          <GridItem xs={12} sm={6} md={3}>
-            <Card>
-              <CardHeader color="danger" stats icon>
-                <CardIcon color="danger">
-                  <InfoOutline />
-                </CardIcon>
-                <p className={classes.cardCategory}>Fixed Issues</p>
-                <h3 className={classes.cardTitle}>75</h3>
-              </CardHeader>
-              <CardFooter stats>
-                <div className={classes.stats}>
-                  <LocalOffer />
-                  Tracked from Github
-                </div>
-              </CardFooter>
-            </Card>
-          </GridItem>
-          <GridItem xs={12} sm={6} md={3}>
-            <Card>
-              <CardHeader color="info" stats icon>
-                <CardIcon color="info">
-                  <Accessibility />
-                </CardIcon>
-                <p className={classes.cardCategory}>Followers</p>
-                <h3 className={classes.cardTitle}>+245</h3>
-              </CardHeader>
-              <CardFooter stats>
-                <div className={classes.stats}>
-                  <Update />
-                  Just Updated
-                </div>
-              </CardFooter>
-            </Card>
-          </GridItem>
-        </Grid>
-        <Grid container>
-          <GridItem xs={12} sm={12} md={4}>
-            <Card chart>
-              <CardHeader color="success">
-                <ChartistGraph
-                  className="ct-chart"
-                  data={dailySalesChart.data}
-                  type="Line"
-                  options={dailySalesChart.options}
-                  listener={dailySalesChart.animation}
-                />
-              </CardHeader>
-              <CardBody>
-                <h4 className={classes.cardTitle}>Daily Sales</h4>
-                <p className={classes.cardCategory}>
-                  <span className={classes.successText}>
-                    <ArrowUpward className={classes.upArrowCardCategory} /> 55%
-                  </span>{" "}
-                  increase in today sales.
-                </p>
-              </CardBody>
-              <CardFooter chart>
-                <div className={classes.stats}>
-                  <AccessTime /> updated 4 minutes ago
-                </div>
-              </CardFooter>
-            </Card>
-          </GridItem>
-          <GridItem xs={12} sm={12} md={4}>
-            <Card chart>
-              <CardHeader color="warning">
-                <ChartistGraph
-                  className="ct-chart"
-                  data={emailsSubscriptionChart.data}
-                  type="Bar"
-                  options={emailsSubscriptionChart.options}
-                  responsiveOptions={emailsSubscriptionChart.responsiveOptions}
-                  listener={emailsSubscriptionChart.animation}
-                />
-              </CardHeader>
-              <CardBody>
-                <h4 className={classes.cardTitle}>Email Subscriptions</h4>
-                <p className={classes.cardCategory}>
-                  Last Campaign Performance
-                </p>
-              </CardBody>
-              <CardFooter chart>
-                <div className={classes.stats}>
-                  <AccessTime /> campaign sent 2 days ago
-                </div>
-              </CardFooter>
-            </Card>
-          </GridItem>
-          <GridItem xs={12} sm={12} md={4}>
-            <Card chart>
-              <CardHeader color="danger">
-                <ChartistGraph
-                  className="ct-chart"
-                  data={completedTasksChart.data}
-                  type="Line"
-                  options={completedTasksChart.options}
-                  listener={completedTasksChart.animation}
-                />
-              </CardHeader>
-              <CardBody>
-                <h4 className={classes.cardTitle}>Completed Tasks</h4>
-                <p className={classes.cardCategory}>
-                  Last Campaign Performance
-                </p>
-              </CardBody>
-              <CardFooter chart>
-                <div className={classes.stats}>
-                  <AccessTime /> campaign sent 2 days ago
-                </div>
-              </CardFooter>
-            </Card>
-          </GridItem>
-        </Grid>
-      </div>
-      :
-      <Redirect to="/vendor/add" />
-    );
+                    <h1 className={classes.cardCategory}>20%</h1>
+                    </CardHeader>
+                  <CardFooter stats>Defect Rate</CardFooter>
+                </Card>
+              </GridItem>
+
+              <GridItem xs={12} sm={6} md={3}>
+                <Card>
+                  <CardHeader color="success" stats icon>
+                    <CardIcon color="success">
+                    <AccessAlarms />
+                    </CardIcon>
+                  <h1 className={classes.cardCategory}>85%</h1>
+                  </CardHeader>
+                  <CardFooter stats>On-time Supplies</CardFooter>
+                </Card>
+              </GridItem>
+
+              <GridItem xs={12} sm={6} md={3}>
+                <Card>
+                  <CardHeader color="info" stats icon>
+                    <CardIcon color="info">
+                      <Accessible />
+                    </CardIcon>
+                    <h1 className={classes.cardCategory}>93%</h1>
+                    </CardHeader>
+                  <CardFooter stats>Supplier Availability</CardFooter>
+                </Card>
+              </GridItem>
+            </Grid>
+
+            <Grid container>
+              <GridItem xs={12} sm={12} md={6}>
+                <Card>
+                  <CardHeader color="danger">
+                    <h4 className={classes.cardTitleWhite}>Requests</h4>
+                  </CardHeader>
+                  <CardBody>
+                    <Table
+                      tableHeaderColor="danger"
+                      tableHead={["Title", "Date"]}
+                      tableData={[
+                        ["Supply of LongTech", "14/6/2018"],
+                        ["Cisco Miraki License", "14/6/2018"],
+                        ["Office365 Business Licence", "14/6/2018"]
+
+                      ]}
+                    />
+                  </CardBody>
+                </Card>
+              </GridItem>
+              <GridItem xs={12} sm={12} md={6}>
+                <Card>
+                  <CardHeader color="warning">
+                    <h4 className={classes.cardTitleWhite}>Purchase Orders</h4>
+                  </CardHeader>
+                  <CardBody>
+                    <Table
+                      tableHeaderColor="warning"
+                      tableHead={["Title", "Date", "Status"]}
+                      tableData={[
+                        ["Supply of LongTech", "14/6/2018", "Payment Due"],
+                        ["Cisco Miraki License", "14/6/2018", "Paid"],
+                        ["Office365 Business Licence", "14/6/2018", "Paid"]
+
+                      ]}
+                    />
+                  </CardBody>
+                </Card>
+              </GridItem>
+            </Grid>
+          </div>);
+        }
+    }
   }
 }
 
@@ -225,14 +177,15 @@ Vendor.propTypes = {
 };
 
 Vendor.defaultProps = {
-  vendor:{},
-  user:{}
+  vendor:{}
 }
-function mapStateToProps(state) {
-  console.log(state)
+
+function mapStateToProps(state) 
+{
   return {
     vendor: state.vendor.datum,
-    user: state.auth.user
+    user: state.auth.user,
+    loader: state.loader 
   };
 }
 

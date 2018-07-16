@@ -6,52 +6,30 @@ import ChartistGraph from "react-chartist";
 import withStyles from "@material-ui/core/styles/withStyles";
 import Grid from "@material-ui/core/Grid";
 // @material-ui/icons
-import ContentCopy from "@material-ui/icons/ContentCopy";
-import Store from "@material-ui/icons/Store";
+import ContentPaste from "@material-ui/icons/ContentPaste";
 import InfoOutline from "@material-ui/icons/InfoOutline";
 import Warning from "@material-ui/icons/Warning";
-import DateRange from "@material-ui/icons/DateRange";
-import LocalOffer from "@material-ui/icons/LocalOffer";
-import Update from "@material-ui/icons/Update";
-import ArrowUpward from "@material-ui/icons/ArrowUpward";
-import AccessTime from "@material-ui/icons/AccessTime";
-import Accessibility from "@material-ui/icons/Accessibility";
-import BugReport from "@material-ui/icons/BugReport";
-import Code from "@material-ui/icons/Code";
-import Cloud from "@material-ui/icons/Cloud";
+import AccessAlarms  from "@material-ui/icons/AccessAlarms";
+import Accessible from "@material-ui/icons/Accessible";
+import Person from "@material-ui/icons/Person";
+import DataUsage from "@material-ui/icons/DataUsage";
+import Cancel from "@material-ui/icons/Cancel";
 // core components
-import GridItem from "../../components/Grid/GridItem.jsx";
-import Table from "../../components/Table/Table.jsx";
-import Tasks from "../../components/Tasks/Tasks.jsx";
-import CustomTabs from "../../components/CustomTabs/CustomTabs.jsx";
-import Danger from "../../components/Typography/Danger.jsx";
-import Card from "../../components/Card/Card.jsx";
-import CardHeader from "../../components/Card/CardHeader.jsx";
-import CardIcon from "../../components/Card/CardIcon.jsx";
-import CardBody from "../../components/Card/CardBody.jsx";
-import CardFooter from "../../components/Card/CardFooter.jsx";
-import {connect} from 'react-redux';
+import GridItem from "../../../components/Grid/GridItem.jsx";
+import Table from "../../../components/Table/Table.jsx";
 
-import { bugs, website, server } from "../../variables/general.jsx";
+import Card from "../../../components/Card/Card.jsx";
+import CardHeader from "../../../components/Card/CardHeader.jsx";
+import CardIcon from "../../../components/Card/CardIcon.jsx";
+import CardBody from "../../../components/Card/CardBody.jsx";
+import CardFooter from "../../../components/Card/CardFooter.jsx";
+import Button from "../../../components/CustomButtons/Button.jsx";
 
-import {
-  dailySalesChart,
-  emailsSubscriptionChart,
-  completedTasksChart
-} from "../../variables/charts.jsx";
+import dashboardStyle from "../../../assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
 
-import dashboardStyle from "../../assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
-
-class Dashboard extends React.Component {
+class Iac extends React.Component {
   state = {
     value: 0
-  };
-  handleChange = (event, value) => {
-    this.setState({ value });
-  };
-
-  handleChangeIndex = index => {
-    this.setState({ value: index });
   };
   render() {
     const { classes } = this.props;
@@ -60,236 +38,124 @@ class Dashboard extends React.Component {
         <Grid container>
           <GridItem xs={12} sm={6} md={3}>
             <Card>
-              <CardHeader color="warning" stats icon>
-                <CardIcon color="warning">
-                  <ContentCopy />
+              <CardHeader color="info" stats icon>
+                <CardIcon color="info">
+                  <ContentPaste />
                 </CardIcon>
-                <p className={classes.cardCategory}>Used Space</p>
-                <h3 className={classes.cardTitle}>
-                  49/50 <small>GB</small>
-                </h3>
-              </CardHeader>
-              <CardFooter stats>
-                <div className={classes.stats}>
-                  <Danger>
-                    <Warning />
-                  </Danger>
-                  <a href="#pablo" onClick={e => e.preventDefault()}>
-                    Get more space
-                  </a>
-                </div>
-              </CardFooter>
+                <p className={classes.cardCategory}><h1>36</h1></p>
+                </CardHeader>
+              <CardFooter stats>Pending Approvals</CardFooter>
             </Card>
           </GridItem>
-          <GridItem xs={12} sm={6} md={3}>
+
+		  <GridItem xs={12} sm={6} md={3}>
             <Card>
-              <CardHeader color="success" stats icon>
-                <CardIcon color="success">
-                  <Store />
+              <CardHeader color="info" stats icon>
+                <CardIcon color="warning">
+                  <Person />
                 </CardIcon>
-                <p className={classes.cardCategory}>Revenue</p>
-                <h3 className={classes.cardTitle}>$34,245</h3>
-              </CardHeader>
-              <CardFooter stats>
-                <div className={classes.stats}>
-                  <DateRange />
-                  Last 24 Hours
-                </div>
-              </CardFooter>
+                <p className={classes.cardCategory}><h1>620</h1></p>
+                </CardHeader>
+              <CardFooter stats>Active Vendors</CardFooter>
             </Card>
           </GridItem>
+
+		 <GridItem xs={12} sm={6} md={3}>
+            <Card>
+              <CardHeader color="info" stats icon>
+                <CardIcon color="gray">
+                  <Cancel />
+                </CardIcon>
+                <p className={classes.cardCategory}><h1>15</h1></p>
+                </CardHeader>
+              <CardFooter stats>Blacklisted Vendors</CardFooter>
+            </Card>
+          </GridItem>
+
+		 <GridItem xs={12} sm={6} md={3}>
+            <Card>
+              <CardHeader color="info" stats icon>
+                <CardIcon color="rose">
+                  <DataUsage />
+                </CardIcon>
+                <p className={classes.cardCategory}><h1>87%</h1></p>
+                </CardHeader>
+              <CardFooter stats>Overall Vendor Performance</CardFooter>
+            </Card>
+          </GridItem>
+
           <GridItem xs={12} sm={6} md={3}>
             <Card>
               <CardHeader color="danger" stats icon>
                 <CardIcon color="danger">
-                  <InfoOutline />
-                </CardIcon>
-                <p className={classes.cardCategory}>Fixed Issues</p>
-                <h3 className={classes.cardTitle}>75</h3>
-              </CardHeader>
-              <CardFooter stats>
-                <div className={classes.stats}>
-                  <LocalOffer />
-                  Tracked from Github
-                </div>
-              </CardFooter>
+                  <Warning />
+		        </CardIcon>
+                <p className={classes.cardCategory}><h1>20%</h1></p>
+                </CardHeader>
+              <CardFooter stats>Defect Rate</CardFooter>
             </Card>
           </GridItem>
+
           <GridItem xs={12} sm={6} md={3}>
             <Card>
-              <CardHeader color="info" stats icon>
-                <CardIcon color="info">
-                  <Accessibility />
+              <CardHeader color="success" stats icon>
+                <CardIcon color="success">
+                 <AccessAlarms />
                 </CardIcon>
-                <p className={classes.cardCategory}>Followers</p>
-                <h3 className={classes.cardTitle}>+245</h3>
-              </CardHeader>
-              <CardFooter stats>
-                <div className={classes.stats}>
-                  <Update />
-                  Just Updated
-                </div>
-              </CardFooter>
+               <p className={classes.cardCategory}><h1>85%</h1></p>
+               </CardHeader>
+              <CardFooter stats>On-time Supplies</CardFooter>
+            </Card>
+          </GridItem>
+
+          <GridItem xs={12} sm={6} md={3}>
+            <Card>
+              <CardHeader color="primary" stats icon>
+                <CardIcon color="primary">
+                  <Accessible />
+                </CardIcon>
+                <p className={classes.cardCategory}><h1>93%</h1></p>
+                </CardHeader>
+              <CardFooter stats>Supplier Availability</CardFooter>
             </Card>
           </GridItem>
         </Grid>
+
         <Grid container>
-          <GridItem xs={12} sm={12} md={4}>
-            <Card chart>
-              <CardHeader color="success">
-                <ChartistGraph
-                  className="ct-chart"
-                  data={dailySalesChart.data}
-                  type="Line"
-                  options={dailySalesChart.options}
-                  listener={dailySalesChart.animation}
-                />
-              </CardHeader>
-              <CardBody>
-                <h4 className={classes.cardTitle}>Daily Sales</h4>
-                <p className={classes.cardCategory}>
-                  <span className={classes.successText}>
-                    <ArrowUpward className={classes.upArrowCardCategory} /> 55%
-                  </span>{" "}
-                  increase in today sales.
-                </p>
-              </CardBody>
-              <CardFooter chart>
-                <div className={classes.stats}>
-                  <AccessTime /> updated 4 minutes ago
-                </div>
-              </CardFooter>
-            </Card>
-          </GridItem>
-          <GridItem xs={12} sm={12} md={4}>
-            <Card chart>
-              <CardHeader color="warning">
-                <ChartistGraph
-                  className="ct-chart"
-                  data={emailsSubscriptionChart.data}
-                  type="Bar"
-                  options={emailsSubscriptionChart.options}
-                  responsiveOptions={emailsSubscriptionChart.responsiveOptions}
-                  listener={emailsSubscriptionChart.animation}
-                />
-              </CardHeader>
-              <CardBody>
-                <h4 className={classes.cardTitle}>Email Subscriptions</h4>
-                <p className={classes.cardCategory}>
-                  Last Campaign Performance
-                </p>
-              </CardBody>
-              <CardFooter chart>
-                <div className={classes.stats}>
-                  <AccessTime /> campaign sent 2 days ago
-                </div>
-              </CardFooter>
-            </Card>
-          </GridItem>
-          <GridItem xs={12} sm={12} md={4}>
-            <Card chart>
-              <CardHeader color="danger">
-                <ChartistGraph
-                  className="ct-chart"
-                  data={completedTasksChart.data}
-                  type="Line"
-                  options={completedTasksChart.options}
-                  listener={completedTasksChart.animation}
-                />
-              </CardHeader>
-              <CardBody>
-                <h4 className={classes.cardTitle}>Completed Tasks</h4>
-                <p className={classes.cardCategory}>
-                  Last Campaign Performance
-                </p>
-              </CardBody>
-              <CardFooter chart>
-                <div className={classes.stats}>
-                  <AccessTime /> campaign sent 2 days ago
-                </div>
-              </CardFooter>
-            </Card>
-          </GridItem>
-        </Grid>
-        <Grid container>
-          <GridItem xs={12} sm={12} md={6}>
-            <CustomTabs
-              title="Tasks:"
-              headerColor="primary"
-              tabs={[
-                {
-                  tabName: "Bugs",
-                  tabIcon: BugReport,
-                  tabContent: (
-                    <Tasks
-                      checkedIndexes={[0, 3]}
-                      tasksIndexes={[0, 1, 2, 3]}
-                      tasks={bugs}
-                    />
-                  )
-                },
-                {
-                  tabName: "Website",
-                  tabIcon: Code,
-                  tabContent: (
-                    <Tasks
-                      checkedIndexes={[0]}
-                      tasksIndexes={[0, 1]}
-                      tasks={website}
-                    />
-                  )
-                },
-                {
-                  tabName: "Server",
-                  tabIcon: Cloud,
-                  tabContent: (
-                    <Tasks
-                      checkedIndexes={[1]}
-                      tasksIndexes={[0, 1, 2]}
-                      tasks={server}
-                    />
-                  )
-                }
-              ]}
-            />
-          </GridItem>
           <GridItem xs={12} sm={12} md={6}>
             <Card>
-              <CardHeader color="warning">
-                <h4 className={classes.cardTitleWhite}>Employees Stats</h4>
-                <p className={classes.cardCategoryWhite}>
-                  New employees on 15th September, 2016
-                </p>
+              <CardHeader color="gray">
+                <h4 className={classes.cardTitleWhite}>Pending Vendor Approvals</h4>
               </CardHeader>
               <CardBody>
                 <Table
-                  tableHeaderColor="warning"
-                  tableHead={["ID", "Name", "Salary", "Country"]}
+                  tableHeaderColor="gray"
+                  tableHead={["Company Name", "Category", "City", "Date Submitted"]}
                   tableData={[
-                    ["1", "Dakota Rice", "$36,738", "Niger"],
-                    ["2", "Minerva Hooper", "$23,789", "Curaçao"],
-                    ["3", "Sage Rodriguez", "$56,142", "Netherlands"],
-                    ["4", "Philip Chaney", "$38,735", "Korea, South"]
+                    ["Ojako Ltd", "Diesel Supplies", "Lagos","12/6/2018"],
+                    ["RedMark Safety", "PPE Supplies", "Port Harcourt","8/6/2018"],
+                    ["Vesta Nigeria", "IT Equipment", "Lagos","22/6/2018"]
                   ]}
                 />
+
+		       <CardFooter>
+                      <Grid container>
+                          <GridItem xs={12} sm={6} md={6}>
+                                <Button color="gray">View All Pending Approvals</Button>
+                        </GridItem>
+		               </Grid>
+                 </CardFooter>
               </CardBody>
             </Card>
           </GridItem>
+
         </Grid>
       </div>
     );
   }
 }
-
-Dashboard.propTypes = {
+Iac.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-
-function mapStateToProps(state) {
-  return {
-    user: state.auth.user
-  };
-}
-
-export default connect(mapStateToProps, null)(withStyles(dashboardStyle)(Dashboard));
+export default withStyles(dashboardStyle)(Iac);

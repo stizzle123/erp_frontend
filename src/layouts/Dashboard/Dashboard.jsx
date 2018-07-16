@@ -11,8 +11,8 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import Header from "../../components/Header/Header.jsx";
 import Footer from "../../components/Footer/Footer.jsx";
 import Sidebar from "../../components/Sidebar/Sidebar.jsx";
-
-import dashboardRoutes from "../../routes/dashboard.jsx";
+import {connect} from 'react-redux';
+import {dashboardRoutes, AdminMenu, VendorMenu} from "../../routes/dashboard.jsx";
 import dashboardStyle from "../../assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx";
 import image from "../../assets/img/sidebars.png";
 import logo from "../../assets/img/logo1.png";
@@ -50,12 +50,20 @@ class App extends React.Component {
       }
     }
   }
+  
   render() {
     const { classes, ...rest } = this.props;
+    let menu = [];
+    if(this.props.user.role === "admin"){
+      menu = AdminMenu;
+    } else if (this.props.user.role === "vendor"){
+      menu = VendorMenu;
+    }
+
     return (
       <div >
         <Sidebar
-          routes={dashboardRoutes}
+          routes={menu}
           logoText={"EDGE"}
           logo={logo}
           image={image}
@@ -89,4 +97,10 @@ App.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(dashboardStyle)(App);
+function mapStateToProps(state) {
+  return {
+    user: state.auth.user
+  };
+}
+
+export default connect(mapStateToProps, null)(withStyles(dashboardStyle)(App));

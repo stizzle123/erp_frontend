@@ -13,7 +13,6 @@ import BugReport from "@material-ui/icons/BugReport";
 import Code from "@material-ui/icons/Code";
 import Cloud from "@material-ui/icons/Cloud";
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
 import * as vendorActions from '../../actions/vendor';
 
 const styles = {
@@ -35,7 +34,7 @@ TabContainer.propTypes = {
 };
 class AddTabs extends React.Component {
   componentWillMount(){
-    const userId = 1;
+    const userId = this.props.user.id;
     vendorActions.findVendorByUserId(this.props, userId);
   }
   handleChange = (event, value) => {
@@ -97,4 +96,10 @@ AddTabs.defaultProps = {
   data:{}
 }
 
-export default connect()(withStyles(styles)(AddTabs));
+function mapStateToProps(state) {
+  return {
+    user: state.auth.user,
+  };
+}
+
+export default  connect(mapStateToProps, null)(withStyles(styles)(AddTabs));

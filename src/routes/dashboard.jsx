@@ -29,20 +29,13 @@ import Maps from "views/Maps/Maps.jsx";
 import NotificationsPage from "views/Notifications/Notifications.jsx";
 import UpgradeToPro from "views/UpgradeToPro/UpgradeToPro.jsx"; */
 
-const dashboardRoutes = [
+export const dashboardRoutes = [
   {
     path: "/dashboard",
     sidebarName: "Dashboard",
     navbarName: "Dashboard",
     icon: HomeIcon,
     component: DashboardPage
-  },
-  {
-    path: "/VendorDashboard",
-    sidebarName: "Vendor Dashboard",
-    navbarName: "Dashboard",
-    icon: HomeIcon,
-    component: VendorDashboard
   },
    {
     path: "/IacDashboard",
@@ -60,27 +53,18 @@ const dashboardRoutes = [
   },
   {
     path: "/vendor",
-    sidebarName: "Vendor List",
-    navbarName: "Vendor List",
+    sidebarName: "Vendors List",
+    navbarName: "Vendors List",
     icon: ContentPaste,
     component: VendorList
   },
   {
     path: "/vendor/add",
-    sidebarName: "Add Vendor",
-    navbarName: "Add Vendor",
+    sidebarName: "Vendor Details",
+    navbarName: "Vendor Details",
     icon: AddIcon,
     component: AddVendor
   },
-
-//  {
-//    path: "/PurchaseRequisition",
-//    sidebarName: "Purchase Requisition",
-//    navbarName: "Purchase Requisition",
-//    icon: AddShopping,
-//    component: PurchaseRequisition
-//  },
-
   {
     path: "/Project",
     sidebarName: "Purchase Requisition",
@@ -88,7 +72,6 @@ const dashboardRoutes = [
     icon: CreditCard,
     component: Project
   },
-
   {
     path: "/PurchaseOrder",
     sidebarName: "Purchase Order",
@@ -96,7 +79,6 @@ const dashboardRoutes = [
     icon:  AccountBalance,
     component: PurchaseOrder
   },
-
   {
     path: "/Log",
     sidebarName: "Report",
@@ -104,42 +86,65 @@ const dashboardRoutes = [
     icon:  LibraryBooks,
     component: Log
   },
-/*  {
-    path: "/typography",
-    sidebarName: "Typography",
-    navbarName: "Typography",
-    icon: LibraryBooks,
-    component: Typography
-  },
-  {
-    path: "/icons",
-    sidebarName: "Icons",
-    navbarName: "Icons",
-    icon: BubbleChart,
-    component: Icons
-  },
-  {
-    path: "/maps",
-    sidebarName: "Maps",
-    navbarName: "Map",
-    icon: LocationOn,
-    component: Maps
-  },
-  {
-    path: "/notifications",
-    sidebarName: "Notifications",
-    navbarName: "Notifications",
-    icon: Notifications,
-    component: NotificationsPage
-  },
-  {
-    path: "/upgrade-to-pro",
-    sidebarName: "Upgrade To PRO",
-    navbarName: "Upgrade To PRO",
-    icon: Unarchive,
-    component: UpgradeToPro
-  },
-  { redirect: true, path: "/", to: "/dashboard", navbarName: "Redirect" } */
+  { redirect: true, path: "/", to: "/dashboard", navbarName: "Redirect" }
 ];
 
-export default dashboardRoutes;
+export const AdminMenu = [
+  {
+    path: "/dashboard",
+    sidebarName: "Dashboard",
+    navbarName: "Dashboard",
+    icon: HomeIcon,
+  },
+  {
+   path: "/user",
+   sidebarName: "User Profile",
+   navbarName: "Profile",
+   icon: Person,
+   component: UserProfile
+ },
+ {
+   path: "/vendor",
+   sidebarName: "Vendors List",
+   navbarName: "Vendors List",
+   icon: ContentPaste,
+   component: VendorList
+ },
+ {
+   path: "/vendor/add",
+   sidebarName: "Vendor Details",
+   navbarName: "Vendor Details",
+   icon: AddIcon,
+   component: AddVendor
+ },
+ {
+   path: "/Project",
+   sidebarName: "Purchase Requisition",
+   navbarName: "Purchase Requisition",
+   icon: CreditCard,
+   component: Project
+ },
+ {
+   path: "/PurchaseOrder",
+   sidebarName: "Purchase Order",
+   navbarName: "Purchase Order",
+   icon:  AccountBalance,
+   component: PurchaseOrder
+ },
+ {
+   path: "/Log",
+   sidebarName: "Report",
+   navbarName: "Report",
+   icon:  LibraryBooks,
+   component: Log
+ },
+];
+
+export const VendorMenu = [
+  {
+    path: "/dashboard",
+    sidebarName: "Dashboard",
+    navbarName: "Dashboard",
+    icon: HomeIcon,
+  },
+];
