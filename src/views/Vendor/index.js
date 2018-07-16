@@ -54,6 +54,16 @@ componentDidMount(){
 render(){
     const { classes } = this.props;
     console.log(this.props);
+    if(this.props.loader.loading){
+      return (
+        <div>
+          <Grid container>
+            <GridItem xs={12} sm={6} md={3} style={{ margin:'20% auto'}}>
+              <CircularProgress className={classes.progress} size={70} style={{ color: purple[500]}} thickness={10} />
+            </GridItem>
+          </Grid>
+        </div>)
+    }else{
     return (
       <Grid container>
         <GridItem xs={12} sm={12} md={12}>
@@ -78,6 +88,7 @@ render(){
       </Grid>
     );
   }
+  }
 }
 
 Index.propTypes = {
@@ -89,7 +100,8 @@ Index.defaultProps = {
 }
 function mapStateToProps(state) {
   return {
-    data: state.vendor.data
+    data: state.vendor.data,
+    loader: state.loader,
   };
 }
 
