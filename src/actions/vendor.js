@@ -9,14 +9,24 @@ export function vendorData(arry){
     return {type: VENDOR_DATA, data:arry};  
 }
 
-export function findAllVendors(props){
+export function findAllVendors(props, type=''){
     let middleware = new MiddleWare();
+    let endpoint = '/vendors';
+    if(type === 'pending'){
+        endpoint = endpoint+'/pending';
+    }else if(type === 'approved'){
+        endpoint = endpoint+'/approved';
+    }else if(type === "unapproved"){
+        endpoint = endpoint+'/unapproved';
+    }else if(type === "blacklisted"){
+        endpoint = endpoint+'/blacklisted';
+    }
     props.dispatch(loadAction.Loading());
-        return middleware.makeConnection('/vendors','GET').then((response) => response.json()).then((responseJson)=>{
+        return middleware.makeConnection(endpoint ,'GET').then((response) => response.json()).then((responseJson)=>{
             let datas =[];
             responseJson.map((row)=>{
                 let arry = [];
-                arry.push(row.general_info.company_name, row.general_info.contact_name, row.general_info.contact_phone,
+                arry.push(row._id, row.general_info.company_name, row.general_info.contact_name, row.general_info.contact_phone,
                 row.general_info.contact_email, row.status);
                 datas.push(arry);
             });
@@ -29,6 +39,19 @@ export function findVendorByUserId(props,userId){
     let middleware = new MiddleWare();
     props.dispatch(loadAction.Loading());
     return middleware.makeConnection('/vendors/'+userId,'GET').then((response) => {
+        return response.json()
+    }).then(        
+        (responseJson)=>{
+        props.dispatch(vendorData(responseJson[0]));
+        props.dispatch(loadAction.LoadingSuccess());
+        }
+    );
+}
+
+export function findVendorById(props,vendorId){
+    let middleware = new MiddleWare();
+    props.dispatch(loadAction.Loading());
+    return middleware.makeConnection('/vendors/one/'+vendorId,'GET').then((response) => {
         return response.json()
     }).then(        
         (responseJson)=>{

@@ -11,8 +11,12 @@ import Card from "../../components/Card/Card.jsx";
 import CardHeader from "../../components/Card/CardHeader.jsx";
 import CardBody from "../../components/Card/CardBody.jsx";
 import Button from "../../components/CustomButtons/Button.jsx";
+import Approve from "@material-ui/icons/ThumbUp";
+import Unapprove from "@material-ui/icons/ThumbDown";
 import { Link } from 'react-router-dom';
 import PropTypes from "prop-types";
+import CircularProgress from '@material-ui/core/CircularProgress';
+import purple from '@material-ui/core/colors/purple';
 import * as vendorActions from '../../actions/vendor';
 
 const styles = {
@@ -47,8 +51,26 @@ const styles = {
 
 class Index extends React.Component {
 
-componentDidMount(){
-  vendorActions.findAllVendors(this.props);
+  constructor(props){
+    super(props)
+    this.handler = this.handler.bind(this)
+  }
+ 
+handler(type, id){
+  console.log(type, id);
+}
+
+
+/* componentDidMount(){
+  const type = this.props.match.params.type;
+  vendorActions.findAllVendors(this.props, type);
+} */
+
+componentDidUpdate(prevProps) {
+  console.log(prevProps);
+  if (this.props.match.params.type !== prevProps.match.params.type) {
+    vendorActions.findAllVendors(this.props, this.props.match.params.type);
+  }
 }
 
 render(){
@@ -70,7 +92,6 @@ render(){
           <Card>
             <CardHeader color="primary">
               <h4 className={classes.cardTitleWhite}>Vendor List</h4>
-              <Button color="danger" to="/vendor/add" component={Link}>Add Vendor</Button>
             </CardHeader>
             <CardBody>
               {(this.props.data.length < 1)?
@@ -78,8 +99,9 @@ render(){
               :
               <Table
                 tableHeaderColor="primary"
-                tableHead={["Company Name", "Contact Person", "Contact Telephone","Contact Email" ,"Status"]}
-                tableData={this.props.data}
+                tableHead={["Company Name", "Contact Person", "Contact Telephone","Contact Email" ,"Status", "Action"]}
+                tableData={this.props.data} cardActions={[{label: Approve}]}  
+                handler={this.handler} viewLink="/vendor/view/"
               />
                }
 			</CardBody>
@@ -99,6 +121,7 @@ Index.defaultProps = {
   data: []
 }
 function mapStateToProps(state) {
+  console.log(state);
   return {
     data: state.vendor.data,
     loader: state.loader,

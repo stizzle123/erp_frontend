@@ -18,21 +18,8 @@ class  LoggedIn extends React.Component {
     return(
     <div>
     <div className={classes.searchWrapper}>
-    <CustomInput
-      formControlProps={{
-        className: classes.margin + " " + classes.search
-      }}
-      inputProps={{
-        placeholder: "Search",
-        inputProps: {
-          "aria-label": "Search"
-        }
-      }}
-    />
-    <Button color="white" aria-label="edit" justIcon round>
-      <Search />
-    </Button>
-  </div>
+     Currently logged in as {this.props.user.username}
+    </div>
     <Button
       color={window.innerWidth > 959 ? "transparent" : "white"}
       justIcon={window.innerWidth > 959}
@@ -79,4 +66,10 @@ const mapDispatchToProps = (dispatch) => {
     Logout: () => dispatch({type:USER_LOGGED_OUT})
   }
 }
-export default connect(null, mapDispatchToProps)(withStyles(headerLinksStyle)(LoggedIn));
+
+function mapStateToProps(state) {
+  return {
+    user: state.auth.user
+  };
+}
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(headerLinksStyle)(LoggedIn));

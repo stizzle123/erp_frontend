@@ -16,7 +16,7 @@ import DashboardPage from "../views/Dashboard/Dashboard.jsx";
 import UserProfile from "../views/UserProfile/UserProfile.jsx";
 import VendorList from "../views/Vendor/index.js";
 import AddVendor from "../views/Vendor/add.js";
-import PurchaseRequisition from "../views/PurchaseRequisition/index.js";
+import ViewVendor from "../views/Vendor/view.js";
 import PurchaseOrder from "../views/PurchaseOrder/index.js";
 import Project from "../views/Project/index.js";
 import Log from "../views/Log/index.js";
@@ -43,10 +43,21 @@ export const dashboardRoutes = [
     component: UserProfile
   },
   {
-    path: "/vendor",
+    path: "/vendor/view/:id",
     sidebarName: "Vendors List",
     navbarName: "Vendors List",
     icon: ContentPaste,
+    component: ViewVendor
+  },{
+    path: "/vendor/type/:type",
+    sidebarName: "Vendors List",
+    navbarName: "Vendors List",
+    component: VendorList
+  },
+  {
+    path: "/vendor",
+    sidebarName: "Vendors List",
+    navbarName: "Vendors List",
     component: VendorList
   },
   {
@@ -139,8 +150,18 @@ export const IacMenu = [
     icon: HomeIcon,
   },
   {
-    path: "/vendor",
-    sidebarName: "Vendors",
+    path: "/vendor/type/approved",
+    sidebarName: "Approved Vendors",
+    navbarName: "Vendors",
+    icon: LibraryBooks,
+  },{
+    path: "/vendor/type/pending",
+    sidebarName: "Pending Approval",
+    navbarName: "Vendors",
+    icon: LibraryBooks,
+  },{
+    path: "/vendor/type/blacklisted",
+    sidebarName: "Blacklisted Vendors",
     navbarName: "Vendors",
     icon: LibraryBooks,
   },

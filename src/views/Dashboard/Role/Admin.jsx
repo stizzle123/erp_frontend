@@ -214,7 +214,7 @@ class Admin extends React.Component {
         <Grid container>
           <GridItem xs={12} sm={12} md={6}>
             <CustomTabs
-              title="Tasks:"
+              title="Tabs : "
               headerColor="primary"
               tabs={[
                 {
