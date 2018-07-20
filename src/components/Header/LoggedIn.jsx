@@ -18,7 +18,7 @@ class  LoggedIn extends React.Component {
     return(
     <div>
     <div className={classes.searchWrapper}>
-     Currently logged in as {this.props.user.username}
+     Currently logged in as {this.props.user.email}
     </div>
     <Button
       color={window.innerWidth > 959 ? "transparent" : "white"}
@@ -68,6 +68,7 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 function mapStateToProps(state) {
+  console.log(state);
   return {
     user: state.auth.user
   };

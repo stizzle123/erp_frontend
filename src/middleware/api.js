@@ -2,8 +2,9 @@
 
 class MiddleWare{
     
-    constructor(){
-        this.api_root = "http://127.0.0.1:3000"    
+    constructor(token=""){
+        this.api_root = "http://127.0.0.1:3000"    ;
+        this.token = token;
     }
 
     makeConnection(endpoint, httpVerb, body=''){
@@ -15,6 +16,7 @@ class MiddleWare{
                 mode: "cors",
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': "Bearer "+this.token
                 }
             }
         }else{
@@ -23,6 +25,7 @@ class MiddleWare{
                 mode: "cors",
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': "Bearer "+this.token
                 },
                 body: JSON.stringify(body)
             }

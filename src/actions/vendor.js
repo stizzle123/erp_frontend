@@ -10,7 +10,7 @@ export function vendorData(arry){
 }
 
 export function findAllVendors(props, type=''){
-    let middleware = new MiddleWare();
+    let middleware = new MiddleWare(props.user.token);
     let endpoint = '/vendors';
     if(type === 'pending'){
         endpoint = endpoint+'/pending';
@@ -36,7 +36,7 @@ export function findAllVendors(props, type=''){
 }
 
 export function findVendorByUserId(props,userId){
-    let middleware = new MiddleWare();
+    let middleware = new MiddleWare(props.user.token);
     props.dispatch(loadAction.Loading());
     return middleware.makeConnection('/vendors/'+userId,'GET').then((response) => {
         return response.json()
@@ -49,7 +49,7 @@ export function findVendorByUserId(props,userId){
 }
 
 export function findVendorById(props,vendorId){
-    let middleware = new MiddleWare();
+    let middleware = new MiddleWare(props.user.token);
     props.dispatch(loadAction.Loading());
     return middleware.makeConnection('/vendors/one/'+vendorId,'GET').then((response) => {
         return response.json()

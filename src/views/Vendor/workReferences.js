@@ -64,7 +64,7 @@ class WorkReferences extends React.Component {
 
   submitDetails = e =>{
     let data = {};
-    let middleware = new MiddleWare();
+    let middleware = new MiddleWare(this.props.user.token);
     data.payload = { work_reference:this.state.data, status:"PENDING"};
     data.key = "user_id";
     data.value = this.props.user.id;

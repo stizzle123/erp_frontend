@@ -92,7 +92,7 @@ class BusinessInfo extends React.Component {
     e.preventDefault();
     this.setState({loading:true});
     let data = {};
-    let middleware = new MiddleWare();
+    let middleware = new MiddleWare(this.props.user.token);
     data.payload = { business_info:this.state.data};
     data.key = "user_id";
     data.value = this.props.user.id;

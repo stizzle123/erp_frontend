@@ -9,6 +9,9 @@ const extractPlugin = new ExtractTextPlugin({
 module.exports = {
     entry: "./index.js",
     mode: 'development',
+    resolve: {
+        modules: [path.resolve(__dirname, 'src'), 'node_modules']
+      },
     output: {
         // CHANGED LINE        
         filename: '[name].bundle.js',

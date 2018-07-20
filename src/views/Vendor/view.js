@@ -79,7 +79,7 @@ class View extends React.Component {
   unApproval(){
     e.preventDefault();
     let data = {};
-    let middleware = new MiddleWare();
+    let middleware = new MiddleWare(this.props.user.token);
     data.key = this.props.data._id;
     data.value = "PENDING";
     data.reason = this.state.reason;

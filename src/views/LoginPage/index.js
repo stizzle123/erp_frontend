@@ -30,8 +30,10 @@ class LoginInfo extends React.Component {
 
   login = (e) => {
     e.preventDefault();
-    AclAuth.authenticate(this.state.data.username, this.state.data.password, (user) => {
-      this.props.dispatch({type: USER_LOGGED_IN, user: user });
+    AclAuth.authenticate(this.state.data.username, this.state.data.password, (user,token) => {
+      let u = user;
+      u.token = token;
+      this.props.dispatch({type: USER_LOGGED_IN, user: u});
     })
   }
 
