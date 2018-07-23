@@ -3,6 +3,7 @@ import Button from "../../components/CustomButtons/Button.jsx";
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import GridItem from "../../components/Grid/GridItem.jsx";
+import CardIcon from "../../components/Card/CardIcon.jsx";
 import Card from "../../components/Card/Card.jsx";
 import CardHeader from "../../components/Card/CardHeader.jsx";
 import CardBody from "../../components/Card/CardBody.jsx";
@@ -13,12 +14,21 @@ import {USER_LOGGED_IN} from '../../actions/index';
 import AclAuth from '../../actions/auth';
 import { connect } from 'react-redux';
 import { Redirect } from "react-router-dom";
-
+import InputAdornment from "@material-ui/core/InputAdornment";
+import Face from "@material-ui/icons/Face";
+import LockOutline from "@material-ui/icons/LockOutline";
+import classNames from 'classnames';
+import logo from "../../assets/img/erplogo.png";
+import logo2 from "../../assets/img/footerbar.png";
+import { withStyles } from '@material-ui/core/styles';
 
 class LoginInfo extends React.Component {
 
   state = {
-    data: {username:'', password:''}
+    data: {username:'', password:''},
+	 card: {
+    minWidth:12,
+	 }
   }
   handleChange = event => {
     let data = this.state.data;
@@ -38,6 +48,7 @@ class LoginInfo extends React.Component {
   }
 
   render() {
+	  const { classes } = this.props;
     const { from } = this.props.location.state || { from: { pathname: '/' }}
     if (this.props.redirectToReferrer === true) {
       //console.log(from);
@@ -45,45 +56,61 @@ class LoginInfo extends React.Component {
     }
       return (
         <div>
-          <Grid container>
-          <GridItem xs={12} sm={6} md={4}>
+		  <Grid container>
+          <GridItem xs={12} sm={6} md={3}>
           </GridItem>
-            <GridItem xs={12} sm={6} md={4}>
+            <GridItem xs={12} sm={6} md={6}>
             <form onSubmit={this.login}>
               <Card>
                   <CardHeader color="primary">
-                      <center><h1>Login</h1></center>
-                  </CardHeader>
+                   <center><img src={logo} /></center>
+		           </CardHeader>
                   <CardBody>
-                  <Grid container>
-                    <GridItem xs={12} sm={12} md={12}>
-                      <CustomInput labelText="Username" id="username" required formControlProps={{
-                              fullWidth: true
-                              }} inputProps={{onChange: this.handleChange,}}/>
+		          <GridItem>
+                  <CustomInput labelText="Username" id="username" required formControlProps={{
+
+                              }} inputProps={{
+		                      endAdornment: (
+                              <InputAdornment position="end">
+                              <Face />
+                              </InputAdornment>
+                               ),
+		                      onChange: this.handleChange,
+		                          }}/>
                     </GridItem>
-                    <GridItem xs={12} sm={12} md={12}>
+                    <GridItem>
                       <CustomInput labelText="Password"  id="password" required formControlProps={{
-                              fullWidth: true
+
                               }}
                             inputProps={{
+						    endAdornment: (
+                              <InputAdornment position="end">
+                              <LockOutline />
+                              </InputAdornment>
+                               ),
                             type:"password",
                             onChange: this.handleChange,
                                 }}
                         />
                     </GridItem>
-                    </Grid>
+
                     </CardBody>
-                    <CardFooter>
-                      <Grid container>
-                          <GridItem xs={12} sm={6} md={6}>
+                    <Grid container>
+                          <GridItem xs={12} sm={6} md={12}>
                                 <Button type="submit" color="info" onClick={this.login}>Login</Button>
                           </GridItem>
-                          <GridItem xs={12} sm={6} md={6}>
+                          <GridItem xs={12} sm={12} md={12}>
                             <Link to="/register">Are you a new Vendor? Click to create and account </Link>
                           </GridItem>
-                      </Grid>
-                    </CardFooter>
-              </Card>
+						 </Grid>
+                     	<CardFooter />
+					<img src={logo2} />
+					<GridItem xs={12} sm={12} md={12}>
+					   <CardFooter />
+				    <center><Link to="">Forgot Password?</Link></center>
+					<CardFooter />
+                     </GridItem>
+				 </Card>
             </form>
           </GridItem>
         </Grid>

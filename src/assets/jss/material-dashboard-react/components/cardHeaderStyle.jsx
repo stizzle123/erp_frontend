@@ -4,9 +4,8 @@ import {
   dangerCardHeader,
   infoCardHeader,
   primaryCardHeader,
-  roseCardHeader,
-  grayCardHeader
-} from "../../material-dashboard-react.jsx";
+  roseCardHeader
+} from "assets/jss/material-dashboard-react.jsx";
 const cardHeaderStyle = {
   cardHeader: {
     padding: "0.75rem 1.25rem",
@@ -14,7 +13,7 @@ const cardHeaderStyle = {
     borderBottom: "none",
     background: "transparent",
     zIndex: "3 !important",
-    "&$cardHeaderPlain,&$cardHeaderIcon,&$cardHeaderStats,&$warningCardHeader,&$successCardHeader,&$dangerCardHeader,&$infoCardHeader,&$primaryCardHeader,&$roseCardHeader,&$grayCardHeader": {
+    "&$cardHeaderPlain,&$cardHeaderImage,&$cardHeaderContact,&$cardHeaderSignup,&$cardHeaderIcon,&$cardHeaderStats,&$warningCardHeader,&$successCardHeader,&$dangerCardHeader,&$infoCardHeader,&$primaryCardHeader,&$roseCardHeader": {
       margin: "0 15px",
       padding: "0",
       position: "relative",
@@ -23,8 +22,8 @@ const cardHeaderStyle = {
     "&:first-child": {
       borderRadius: "calc(.25rem - 1px) calc(.25rem - 1px) 0 0"
     },
-    "&$warningCardHeader,&$successCardHeader,&$dangerCardHeader,&$infoCardHeader,&$primaryCardHeader,&$roseCardHeader,&$grayCardHeader": {
-      "&:not($cardHeaderIcon)": {
+    "&$warningCardHeader,&$successCardHeader,&$dangerCardHeader,&$infoCardHeader,&$primaryCardHeader,&$roseCardHeader": {
+      "&:not($cardHeaderIcon):not($cardHeaderImage):not($cardHeaderText)": {
         borderRadius: "3px",
         marginTop: "-20px",
         padding: "15px"
@@ -47,11 +46,50 @@ const cardHeaderStyle = {
     },
     "&$cardHeaderStats$cardHeaderIcon": {
       textAlign: "right"
+    },
+    "&$cardHeaderImage": {
+      marginLeft: "15px",
+      marginRight: "15px",
+      marginTop: "-30px",
+      borderRadius: "6px"
+    },
+    "&$cardHeaderText": {
+      display: "inline-block"
     }
   },
   cardHeaderPlain: {
-    marginLeft: "0px !important",
-    marginRight: "0px !important"
+    marginLeft: "0px",
+    marginRight: "0px",
+    "&$cardHeaderImage": {
+      margin: "0 !important"
+    }
+  },
+  cardHeaderImage: {
+    position: "relative",
+    padding: "0",
+    zIndex: "1",
+    "& img": {
+      width: "100%",
+      borderRadius: "6px",
+      pointerEvents: "none",
+      boxShadow:
+        "0 5px 15px -8px rgba(0, 0, 0, 0.24), 0 8px 10px -5px rgba(0, 0, 0, 0.2)"
+    },
+    "& a": {
+      display: "block"
+    }
+  },
+  cardHeaderContact: {
+    margin: "0 15px",
+    marginTop: "-20px"
+  },
+  cardHeaderSignup: {
+    marginLeft: "20px",
+    marginRight: "20px",
+    marginTop: "-40px",
+    padding: "20px 0",
+    width: "100%",
+    marginBottom: "15px"
   },
   cardHeaderStats: {
     "& $cardHeaderIcon": {
@@ -62,7 +100,7 @@ const cardHeaderStyle = {
     }
   },
   cardHeaderIcon: {
-    "&$warningCardHeader,&$successCardHeader,&$dangerCardHeader,&$infoCardHeader,&$primaryCardHeader,&$roseCardHeader,&$grayCardHeader": {
+    "&$warningCardHeader,&$successCardHeader,&$dangerCardHeader,&$infoCardHeader,&$primaryCardHeader,&$roseCardHeader": {
       background: "transparent",
       boxShadow: "none"
     },
@@ -80,45 +118,40 @@ const cardHeaderStyle = {
       margin: "5px 4px 0px"
     }
   },
+  cardHeaderText: {},
   warningCardHeader: {
     color: "#FFFFFF",
-    "&:not($cardHeaderIcon)": {
+    "&:not($cardHeaderText):not($cardHeaderIcon)": {
       ...warningCardHeader
     }
   },
   successCardHeader: {
     color: "#FFFFFF",
-    "&:not($cardHeaderIcon)": {
+    "&:not($cardHeaderText):not($cardHeaderIcon)": {
       ...successCardHeader
     }
   },
   dangerCardHeader: {
     color: "#FFFFFF",
-    "&:not($cardHeaderIcon)": {
+    "&:not($cardHeaderText):not($cardHeaderIcon)": {
       ...dangerCardHeader
     }
   },
-  grayCardHeader: {
+  infoCardHeader: {
     color: "#FFFFFF",
-    "&:not($cardHeaderIcon)": {
-      ...grayCardHeader
-    }
-  },
-   infoCardHeader: {
-    color: "#FFFFFF",
-    "&:not($cardHeaderIcon)": {
+    "&:not($cardHeaderText):not($cardHeaderIcon)": {
       ...infoCardHeader
     }
   },
   primaryCardHeader: {
     color: "#FFFFFF",
-    "&:not($cardHeaderIcon)": {
+    "&:not($cardHeaderText):not($cardHeaderIcon)": {
       ...primaryCardHeader
     }
   },
   roseCardHeader: {
     color: "#FFFFFF",
-    "&:not($cardHeaderIcon)": {
+    "&:not($cardHeaderText):not($cardHeaderIcon)": {
       ...roseCardHeader
     }
   }

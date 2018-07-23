@@ -1,30 +1,32 @@
+// ##############################
+// // // Tasks styles
+// #############################
+
 import {
   defaultFont,
   primaryColor,
-  dangerColor
-} from "../../material-dashboard-react.jsx";
-import tooltipStyle from "../tooltipStyle.jsx";
-import checkboxAdnRadioStyle from "../checkboxAdnRadioStyle.jsx";
+  dangerColor,
+  tooltip
+} from "assets/jss/material-dashboard-react.jsx";
+import customCheckboxRadioSwitch from "assets/jss/material-dashboard-react/customCheckboxRadioSwitch.jsx";
+
 const tasksStyle = {
-  ...tooltipStyle,
-  ...checkboxAdnRadioStyle,
+  ...customCheckboxRadioSwitch,
   table: {
-    marginBottom: "0",
-    overflow: "visible"
+    marginBottom: "0"
   },
   tableRow: {
     position: "relative",
     borderBottom: "1px solid #dddddd"
   },
   tableActions: {
-    display: "flex",
     border: "none",
     padding: "12px 8px !important",
     verticalAlign: "middle"
   },
   tableCell: {
     ...defaultFont,
-    padding: "8px",
+    padding: "0",
     verticalAlign: "middle",
     border: "none",
     lineHeight: "1.42857143",
@@ -47,6 +49,7 @@ const tasksStyle = {
     backgroundColor: "transparent",
     color: dangerColor,
     boxShadow: "none"
-  }
+  },
+  tooltip
 };
 export default tasksStyle;

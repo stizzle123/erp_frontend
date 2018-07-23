@@ -1,3 +1,7 @@
+// ##############################
+// // // SnackbarContent styles
+// #############################
+
 import {
   defaultFont,
   primaryBoxShadow,
@@ -6,7 +10,7 @@ import {
   warningBoxShadow,
   dangerBoxShadow,
   roseBoxShadow
-} from "../../material-dashboard-react.jsx";
+} from "assets/jss/material-dashboard-react.jsx";
 
 const snackbarContentStyle = {
   root: {
@@ -31,32 +35,32 @@ const snackbarContentStyle = {
   },
   info: {
     backgroundColor: "#00d3ee",
-    color: "#ffffff",
+    color: "#00d3ee",
     ...infoBoxShadow
   },
   success: {
     backgroundColor: "#5cb860",
-    color: "#ffffff",
+    color: "#5cb860",
     ...successBoxShadow
   },
   warning: {
     backgroundColor: "#ffa21a",
-    color: "#ffffff",
+    color: "#ffa21a",
     ...warningBoxShadow
   },
   danger: {
     backgroundColor: "#f55a4e",
-    color: "#ffffff",
+    color: "#f55a4e",
     ...dangerBoxShadow
   },
   primary: {
     backgroundColor: "#af2cc5",
-    color: "#ffffff",
+    color: "#af2cc5",
     ...primaryBoxShadow
   },
   rose: {
     backgroundColor: "#eb3573",
-    color: "#ffffff",
+    color: "#eb3573",
     ...roseBoxShadow
   },
   message: {
@@ -73,13 +77,24 @@ const snackbarContentStyle = {
     height: "24px"
   },
   icon: {
+    // display: "block",
+    // left: "15px",
+    // position: "absolute",
+    // top: "50%",
+    // marginTop: "-15px",
+    width: "38px",
+    height: "38px",
     display: "block",
     left: "15px",
     position: "absolute",
-    top: "50%",
-    marginTop: "-15px",
-    width: "30px",
-    height: "30px"
+    marginTop: "-39px",
+    fontSize: "20px",
+    backgroundColor: "#FFFFFF",
+    padding: "9px",
+    borderRadius: "50%",
+    maxWidth: "38px",
+    boxShadow:
+      "0 10px 30px -12px rgba(0, 0, 0, 0.42), 0 4px 25px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2)"
   },
   infoIcon: {
     color: "#00d3ee"
@@ -101,7 +116,8 @@ const snackbarContentStyle = {
   },
   iconMessage: {
     paddingLeft: "50px",
-    display: "block"
+    display: "block",
+	 color: "#FFFFFF"
   }
 };
 
