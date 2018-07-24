@@ -21,6 +21,8 @@ import classNames from 'classnames';
 import logo from "../../assets/img/erplogo.png";
 import logo2 from "../../assets/img/footerbar.png";
 import { withStyles } from '@material-ui/core/styles';
+import GridContainer from "../../components/Grid/GridContainer.jsx";
+
 
 class LoginInfo extends React.Component {
 
@@ -55,11 +57,10 @@ class LoginInfo extends React.Component {
       return <Redirect to="/dashboard" />
     }
       return (
-        <div>
-		  <Grid container>
-          <GridItem xs={12} sm={6} md={3}>
+		  <GridContainer>
+          <GridItem xs={12} sm={8} md={4}>
           </GridItem>
-            <GridItem xs={12} sm={6} md={6}>
+            <GridItem xs={12} sm={8} md={4}>
             <form onSubmit={this.login}>
               <Card>
                   <CardHeader color="primary">
@@ -68,7 +69,7 @@ class LoginInfo extends React.Component {
                   <CardBody>
 		          <GridItem>
                   <CustomInput labelText="Username" id="username" required formControlProps={{
-
+                        fullWidth: true
                               }} inputProps={{
 		                      endAdornment: (
                               <InputAdornment position="end">
@@ -80,7 +81,7 @@ class LoginInfo extends React.Component {
                     </GridItem>
                     <GridItem>
                       <CustomInput labelText="Password"  id="password" required formControlProps={{
-
+                             fullWidth: true
                               }}
                             inputProps={{
 						    endAdornment: (
@@ -97,7 +98,7 @@ class LoginInfo extends React.Component {
                     </CardBody>
                     <Grid container>
                           <GridItem xs={12} sm={6} md={12}>
-                                <Button type="submit" color="info" onClick={this.login}>Login</Button>
+                                <Button type="submit" color="primary" onClick={this.login}>Login</Button>
                           </GridItem>
                           <GridItem xs={12} sm={12} md={12}>
                             <Link to="/register">Are you a new Vendor? Click to create and account </Link>
@@ -113,8 +114,7 @@ class LoginInfo extends React.Component {
 				 </Card>
             </form>
           </GridItem>
-        </Grid>
-        </div>
+        </GridContainer>
       );
     }
 }

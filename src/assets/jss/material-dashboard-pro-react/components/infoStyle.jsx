@@ -51,18 +51,22 @@ const infoStyle = {
   descriptionWrapper: {
     color: grayColor,
     overflow: "hidden"
+
   },
   title: {
     color: "#3C4858",
     margin: "30px 0 15px",
     textDecoration: "none",
-    fontSize: "18px"
+    fontSize: "18px",
+	fontFamily: "'Roboto', 'Helvetica', 'Arial'"
   },
   description: {
     color: grayColor,
     overflow: "hidden",
     marginTop: "0px",
+	fontFamily: "'Roboto', 'Helvetica', 'Arial'",
     fontSize: "14px"
+
   }
 };
 

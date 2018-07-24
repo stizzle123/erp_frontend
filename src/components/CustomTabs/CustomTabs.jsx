@@ -9,13 +9,11 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 // core components
-import Card from "../Card/Card.jsx";
-import CardBody from "../Card/CardBody.jsx";
-import CardHeader from "../Card/CardHeader.jsx";
-import {SHOW_VENDOR_PART} from '../../actions/index';
-import { connect } from 'react-redux'
+import Card from "components/Card/Card.jsx";
+import CardBody from "components/Card/CardBody.jsx";
+import CardHeader from "components/Card/CardHeader.jsx";
 
-import customTabsStyle from "../../assets/jss/material-dashboard-react/components/customTabsStyle.jsx";
+import customTabsStyle from "assets/jss/material-dashboard-pro-react/components/customTabsStyle.jsx";
 
 class CustomTabs extends React.Component {
   state = {
@@ -24,7 +22,6 @@ class CustomTabs extends React.Component {
 
   handleChange = (event, value) => {
     this.setState({ value });
-    this.props.dispatch({type: SHOW_VENDOR_PART, value: value });
   };
 
   render() {
@@ -53,8 +50,6 @@ class CustomTabs extends React.Component {
               root: classes.tabsRoot,
               indicator: classes.displayNone
             }}
-            scrollable
-            scrollButtons="auto"
           >
             {tabs.map((prop, key) => {
               var icon = {};
@@ -75,7 +70,6 @@ class CustomTabs extends React.Component {
                   key={key}
                   label={prop.tabName}
                   {...icon}
-                  
                 />
               );
             })}
@@ -101,7 +95,8 @@ CustomTabs.propTypes = {
     "success",
     "danger",
     "info",
-    "primary"
+    "primary",
+    "rose"
   ]),
   title: PropTypes.string,
   tabs: PropTypes.arrayOf(
@@ -115,7 +110,4 @@ CustomTabs.propTypes = {
   plainTabs: PropTypes.bool
 };
 
-
-
-
-export default connect()(withStyles(customTabsStyle)(CustomTabs));
+export default withStyles(customTabsStyle)(CustomTabs);

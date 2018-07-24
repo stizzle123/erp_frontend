@@ -35,6 +35,7 @@ const customInputStyle = {
     color: "#AAAAAA !important",
     fontWeight: "400",
     fontSize: "14px",
+	fontFamily: '"Roboto"',
     lineHeight: "1.42857",
     top: "10px",
     "& + $underline": {
@@ -81,7 +82,7 @@ const customInputStyle = {
     color: "#495057",
     "&,&::placeholder": {
       fontSize: "14px",
-      fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+      fontFamily:"'Roboto', 'Helvetica', 'Arial'",
       fontWeight: "400",
       lineHeight: "1.42857",
       opacity: "1"
