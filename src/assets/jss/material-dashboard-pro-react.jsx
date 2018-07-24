@@ -80,12 +80,12 @@ const card = {
 };
 
 const defaultFont = {
-  fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+  fontFamily: '"Roboto"',
   fontWeight: "300",
   lineHeight: "1.5em"
 };
 
-const primaryColor = "#9c27b0";
+const primaryColor = "#000066";
 const warningColor = "#ff9800";
 const dangerColor = "#f44336";
 const successColor = "#4caf50";
@@ -121,48 +121,48 @@ const roseBoxShadow = {
 // old card headers
 const orangeCardHeader = {
   background: "linear-gradient(60deg, #ffa726, #fb8c00)",
-  ...warningBoxShadow
+
 };
 const greenCardHeader = {
   background: "linear-gradient(60deg, #66bb6a, #43a047)",
-  ...successBoxShadow
+
 };
 const redCardHeader = {
   background: "linear-gradient(60deg, #ef5350, #e53935)",
-  ...dangerBoxShadow
+
 };
 const blueCardHeader = {
   background: "linear-gradient(60deg, #26c6da, #00acc1)",
-  ...infoBoxShadow
+
 };
 const purpleCardHeader = {
   background: "linear-gradient(60deg, #ab47bc, #8e24aa)",
-  ...primaryBoxShadow
+
 };
 // new card headers
 const warningCardHeader = {
   background: "linear-gradient(60deg, #ffa726, #fb8c00)",
-  ...warningBoxShadow
+
 };
 const successCardHeader = {
   background: "linear-gradient(60deg, #66bb6a, #43a047)",
-  ...successBoxShadow
+
 };
 const dangerCardHeader = {
   background: "linear-gradient(60deg, #ef5350, #e53935)",
-  ...dangerBoxShadow
+
 };
 const infoCardHeader = {
   background: "linear-gradient(60deg, #26c6da, #00acc1)",
-  ...infoBoxShadow
+
 };
 const primaryCardHeader = {
-  background: "linear-gradient(60deg, #ab47bc, #8e24aa)",
-  ...primaryBoxShadow
+  background: "linear-gradient(60deg, #000066, #000066)",
+
 };
 const roseCardHeader = {
   background: "linear-gradient(60deg, #ec407a, #d81b60)",
-  ...roseBoxShadow
+
 };
 
 const cardActions = {
@@ -201,7 +201,7 @@ const tooltip = {
     "0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12), 0 5px 5px -3px rgba(0, 0, 0, 0.2)",
   maxWidth: "200px",
   textAlign: "center",
-  fontFamily: '"Helvetica Neue",Helvetica,Arial,sans-serif',
+  fontFamily: "'Roboto'",
   fontSize: "12px",
   fontStyle: "normal",
   fontWeight: "400",
@@ -222,7 +222,7 @@ const title = {
   marginTop: "30px",
   marginBottom: "25px",
   minHeight: "32px",
-  fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
+  fontFamily: "'Roboto'",
   "& small": {
     color: "#777",
     fontSize: "65%",
@@ -236,11 +236,13 @@ const cardTitle = {
   marginTop: "0",
   marginBottom: "3px",
   minHeight: "auto",
+  fontFamily: "'Roboto', 'Helvetica', 'Arial'",
   "& a": {
     ...title,
     marginTop: ".625rem",
     marginBottom: "0.75rem",
     minHeight: "auto"
+
   }
 };
 

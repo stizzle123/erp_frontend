@@ -18,6 +18,12 @@ const cardFooterStyle = {
     paddingRight: "5px",
     backgroundColor: "transparent"
   },
+  cardFooterPricing: {
+    zIndex: "2"
+  },
+  cardFooterTestimonial: {
+    display: "block"
+  },
   cardFooterStats: {
     borderTop: "1px solid #eee",
     marginTop: "20px",

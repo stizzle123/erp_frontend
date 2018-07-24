@@ -62,7 +62,7 @@ body {
     background-color: #EEEEEE;
     color: #3C4858;
     margin: 0;
-    font-family: Roboto, Helvetica, Arial, sans-serif !important;
+    font-family: "Roboto" !important;
     font-weight: 300;
     line-height: 1.5em;
 }
@@ -74,38 +74,46 @@ blockquote footer:before, blockquote small:before {
 h1 {
     font-size: 3em;
     line-height: 1.15em;
+
 }
 
 h2 {
     font-size: 2.4em;
+	font-family: "'Roboto', 'Helvetica', 'Arial'";
+
 }
 
 h3 {
     font-size: 1.825em;
     line-height: 1.4em;
     margin: 20px 0 10px;
+
 }
 
 h4 {
     font-size: 1.3em;
     line-height: 1.4em;
+
 }
 
 h5 {
     font-size: 1.25em;
     line-height: 1.4em;
     margin-bottom: 15px;
+
 }
 
 h6 {
     font-size: 1em;
     text-transform: uppercase;
     font-weight: 500;
+
 }
 
 body {
     background-color: #EEEEEE;
     color: #3C4858;
+
 }
 
 blockquote p {
@@ -113,7 +121,7 @@ blockquote p {
 }
 
 body, h1, h2, h3, h4, h5, h6 {
-    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-family: "'Roboto', 'Helvetica', 'Arial'";
     font-weight: 300;
     line-height: 1.5em;
 }
