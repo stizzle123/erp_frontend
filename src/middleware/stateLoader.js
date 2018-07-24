@@ -25,6 +25,10 @@ class StateLoader {
         }
     }
 
+    unsetState(){
+        localStorage.removeItem("http://localhost:8081:state");
+    }
+
     initializeState() {
         return {
               //state object

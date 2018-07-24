@@ -61,10 +61,11 @@ handler(type, id){
 }
 
 
-/* componentDidMount(){
-  const type = this.props.match.params.type;
-  vendorActions.findAllVendors(this.props, type);
-} */
+componentDidMount(){
+  if(typeof(this.props.match.params.type) === "undefined" && this.props.data.length === 0){
+    vendorActions.findAllVendors(this.props);
+  }
+}
 
 componentDidUpdate(prevProps) {
   console.log(prevProps);
@@ -125,6 +126,7 @@ function mapStateToProps(state) {
   return {
     data: state.vendor.data,
     loader: state.loader,
+     user: state.auth.user,
   };
 }
 

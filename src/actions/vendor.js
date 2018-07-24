@@ -36,6 +36,7 @@ export function findAllVendors(props, type=''){
 }
 
 export function findVendorByUserId(props,userId){
+    if(typeof(userId) == "undefined")return;
     let middleware = new MiddleWare(props.user.token);
     props.dispatch(loadAction.Loading());
     return middleware.makeConnection('/vendors/'+userId,'GET').then((response) => {

@@ -51,7 +51,7 @@ class WorkReferences extends React.Component {
   };
  
   componentDidMount(){
-    this.setState({data:this.props.data.work_reference});
+    this.setState({data:this.props.data});
   }
 
   handleChange = event => {
@@ -252,7 +252,7 @@ WorkReferences.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    data: state.vendor.datum,
+    data: (typeof(state.vendor.datum.work_reference) != 'undefined')?state.vendor.datum.work_reference: {},
     user: state.auth.user
   };
 }

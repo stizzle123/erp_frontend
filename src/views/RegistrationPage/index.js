@@ -8,83 +8,88 @@ import CardHeader from "../../components/Card/CardHeader.jsx";
 import CardBody from "../../components/Card/CardBody.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import { Link } from 'react-router-dom';
-import CardFooter from '../../components/Card/CardFooter.jsx';
+import MiddleWare from "middleware/api";
 
 
-class LoginInfo extends React.Component {
+class Registration extends React.Component {
 
   state = {
-    redirectToReferrer: false
+    coy_name: '', email:'', password:'', confirm_password:''
   }
 
-  login = () => {
-    fakeAuth.authenticate(() => {
-      this.setState(() => ({
-        redirectToReferrer: true
-      }))
+  handleChange = event => {
+    console.log(this.state);
+    this.setState({ 
+      [[event.target.id]] : event.target.value,
+    });
+  };
+
+  register = e =>{
+    e.preventDefault();
+    let middleware = new MiddleWare();
+    let data = {};
+    data.email = this.state.email;
+    data.password = this.state.password;
+    data.coy_name = this.state.coy_name;
+    data.role = "vendor";
+    console.log(data);
+    middleware.makeConnection('/users/register','POST', data).then((response) => {
+      if(response.ok && response.status == 200){
+       return response.json();
+      }else{
+        //show error registering
+      }
+    }).then(()=>{
+
     })
   }
 
-  render() {
-      return (
-        <div>
-          <Grid container>
-          <GridItem xs={12} sm={6} md={4}>
-          </GridItem>
-            <GridItem xs={12} sm={6} md={4}>
-            <form>
-              <Card>
-                  <CardHeader color="primary">
-                      <center><h1>Registration</h1></center>
-                  </CardHeader>
-                  <CardBody>
-                  <Grid container>
-                    <GridItem xs={12} sm={12} md={12}>
-                      <CustomInput labelText="Username" id="username" required formControlProps={{
-                              fullWidth: true
-                              }}/>
-                    </GridItem>
-                    <GridItem xs={12} sm={12} md={12}>
-                      <CustomInput labelText="password"  id="password" required formControlProps={{
-                              fullWidth: true
-                              }}
-                            inputProps={{
-                            type:"password"
-                                }}
-                        />
-                    </GridItem>
-		            <GridItem xs={12} sm={12} md={12}>
-                      <CustomInput labelText="Confrim password"  id="cpassword" required formControlProps={{
-                              fullWidth: true
-                              }}
-                            inputProps={{
-                            type:"password"
-                                }}
-                        />
-                    </GridItem>
-                    </Grid>
-                    </CardBody>
-                    <CardFooter>
-                      <Grid container>
-                          <GridItem xs={12} sm={6} md={6}>
-                                <Button color="primary">Submit</Button>
-                          </GridItem>
-                          <GridItem xs={12} sm={6} md={6}>
-                            <Link to="/login">Have an Account? Click to Login </Link>
-                          </GridItem>
-                      </Grid>
-                    </CardFooter>
-              </Card>
-            </form>
-          </GridItem>
-        </Grid>
-        </div>
-      );
-    }
+render() {
+    return (
+      <div>
+          <GridItem xs={12} sm={6} md={6}>
+	    <form  onSubmit={this.register}>
+		 <Card>
+              <CardHeader color="primary">
+                <center><h1>Registration</h1></center>
+              </CardHeader>
+		      <CardBody>
+          <CustomInput labelText="Company Name" id="coy_name" required formControlProps={{
+                    fullWidth: true
+                    }} inputProps={{onChange:this.handleChange}}
+		    />
+		     <CustomInput labelText="Email" id="email" required formControlProps={{
+                    fullWidth: true
+                    }} inputProps={{onChange:this.handleChange}}
+		     />
+           <br/>
+              <CustomInput labelText="Password"  id="password" required formControlProps={{fullWidth: true}}
+		            inputProps={{type:"password",onChange:this.handleChange}}
+		    />
+		    <CustomInput labelText="Confirm password"  id="confirm_password" required formControlProps={{
+                    fullWidth: true
+                    }}
+                    inputProps={{type:"password",onChange:this.handleChange}}
+		    />
+             <br/><br/>
+             <Grid container>
+                <GridItem xs={12} sm={12} md={12}>
+                      <center><Button  type="submit" color="info" onClick={this.register}>Sign Up</Button></center>
+		<br/>
+                </GridItem>
+              </Grid>
+		</CardBody>
+		</Card>
+		</form>
+		 </GridItem>
+
+      </div>
+    );
+  }
 }
 
 
 const style = {
  margin: 15,
 };
-export default LoginInfo;
+export default Registration;
