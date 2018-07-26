@@ -221,7 +221,6 @@ class BusinessInfo extends React.Component {
 }
 
 function mapStateToProps(state) {
-  console.log(state);
   return {
     data: (typeof(state.vendor.datum.business_info) != 'undefined')?state.vendor.datum.business_info: {},
     user: state.auth.user

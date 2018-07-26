@@ -56,13 +56,15 @@ module.exports = {
                     outputPath: './assets/',
                 }
             }]
-        }, {
-            test: /\.(scss|css)$/,
+        }, 
+        {
+        test: /\.(scss|css)$/,
             use: extractPlugin.extract({
              use: ["css-loader", "sass-loader", "postcss-loader"],
              fallback: 'style-loader'
             })
-        }, {
+        }, 
+        {
          test: /\.(js|jsx)$/,
          exclude: /(node_modules|bower_components)/,
          use: {

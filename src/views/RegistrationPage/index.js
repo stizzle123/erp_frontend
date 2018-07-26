@@ -24,18 +24,18 @@ import CustomInput from "components/CustomInput/CustomInput.jsx";
 import InfoArea from "components/InfoArea/InfoArea.jsx";
 import Card from "components/Card/Card.jsx";
 import CardBody from "components/Card/CardBody.jsx";
-import BackgroundImage from "../../assets/img/register.jpeg";
-import logo from "../../assets/img/reglogo.jpeg";
-import CardHeader from "../../components/Card/CardHeader.jsx";
+import logo from "../../assets/img/reglogo.png";
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 import MiddleWare from "middleware/api";
 import SweetAlert from "react-bootstrap-sweetalert";
 import sweetAlertStyle from "assets/jss/material-dashboard-pro-react/views/sweetAlertStyle.jsx";
 import LinearProgress from '@material-ui/core/LinearProgress';
+import bg from "assets/img/bg-image.png";
 import SnackbarContent from "components/Snackbar/SnackbarContent.jsx";
 import registerPageStyle from "assets/jss/material-dashboard-pro-react/views/registerPageStyle.jsx";
 
+const styles = {sweetAlertStyle,registerPageStyle}
 class RegisterPage extends React.Component {
   constructor(props) {
     super(props);
@@ -111,12 +111,13 @@ class RegisterPage extends React.Component {
         this.props.classes.button + " " + this.props.classes.success
       }
     >
-      Registration Successful, kindly check your email for confirmation.
+      Account creation was successful. Kindly check your email for confirmation.
     </SweetAlert>)
   }else 
     return (
-		<div>
-        <GridContainer justify="center">
+      <div className={classes.content} style={{backgroundColor:'#082356', backgroundImage:"url(" + bg + ")", backgroundRepeat:"no-repeat"}}>
+      <div className={classes.container}>
+      <GridContainer justify="center">
           <GridItem xs={12} sm={12} md={8}>
             <Card className={classes.cardSignup}>
                    <center><img src={logo} /></center>
@@ -242,6 +243,7 @@ class RegisterPage extends React.Component {
           </GridItem>
         </GridContainer>
 		</div>
+    </div>
     );
   }
 }

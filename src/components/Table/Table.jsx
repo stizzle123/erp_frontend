@@ -11,7 +11,7 @@ import View from "@material-ui/icons/Pageview";
 import { Link } from 'react-router-dom';
 import Button from "../../components/CustomButtons/Button.jsx";
 // core components
-import tableStyle from "../../assets/jss/material-dashboard-react/components/tableStyle.jsx";
+import tableStyle from "../../assets/jss/material-dashboard-pro-react/components/tableStyle.jsx";
 
 function CustomTable({ ...props }) {
   const { classes, tableHead, tableData, tableHeaderColor, cardActions, viewLink, viewComponent} = props;

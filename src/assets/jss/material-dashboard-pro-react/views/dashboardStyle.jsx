@@ -16,7 +16,8 @@ const dashboardStyle = {
   cardTitle: {
     ...cardTitle,
     marginTop: "0px",
-    marginBottom: "3px"
+    marginBottom: "3px",
+    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
   },
   cardIconTitle: {
     ...cardTitle,

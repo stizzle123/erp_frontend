@@ -19,10 +19,16 @@ import Face from "@material-ui/icons/Face";
 import LockOutline from "@material-ui/icons/LockOutline";
 import classNames from 'classnames';
 import logo from "../../assets/img/erplogo.png";
+import bg from "assets/img/bg-image.png";
 import logo2 from "../../assets/img/footerbar.png";
 import { withStyles } from '@material-ui/core/styles';
+import Progress from "components/Progress/Progress.jsx";
 import GridContainer from "../../components/Grid/GridContainer.jsx";
+import SnackbarContent from "components/Snackbar/SnackbarContent.jsx";
 
+import loginPageStyle from "assets/jss/material-dashboard-pro-react/views/loginPageStyle.jsx";
+import StateLoader from "middleware/stateLoader";
+const stateLoader = new StateLoader();
 
 class LoginInfo extends React.Component {
 
@@ -39,10 +45,19 @@ class LoginInfo extends React.Component {
       data : data,
     });
   };
-
+  componentWillMount(){
+    stateLoader.unsetState();
+  }
+  
   login = (e) => {
     e.preventDefault();
-    AclAuth.authenticate(this.state.data.username, this.state.data.password, (user,token) => {
+    this.setState({loading:true});
+    AclAuth.authenticate(this.state.data.username, this.state.data.password, (err,user,token) => {
+      this.setState({loading:false});
+      if(err) {
+        this.setState({showError:true});
+      return;
+      }
       let u = user;
       u.token = token;
       this.props.dispatch({type: USER_LOGGED_IN, user: u});
@@ -57,17 +72,26 @@ class LoginInfo extends React.Component {
       return <Redirect to="/dashboard" />
     }
       return (
-		  <GridContainer>
-          <GridItem xs={12} sm={8} md={4}>
-          </GridItem>
+        <div className={classes.content} style={{backgroundColor:'#082356', backgroundImage:"url(" + bg + ")", backgroundRepeat:"no-repeat"}}>
+        <div className={classes.container}>
+		      <GridContainer justify="center">
             <GridItem xs={12} sm={8} md={4}>
             <form onSubmit={this.login}>
+            <Progress loading={this.state.loading}/>
+    {(this.state.showError)?<SnackbarContent
+                message={
+                  'Invalid username and password, please try again'
+                }
+                close
+                color="danger"
+              /> : ""}
               <Card>
-                  <CardHeader color="primary">
+                <CardHeader color="primary" style={{background: "linear-gradient(60deg, #000, #000)"}}>
                    <center><img src={logo} /></center>
 		           </CardHeader>
-                  <CardBody>
-		          <GridItem>
+              <CardBody>
+              <Grid container>
+		            <GridItem xs={12} sm={12} md={12}>
                   <CustomInput labelText="Username" id="username" required formControlProps={{
                         fullWidth: true
                               }} inputProps={{
@@ -78,8 +102,8 @@ class LoginInfo extends React.Component {
                                ),
 		                      onChange: this.handleChange,
 		                          }}/>
-                    </GridItem>
-                    <GridItem>
+                </GridItem>
+                <GridItem xs={12} sm={12} md={12}>
                       <CustomInput labelText="Password"  id="password" required formControlProps={{
                              fullWidth: true
                               }}
@@ -94,27 +118,29 @@ class LoginInfo extends React.Component {
                                 }}
                         />
                     </GridItem>
-
-                    </CardBody>
-                    <Grid container>
-                          <GridItem xs={12} sm={6} md={12}>
-                                <Button type="submit" color="primary" onClick={this.login}>Login</Button>
-                          </GridItem>
-                          <GridItem xs={12} sm={12} md={12}>
-                            <Link to="/register">Are you a new Vendor? Click to create and account </Link>
-                          </GridItem>
-						 </Grid>
-                     	<CardFooter />
-					<img src={logo2} />
-					<GridItem xs={12} sm={12} md={12}>
-					   <CardFooter />
-				    <center><Link to="">Forgot Password?</Link></center>
-					<CardFooter />
-                     </GridItem>
-				 </Card>
+                    <GridItem xs={12} sm={6} md={12}>
+                          <Button type="submit" color="primary" onClick={this.login}>Login</Button>
+                        </GridItem>
+                        <GridItem xs={12} sm={12} md={12}>
+                          <Link to="/register">Are you a new Vendor? Click to create and account </Link>
+                        </GridItem>
+						        </Grid>
+                  </CardBody>
+                  <Progress loading={this.state.loading}/>
+					        <img src={logo2} />
+					        <CardFooter>
+                    <Grid>
+                      <GridItem>
+				                <Link to="">Forgot Password?</Link>
+                      </GridItem>
+						        </Grid>
+					        </CardFooter>
+				        </Card>
             </form>
           </GridItem>
         </GridContainer>
+        </div>
+        </div>
       );
     }
 }
@@ -129,4 +155,4 @@ function mapStateToProps(state) {
     redirectToReferrer: state.auth.redirectToReferrer
   };
 }
-export default connect(mapStateToProps, null)(LoginInfo);
+export default connect(mapStateToProps, null)(withStyles(loginPageStyle)(LoginInfo));

@@ -21,6 +21,7 @@ import PurchaseOrder from "../views/PurchaseOrder/index.js";
 import Project from "../views/Project/index.js";
 import Log from "../views/Log/index.js";
 import Registration from "../views/RegistrationPage/index.js";
+import DashboardIcon from "@material-ui/icons/Dashboard";
 /* import Typography from "views/Typography/Typography.jsx";
 import Icons from "views/Icons/Icons.jsx";
 import Maps from "views/Maps/Maps.jsx";
@@ -94,49 +95,43 @@ export const dashboardRoutes = [
 export const AdminMenu = [
   {
     path: "/dashboard",
-    sidebarName: "Dashboard",
-    navbarName: "Dashboard",
-    icon: HomeIcon,
+    name: "Dashboard",
+    icon: DashboardIcon,
+    component: Dashboard
   },
   {
    path: "/user",
-   sidebarName: "User Profile",
-   navbarName: "Profile",
+   name: "User Profile",
    icon: Person,
    component: UserProfile
  },
  {
    path: "/vendor",
-   sidebarName: "Vendors List",
-   navbarName: "Vendors List",
+   name: "Vendors List",
    icon: ContentPaste,
    component: VendorList
  },
  {
    path: "/vendor/add",
-   sidebarName: "Vendor Details",
-   navbarName: "Vendor Details",
+   name: "Vendor Details",
    icon: AddIcon,
    component: AddVendor
  },
  {
    path: "/Project",
-   sidebarName: "Purchase Requisition",
-   navbarName: "Purchase Requisition",
+   name: "Purchase Requisition",
    icon: CreditCard,
    component: Project
  },
  {
    path: "/PurchaseOrder",
-   sidebarName: "Purchase Order",
-   navbarName: "Purchase Order",
+   name: "Purchase Order",
    icon:  AccountBalance,
    component: PurchaseOrder
  },
  {
    path: "/Log",
-   sidebarName: "Report",
-   navbarName: "Report",
+   name: "Report",
    icon:  LibraryBooks,
    component: Log
  },
@@ -145,24 +140,20 @@ export const AdminMenu = [
 export const IacMenu = [
   {
     path: "/dashboard",
-    sidebarName: "Dashboard",
-    navbarName: "Dashboard",
+    name: "Dashboard",
     icon: HomeIcon,
   },
   {
     path: "/vendor/type/approved",
-    sidebarName: "Approved Vendors",
-    navbarName: "Vendors",
+    name: "Approved Vendors",
     icon: LibraryBooks,
   },{
     path: "/vendor/type/pending",
-    sidebarName: "Pending Approval",
-    navbarName: "Vendors",
+    name: "Pending Approval",
     icon: LibraryBooks,
   },{
     path: "/vendor/type/blacklisted",
-    sidebarName: "Blacklisted Vendors",
-    navbarName: "Vendors",
+    name: "Blacklisted Vendors",
     icon: LibraryBooks,
   },
 ];
@@ -171,8 +162,7 @@ export const IacMenu = [
 export const VendorMenu = [
   {
     path: "/dashboard",
-    sidebarName: "Dashboard",
-    navbarName: "Dashboard",
+    name: "Dashboard",
     icon: HomeIcon,
   },
 ];

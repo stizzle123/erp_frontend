@@ -1,59 +1,48 @@
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
 import React from "react";
+import ReactTable from "react-table";
+import 'react-table/react-table.css'
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
+// @material-ui/icons
+import Assignment from "@material-ui/icons/Assignment";
+import Dvr from "@material-ui/icons/Dvr";
+import Favorite from "@material-ui/icons/Favorite";
+import Close from "@material-ui/icons/Close";
 import Grid from "@material-ui/core/Grid";
+import GridContainer from "components/Grid/GridContainer.jsx";
 // core components
 import GridItem from "../../components/Grid/GridItem.jsx";
 import Table from "../../components/Table/Table.jsx";
-import Card from "../../components/Card/Card.jsx";
-import CardHeader from "../../components/Card/CardHeader.jsx";
-import CardBody from "../../components/Card/CardBody.jsx";
+import Card from "components/Card/Card.jsx";
+import CardBody from "components/Card/CardBody.jsx";
+import CardIcon from "components/Card/CardIcon.jsx";
+import CardHeader from "components/Card/CardHeader.jsx";
 import Button from "../../components/CustomButtons/Button.jsx";
 import Approve from "@material-ui/icons/ThumbUp";
-import Unapprove from "@material-ui/icons/ThumbDown";
+import View from "@material-ui/icons/Pageview";
 import { Link } from 'react-router-dom';
 import PropTypes from "prop-types";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import purple from '@material-ui/core/colors/purple';
 import * as vendorActions from '../../actions/vendor';
+import { Redirect } from 'react-router'
+import { cardTitle } from "assets/jss/material-dashboard-pro-react.jsx";
+
+import {connect} from 'react-redux';
 
 const styles = {
-  cardCategoryWhite: {
-    "&,& a,& a:hover,& a:focus": {
-      color: "rgba(255,255,255,.62)",
-      margin: "0",
-      fontSize: "14px",
-      marginTop: "0",
-      marginBottom: "0"
-    },
-    "& a,& a:hover,& a:focus": {
-      color: "#FFFFFF"
-    }
-  },
-  cardTitleWhite: {
-    color: "#FFFFFF",
-    marginTop: "0px",
-    minHeight: "auto",
-    fontWeight: "300",
-    fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
-    marginBottom: "3px",
-    textDecoration: "none",
-    "& small": {
-      color: "#777",
-      fontSize: "65%",
-      fontWeight: "400",
-      lineHeight: "1"
-    }
+  cardIconTitle: {
+    ...cardTitle,
+    marginTop: "15px",
+    marginBottom: "0px"
   }
 };
-
 class Index extends React.Component {
 
-  constructor(props){
-    super(props)
-    this.handler = this.handler.bind(this)
+  constructor(props) {
+    super(props);
+    this.handler = this.handler.bind(this);
+    this.state = { redirectTo:false};
   }
  
 handler(type, id){
@@ -64,11 +53,13 @@ handler(type, id){
 componentDidMount(){
   if(typeof(this.props.match.params.type) === "undefined" && this.props.data.length === 0){
     vendorActions.findAllVendors(this.props);
+  }else if(this.props.match.params.type){
+    vendorActions.findAllVendors(this.props, this.props.match.params.type);
   }
 }
 
 componentDidUpdate(prevProps) {
-  console.log(prevProps);
+  console.log(prevProps, "props");
   if (this.props.match.params.type !== prevProps.match.params.type) {
     vendorActions.findAllVendors(this.props, this.props.match.params.type);
   }
@@ -77,6 +68,70 @@ componentDidUpdate(prevProps) {
 render(){
     const { classes } = this.props;
     console.log(this.props);
+    let data = this.props.data.dataRows.map((prop, key) => {
+        return {
+          id: key,
+          companyname: prop[1],
+          contactperson: prop[2],
+          contacttelephone: prop[3],
+          contactemail: prop[4],
+          actions: (
+            // we've added some custom button actions
+            <div className="actions-right">
+              {/* use this button to add a like kind of action */}
+              {/* <Button
+                justIcon
+                round
+                simple
+                onClick={() => {
+                  let obj = this.state.data.find(o => o.id === key);
+                 
+                }}
+                color="info"
+                className="like"
+              >
+                <Approve />
+              </Button>{""} */}
+              <Button
+                justIcon
+                round
+                simple
+                onClick={() => {
+                  let obj = data.find(o => o.id === key);
+                  this.setState({redirectTo:this.props.data.dataRows[[obj.id]][0]})
+                  }}
+                color="warning"
+                className="edit"
+              >
+                 <Dvr />
+              </Button>
+              {/* use this button to remove the data row */}
+            {/*   <Button
+                justIcon
+                round
+                simple
+                onClick={() => {
+                  var data = this.state.data;
+                  data.find((o, i) => {
+                    if (o.id === key) {
+                      // here you should add some custom code so you can delete the data
+                      // from this component and from your server as well
+                      data.splice(i, 1);
+                      return true;
+                    }
+                    return false;
+                  });
+                  this.setState({ data: data });
+                }}
+                color="danger"
+                className="remove"
+              >
+                <Close />
+              </Button>{" "} */}
+            </div>
+          )
+        };
+      });
     if(this.props.loader.loading){
       return (
         <div>
@@ -86,29 +141,56 @@ render(){
             </GridItem>
           </Grid>
         </div>)
+    }else if(this.state.redirectTo){
+      return (<Redirect to={"/vendor/view/"+this.state.redirectTo}  />)
     }else{
     return (
-      <Grid container>
-        <GridItem xs={12} sm={12} md={12}>
+      <GridContainer>
+        <GridItem xs={12}>
           <Card>
-            <CardHeader color="primary">
-              <h4 className={classes.cardTitleWhite}>Vendor List</h4>
+            <CardHeader color="primary" icon>
+              <CardIcon color="primary">
+                <Assignment />
+              </CardIcon>
+              <h4 className={classes.cardIconTitle}>Vendors</h4>
             </CardHeader>
             <CardBody>
-              {(this.props.data.length < 1)?
-                "No Data"
-              :
-              <Table
-                tableHeaderColor="primary"
-                tableHead={["Company Name", "Contact Person", "Contact Telephone","Contact Email" ,"Status", "Action"]}
-                tableData={this.props.data} cardActions={[{label: Approve}]}  
-                handler={this.handler} viewLink="/vendor/view/"
+              <ReactTable
+                data={data}
+                filterable
+                columns={[
+                  {
+                    Header: "Company Name",
+                    accessor: "companyname"
+                  },
+                  {
+                    Header: "Contact Person",
+                    accessor: "contactperson"
+                  },
+                  {
+                    Header: "Contact Telephone",
+                    accessor: "contacttelephone"
+                  },
+                  {
+                    Header: "Contact Email",
+                    accessor: "contactemail"
+                  },
+                  {
+                    Header: "Actions",
+                    accessor: "actions",
+                    sortable: false,
+                    filterable: false
+                  }
+                ]}
+                defaultPageSize={10}
+                showPaginationTop
+                showPaginationBottom={false}
+                className="-striped -highlight"
               />
-               }
-			</CardBody>
+            </CardBody>
           </Card>
         </GridItem>
-      </Grid>
+      </GridContainer>
     );
   }
   }
@@ -116,17 +198,17 @@ render(){
 
 Index.propTypes = {
   vendorActions:PropTypes.object,
-  data: PropTypes.array
+  data: PropTypes.object
 }
+
 Index.defaultProps = {
-  data: []
+  data: {dataRows:[],headerRow:[],footerRow:[]}
 }
 function mapStateToProps(state) {
-  console.log(state);
   return {
     data: state.vendor.data,
     loader: state.loader,
-     user: state.auth.user,
+    user: state.auth.user,
   };
 }
 

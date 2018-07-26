@@ -12,6 +12,7 @@ export default function auth(state=[], action){
             return {...state, user: action.user, token:action.token, redirectToReferrer: true, isAuthenticated : true};
         case types.USER_LOGGED_OUT:
             state = undefined;
+            console.log('here');
             stateLoader.unsetState();
             return {isAuthenticated:false}
         default:

@@ -6,7 +6,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormLabel from '@material-ui/core/FormLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import customInputStyle from "../../assets/jss/material-dashboard-react/components/customInputStyle.jsx";
+import customInputStyle from "../../assets/jss/material-dashboard-pro-react/components/customInputStyle.jsx";
 
 function CustomCheck({ ...props }) {
     const {

@@ -1,7 +1,7 @@
 import * as types from '../actions/index';
 
 
-export default function vendor(state={datum:{}, data:[]} , action){
+export default function vendor(state={datum:{}} , action){
     switch(action.type){
         case types.FETCH_DATA:
             console.log('FETCH_DATA action')

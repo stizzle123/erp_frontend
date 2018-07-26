@@ -9,10 +9,12 @@ let AclAuth = {
       middleware.makeConnection('/users/login','POST', data).then((response) => {
         if(response.ok && response.status == 200){
          return response.json();
+        }else{
+          cb(response);
         }
       }).then(
         (user)=>{   
-            cb(user.user, user.token);
+            cb('', user.user, user.token);
         }
       )
       /* let user = {};

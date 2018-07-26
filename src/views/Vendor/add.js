@@ -13,6 +13,7 @@ import BugReport from "@material-ui/icons/BugReport";
 import Code from "@material-ui/icons/Code";
 import Cloud from "@material-ui/icons/Cloud";
 import {connect} from 'react-redux';
+import { Redirect } from "react-router-dom";
 import * as vendorActions from '../../actions/vendor';
 
 const styles = {
@@ -43,6 +44,9 @@ class AddTabs extends React.Component {
 
   render() {
     const { classes } = this.props;
+    if(this.props.user.role ==='vendor' && this.props.vendor.status === "PENDING"){
+      return  <Redirect to="/dashboard" /> 
+    }else
     return (
       <Grid container>
            <GridItem xs={12} sm={12} md={12}>
@@ -99,6 +103,7 @@ AddTabs.defaultProps = {
 function mapStateToProps(state) {
   return {
     user: state.auth.user,
+    vendor: state.vendor.datum,
   };
 }
 

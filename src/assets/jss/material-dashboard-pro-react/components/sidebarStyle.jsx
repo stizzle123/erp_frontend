@@ -78,8 +78,8 @@ const sidebarStyle = theme => ({
   blackBackground: {
     color: "#FFFFFF",
     "&:after": {
-      background: "#000",
-      opacity: ".8"
+      background: "#1a2028",
+     /*  opacity: ".8" */
     }
   },
   blueBackground: {
@@ -105,7 +105,7 @@ const sidebarStyle = theme => ({
     width: drawerMiniWidth + "px!important"
   },
   logo: {
-    padding: "15px 0px",
+    padding: "0px 0px 5px",
     margin: "0",
     display: "block",
     position: "relative",
@@ -114,10 +114,10 @@ const sidebarStyle = theme => ({
       content: '""',
       position: "absolute",
       bottom: "0",
-      height: "1px",
+      height: "6px",
       right: "15px",
       width: "calc(100% - 30px)",
-      backgroundColor: "hsla(0,0%,100%,.3)"
+      backgroundColor: "hsla(0, 92%, 51%)"
     }
   },
   logoMini: {
@@ -127,7 +127,6 @@ const sidebarStyle = theme => ({
     textAlign: "center",
     width: "30px",
     display: "inline-block",
-    maxHeight: "30px",
     marginLeft: "22px",
     marginRight: "18px",
     marginTop: "7px",
@@ -166,7 +165,7 @@ const sidebarStyle = theme => ({
     transform: "translate3d(25px, 0, 0)"
   },
   img: {
-    width: "35px",
+    width: "auto",
     verticalAlign: "middle",
     border: "0"
   },
@@ -190,6 +189,7 @@ const sidebarStyle = theme => ({
     marginBottom: "0",
     listStyle: "none",
     color: "inherit",
+    textDecoration: "none",
     "&:before,&:after": {
       display: "table",
       content: '" "'
@@ -204,7 +204,8 @@ const sidebarStyle = theme => ({
     display: "block",
     textDecoration: "none",
     margin: "0",
-    padding: "0"
+    padding: "0",
+    textDecoration: "none"
   },
   userItem: {
     "&:last-child": {
@@ -223,6 +224,7 @@ const sidebarStyle = theme => ({
     backgroundColor: "transparent",
     ...defaultFont,
     width: "auto",
+    textDecoration: "none",
     "&:hover": {
       outline: "none",
       backgroundColor: "rgba(200, 200, 200, 0.2)",
@@ -261,7 +263,8 @@ const sidebarStyle = theme => ({
     position: "relative",
     display: "block",
     height: "auto",
-    whiteSpace: "nowrap"
+    whiteSpace: "nowrap",
+    textDecoration: "none"
   },
   userItemText: {
     lineHeight: "22px"
@@ -386,9 +389,9 @@ const sidebarStyle = theme => ({
   blue: {
     "&,&:hover,&:focus": {
       color: "#FFFFFF",
-      backgroundColor: infoColor,
-      boxShadow:
-        "0 12px 20px -10px rgba(0,188,212,.28), 0 4px 20px 0 rgba(0,0,0,.12), 0 7px 8px -5px rgba(0,188,212,.2)"
+      backgroundColor: "rgba(200, 200, 200, 0.2)",
+     // boxShadow:
+      //  "0 12px 20px -10px rgba(0,188,212,.28), 0 4px 20px 0 rgba(0,0,0,.12), 0 7px 8px -5px rgba(0,188,212,.2)"
     }
   },
   green: {

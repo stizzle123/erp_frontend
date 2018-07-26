@@ -16,7 +16,8 @@ const infoStyle = {
   infoArea: {
     maxWidth: "360px",
     margin: "0 auto",
-    padding: "0px"
+    padding: "0px",
+    fontFamily:"Roboto, Arial, Helvetica"
   },
   iconWrapper: {
     float: "left",
@@ -63,7 +64,8 @@ const infoStyle = {
     overflow: "hidden",
     marginTop: "0px",
     fontSize: "14px"
-  }
+  },
+  
 };
 
 export default infoStyle;
