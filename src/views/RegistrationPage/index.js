@@ -56,7 +56,6 @@ class RegisterPage extends React.Component {
       checked: newChecked
     });
 
-
   }
   render() {
     const { classes } = this.props;
@@ -172,7 +171,7 @@ class RegisterPage extends React.Component {
             </Card>
           </GridItem>
         </GridContainer>
-		</div>
+							</div>
     );
   }
 }
