@@ -9,7 +9,7 @@ import Button from "../CustomButtons/Button.jsx";
 import { connect } from 'react-redux'
 import {USER_LOGGED_OUT} from '../../actions/index';
 import withStyles from "@material-ui/core/styles/withStyles";
-import headerLinksStyle from "../../assets/jss/material-dashboard-react/components/headerLinksStyle.jsx";
+import headerLinksStyle from "../../assets/jss/material-dashboard-pro-react/components/headerLinksStyle.jsx";
 
 class  LoggedIn extends React.Component {
 
@@ -68,7 +68,6 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 function mapStateToProps(state) {
-  console.log(state);
   return {
     user: state.auth.user
   };

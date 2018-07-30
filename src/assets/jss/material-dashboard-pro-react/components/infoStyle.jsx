@@ -16,7 +16,8 @@ const infoStyle = {
   infoArea: {
     maxWidth: "360px",
     margin: "0 auto",
-    padding: "0px"
+    padding: "0px",
+    fontFamily:"Roboto, Arial, Helvetica"
   },
   iconWrapper: {
     float: "left",
@@ -51,23 +52,20 @@ const infoStyle = {
   descriptionWrapper: {
     color: grayColor,
     overflow: "hidden"
-
   },
   title: {
     color: "#3C4858",
     margin: "30px 0 15px",
     textDecoration: "none",
-    fontSize: "18px",
-	fontFamily: "'Roboto', 'Helvetica', 'Arial'"
+    fontSize: "18px"
   },
   description: {
     color: grayColor,
     overflow: "hidden",
     marginTop: "0px",
-	fontFamily: "'Roboto', 'Helvetica', 'Arial'",
     fontSize: "14px"
+  },
 
-  }
 };
 
 export default infoStyle;

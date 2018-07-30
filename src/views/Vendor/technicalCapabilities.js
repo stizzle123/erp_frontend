@@ -161,7 +161,7 @@ TechnicalCapabilities.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    data: state.vendor.datum.tech_capability,
+    data: (typeof(state.vendor.datum.tech_capability) != 'undefined')?state.vendor.datum.tech_capability: {},
     user: state.auth.user
   };
 }

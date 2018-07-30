@@ -30,12 +30,17 @@ export function findAllVendors(props, type=''){
                 row.general_info.contact_email, row.status);
                 datas.push(arry);
             });
-            props.dispatch(receivedData(datas));
+            const dataTable = {
+                headerRow: ["Company Name", "Contact Person", "Contact Telephone", "Contact Email", "Actions"],
+                footerRow: ["Company Name", "Contact Person", "Contact Telephone", "Contact Email", "Actions"],
+                dataRows: datas}
+            props.dispatch(receivedData(dataTable));
             props.dispatch(loadAction.LoadingSuccess());
         });
 }
 
 export function findVendorByUserId(props,userId){
+    if(typeof(userId) == "undefined")return;
     let middleware = new MiddleWare(props.user.token);
     props.dispatch(loadAction.Loading());
     return middleware.makeConnection('/vendors/'+userId,'GET').then((response) => {

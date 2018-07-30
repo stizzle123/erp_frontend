@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import FormControl from "@material-ui/core/FormControl";
-import customInputStyle from "../../assets/jss/material-dashboard-react/components/customInputStyle.jsx";
+import customInputStyle from "../../assets/jss/material-dashboard-pro-react/components/customInputStyle.jsx";
 
 function CustomSelect({ ...props }) {
     const {

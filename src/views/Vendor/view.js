@@ -15,7 +15,7 @@ import Cloud from "@material-ui/icons/Cloud";
 import Approve from "@material-ui/icons/ThumbUp";
 import Unapprove from "@material-ui/icons/ThumbDown";
 import Button from '@material-ui/core/Button';
-import InputLabel from "@material-ui/core/InputLabel";
+import Progress from "components/Progress/Progress.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import {connect} from 'react-redux';
 import MiddleWare from "../../middleware/api";
@@ -57,12 +57,11 @@ class View extends React.Component {
       [event.target.id] : event.target.value,
     });
   };
-  doApproval= e=>{
-    console.log(this.props.data)
+  updateStatus= (event, status)=>{
       let data = {};
       let middleware = new MiddleWare();
       data.key = this.props.data._id;
-      data.value = "APPROVED";
+      data.value = status;
       middleware.makeConnection('/vendors/updatestatus','PUT', data).then(
         (result)=>{
           if(!result.ok || result.statusText != "OK" && result.status != 200 ) {
@@ -76,32 +75,14 @@ class View extends React.Component {
 
   }
 
-  unApproval(){
-    e.preventDefault();
-    let data = {};
-    let middleware = new MiddleWare(this.props.user.token);
-    data.key = this.props.data._id;
-    data.value = "PENDING";
-    data.reason = this.state.reason;
-    middleware.makeConnection('/vendors/updatestatus','PUT', data).then(
-      (result)=>{
-        if(!result.ok || result.statusText != "OK" && result.status != 200 ) {
-          
-        }
-        this.setState({loading:false});
-      }
-    ).catch((e)=>{
-      console.log(e);
-    })
-  }
-
   render() {
     const { classes } = this.props;
     return (
       <Grid container>
            <GridItem xs={12} sm={12} md={12}>
+           <Progress loading={this.state.loading}/>
             <CustomTabs
-              title="Form Tabs:"
+              title=""
               headerColor="primary"
               tabs={[
                 {
@@ -143,7 +124,7 @@ class View extends React.Component {
                 justify="center"
               >
                 <CustomInput
-                    labelText="Kindly give reason"
+                    labelText="Kindly give a reason for the rejection"
                     id="reason"
                     formControlProps={{
                       fullWidth: true
@@ -154,7 +135,9 @@ class View extends React.Component {
                       onChange: this.handleChange,
                     }}
                   />
-
+                  <Button onClick={(e)=>this.updateStatus(e,"UPDATE")}>
+                    submit
+                  </Button>
               </Grid>
               : ""}
             <Grid
@@ -164,13 +147,14 @@ class View extends React.Component {
                 direction="row"
                 justify="center"
               >
-              <Button onClick={this.doApproval}>
+              <Button onClick={(e)=>this.updateStatus(e, "APPROVED")}>
               <Approve />
                 Approve
               </Button>
-              <Button onClick={()=>{this.setState({showReason:true})}}>
+
+              <Button onClick={()=>{(this.state.showReason)?this.setState({showReason:false}): this.setState({showReason:true})}}>
                 <Unapprove />
-                Dissaprove
+                Reject
               </Button>
               </Grid>
           </GridItem>

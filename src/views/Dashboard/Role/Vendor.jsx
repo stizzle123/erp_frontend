@@ -32,7 +32,7 @@ import {
 } from "../../../variables/charts.jsx";
 import * as vendorActions from '../../../actions/vendor';
 
-import VendorStyle from "../../../assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
+import VendorStyle from "../../../assets/jss/material-dashboard-pro-react/views/dashboardStyle.jsx";
 
 class Vendor extends React.Component {
   state = {
@@ -53,7 +53,7 @@ class Vendor extends React.Component {
   };
   render() {
     const { classes } = this.props;
-    console.log(this.props);
+    console.log(this.props.vendor.status);
     if(this.props.loader.loading){
       return (
         <div>
@@ -64,7 +64,7 @@ class Vendor extends React.Component {
           </Grid>
         </div>)
     }else{
-        if(this.props.vendor.status === "PENDING"){
+        if(this.props.vendor.status === "PENDING" || this.props.vendor.status === "UPDATE"){
           return (<Grid container>
             <GridItem xs={12} sm={12} md={6}>
               <h5>Notifications</h5>
@@ -72,7 +72,7 @@ class Vendor extends React.Component {
               <SnackbarContent message={"Your account is yet to be activated"} close color="warning" />
             </GridItem>
           </Grid>);
-        }else if(!this.props.vendor.status){
+        }else if(typeof(this.props.vendor.status) === "undefined" || this.props.vendor.status === null){
           return  <Redirect to="/vendor/add" /> 
         }else{
           return (<div>

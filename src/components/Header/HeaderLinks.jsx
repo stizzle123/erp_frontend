@@ -17,7 +17,10 @@ import Person from "@material-ui/icons/Person";
 import Notifications from "@material-ui/icons/Notifications";
 import Dashboard from "@material-ui/icons/Dashboard";
 import Search from "@material-ui/icons/Search";
+import Exit from "@material-ui/icons/ExitToApp";
 
+import { connect } from 'react-redux'
+import {USER_LOGGED_OUT} from '../../actions/index';
 // core components
 import CustomInput from "components/CustomInput/CustomInput.jsx";
 import Button from "components/CustomButtons/Button.jsx";
@@ -108,7 +111,7 @@ class HeaderLinks extends React.Component {
             </span>
           </Hidden>
         </Button>
-        <Manager className={managerClasses}>
+        {/* <Manager className={managerClasses}>
           <Target>
             <Button
               color="transparent"
@@ -197,7 +200,7 @@ class HeaderLinks extends React.Component {
               </Grow>
             </ClickAwayListener>
           </Popper>
-        </Manager>
+        </Manager> */}
         <Button
           color="transparent"
           aria-label="Person"
@@ -222,6 +225,19 @@ class HeaderLinks extends React.Component {
             </span>
           </Hidden>
         </Button>
+        <Button
+          color={window.innerWidth > 959 ? "transparent" : "white"}
+          justIcon={window.innerWidth > 959}
+          simple={!(window.innerWidth > 959)}
+          aria-label="Person"
+          className={classes.buttonLink}
+          onClick={this.props.Logout}
+        >
+          <Exit className={classes.icons} />
+          <Hidden mdUp>
+            <p className={classes.linkText}>Logout</p>
+          </Hidden>
+        </Button>
       </div>
     );
   }
@@ -232,4 +248,16 @@ HeaderLinks.propTypes = {
   rtlActive: PropTypes.bool
 };
 
-export default withStyles(headerLinksStyle)(HeaderLinks);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    Logout: () => dispatch({type:USER_LOGGED_OUT})
+  }
+}
+
+function mapStateToProps(state) {
+  return {
+    user: state.auth.user
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(headerLinksStyle)(HeaderLinks));

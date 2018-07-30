@@ -19,6 +19,7 @@ import Accessibility from "@material-ui/icons/Accessibility";
 import BugReport from "@material-ui/icons/BugReport";
 import Code from "@material-ui/icons/Code";
 import Cloud from "@material-ui/icons/Cloud";
+import GridContainer from "components/Grid/GridContainer.jsx";
 // core components
 import GridItem from "../../../components/Grid/GridItem.jsx";
 import Table from "../../../components/Table/Table.jsx";
@@ -40,7 +41,7 @@ import {
   completedTasksChart
 } from "../../../variables/charts.jsx";
 
-import dashboardStyle from "../../../assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
+import dashboardStyle from "../../../assets/jss/material-dashboard-pro-react/views/dashboardStyle.jsx";
 
 class Admin extends React.Component {
   state = {
@@ -57,7 +58,7 @@ class Admin extends React.Component {
     const { classes } = this.props;
     return (
       <div>
-        <Grid container>
+        <GridContainer>
           <GridItem xs={12} sm={6} md={3}>
             <Card>
               <CardHeader color="warning" stats icon>
@@ -132,8 +133,8 @@ class Admin extends React.Component {
               </CardFooter>
             </Card>
           </GridItem>
-        </Grid>
-        <Grid container>
+        </GridContainer>
+        <GridContainer>
           <GridItem xs={12} sm={12} md={4}>
             <Card chart>
               <CardHeader color="success">
@@ -210,8 +211,8 @@ class Admin extends React.Component {
               </CardFooter>
             </Card>
           </GridItem>
-        </Grid>
-        <Grid container>
+        </GridContainer>
+        <GridContainer>
           <GridItem xs={12} sm={12} md={6}>
             <CustomTabs
               title="Tabs : "
@@ -275,7 +276,7 @@ class Admin extends React.Component {
               </CardBody>
             </Card>
           </GridItem>
-        </Grid>
+        </GridContainer>
       </div>
     );
   }

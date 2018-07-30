@@ -261,7 +261,7 @@ GeneralInfo.propTypes = {
 };
 
 GeneralInfo.defaultProps = {
-  data:{general_info:{}}
+  data:{}
 }
 function mapStateToProps(state) {
   return {
