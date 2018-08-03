@@ -53,9 +53,9 @@ handler(type, id){
 componentDidMount(){
   if(typeof(this.props.match.params.type) === "undefined" && this.props.data.length === 0){
     vendorActions.findAllVendors(this.props);
-  }else if(this.props.match.params.type){
+  }/* else if(this.props.match.params.type){
     vendorActions.findAllVendors(this.props, this.props.match.params.type);
-  }
+  } */
 }
 
 componentDidUpdate(prevProps) {

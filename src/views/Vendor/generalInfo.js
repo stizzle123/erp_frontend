@@ -37,26 +37,29 @@ const styles = {
 };
 
 class GeneralInfo extends React.Component {
- 
-  state ={
-      data: {
-        company_name:'',
-        reg_no:'',
-        office_address:'',
-        city: '',
-        state: '',
-        country:'',
-        coy_phone:'',
-        coy_email:'',
-        website:'',
-        contact_name:'',
-        designation: '',
-        contact_phone: '',
-        contact_email:''
-      },
-      loading:false,
-      showMsg: false 
-  };
+
+  constructor(props) {
+    super(props);
+    this.state ={
+        data: {
+          company_name: props.data.company_name,
+          reg_no: props.data.reg_no,
+          office_address: props.data.office_address,
+          city: props.data.city,
+          state: props.data.state,
+          country: props.data.country,
+          coy_phone: props.data.coy_phone,
+          coy_email: props.data.coy_email,
+          website: props.data.website,
+          contact_name: props.data.contact_name,
+          designation: props.data.designation,
+          contact_phone: props.data.contact_phone,
+          contact_email: props.data.contact_email
+        },
+        loading:false,
+        showMsg: false 
+    };
+  }
 
 
   handleChange = event => {
@@ -66,10 +69,6 @@ class GeneralInfo extends React.Component {
       data : data,
     });
   };
-
-  componentDidMount(){
-    this.setState({data:this.props.data.general_info});
-  }
 
   handleSave = e=>{
       e.preventDefault();
@@ -93,7 +92,7 @@ class GeneralInfo extends React.Component {
   render() {
     const { classes, data } = this.props;
     //console.log(this.props);
-    if(this.props.loader.loading){
+    if(this.state.loading){
       return (
         <div>
           <Grid container>
@@ -116,7 +115,7 @@ class GeneralInfo extends React.Component {
               <CardBody>
               <Grid container>
                 <GridItem xs={12} sm={12} md={6}>
-                  <CustomInput labelText="Company Name" id="coy_name" required
+                  <CustomInput labelText="Company Name *" id="coy_name" required
                     formControlProps={{
                       fullWidth: true
                     }} inputProps={{
@@ -126,7 +125,7 @@ class GeneralInfo extends React.Component {
                   />
                 </GridItem>
                 <GridItem xs={12} sm={12} md={6}>
-                  <CustomInput labelText="Registration Number" id="reg_no" required formControlProps={{
+                  <CustomInput labelText="CAC Registration Number *" id="reg_no" required formControlProps={{
                       fullWidth: true
                     }}
                     onChange={this.handleChange} inputProps={{
@@ -258,14 +257,12 @@ class GeneralInfo extends React.Component {
 
 GeneralInfo.propTypes = {
   classes: PropTypes.object.isRequired,
+  data: PropTypes.object.isRequired
 };
 
-GeneralInfo.defaultProps = {
-  data:{}
-}
 function mapStateToProps(state) {
   return {
-    data: state.vendor.datum,
+    data: state.vendor.datum.general_info,
     loader: state.loader,
     user: state.auth.user
   };

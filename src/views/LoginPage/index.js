@@ -45,7 +45,7 @@ class LoginInfo extends React.Component {
       data : data,
     });
   };
-  componentWillMount(){
+  componentDidMount(){
     stateLoader.unsetState();
   }
   

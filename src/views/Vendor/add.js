@@ -58,7 +58,7 @@ class AddTabs extends React.Component {
                   tabName: "General Information",
                   tabIcon: BugReport,
                   tabContent: (
-                    <GeneralInfo />
+                    <GeneralInfo data={this.props.vendor.general_info}/>
                   )
                 },
                 {
@@ -93,11 +93,11 @@ class AddTabs extends React.Component {
 AddTabs.propTypes = {
   classes: PropTypes.object.isRequired,
   vendorActions:PropTypes.object,
-  data: PropTypes.object
+  vendor: PropTypes.object
 }
 
 AddTabs.defaultProps = {
-  data:{}
+  vendor:{}
 }
 
 function mapStateToProps(state) {

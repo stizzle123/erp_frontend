@@ -7,9 +7,7 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 
-// @material-ui/icons
-import Timeline from "@material-ui/icons/Timeline";
-import Code from "@material-ui/icons/Code";
+// @material-ui/icon
 import Group from "@material-ui/icons/Group";
 import Face from "@material-ui/icons/Face";
 import Email from "@material-ui/icons/Email";
@@ -33,6 +31,7 @@ import sweetAlertStyle from "assets/jss/material-dashboard-pro-react/views/sweet
 import LinearProgress from '@material-ui/core/LinearProgress';
 import bg from "assets/img/bg-image.png";
 import SnackbarContent from "components/Snackbar/SnackbarContent.jsx";
+import Typography from '@material-ui/core/Typography';
 import registerPageStyle from "assets/jss/material-dashboard-pro-react/views/registerPageStyle.jsx";
 
 const styles = {sweetAlertStyle,registerPageStyle}
@@ -53,7 +52,6 @@ class RegisterPage extends React.Component {
   }
 
   handleChange = event => {
-    console.log(this.state);
     this.setState({ 
       [[event.target.id]] : event.target.value,
     });
@@ -64,7 +62,6 @@ class RegisterPage extends React.Component {
     const { checked } = this.state;
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
-
     if (currentIndex === -1) {
       newChecked.push(value);
     } else {
@@ -75,10 +72,13 @@ class RegisterPage extends React.Component {
       checked: newChecked
     });
 
-
   }
   register = e =>{
     e.preventDefault();
+    if(this.state.checked.length === 0){
+      this.setState({showCheckNotice:true})
+      return;
+    }
     let middleware = new MiddleWare();
     let data = {};
     data.email = this.state.email;
@@ -116,14 +116,13 @@ class RegisterPage extends React.Component {
   }else 
     return (
       <div className={classes.content} style={{backgroundColor:'#082356', backgroundImage:"url(" + bg + ")", backgroundRepeat:"no-repeat"}}>
-      <div className={classes.container}>
-      <GridContainer justify="center">
+      <GridContainer justify="center" alignItems="flex-start">
           <GridItem xs={12} sm={12} md={8}>
             <Card className={classes.cardSignup}>
                    <center><img src={logo} /></center>
               <h2 className={classes.cardTitle}>New Vendor Registration</h2>
               <CardBody>
-                <GridContainer justify="center">
+                <GridContainer>
                   <GridItem xs={12} sm={12} md={6}>
                     <InfoArea
                       title="How To Register"
@@ -188,7 +187,8 @@ class RegisterPage extends React.Component {
                           className: classes.customFormControlClasses
                         }}
                         inputProps={{
-				onChange:this.handleChange,
+                          onChange:this.handleChange,
+                          type:"password",
                           startAdornment: (
                             <InputAdornment
                               position="start"
@@ -202,6 +202,11 @@ class RegisterPage extends React.Component {
                           placeholder: "Password..."
                         }}
                       />
+                      {(this.state.showCheckNotice)? 
+                        <Typography variant="caption" color="secondary" gutterBottom align="center">
+                              Kindly agree to the terms and condition
+                        </Typography>
+                        : ""}
                       <FormControlLabel
                         classes={{
                           root: classes.checkboxLabelControl,
@@ -229,7 +234,7 @@ class RegisterPage extends React.Component {
                       />
                      <GridItem xs={12} sm={12} md={12}>
                             <Link to="/login">Already have an account? Click here</Link>
-                          </GridItem>
+                      </GridItem>
                       <div className={classes.center}>
                         <Button round color="primary" type="submit" onClick={this.register}>
                           Get started
@@ -243,7 +248,6 @@ class RegisterPage extends React.Component {
           </GridItem>
         </GridContainer>
 		</div>
-    </div>
     );
   }
 }

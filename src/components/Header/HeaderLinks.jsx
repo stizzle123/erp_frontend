@@ -26,6 +26,8 @@ import CustomInput from "components/CustomInput/CustomInput.jsx";
 import Button from "components/CustomButtons/Button.jsx";
 
 import headerLinksStyle from "assets/jss/material-dashboard-pro-react/components/headerLinksStyle.jsx";
+import StateLoader from "middleware/stateLoader";
+const stateLoader = new StateLoader();
 
 class HeaderLinks extends React.Component {
   state = {
@@ -37,6 +39,12 @@ class HeaderLinks extends React.Component {
   handleClose = () => {
     this.setState({ open: false });
   };
+
+  handleLogout = ()=>{
+    stateLoader.unsetState();
+    this.props.Logout();
+  }
+
   render() {
     const { classes, rtlActive } = this.props;
     const { open } = this.state;
@@ -231,7 +239,7 @@ class HeaderLinks extends React.Component {
           simple={!(window.innerWidth > 959)}
           aria-label="Person"
           className={classes.buttonLink}
-          onClick={this.props.Logout}
+          onClick={this.handleLogout}
         >
           <Exit className={classes.icons} />
           <Hidden mdUp>

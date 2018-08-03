@@ -53,7 +53,6 @@ class Vendor extends React.Component {
   };
   render() {
     const { classes } = this.props;
-    console.log(this.props.vendor.status);
     if(this.props.loader.loading){
       return (
         <div>

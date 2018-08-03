@@ -76,9 +76,9 @@ function Header({ ...props }) {
         </Hidden>
         <div className={classes.flex}>
           {/* Here we create navbar brand, based on route name */}
-          <Button href="#" className={classes.title} color="transparent">
+         {/*  <Button href="#" className={classes.title} color="transparent">
             {makeBrand()}
-          </Button>
+          </Button> */}
         </div>
         <Hidden smDown implementation="css">
           <HeaderLinks rtlActive={rtlActive} />
