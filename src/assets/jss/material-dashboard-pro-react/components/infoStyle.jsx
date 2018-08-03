@@ -65,7 +65,7 @@ const infoStyle = {
     marginTop: "0px",
     fontSize: "14px"
   },
-  
+
 };
 
 export default infoStyle;

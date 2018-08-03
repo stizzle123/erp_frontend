@@ -48,7 +48,7 @@ class LoginInfo extends React.Component {
   componentDidMount(){
     stateLoader.unsetState();
   }
-  
+
   login = (e) => {
     e.preventDefault();
     this.setState({loading:true});

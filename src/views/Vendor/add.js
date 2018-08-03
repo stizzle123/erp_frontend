@@ -45,7 +45,7 @@ class AddTabs extends React.Component {
   render() {
     const { classes } = this.props;
     if(this.props.user.role ==='vendor' && this.props.vendor.status === "PENDING"){
-      return  <Redirect to="/dashboard" /> 
+      return  <Redirect to="/dashboard" />
     }else
     return (
       <Grid container>

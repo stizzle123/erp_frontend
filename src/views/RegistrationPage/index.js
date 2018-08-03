@@ -22,7 +22,9 @@ import CustomInput from "components/CustomInput/CustomInput.jsx";
 import InfoArea from "components/InfoArea/InfoArea.jsx";
 import Card from "components/Card/Card.jsx";
 import CardBody from "components/Card/CardBody.jsx";
+import BackgroundImage from "../../assets/img/register.jpeg";
 import logo from "../../assets/img/reglogo.png";
+import CardHeader from "../../components/Card/CardHeader.jsx";
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 import MiddleWare from "middleware/api";
@@ -34,21 +36,13 @@ import SnackbarContent from "components/Snackbar/SnackbarContent.jsx";
 import Typography from '@material-ui/core/Typography';
 import registerPageStyle from "assets/jss/material-dashboard-pro-react/views/registerPageStyle.jsx";
 
-const styles = {sweetAlertStyle,registerPageStyle}
 class RegisterPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      alert: false,coy_name: '', email:'', password:'', confirm_password:'',showResponse: false, 
-      loading:false, showError:false, checked: []
+      checked: []
     };
-    this.hideAlert = this.hideAlert.bind(this);
-  }
-
-  hideAlert() {
-    this.setState({
-      alert: false,
-    });
+    this.handleToggle = this.handleToggle.bind(this);
   }
 
   handleChange = event => {
@@ -100,20 +94,6 @@ class RegisterPage extends React.Component {
   }
   render() {
     const { classes } = this.props;
-  if(this.state.alert){
-    return (<SweetAlert
-      success
-      style={{ display: "block", marginTop: "-100px" }}
-      title=" Registration Successful !"
-      onConfirm={() => this.hideAlert()}
-      onCancel={() => this.hideAlert()}
-      confirmBtnCssClass={
-        this.props.classes.button + " " + this.props.classes.success
-      }
-    >
-      Account creation was successful. Kindly check your email for confirmation.
-    </SweetAlert>)
-  }else 
     return (
       <div className={classes.content} style={{backgroundColor:'#082356', backgroundImage:"url(" + bg + ")", backgroundRepeat:"no-repeat"}}>
       <GridContainer justify="center" alignItems="flex-start">
@@ -132,24 +112,13 @@ class RegisterPage extends React.Component {
                     />
                   </GridItem>
                   <GridItem xs={12} sm={8} md={6}>
-                    <form className={classes.form}  onSubmit={this.register}>
-    { (this.state.loading)? <LinearProgress color="secondary" />: "" }
-    {(this.state.showError)?<SnackbarContent
-                message={
-                  'Error encountered while trying to register, our engineers have been notified, kindly try again later'
-                }
-                close
-                color="danger"
-              /> : ""}
-
+                    <form className={classes.form}>
                       <CustomInput
                         formControlProps={{
                           fullWidth: true,
                           className: classes.customFormControlClasses
                         }}
-			id="coy_name" required
                         inputProps={{
-			onChange:this.handleChange,
                           startAdornment: (
                             <InputAdornment
                               position="start"
@@ -158,17 +127,15 @@ class RegisterPage extends React.Component {
                               <Face className={classes.inputAdornmentIcon} />
                             </InputAdornment>
                           ),
-                          placeholder: "Company Name..."
+                          placeholder: "First Name..."
                         }}
                       />
                       <CustomInput
-			id="email" required
                         formControlProps={{
                          fullWidth: true,
                           className: classes.customFormControlClasses
                         }}
                         inputProps={{
-			onChange:this.handleChange,
                           startAdornment: (
                             <InputAdornment
                               position="start"
@@ -181,7 +148,6 @@ class RegisterPage extends React.Component {
                         }}
                       />
                       <CustomInput
-			id="password" required
                         formControlProps={{
                           fullWidth: true,
                           className: classes.customFormControlClasses
@@ -236,7 +202,7 @@ class RegisterPage extends React.Component {
                             <Link to="/login">Already have an account? Click here</Link>
                       </GridItem>
                       <div className={classes.center}>
-                        <Button round color="primary" type="submit" onClick={this.register}>
+                        <Button round color="primary">
                           Get started
                         </Button>
                       </div>

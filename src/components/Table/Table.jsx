@@ -49,7 +49,7 @@ function CustomTable({ ...props }) {
                 <TableCell className={classes.tableCell} key={key}>
                   <Button aria-label="View" variant="fab" to={viewLink+prop[0]} component={Link} className={classes.button}><View /></Button>;
                     {cardActions.map((action,key)=>{
-                      return (    
+                      return (
                       <Button className={classes.button} onClick={props.handler("approve",prop[0])}>
                       <action.label />
                     </Button>)

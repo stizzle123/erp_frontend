@@ -245,7 +245,7 @@ class HeaderLinks extends React.Component {
           <Hidden mdUp>
             <p className={classes.linkText}>Logout</p>
           </Hidden>
-        </Button> 
+        </Button>
       </div>
     );
   }

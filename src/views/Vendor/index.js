@@ -85,7 +85,7 @@ render(){
                 simple
                 onClick={() => {
                   let obj = this.state.data.find(o => o.id === key);
-                 
+
                 }}
                 color="info"
                 className="like"
