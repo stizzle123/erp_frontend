@@ -4,7 +4,8 @@ import { withStyles } from '@material-ui/core/styles';
 import GeneralInfo from './view/generalInfo';
 import BusinessInfo from './view/businessInfo';
 import WorkReference from './view/workReferences';
-import TechnicalCapabilities from './view/technicalCapabilities'
+import TechnicalCapabilities from './view/technicalCapabilities';
+import BankDetails from './view/bankDetails';
 import Typography from '@material-ui/core/Typography';
 import CustomTabs from "../../components/CustomTabs/CustomTabs.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
@@ -19,6 +20,7 @@ import Progress from "components/Progress/Progress.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import {connect} from 'react-redux';
 import MiddleWare from "../../middleware/api";
+import Notification from 'views/Notifications/Index.jsx'
 import * as vendorActions from '../../actions/vendor';
 
 const styles = {
@@ -48,6 +50,7 @@ class View extends React.Component {
   }
 
   componentDidMount(){
+    {{debugger}}
     const vendorId = this.props.match.params.id;
     vendorActions.findVendorById(this.props, vendorId);
   }
@@ -62,10 +65,13 @@ class View extends React.Component {
       let middleware = new MiddleWare();
       data.key = this.props.data._id;
       data.value = status;
+      data.message = this.state.reason;
       middleware.makeConnection('/vendors/updatestatus','PUT', data).then(
         (result)=>{
           if(!result.ok || result.statusText != "OK" && result.status != 200 ) {
-            
+            this.setState({error:true, message: "Error completing the request"})
+          }else{
+            this.setState({error:false, message: "Saved succesfully"})
           }
           this.setState({loading:false});
         }
@@ -79,6 +85,7 @@ class View extends React.Component {
     const { classes } = this.props;
     return (
       <Grid container>
+      <Notification error={this.state.error} message={this.state.message} />
            <GridItem xs={12} sm={12} md={12}>
            <Progress loading={this.state.loading}/>
             <CustomTabs
@@ -99,11 +106,18 @@ class View extends React.Component {
                     <BusinessInfo />
                   )
                 },
-                {
+               /*  {
                   tabName: "Technical Capabilities",
                   tabIcon: Cloud,
                   tabContent: (
                     <TechnicalCapabilities  />
+                  )
+                }, */
+                {
+                  tabName: "Bank Details",
+                  tabIcon: Cloud,
+                  tabContent: (
+                    <BankDetails />
                   )
                 },
                 {
@@ -176,7 +190,7 @@ View.defaultProps = {
 function mapStateToProps(state) {
   return {
     user: state.auth.user,
-    data: state.vendor.datum
+    data: state.vendor
   };
 }
 

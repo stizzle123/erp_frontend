@@ -1,17 +1,15 @@
 import * as types from '../actions/index';
-let datum = {general_info:{}, business_info:{}, work_references:{}, tech_capability:{}}
+let data = {general_info:{}, business_info:{}, work_references:{}, tech_capability:{}}
 
-export default function vendor(state={datum:datum,} , action){
+export default function vendor(state = data , action){
     switch(action.type){
-        case types.FETCH_DATA:
-            console.log('FETCH_DATA action')
+        case types.ADD_VENDOR:
+
         return action;
-        case types.RECEIVED_DATA:
-            return {...state, data:action.data};
-        case types.VENDOR_DATA:
-            return {...state, datum:action.data};
-        case types.SHOW_VENDOR_PART:
-            return state;
+        case types.UPDATE_VENDOR:
+            return {...state, ...action.data};
+        case types.FETCH_VENDOR:
+            return action.data;
         default:
         return state;
     }

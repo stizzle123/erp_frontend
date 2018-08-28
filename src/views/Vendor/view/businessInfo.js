@@ -14,6 +14,7 @@ import CardBody from "../../../components/Card/CardBody.jsx";
 import CardFooter from "../../../components/Card/CardFooter.jsx";
 import Progress from "../../../components/Progress/Progress.jsx";
 import MiddleWare from "../../../middleware/api";
+import {Services, Products} from "../params.js";
 import FormLabel from '@material-ui/core/FormLabel';
 import {connect} from 'react-redux';
 
@@ -26,13 +27,6 @@ const biz_types = [
   {value: '1',label: 'Corporate/Limited',},
   {value: '2',label: 'Partnership',},
   {value: '3',label: 'Other',}
-];
-const biz_nature = [
-  {value: '1',label: 'Manufacturer',},
-  {value: '2',label: 'Trader',},
-  {value: '3',label: 'Authorized Agent',},
-  {value: '4',label: 'Consulting Firm',},
-  {value: '5',label: 'Others Specify',}
 ];
 class BusinessInfo extends React.Component {
   state = {
@@ -159,7 +153,7 @@ class BusinessInfo extends React.Component {
               <GridItem xs={12} sm={12} md={12}>
               <FormLabel component="legend" >Area(s) of Business that you wish to Register For : </FormLabel> 
               </GridItem>
-              <GridItem xs={12} sm={12} md={6}>
+              <GridItem xs={12} sm={12} md={6} >
                 <CustomCheck labelText="Product Related" name="product_related" required state={(this.state.data.product_related)?this.state.data.product_related: {} }
                       formControlProps={{
                         fullWidth: true
@@ -167,7 +161,7 @@ class BusinessInfo extends React.Component {
                         disabled: true,
                         onChange: this.handleBizNatureChange,
                       }}
-                      collection={biz_nature}
+                      collection={Products}
                     />
               </GridItem>
               <GridItem xs={12} sm={12} md={6}>
@@ -178,7 +172,7 @@ class BusinessInfo extends React.Component {
                         disabled: true,
                         onChange: this.handleBizNatureChange,
                       }}
-                      collection={biz_nature}
+                      collection={Services}
                     />
               </GridItem>
               <GridItem xs={12} sm={12} md={6}>
@@ -211,7 +205,7 @@ class BusinessInfo extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    data: state.vendor.datum.business_info,
+    data: state.vendor.business_info,
     user: state.auth.user
   };
 }

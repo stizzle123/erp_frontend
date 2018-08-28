@@ -4,7 +4,8 @@ import { withStyles } from '@material-ui/core/styles';
 import GeneralInfo from './generalInfo';
 import BusinessInfo from './businessInfo';
 import WorkReference from './workReferences';
-import TechnicalCapabilities from './technicalCapabilities'
+import TechnicalCapabilities from './technicalCapabilities';
+import BankDetails from './bankDetails';
 import Typography from '@material-ui/core/Typography';
 import CustomTabs from "../../components/CustomTabs/CustomTabs.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
@@ -12,8 +13,11 @@ import Grid from "@material-ui/core/Grid";
 import BugReport from "@material-ui/icons/BugReport";
 import Code from "@material-ui/icons/Code";
 import Cloud from "@material-ui/icons/Cloud";
+import CircularProgress from '@material-ui/core/CircularProgress';
+import purple from '@material-ui/core/colors/purple';
 import {connect} from 'react-redux';
 import { Redirect } from "react-router-dom";
+import Notification from 'views/Notifications/Index.jsx'
 import * as vendorActions from '../../actions/vendor';
 
 const styles = {
@@ -34,24 +38,37 @@ TabContainer.propTypes = {
   children: PropTypes.node.isRequired,
 };
 class AddTabs extends React.Component {
+
   componentWillMount(){
     const userId = this.props.user._id;
     vendorActions.findVendorByUserId(this.props, userId);
   }
+
   handleChange = (event, value) => {
     this.setState({ value });
-  };
+  }
 
   render() {
     const { classes } = this.props;
-    if(this.props.user.role ==='vendor' && this.props.vendor.status === "PENDING"){
-      return  <Redirect to="/dashboard" />
+    if(this.props.loading){
+      return (
+        <div>
+          <Grid container>
+            <GridItem xs={12} sm={6} md={3} style={{ margin:'20% auto'}}>
+              <CircularProgress className={classes.progress} size={70} style={{ color: purple[500]}} thickness={10} />
+            </GridItem>
+          </Grid>
+        </div>)
+    }
+    else if(this.props.user.role ==='vendor' && this.props.vendor.status === "PENDING"){
+      return  (<Redirect to="/dashboard" />);
     }else
     return (
-      <Grid container>
+    <Grid container>
+    <Notification error={this.props.loader.error} message={this.props.loader.message} />
            <GridItem xs={12} sm={12} md={12}>
             <CustomTabs
-              title="Information Tabs"
+              title=""
               headerColor="primary"
               tabs={[
                 {
@@ -69,12 +86,19 @@ class AddTabs extends React.Component {
                   )
                 },
                 {
+                  tabName: "Bank Details",
+                  tabIcon: Cloud,
+                  tabContent: (
+                    <BankDetails />
+                  )
+                },
+               /*  {
                   tabName: "Technical Capabilities",
                   tabIcon: Cloud,
                   tabContent: (
                     <TechnicalCapabilities  />
                   )
-                },
+                }, */
                 {
                   tabName: "Work Reference",
                   tabIcon: Cloud,
@@ -97,13 +121,15 @@ AddTabs.propTypes = {
 }
 
 AddTabs.defaultProps = {
-  vendor:{}
+  vendor:{},
 }
 
 function mapStateToProps(state) {
   return {
     user: state.auth.user,
-    vendor: state.vendor.datum,
+    vendor: state.vendor,
+    loading: state.loader.loading,
+    loader : state.loader
   };
 }
 

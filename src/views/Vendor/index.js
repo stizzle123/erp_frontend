@@ -42,18 +42,20 @@ class Index extends React.Component {
   constructor(props) {
     super(props);
     this.handler = this.handler.bind(this);
-    this.state = { redirectTo:false};
+    this.state = { 
+      redirectTo:false
+    };
   }
  
+
 handler(type, id){
   console.log(type, id);
 }
 
 
 componentDidMount(){
-  if(typeof(this.props.match.params.type) === "undefined" && this.props.data.length === 0){
-    vendorActions.findAllVendors(this.props);
-  }/* else if(this.props.match.params.type){
+   vendorActions.findAllVendors(this.props);
+    /* else if(this.props.match.params.type){
     vendorActions.findAllVendors(this.props, this.props.match.params.type);
   } */
 }
@@ -64,13 +66,32 @@ componentDidUpdate(prevProps) {
     vendorActions.findAllVendors(this.props, this.props.match.params.type);
   }
 }
+processJson(responseJson){
+  let datas = [];
+  responseJson.map((row)=>{
+    let arry = [];
+    arry.push(row._id, row.general_info.company_name, row.general_info.contact_name, row.general_info.contact_phone,
+    row.general_info.contact_email, row.status, row.classes);
+    datas.push(arry);
+  });
+  const dataTable = {
+    headerRow: ["Class","Company Name", "Contact Person", "Contact Telephone", "Contact Email", "Actions"],
+    footerRow: ["Class","Company Name", "Contact Person", "Contact Telephone", "Contact Email", "Actions"],
+    dataRows: datas}
+  return dataTable;
+}
 
 render(){
     const { classes } = this.props;
+    let vendors = {"dataRows":[]};
+    if(this.props.data.length> 0){
+      vendors = this.processJson(this.props.data);
+    }
     console.log(this.props);
-    let data = this.props.data.dataRows.map((prop, key) => {
+    let data = vendors.dataRows.map((prop, key) => {
         return {
           id: key,
+          class: prop[6],
           companyname: prop[1],
           contactperson: prop[2],
           contacttelephone: prop[3],
@@ -98,7 +119,7 @@ render(){
                 simple
                 onClick={() => {
                   let obj = data.find(o => o.id === key);
-                  this.setState({redirectTo:this.props.data.dataRows[[obj.id]][0]})
+                  this.setState({redirectTo:vendors.dataRows[[obj.id]][0]})
                   }}
                 color="warning"
                 className="edit"
@@ -160,6 +181,10 @@ render(){
                 filterable
                 columns={[
                   {
+                    Header: "Class",
+                    accessor: "class"
+                  },
+                  {
                     Header: "Company Name",
                     accessor: "companyname"
                   },
@@ -202,11 +227,11 @@ Index.propTypes = {
 }
 
 Index.defaultProps = {
-  data: {dataRows:[],headerRow:[],footerRow:[]}
+  data: {"dataRows":{}}
 }
 function mapStateToProps(state) {
   return {
-    data: state.vendor.data,
+    data: state.vendors,
     loader: state.loader,
     user: state.auth.user,
   };

@@ -37,59 +37,8 @@ const styles = {
 };
 
 class GeneralInfo extends React.Component {
- 
-  state ={
-      data: {
-        company_name:'',
-        reg_no:'',
-        office_address:'',
-        city: '',
-        state: '',
-        country:'',
-        coy_phone:'',
-        coy_email:'',
-        website:'',
-        contact_name:'',
-        designation: '',
-        contact_phone: '',
-        contact_email:''
-      },
-      loading:false,
-      showMsg: false 
-  };
 
 
-  handleChange = event => {
-    let data = this.state.data;
-    data[[event.target.id]] = event.target.value; 
-    this.setState({ 
-      data : data,
-    });
-  };
-
-  componentDidMount(){
-    this.setState({data:this.props.data.general_info});
-  }
-
-  handleSave = e=>{
-      e.preventDefault();
-      let data = {};
-      let middleware = new MiddleWare();
-      data.payload = { general_info:this.state.data};
-      data.key = "user_id";
-      data.value = this.props.user.id;
-      middleware.makeConnection('/vendors','PUT', data).then(
-        (result)=>{
-          if(!result.ok || result.statusText != "OK" && result.status != 200 ) {
-            
-          }
-          this.setState({loading:false});
-        }
-      ).catch((e)=>{
-        console.log(e);
-      })
-      
-  }
   render() {
     const { classes, data } = this.props;
     //console.log(this.props);
@@ -108,7 +57,7 @@ class GeneralInfo extends React.Component {
         <Grid container>
           <GridItem xs={12} sm={12} md={12}>
           <form className={classes.container} noValidate autoComplete="off">
-            <Progress loading={this.state.loading}/>
+            <Progress loading={this.props.loading}/>
             <Card>
               <CardBody>
               <Grid container>
@@ -118,7 +67,7 @@ class GeneralInfo extends React.Component {
                       fullWidth: true
                     }} inputProps={{
                       disabled: true,
-                      value: this.state.data.company_name
+                      value: this.props.data.company_name
                     }}
                   />
                 </GridItem>
@@ -127,7 +76,7 @@ class GeneralInfo extends React.Component {
                       fullWidth: true
                     }} inputProps={{
                       disabled: true,
-                      value: this.state.data.reg_no
+                      value: this.props.data.reg_no
                     }}
                   />
                 </GridItem>
@@ -136,7 +85,7 @@ class GeneralInfo extends React.Component {
                       fullWidth: true
                     }} inputProps={{
                       disabled: true,
-                      value: this.state.data.office_address
+                      value: this.props.data.office_address
                     }}
                   />                    
                 </GridItem>
@@ -145,7 +94,7 @@ class GeneralInfo extends React.Component {
                       fullWidth: true
                     }} inputProps={{
                       disabled: true,
-                      value: this.state.data.city
+                      value: this.props.data.city
                     }}
                   />
                 </GridItem>
@@ -154,7 +103,7 @@ class GeneralInfo extends React.Component {
                       fullWidth: true
                     }} inputProps={{
                       disabled: true,
-                      value: this.state.data.state
+                      value: this.props.data.state
                     }}
                   />
                 </GridItem>
@@ -163,7 +112,7 @@ class GeneralInfo extends React.Component {
                       fullWidth: true
                     }} inputProps={{
                       disabled: true,
-                      value: this.state.data.country
+                      value: this.props.data.country
                     }}
                   />
                 </GridItem>
@@ -172,7 +121,7 @@ class GeneralInfo extends React.Component {
                       fullWidth: true
                     }} inputProps={{
                       disabled: true,
-                      value: this.state.data.coy_phone
+                      value: this.props.data.coy_phone
                     }}
                   />
                 </GridItem>
@@ -181,7 +130,7 @@ class GeneralInfo extends React.Component {
                       fullWidth: true
                     }} inputProps={{
                       disabled: true,
-                      value: this.state.data.coy_email
+                      value: this.props.data.coy_email
                     }}
                   />
                 </GridItem>
@@ -190,7 +139,7 @@ class GeneralInfo extends React.Component {
                       fullWidth: true
                     }} inputProps={{
                       disabled: true,
-                      value: this.state.data.website
+                      value: this.props.data.website
                     }}
                   />
                 </GridItem>
@@ -199,7 +148,7 @@ class GeneralInfo extends React.Component {
                       fullWidth: true
                     }} inputProps={{
                       disabled: true,
-                      value: this.state.data.contact_name
+                      value: this.props.data.contact_name
                     }}
                   />
                 </GridItem>
@@ -208,21 +157,21 @@ class GeneralInfo extends React.Component {
                       fullWidth: true
                     }} inputProps={{
                       disabled: true,
-                      value: this.state.data.designation
+                      value: this.props.data.designation
                     }}
                   />
                 </GridItem>
                 <GridItem xs={12} sm={12} md={6}>
-                  <CustomInput labelText="Contact Telephone" id="contact_phone" required formControlProps={{
+                  <CustomInput labelText="Contact Telephone" id="contact_phone"  formControlProps={{
                       fullWidth: true
                     }} inputProps={{disabled: true,
-                      value: this.state.data.contact_phone}}
+                      value: this.props.data.contact_phone}}
                   />
                 </GridItem>
                 <GridItem xs={12} sm={12} md={6}>
-                  <CustomInput labelText="Contact Email" id="contact_email" required formControlProps={{
+                  <CustomInput labelText="Contact Email" id="contact_email"  formControlProps={{
                       fullWidth: true }} inputProps={{ disabled: true,
-                        value: this.state.data.contact_email}}
+                        value: this.props.data.contact_email}}
                   />
                 </GridItem>
               </Grid>
@@ -238,7 +187,7 @@ class GeneralInfo extends React.Component {
 
 
 GeneralInfo.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object,
 };
 
 GeneralInfo.defaultProps = {
@@ -246,7 +195,7 @@ GeneralInfo.defaultProps = {
 }
 function mapStateToProps(state) {
   return {
-    data: state.vendor.datum,
+    data: state.vendor.general_info,
     loader: state.loader,
     user: state.auth.user
   };

@@ -6,14 +6,13 @@ import Save from '@material-ui/icons/Save';
 import Button from '@material-ui/core/Button';
 import classNames from 'classnames';
 import Grid from '@material-ui/core/Grid';
-import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
-import Checkbox from '@material-ui/core/Checkbox';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import AddIcon from '@material-ui/icons/Add';
+import * as vendorActions from '../../actions/vendor';
 import {connect} from 'react-redux';
 
 
@@ -161,7 +160,7 @@ TechnicalCapabilities.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    data: (typeof(state.vendor.datum.tech_capability) != 'undefined')?state.vendor.datum.tech_capability: {},
+    data: (typeof(state.vendor.tech_capability) != 'undefined')?state.vendor.tech_capability: {},
     user: state.auth.user
   };
 }

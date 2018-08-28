@@ -73,6 +73,7 @@ class RegisterPage extends React.Component {
       this.setState({showCheckNotice:true})
       return;
     }
+    {{debugger}}
     let middleware = new MiddleWare();
     let data = {};
     data.email = this.state.email;
@@ -94,6 +95,20 @@ class RegisterPage extends React.Component {
   }
   render() {
     const { classes } = this.props;
+    if(this.state.alert){
+      return (<SweetAlert
+        success
+        style={{ display: "block", marginTop: "-100px" }}
+        title=" Registration Successful !"
+        onConfirm={() => this.hideAlert()}
+        onCancel={() => this.hideAlert()}
+        confirmBtnCssClass={
+          this.props.classes.button + " " + this.props.classes.success
+        }
+      >
+        Account creation was successful. Kindly check your email for confirmation.
+      </SweetAlert>)
+    }else 
     return (
       <div className={classes.content} style={{backgroundColor:'#082356', backgroundImage:"url(" + bg + ")", backgroundRepeat:"no-repeat"}}>
       <GridContainer justify="center" alignItems="flex-start">
@@ -118,7 +133,9 @@ class RegisterPage extends React.Component {
                           fullWidth: true,
                           className: classes.customFormControlClasses
                         }}
+                        id="coy_name"
                         inputProps={{
+                          onChange:this.handleChange,
                           startAdornment: (
                             <InputAdornment
                               position="start"
@@ -127,7 +144,7 @@ class RegisterPage extends React.Component {
                               <Face className={classes.inputAdornmentIcon} />
                             </InputAdornment>
                           ),
-                          placeholder: "First Name..."
+                          placeholder: "Company Name..."
                         }}
                       />
                       <CustomInput
@@ -135,7 +152,9 @@ class RegisterPage extends React.Component {
                          fullWidth: true,
                           className: classes.customFormControlClasses
                         }}
+                        id="email"
                         inputProps={{
+                          onChange:this.handleChange,
                           startAdornment: (
                             <InputAdornment
                               position="start"
@@ -152,6 +171,7 @@ class RegisterPage extends React.Component {
                           fullWidth: true,
                           className: classes.customFormControlClasses
                         }}
+                        id="password"
                         inputProps={{
                           onChange:this.handleChange,
                           type:"password",
@@ -202,7 +222,7 @@ class RegisterPage extends React.Component {
                             <Link to="/login">Already have an account? Click here</Link>
                       </GridItem>
                       <div className={classes.center}>
-                        <Button round color="primary">
+                        <Button round color="primary" onClick={this.register}>
                           Get started
                         </Button>
                       </div>

@@ -50,6 +50,7 @@ class LoginInfo extends React.Component {
   }
 
   login = (e) => {
+    {{debugger}}
     e.preventDefault();
     this.setState({loading:true});
     AclAuth.authenticate(this.state.data.username, this.state.data.password, (err,user,token) => {

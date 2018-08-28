@@ -9,12 +9,12 @@ import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import CustomCheck from "../../components/CustomInput/CustomCheck.jsx";
 import Button from "../../components/CustomButtons/Button.jsx";
 import Card from "../../components/Card/Card.jsx";
-import CardHeader from "../../components/Card/CardHeader.jsx";
 import CardBody from "../../components/Card/CardBody.jsx";
 import CardFooter from "../../components/Card/CardFooter.jsx";
 import Progress from "../../components/Progress/Progress.jsx";
-import MiddleWare from "../../middleware/api";
+import {Services, Products} from "./params.js";
 import FormLabel from '@material-ui/core/FormLabel';
+import * as vendorActions from '../../actions/vendor';
 import {connect} from 'react-redux';
 
 const styles = theme => ({
@@ -27,26 +27,22 @@ const biz_types = [
   {value: '2',label: 'Partnership',},
   {value: '3',label: 'Other',}
 ];
-const biz_nature = [
-  {value: '1',label: 'Manufacturer',},
-  {value: '2',label: 'Trader',},
-  {value: '3',label: 'Authorized Agent',},
-  {value: '4',label: 'Consulting Firm',},
-  {value: '5',label: 'Others Specify',}
-];
+
 class BusinessInfo extends React.Component {
-  state = {
+  constructor(props) {
+    super(props);
+    this.state = {
     business_nature: {},
     data: {
-    employee_no:'',
-    business_type: 0,
-    year_established:'',
-    vat_no: '',
-    tax_no: '',
-    product_related: {},
-    service_related: {}
+    business_type: props.data.business_type,
+    year_established: props.data.year_established,
+    vat_no: props.data.vat_no,
+    tax_no: props.data.tax_no,
+    product_related: props.data.product_related,
+    service_related: props.data.service_related
     }
   };
+}
   biz_nature_state = {};
   
   componentDidMount(){
@@ -77,37 +73,26 @@ class BusinessInfo extends React.Component {
   };
   
   handleBizNatureChange = event =>{
-    if( this.biz_nature_state[event.target.name] === "" || this.biz_nature_state[event.target.name] == undefined){
+    let data = this.state.data;
+    data[[event.target.name]] = event.target.value;
+    this.setState({ 
+      data : data,
+    });
+    /* if( this.biz_nature_state[event.target.name] === "" || this.biz_nature_state[event.target.name] == undefined){
       this.biz_nature_state[event.target.name] = event.target.value; 
     }else{
       this.biz_nature_state[event.target.name] = "";
     }
     let data = this.state.data;
     data[[event.target.id]] = this.biz_nature_state; 
-    this.setState({data : data});
+    this.setState({data : data}); */
     //console.log(this.state);
   };
 
   handleSave = e=>{
     e.preventDefault();
-    this.setState({loading:true});
-    let data = {};
-    let middleware = new MiddleWare(this.props.user.token);
-    data.payload = { business_info:this.state.data};
-    data.key = "user_id";
-    data.value = this.props.user.id;
-    middleware.makeConnection('/vendors','PUT', data).then(
-      (result)=>{
-        if(!result.ok || result.statusText != "OK" && result.status != 200 ) {
-          
-        }
-        this.setState({loading:false});
-      }
-    ).catch((e)=>{
-      console.log(e);
-    })
-    
-}
+    this.props.updateVendor(this); 
+  }
 
   render() {
     const { classes } = this.props;
@@ -118,9 +103,6 @@ class BusinessInfo extends React.Component {
         <form className={classes.container} noValidate autoComplete="off">
           <Progress loading={this.state.loading}/>
           <Card>
-            <CardHeader color="info">
-              <h4 className={classes.cardTitleWhite}>General Information</h4>
-            </CardHeader>
             <CardBody>
             <Grid container>
               <GridItem xs={12} sm={12} md={6}>
@@ -162,25 +144,45 @@ class BusinessInfo extends React.Component {
               <FormLabel component="legend" >Area(s) of Business that you wish to Register For : </FormLabel> 
               </GridItem>
               <GridItem xs={12} sm={12} md={6}>
-                <CustomCheck labelText="Product Related" name="product_related" required state={(this.state.data.product_related)?this.state.data.product_related: {} }
-                      formControlProps={{
-                        fullWidth: true
-                      }} inputProps={{
-                        onChange: this.handleBizNatureChange,
-                      }}
-                      collection={biz_nature}
-                    />
+                <CustomSelect labelText="Product Related" id="product_related" name="product_related" required
+                                value={this.state.data.product_related} onChange={(e)=>this.handleBizNatureChange(e)}
+                                formControlProps={{
+                                  fullWidth: true
+                                }} 
+                                inputProps={{margin:"normal"}}
+                    >
+                    {Products.map(option => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </CustomSelect>
               </GridItem>
               <GridItem xs={12} sm={12} md={6}>
+                <CustomSelect labelText="Service Related" name="service_related" id="service_related" required
+                                value={this.state.data.service_related} onChange={(e)=>this.handleBizNatureChange(e)}
+                                formControlProps={{
+                                  fullWidth: true
+                                }} 
+                                inputProps={{margin:"normal"}}
+                    >
+                    {Services.map(option => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </CustomSelect>
+              </GridItem>
+             {/*  <GridItem xs={12} sm={12} md={6} >
                 <CustomCheck labelText="Service Related" name="service_related" required state={(this.state.data.service_related)?this.state.data.service_related:{}}
                       formControlProps={{
                         fullWidth: true
                       }} inputProps={{
                         onChange: this.handleBizNatureChange,
                       }}
-                      collection={biz_nature}
+                      collection={Services}
                     />
-              </GridItem>
+              </GridItem> */}
               <GridItem xs={12} sm={12} md={6}>
               <CustomInput id="tax_no" required labelText="Tax Identification No (TIN)" formControlProps={{
                   fullWidth: true
@@ -206,9 +208,6 @@ class BusinessInfo extends React.Component {
                 <GridItem xs={12} sm={6} md={2}>
                   <Button color="primary" onClick={this.handleSave}>Save</Button>
                 </GridItem>
-                <GridItem xs={12} sm={6} md={2}>
-                  <Button color="info">Submit</Button>
-                </GridItem>
               </Grid>
             </CardFooter>
           </Card>
@@ -222,8 +221,18 @@ class BusinessInfo extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    data: (typeof(state.vendor.datum.business_info) != 'undefined')?state.vendor.datum.business_info: {},
-    user: state.auth.user
+    data: (typeof(state.vendor.business_info) != 'undefined')?state.vendor.business_info: {},
+    user: state.auth.user,
   };
 }
-export default connect(mapStateToProps, null)(withStyles(styles)(BusinessInfo));
+
+function mapDispatchToProps(dispatch) {
+  return {
+    updateVendor(e){
+      let d = {};
+      d.business_info = e.state.data
+      vendorActions.submitVendorDetailsViaUserId(dispatch, e.props.user._id, d);
+    }
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(BusinessInfo));

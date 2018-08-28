@@ -182,7 +182,7 @@ Vendor.defaultProps = {
 function mapStateToProps(state) 
 {
   return {
-    vendor: state.vendor.datum,
+    vendor: state.vendor,
     user: state.auth.user,
     loader: state.loader 
   };

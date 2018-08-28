@@ -161,7 +161,7 @@ TechnicalCapabilities.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    data: state.vendor.datum.tech_capability,
+    data: state.vendor.tech_capability,
     user: state.auth.user
   };
 }

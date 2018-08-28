@@ -1,7 +1,11 @@
 export const FETCH_DATA = 'FETCH_ACTION';
 export const RECEIVED_DATA = 'RECEIVED_ACTION';
-export const VENDOR_DATA = 'VENDOR_DATA';
-export const SHOW_VENDOR_PART = 'SHOW_VENDOR_PART';
+export const DELETE_VENDOR = 'DELETE_VENDOR';
+export const APPROVE_VENDOR = 'APPROVE_VENDOR';
+export const ADD_VENDOR = 'ADD_VENDOR';
+export const UPDATE_VENDOR = 'UPDATE_VENDOR';
+export const FETCH_VENDOR = 'FETCH_VENDOR';
+export const FETCH_VENDORS = 'FETCH_VENDORS';
 export const USER_LOGGED_IN = 'USER_LOGGED_IN';
 export const USER_LOGGED_OUT = 'USER_LOGGED_OUT';
 export const LOADING_REQUEST = 'LOADING';

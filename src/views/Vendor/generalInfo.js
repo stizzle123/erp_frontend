@@ -7,11 +7,10 @@ import GridItem from "../../components/Grid/GridItem.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import Button from "../../components/CustomButtons/Button.jsx";
 import Card from "../../components/Card/Card.jsx";
-import CardHeader from "../../components/Card/CardHeader.jsx";
 import CardBody from "../../components/Card/CardBody.jsx";
 import CardFooter from "../../components/Card/CardFooter.jsx";
 import Progress from "../../components/Progress/Progress.jsx";
-import MiddleWare from "../../middleware/api";
+import * as vendorActions from '../../actions/vendor';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import purple from '@material-ui/core/colors/purple';
 import {connect} from 'react-redux';
@@ -56,11 +55,10 @@ class GeneralInfo extends React.Component {
           contact_phone: props.data.contact_phone,
           contact_email: props.data.contact_email
         },
-        loading:false,
-        showMsg: false 
+        loading: props.loader.loading,
+        loader: props.loader
     };
   }
-
 
   handleChange = event => {
     let data = this.state.data;
@@ -72,26 +70,10 @@ class GeneralInfo extends React.Component {
 
   handleSave = e=>{
       e.preventDefault();
-      let data = {};
-      let middleware = new MiddleWare();
-      data.payload = { general_info:this.state.data};
-      data.key = "user_id";
-      data.value = this.props.user.id;
-      middleware.makeConnection('/vendors','PUT', data).then(
-        (result)=>{
-          if(!result.ok || result.statusText != "OK" && result.status != 200 ) {
-            
-          }
-          this.setState({loading:false});
-        }
-      ).catch((e)=>{
-        console.log(e);
-      })
-      
+      this.props.updateVendor(this); 
   }
   render() {
     const { classes, data } = this.props;
-    //console.log(this.props);
     if(this.state.loading){
       return (
         <div>
@@ -109,9 +91,6 @@ class GeneralInfo extends React.Component {
           <form className={classes.container} noValidate autoComplete="off">
             <Progress loading={this.state.loading}/>
             <Card>
-              <CardHeader color="info">
-                <h4 className={classes.cardTitleWhite}>General Information</h4>
-              </CardHeader>
               <CardBody>
               <Grid container>
                 <GridItem xs={12} sm={12} md={6}>
@@ -240,9 +219,6 @@ class GeneralInfo extends React.Component {
                 <GridItem xs={12} sm={6} md={2}>
                   <Button color="primary" onClick={this.handleSave}>Save</Button>
                 </GridItem>
-                <GridItem xs={12} sm={6} md={2}>
-                  <Button color="info">Submit</Button>
-                </GridItem>
               </Grid>
             </CardFooter>
             </Card>
@@ -260,11 +236,27 @@ GeneralInfo.propTypes = {
   data: PropTypes.object.isRequired
 };
 
+GeneralInfo.defaultProps = {
+  data: {}
+}
+
 function mapStateToProps(state) {
   return {
-    data: state.vendor.datum.general_info,
-    loader: state.loader,
-    user: state.auth.user
+    user: state.auth.user,
+    //data: state.vendor.general_info,
+    loading: state.loader.loading,
+    loader : state.loader
   };
 }
-export default  connect(mapStateToProps, null)(withStyles(styles)(GeneralInfo));
+
+function mapDispatchToProps(dispatch) {
+  return {
+    updateVendor(e){
+      let d = {};
+      d.general_info = e.state.data
+      vendorActions.submitVendorDetailsViaUserId(dispatch, e.props.user._id, d);
+       // dispatch({type: 'UPDATE_VENDOR', data:d});
+    }
+  }
+}
+export default  connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(GeneralInfo));

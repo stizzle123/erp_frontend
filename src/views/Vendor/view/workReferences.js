@@ -34,85 +34,22 @@ const styles = {
   }
 };
 class WorkReferences extends React.Component {
-  state = {
-    data:{
-      coy_name:'',
-      coy_address:'',
-      contact_person:'',
-      contact_designation:'',
-      contact_email:'',
-      contact_phone:'',
-      name:'',
-      phone:'',
-      address:'',
-      email:''
-    },
+  props = {
     redirect: false
   };
- 
-  componentDidMount(){
-    this.setState({data:this.props.data.work_reference});
-  }
 
-  handleChange = event => {
-    let data = this.state.data;
-    data[[event.target.id]] = event.target.value; 
-    this.setState({ 
-      data : data,
-    });
-  };
 
-  submitDetails = e =>{
-    let data = {};
-    let middleware = new MiddleWare();
-    data.payload = { work_reference:this.state.data, status:"PENDING"};
-    data.key = "user_id";
-    data.value = this.props.user.id;
-    console.log(data);
-    middleware.makeConnection('/vendors','PUT', data).then(
-      (result)=>{
-        if(result.ok && result.statusText == "OK" && result.status == 200 ) {
-          this.setState({loading:false, redirect:true});
-          console.log(result);
-          console.log(this.state);
-        }  
-      }
-    ).catch((e)=>{
-      console.log(e);
-    })
-  }
-
-  handleSave = e=>{
-    e.preventDefault();
-    let data = {};
-    let middleware = new MiddleWare();
-    data.payload = { work_reference:this.state.data};
-    data.key = "user_id";
-    data.value = this.props.user.id;
-    middleware.makeConnection('/vendors','PUT', data).then(
-      (result)=>{
-        console.log(result);
-        if(result.ok && result.statusText == "OK" && result.status == 200 ) {
-          
-        }
-        this.setState({loading:false});
-      }
-    ).catch((e)=>{
-      console.log(e);
-    })
-    
-}
 
   render() {
     const { classes } = this.props;
-    return  (this.state.redirect)? 
+    return  (this.props.redirect)? 
     <Redirect to="/dashboard" /> 
     : 
     (
       <Grid container>
       <GridItem xs={12} sm={12} md={12}>
       <form className={classes.container} noValidate autoComplete="off">
-        <Progress loading={this.state.loading}/>
+        <Progress loading={this.props.loading}/>
         <Card>
             <CardBody>
             <Grid container>
@@ -122,7 +59,7 @@ class WorkReferences extends React.Component {
                         fullWidth: true
                       }} inputProps={{
                         disabled: true,
-                        value: this.state.data.coy_name
+                        value: this.props.data.coy_name
                       }}
                     />
                 </GridItem>
@@ -132,7 +69,7 @@ class WorkReferences extends React.Component {
                         fullWidth: true
                       }} inputProps={{
                         disabled: true,
-                        value: this.state.data.coy_address
+                        value: this.props.data.coy_address
                       }}
                     />
                 </GridItem>
@@ -142,7 +79,7 @@ class WorkReferences extends React.Component {
                         fullWidth: true
                       }} inputProps={{
                         disabled: true,
-                        value: this.state.data.contact_person
+                        value: this.props.data.contact_person
                       }}
                     />
                 </GridItem>
@@ -152,7 +89,7 @@ class WorkReferences extends React.Component {
                         fullWidth: true
                       }} inputProps={{
                         disabled: true,
-                        value: this.state.data.contact_designation
+                        value: this.props.data.contact_designation
                       }}
                     />
                 </GridItem>
@@ -162,7 +99,7 @@ class WorkReferences extends React.Component {
                         fullWidth: true
                       }} inputProps={{
                         disabled: true,
-                        value: this.state.data.contact_email
+                        value: this.props.data.contact_email
                       }}
                     />
                 </GridItem>
@@ -172,13 +109,13 @@ class WorkReferences extends React.Component {
                         fullWidth: true
                       }} inputProps={{
                         disabled: true,
-                        value: this.state.data.contact_phone
+                        value: this.props.data.contact_phone
                       }}
                     />
                 </GridItem>
             </Grid>
             </CardBody>
-            <h4 >Individual Reference.</h4>
+            <h4 style={{ marginLeft:"20px"}}>Individual Reference.</h4>
             <CardBody>
             <Grid container>
                 <GridItem xs={12} sm={12} md={6}>
@@ -187,7 +124,7 @@ class WorkReferences extends React.Component {
                         fullWidth: true
                       }} inputProps={{
                         disabled: true,
-                        value: this.state.data.name
+                        value: this.props.data.name
                       }}
                     />
                 </GridItem>
@@ -197,7 +134,7 @@ class WorkReferences extends React.Component {
                         fullWidth: true
                       }} inputProps={{
                         disabled: true,
-                        value: this.state.data.address
+                        value: this.props.data.address
                       }}
                     />
                 </GridItem>
@@ -207,7 +144,7 @@ class WorkReferences extends React.Component {
                         fullWidth: true
                       }} inputProps={{
                         disabled: true,
-                        value: this.state.data.email
+                        value: this.props.data.email
                       }}
                     />
                 </GridItem>    
@@ -217,7 +154,7 @@ class WorkReferences extends React.Component {
                         fullWidth: true
                       }} inputProps={{
                         disabled: true,
-                        value: this.state.data.phone
+                        value: this.props.data.phone
                       }}
                     />
                 </GridItem>
@@ -237,7 +174,7 @@ WorkReferences.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    data: state.vendor.datum,
+    data: (typeof(state.vendor.work_reference) != 'undefined')?state.vendor.work_reference: {},
     user: state.auth.user
   };
 }
