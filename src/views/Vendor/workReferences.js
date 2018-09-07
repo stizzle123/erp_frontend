@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-
+import { FormErrors } from './FormErrors';
 import Grid from '@material-ui/core/Grid';
 import GridItem from "../../components/Grid/GridItem.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
@@ -47,6 +47,29 @@ class WorkReferences extends React.Component {
       address:'',
       email:''
     },
+    formErrors: { 
+      coy_name:'', 
+      coy_address:'',  
+      contact_person:'', 
+      contact_designation:'', 
+      contact_email:'', 
+      contact_phone:'',
+      name:'',
+      phone:'',
+      address:'',
+      email:''
+    },
+    coy_nameValid: false,
+    coy_addressValid: false,
+    contact_personValid: false,
+    contact_designationValid: false,
+    contact_emailValid: false,
+    contact_phoneValid: false,
+    nameValid: false,
+    phoneValid: false,
+    addressValid: false,
+    emailValid: false,
+    formValid: false,
     redirect: false
   };
  
@@ -56,11 +79,101 @@ class WorkReferences extends React.Component {
 
   handleChange = event => {
     let data = this.state.data;
+    const name = event.target.id;
+    const value = event.target.value;
     data[[event.target.id]] = event.target.value; 
     this.setState({ 
       data : data,
-    });
+    }, 
+    () => { this.validateField(name, value)});
   };
+
+
+   validateField(fieldName, value) {
+     let fieldValidationErrors = this.state.formErrors;
+     let coy_nameValid = this.state.coy_nameValid;
+     let coy_addressValid = this.state.addressValid;
+     let contact_personValid = this.state.contact_personValid
+     let contact_designationValid = this.state.contact_designationValid;
+     let contact_emailValid = this.state.contact_emailValid;
+     let contact_phoneValid = this.state.contact_phoneValid;
+     let nameValid = this.state.nameValid;
+     let phoneValid = this.state.phoneValid;
+     let addressValid = this.state.addressValid;
+     let emailValid = this.state.emailValid;
+
+    switch(fieldName) {
+      case 'coy_name':
+      coy_nameValid = value.length >= 3;
+      fieldValidationErrors.coy_name = coy_nameValid ? '': 'is invalid';
+      break;
+      case 'coy_address':
+      coy_addressValid =value.length >= 12;
+      fieldValidationErrors.coy_address = coy_addressValid  ? '': 'is invalid';
+      break;
+      case 'contact_person':
+      contact_personValid =value.length >= 3;
+      fieldValidationErrors.contact_person = contact_personValid  ? '': ' is invalid';
+      break;
+      case 'contact_designation':
+      contact_designationValid = value.length >= 2;
+      fieldValidationErrors.contact_designation = contact_designationValid  ? '': ' is invalid';
+      break;
+      case 'contact_email':
+      contact_emailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
+      fieldValidationErrors.contact_email = contact_emailValid  ? '': ' is invalid';
+      break;
+      case 'contact_phone':
+      contact_phoneValid = value.length > 8 && value.length < 12;
+      fieldValidationErrors.contact_phone = contact_phoneValid  ? '': ' is invalid';
+      break;
+      case 'name':
+      nameValid = value.match(/^[a-zA-Z]+$/);
+      fieldValidationErrors.name = nameValid  ? '': ' must be letters only';
+      break;
+      case 'phone':
+      phoneValid =  value.length > 8 && value.length < 12;
+      fieldValidationErrors.phone = phoneValid ? '': ' is invalid';
+      break;
+      case 'address':
+      addressValid =  value.length >= 12;
+      fieldValidationErrors.address = addressValid ? '': ' is invalid';
+      break;
+      case 'email':
+      emailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
+      fieldValidationErrors.email = emailValid ? '' : ' is invalid';
+      break;
+    default:
+      break;
+  }
+  this.setState({formErrors: fieldValidationErrors,
+                  coy_nameValid: coy_nameValid,
+                  coy_addressValid: coy_addressValid,
+                  contact_personValid: contact_personValid,
+                  contact_designationValid: contact_designationValid,
+                  contact_emailValid: contact_emailValid,
+                  contact_phoneValid: contact_phoneValid,
+                  nameValid: nameValid,
+                  phoneValid: phoneValid,
+                  addressValid: addressValid,
+                  emailValid: emailValid,
+                  
+                }, this.validateForm);
+}
+
+  validateForm() {
+  this.setState({formValid: this.state.coy_nameValid 
+                && this.state.coy_addressValid 
+                && this.state.contact_personValid 
+                && this.state.contact_designationValid
+                && this.state.contact_emailValid
+                && this.state.contact_phoneValid
+                && this.state.nameValid
+                && this.state.addressValid
+                && this.state.emailValid
+                && this.state.phoneValid
+                });
+}
 
   handleSave = e=>{
     e.preventDefault();
@@ -69,7 +182,8 @@ class WorkReferences extends React.Component {
 
   submitDetails = e =>{
     e.preventDefault();
-    this.props.submitVendor(this);
+    this.props.vendor;
+    //this.props.submitVendor(this);
   }
 
   render() {
@@ -81,6 +195,9 @@ class WorkReferences extends React.Component {
       <Grid container>
       <GridItem xs={12} sm={12} md={12}>
       <form className={classes.container} noValidate autoComplete="off">
+      <div className="">
+          <FormErrors formErrors={this.state.formErrors} />
+        </div>
         <Progress loading={this.state.loading}/>
         <Card>
             <CardBody>
@@ -198,7 +315,7 @@ class WorkReferences extends React.Component {
                   <Button color="primary" onClick={this.handleSave}>Save</Button>
                 </GridItem>
                 <GridItem xs={12} sm={6} md={2}>
-                  <Button color="info" onClick={this.submitDetails}>Submit</Button>
+                  <Button color="info" disabled={!this.state.formValid} onClick={this.submitDetails} >Submit</Button>
                 </GridItem>
               </Grid>
             </CardFooter>
@@ -217,7 +334,8 @@ WorkReferences.propTypes = {
 function mapStateToProps(state) {
   return {
     data: (typeof(state.vendor.work_reference) != 'undefined')?state.vendor.work_reference: {},
-    user: state.auth.user
+    user: state.auth.user,
+    vendor: state.vendor
   };
 }
 
