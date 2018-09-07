@@ -153,27 +153,37 @@ class BusinessInfo extends React.Component {
               <GridItem xs={12} sm={12} md={12}>
               <FormLabel component="legend" >Area(s) of Business that you wish to Register For : </FormLabel> 
               </GridItem>
-              <GridItem xs={12} sm={12} md={6} >
-                <CustomCheck labelText="Product Related" name="product_related" required state={(this.state.data.product_related)?this.state.data.product_related: {} }
-                      formControlProps={{
-                        fullWidth: true
-                      }} inputProps={{
-                        disabled: true,
-                        onChange: this.handleBizNatureChange,
-                      }}
-                      collection={Products}
-                    />
+              <GridItem xs={12} sm={12} md={6}>
+                <CustomSelect labelText="Product Related" name="product_related" required
+                                value={this.state.data.product_related} 
+                                formControlProps={{
+                                  fullWidth: true
+                                }} 
+                                inputProps={{margin:"normal",
+                                disabled: true}}
+                    >
+                    {Products.map(option => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </CustomSelect>
               </GridItem>
               <GridItem xs={12} sm={12} md={6}>
-                <CustomCheck labelText="Service Related" name="service_related" required state={(this.state.data.service_related)?this.state.data.service_related:{}}
-                      formControlProps={{
-                        fullWidth: true
-                      }} inputProps={{
-                        disabled: true,
-                        onChange: this.handleBizNatureChange,
-                      }}
-                      collection={Services}
-                    />
+                <CustomSelect labelText="Service Related" name="service_related" required
+                                value={this.state.data.service_related} 
+                                formControlProps={{
+                                  fullWidth: true
+                                }} 
+                                inputProps={{margin:"normal",
+                                disabled: true}}
+                    >
+                    {Services.map(option => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </CustomSelect>
               </GridItem>
               <GridItem xs={12} sm={12} md={6}>
               <CustomInput id="tax_no" required labelText="Tax Identification No (TIN)" formControlProps={{
