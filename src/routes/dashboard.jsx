@@ -18,7 +18,8 @@ import VendorList from "../views/Vendor/index.js";
 import AddVendor from "../views/Vendor/add.js";
 import ViewVendor from "../views/Vendor/view.js";
 import PurchaseOrder from "../views/PurchaseOrder/index.js";
-import Project from "../views/Project/index.js";
+import AddPurchaseRequisition from "../views/PurchaseRequisition/Add/index.js";
+import ListPurchaseRequisition from "../views/PurchaseRequisition/index.js";
 import Log from "../views/Log/index.js";
 import Registration from "../views/RegistrationPage/index.js";
 import DashboardIcon from "@material-ui/icons/Dashboard";
@@ -69,11 +70,17 @@ export const dashboardRoutes = [
     component: AddVendor
   },
   {
-    path: "/Project",
-    sidebarName: "Purchase Requisition",
-    navbarName: "Purchase Requisition",
+    path: "/purchaserequisition/add",
+    sidebarName: "New Purchase Requisition",
+    navbarName: "New Purchase Requisition",
+    icon: AddIcon,
+    component: AddPurchaseRequisition
+  },
+  {
+    path: "/purchaserequisition",
+    name: "Purchase Requisition",
     icon: CreditCard,
-    component: Project
+    component: ListPurchaseRequisition
   },
   {
     path: "/PurchaseOrder",
@@ -118,10 +125,10 @@ export const AdminMenu = [
    component: AddVendor
  },
  {
-   path: "/Project",
+   path: "/purchaserequisition",
    name: "Purchase Requisition",
    icon: CreditCard,
-   component: Project
+   component: ListPurchaseRequisition
  },
  {
    path: "/PurchaseOrder",
