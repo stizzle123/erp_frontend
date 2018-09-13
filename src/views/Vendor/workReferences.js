@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import { FormErrors } from './FormErrors';
 import Grid from '@material-ui/core/Grid';
 import GridItem from "../../components/Grid/GridItem.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
@@ -14,6 +13,8 @@ import Progress from "../../components/Progress/Progress.jsx";
 import * as vendorActions from '../../actions/vendor';
 import {connect} from 'react-redux';
 import { Redirect } from "react-router-dom";
+import Notification from 'views/Notifications/Index.jsx'
+
 
 const styles = {
   cardCategoryWhite: {
@@ -33,6 +34,7 @@ const styles = {
     textDecoration: "none"
   }
 };
+
 class WorkReferences extends React.Component {
   state = {
     data:{
@@ -47,134 +49,47 @@ class WorkReferences extends React.Component {
       address:'',
       email:''
     },
-    formErrors: { 
-      coy_name:'', 
-      coy_address:'',  
-      contact_person:'', 
-      contact_designation:'', 
-      contact_email:'', 
-      contact_phone:'',
-      name:'',
-      phone:'',
-      address:'',
-      email:''
-    },
-    coy_nameValid: false,
-    coy_addressValid: false,
-    contact_personValid: false,
-    contact_designationValid: false,
-    contact_emailValid: false,
-    contact_phoneValid: false,
-    nameValid: false,
-    phoneValid: false,
-    addressValid: false,
-    emailValid: false,
-    formValid: false,
-    redirect: false
+    redirect: false,
+    errorLog:''
   };
  
   componentDidMount(){
     this.setState({data:this.props.data});
   }
+  isString (input) {
+    let re = /^[A-Za-z]+$/;
+    return re.test(input);
+}
+isAlphanumeric(input){
+  let re = /^[a-z0-9]+$/i;
+    return re.test(input);
+}
+isPhoneNumber(input) {
+  if(typeof input === 'number'&& (input.toString().length > 8 && input.toString().length < 12 )){
+    return true
+}
+}
+isNumber(input) {
+  let re = /^[0-9]+$/;
+  return re.test(input);
+}
+isEmail(input) {
+    let re = /\S+@\S+\.\S+/;
+    return re.test(input); 
+}
+ValidURL(input) {
+  var a  = document.createElement('a');
+    a.href = input;
+    return (a.host && a.host != window.location.host);
+ }
 
   handleChange = event => {
     let data = this.state.data;
-    const name = event.target.id;
-    const value = event.target.value;
     data[[event.target.id]] = event.target.value; 
     this.setState({ 
       data : data,
-    }, 
-    () => { this.validateField(name, value)});
+    });
   };
-
-
-   validateField(fieldName, value) {
-     let fieldValidationErrors = this.state.formErrors;
-     let coy_nameValid = this.state.coy_nameValid;
-     let coy_addressValid = this.state.addressValid;
-     let contact_personValid = this.state.contact_personValid
-     let contact_designationValid = this.state.contact_designationValid;
-     let contact_emailValid = this.state.contact_emailValid;
-     let contact_phoneValid = this.state.contact_phoneValid;
-     let nameValid = this.state.nameValid;
-     let phoneValid = this.state.phoneValid;
-     let addressValid = this.state.addressValid;
-     let emailValid = this.state.emailValid;
-
-    switch(fieldName) {
-      case 'coy_name':
-      coy_nameValid = value.length >= 3;
-      fieldValidationErrors.coy_name = coy_nameValid ? '': 'is invalid';
-      break;
-      case 'coy_address':
-      coy_addressValid =value.length >= 12;
-      fieldValidationErrors.coy_address = coy_addressValid  ? '': 'is invalid';
-      break;
-      case 'contact_person':
-      contact_personValid =value.length >= 3;
-      fieldValidationErrors.contact_person = contact_personValid  ? '': ' is invalid';
-      break;
-      case 'contact_designation':
-      contact_designationValid = value.length >= 2;
-      fieldValidationErrors.contact_designation = contact_designationValid  ? '': ' is invalid';
-      break;
-      case 'contact_email':
-      contact_emailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
-      fieldValidationErrors.contact_email = contact_emailValid  ? '': ' is invalid';
-      break;
-      case 'contact_phone':
-      contact_phoneValid = value.length > 8 && value.length < 12;
-      fieldValidationErrors.contact_phone = contact_phoneValid  ? '': ' is invalid';
-      break;
-      case 'name':
-      nameValid = value.match(/^[a-zA-Z]+$/);
-      fieldValidationErrors.name = nameValid  ? '': ' must be letters only';
-      break;
-      case 'phone':
-      phoneValid =  value.length > 8 && value.length < 12;
-      fieldValidationErrors.phone = phoneValid ? '': ' is invalid';
-      break;
-      case 'address':
-      addressValid =  value.length >= 12;
-      fieldValidationErrors.address = addressValid ? '': ' is invalid';
-      break;
-      case 'email':
-      emailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
-      fieldValidationErrors.email = emailValid ? '' : ' is invalid';
-      break;
-    default:
-      break;
-  }
-  this.setState({formErrors: fieldValidationErrors,
-                  coy_nameValid: coy_nameValid,
-                  coy_addressValid: coy_addressValid,
-                  contact_personValid: contact_personValid,
-                  contact_designationValid: contact_designationValid,
-                  contact_emailValid: contact_emailValid,
-                  contact_phoneValid: contact_phoneValid,
-                  nameValid: nameValid,
-                  phoneValid: phoneValid,
-                  addressValid: addressValid,
-                  emailValid: emailValid,
-                  
-                }, this.validateForm);
-}
-
-  validateForm() {
-  this.setState({formValid: this.state.coy_nameValid 
-                && this.state.coy_addressValid 
-                && this.state.contact_personValid 
-                && this.state.contact_designationValid
-                && this.state.contact_emailValid
-                && this.state.contact_phoneValid
-                && this.state.nameValid
-                && this.state.addressValid
-                && this.state.emailValid
-                && this.state.phoneValid
-                });
-}
-
   handleSave = e=>{
     e.preventDefault();
     this.props.updateVendor(this); 
@@ -182,8 +97,163 @@ class WorkReferences extends React.Component {
 
   submitDetails = e =>{
     e.preventDefault();
+    let errorState = false;
+    let general_info_error_array = ['General Info Errors'];
+    let business_info_error_array = ['Business Info Errors'];
+    let bank_details_error_array = ['Bank Details Errors'];
+    let work_reference_error_array = ['Work Reference Errors']
+    let error_string = '';
     this.props.vendor;
-    //this.props.submitVendor(this);
+    //validate general_info
+    const generalIinfo = this.props.vendor.general_info; 
+    if(!this.isAlphanumeric(generalIinfo.company_name)) {
+      general_info_error_array.push("Company name is invalid");
+    }
+    if(!this.isAlphanumeric(generalIinfo.reg_no)) {
+      general_info_error_array.push("reg number is invalid");
+    }
+    if(!this.isAlphanumeric(generalIinfo.office_address)) {
+      general_info_error_array.push("office address is invalid");
+    }
+    if(!this.isString(generalIinfo.city)) {
+      general_info_error_array.push("city is invalid");
+    }
+    if(!this.isString(generalIinfo.state)) {
+      general_info_error_array.push("state is invalid");
+    }
+    if(!this.isString(generalIinfo.country)) {
+      general_info_error_array.push("country is invalid");
+    }
+    if(!this.isPhoneNumber(generalIinfo.coy_phone)) {
+      general_info_error_array.push("company telephone is invalid");
+    }
+    if(!this.isEmail(generalIinfo.coy_email)) {
+      general_info_error_array.push("company email is invalid");
+    }
+    if(!this.ValidURL(generalIinfo.website)) {
+      general_info_error_array.push("website is invalid");
+    }
+    if(!this.isString(generalIinfo.contact_name)) {
+      general_info_error_array.push("contact name is invalid");
+    }
+    if(!this.isString(generalIinfo.designation)) {
+      general_info_error_array.push("designation is invalid");
+    }
+    if(!this.isPhoneNumber(generalIinfo.contact_phone)) {
+      general_info_error_array.push("contact telephone is invalid");
+    }
+    if(!this.isEmail(generalIinfo.contact_email)) {
+      general_info_error_array.push("contact email is invalid");
+    }
+
+    //validate business_info
+    const businessInfo = this.props.vendor.business_info;
+    if(!this.isString(businessInfo.business_type)) {
+      business_info_error_array.push("business type is invalid");
+    }
+    if(!this.isNumber(businessInfo.year_established)) {
+      business_info_error_array.push("year established is invalid");
+    }
+   if(!this.isAlphanumeric(businessInfo.vat_no)) {
+    business_info_error_array.push("VAT number is invalid");
+    }
+    if(!this.isAlphanumeric(businessInfo.tax_no)) {
+      business_info_error_array.push("tax number is invalid");
+    }
+   if(!this.isAlphanumeric(businessInfo.product_related)) {
+    business_info_error_array.push("product related is invalid");
+    }
+   if(!this.isAlphanumeric(businessInfo.service_related)) {
+    business_info_error_array.push("service related is invalid");
+    }
+  
+    //validate bank details
+    const bankDetail = this.props.vendor.bank_detail;
+    if(!this.isAlphanumeric(bankDetail.account_name)) {
+      bank_details_error_array.push("account name is invalid");
+    }
+    if(!this.isNumber(bankDetail.account_number)) {
+      bank_details_error_array.push("account number is invalid");
+    }
+    if(!this.isString(bankDetail.bank)) {
+      bank_details_error_array.push("bank is invalid");
+    }
+    if(!this.isNumber(bankDetail.sort_code)) {
+      bank_details_error_array.push("sort code is invalid");
+    }
+    if(!this.isAlphanumeric(bankDetail.branch)) {
+      bank_details_error_array.push("branch is invalid");
+    }
+    if(!this.isPhoneNumber(bankDetail.contact_phone)) {
+      bank_details_error_array.push("contact telephone is invalid");
+    }
+
+    //validate for 
+    const workReference = this.state.data;
+    if(!this.isAlphanumeric(workReference.coy_name)) {
+      work_reference_error_array.push("company is invalid");
+    }
+    if(!this.isAlphanumeric(workReference.coy_address)) {
+      work_reference_error_array.push("company is invalid");
+    }
+    if(!this.isString(workReference.contact_person)) {
+      work_reference_error_array.push("contact person is invalid");
+    }
+    if(!this.isString(workReference.contact_designation)) {
+      work_reference_error_array.push("contact designation is invalid");
+    }
+    if(!this.isEmail(workReference.contact_email)) {
+      work_reference_error_array.push("contact email is invalid");
+    }
+    if(!this.isPhoneNumber(workReference.contact_phone)) {
+      work_reference_error_array.push("contact telephone is invalid");
+    }
+    if(!this.isString(workReference.name)) {
+      work_reference_error_array.push("name is invalid");
+    }
+    if(!this.isString(workReference.address)) {
+      work_reference_error_array.push("address is invalid");
+    }
+    if(!this.isEmail(workReference.email)) {
+      work_reference_error_array.push("email is invalid");
+    }
+    if(!this.isPhoneNumber(workReference.phone)) {
+      work_reference_error_array.push("phone is invalid");
+    }
+    function addErrors(value, key) {
+      if(key == 0){
+        error_string+="<h4>"+value+"</h4>";
+      }
+      if (key>=1)
+      error_string+="<p>"+value+"</p>";
+    }
+    
+    if(general_info_error_array.length > 1){
+      errorState = true;
+      general_info_error_array.forEach(addErrors)
+    }
+    if(business_info_error_array.length > 1){
+      errorState = true;
+      business_info_error_array.forEach(addErrors)
+    }
+    if(bank_details_error_array.length > 1){
+      errorState = true;
+      bank_details_error_array.forEach(addErrors)
+    }
+    if(work_reference_error_array.length > 1){
+      errorState = true;
+      work_reference_error_array.forEach(addErrors);
+    }
+
+if (error_string == '') {
+ // this.props.submitVendor(this);
+}
+else {
+
+  this.setState({ 
+    errorLog : <div dangerouslySetInnerHTML={{ __html: error_string }}/>,
+  });
+}
   }
 
   render() {
@@ -195,9 +265,7 @@ class WorkReferences extends React.Component {
       <Grid container>
       <GridItem xs={12} sm={12} md={12}>
       <form className={classes.container} noValidate autoComplete="off">
-      <div className="">
-          <FormErrors formErrors={this.state.formErrors} />
-        </div>
+      <Notification error={true} message={this.state.errorLog} />
         <Progress loading={this.state.loading}/>
         <Card>
             <CardBody>
@@ -315,7 +383,7 @@ class WorkReferences extends React.Component {
                   <Button color="primary" onClick={this.handleSave}>Save</Button>
                 </GridItem>
                 <GridItem xs={12} sm={6} md={2}>
-                  <Button color="info" disabled={!this.state.formValid} onClick={this.submitDetails} >Submit</Button>
+                  <Button color="info"onClick={this.submitDetails} >Submit</Button>
                 </GridItem>
               </Grid>
             </CardFooter>
