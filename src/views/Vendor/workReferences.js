@@ -50,7 +50,7 @@ class WorkReferences extends React.Component {
       email:''
     },
     redirect: false,
-    errorLog:''
+    errorLog:'',
   };
  
   componentDidMount(){
@@ -257,12 +257,13 @@ else {
   }
 
   render() {
+    console.log("error_string" + this.state.error_string);
     const { classes } = this.props;
     return  (this.state.redirect)? 
     <Redirect to="/dashboard" /> 
     : 
     (
-      <Grid container>
+      <Grid container id="mainGrid">
       <GridItem xs={12} sm={12} md={12}>
       <form className={classes.container} noValidate autoComplete="off">
       <Notification error={true} message={this.state.errorLog} />
@@ -383,7 +384,7 @@ else {
                   <Button color="primary" onClick={this.handleSave}>Save</Button>
                 </GridItem>
                 <GridItem xs={12} sm={6} md={2}>
-                  <Button color="info"onClick={this.submitDetails} >Submit</Button>
+                  <Button color="info"onClick={this.submitDetails}  id="button-submit">Submit</Button>
                 </GridItem>
               </Grid>
             </CardFooter>
