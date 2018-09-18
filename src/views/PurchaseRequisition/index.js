@@ -18,8 +18,7 @@ import CardBody from "components/Card/CardBody.jsx";
 import CardIcon from "components/Card/CardIcon.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
 import Button from "../../components/CustomButtons/Button.jsx";
-import Approve from "@material-ui/icons/ThumbUp";
-import View from "@material-ui/icons/Pageview";
+import Add from "@material-ui/icons/Add";
 import PropTypes from "prop-types";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import purple from '@material-ui/core/colors/purple';
@@ -27,6 +26,7 @@ import * as vendorActions from '../../actions/vendor';
 import { Redirect } from 'react-router';
 import { Link } from "react-router-dom";
 import { cardTitle } from "assets/jss/material-dashboard-pro-react.jsx";
+import generalStyle from "assets/jss/material-dashboard-pro-react/generalStyle.jsx";
 
 import {connect} from 'react-redux';
 
@@ -108,7 +108,11 @@ render(){
                 <Assignment />
               </CardIcon>
               <h4 className={classes.cardIconTitle}>Purchase Requisition Records</h4>
-              <Link to="/purchaserequisition/add">Create New</Link>
+              <div style={generalStyle.mt3}>
+                <Link to="/purchaserequisition/add">
+                Create New
+                </Link>
+              </div>
             </CardHeader>
             <CardBody>
               <ReactTable

@@ -33,7 +33,7 @@ const styles = theme => ({
   td:{
     border: 'none',
     margin: '0 10px',
-    padding: '0 10px',
+    padding: '4px',
     fontWeight: '700',
     fontSize: '15px',
   },
@@ -267,15 +267,14 @@ class PurchaseRequisition extends React.Component {
                         }}
                         inputProps={{
                           disabled: true,
-                          value:{today}                 
-                            }}
+                          value:today                 
+                        }}
                       />
                   </GridItem>                   
                   <GridItem xs={12} sm={4} md={4}>
                       <CustomInput labelText=" Department" id="departmentname" required
                         formControlProps={{
                         fullWidth: true,
-                        style: {padding: "0 7px 7px 7px"}
                         }}
                       />
                   </GridItem>

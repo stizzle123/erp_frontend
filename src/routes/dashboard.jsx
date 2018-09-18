@@ -61,8 +61,6 @@ export const dashboardRoutes = [
   },
   {
     path: "/RequestQuotation",
-    name: "Request for Quotation",
-    icon: CreditCard,
     component: RequestQuotation
   },
   {
@@ -105,7 +103,8 @@ export const AdminMenu = [
       name: "Monthly Budget",
       mini: "MB",
       component: ListPurchaseRequisition
-    },{
+    },
+    {
       path: "#",
       name: "Supplementary Budget",
       mini: "SB",
@@ -142,21 +141,21 @@ export const AdminMenu = [
   icon: GridOn,
   views: [
     {
+      path: "/PurchaseRequisition",
+      name: "Purchase Requisition",
+      mini: "PR",
+      component: ListPurchaseRequisition
+    },
+    {
       path: "/RequestQuotation",
       name: "Request for Quotation",
-      mini: RFQ,
+      mini: "RFQ",
       component: RequestQuotation
     },
     {
       path: "/PurchaseOrder",
       name: "Purchase Order",
       mini: "PO",
-      component: PurchaseOrder
-    },    
-    {
-      path: "/RequestForQuotation",
-      name: "Purchase Order",
-      mini: "RFQ",
       component: PurchaseOrder
     }]
   },
