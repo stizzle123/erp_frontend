@@ -70,7 +70,8 @@ module.exports = {
          use: {
           loader: 'babel-loader',
           options: {
-           presets: ['env', 'stage-0', 'react']
+           presets: ['@babel/preset-env', "@babel/react"],
+           plugins: ['@babel/proposal-class-properties']
           }
          }
         }]

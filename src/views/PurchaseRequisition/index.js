@@ -88,71 +88,7 @@ render(){
       vendors = this.processJson(this.props.data);
     }
     console.log(this.props);
-    let data = vendors.dataRows.map((prop, key) => {
-        return {
-          id: key,
-          class: prop[6],
-          companyname: prop[1],
-          contactperson: prop[2],
-          contacttelephone: prop[3],
-          contactemail: prop[4],
-          actions: (
-            // we've added some custom button actions
-            <div className="actions-right">
-              {/* use this button to add a like kind of action */}
-              {/* <Button
-                justIcon
-                round
-                simple
-                onClick={() => {
-                  let obj = this.state.data.find(o => o.id === key);
-
-                }}
-                color="info"
-                className="like"
-              >
-                <Approve />
-              </Button>{""} */}
-              <Button
-                justIcon
-                round
-                simple
-                onClick={() => {
-                  let obj = data.find(o => o.id === key);
-                  this.setState({redirectTo:vendors.dataRows[[obj.id]][0]})
-                  }}
-                color="warning"
-                className="edit"
-              >
-                 <Dvr />
-              </Button>
-              {/* use this button to remove the data row */}
-            {/*   <Button
-                justIcon
-                round
-                simple
-                onClick={() => {
-                  var data = this.state.data;
-                  data.find((o, i) => {
-                    if (o.id === key) {
-                      // here you should add some custom code so you can delete the data
-                      // from this component and from your server as well
-                      data.splice(i, 1);
-                      return true;
-                    }
-                    return false;
-                  });
-                  this.setState({ data: data });
-                }}
-                color="danger"
-                className="remove"
-              >
-                <Close />
-              </Button>{" "} */}
-            </div>
-          )
-        };
-      });
+    let data = [{}];
     if(this.props.loader.loading){
       return (
         <div>
@@ -171,8 +107,8 @@ render(){
               <CardIcon color="primary">
                 <Assignment />
               </CardIcon>
-              <h4 className={classes.cardIconTitle}>Vendors</h4>
-              <Link to="/purchaserequisition/add">New Requisition</Link>
+              <h4 className={classes.cardIconTitle}>Purchase Requisition Records</h4>
+              <Link to="/purchaserequisition/add">Create New</Link>
             </CardHeader>
             <CardBody>
               <ReactTable
@@ -180,24 +116,20 @@ render(){
                 filterable
                 columns={[
                   {
-                    Header: "Class",
-                    accessor: "class"
+                    Header: "Date",
+                    accessor: "date"
                   },
                   {
-                    Header: "Company Name",
-                    accessor: "companyname"
+                    Header: "Req. No.",
+                    accessor: "reqno"
                   },
                   {
-                    Header: "Contact Person",
-                    accessor: "contactperson"
+                    Header: "Requested By",
+                    accessor: "requestedby"
                   },
                   {
-                    Header: "Contact Telephone",
-                    accessor: "contacttelephone"
-                  },
-                  {
-                    Header: "Contact Email",
-                    accessor: "contactemail"
+                    Header: "Status",
+                    accessor: "status"
                   },
                   {
                     Header: "Actions",
