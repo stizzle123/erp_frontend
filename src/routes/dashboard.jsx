@@ -10,6 +10,7 @@ import Settings from '@material-ui/icons/Settings';
 import SdStorage from '@material-ui/icons/SdStorage';
 import AccountBalance from '@material-ui/icons/AccountBalanceWallet';
 import CreditCard from '@material-ui/icons/CreditCard';
+import RequestQuotation from "../views/RequestQuotation/index.js";
 
 // core components/views
 import LoginPage from "../views/LoginPage/index.js";
@@ -57,6 +58,12 @@ export const dashboardRoutes = [
   {
     path: "/purchaserequisition/add",
     component: AddPurchaseRequisition
+  },
+  {
+    path: "/RequestQuotation",
+    name: "Request for Quotation",
+    icon: CreditCard,
+    component: RequestQuotation
   },
   {
     path: "/purchaserequisition",
@@ -135,11 +142,11 @@ export const AdminMenu = [
   icon: GridOn,
   views: [
     {
-      path: "/purchaserequisition",
-      name: "Purchase Requisition",
-      mini: "PR",
-      component: ListPurchaseRequisition
-    }, 
+      path: "/RequestQuotation",
+      name: "Request for Quotation",
+      mini: RFQ,
+      component: RequestQuotation
+    },
     {
       path: "/PurchaseOrder",
       name: "Purchase Order",

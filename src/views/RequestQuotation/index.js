@@ -20,11 +20,14 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableBody from '@material-ui/core/TableBody';
 import Add from "@material-ui/icons/Add";
+import Note from '@material-ui/icons/Message';
 import Checkbox from '@material-ui/core/Checkbox';
 import {connect} from 'react-redux';
+
 import regularFormsStyle from "assets/jss/material-dashboard-pro-react/views/regularFormsStyle.jsx";
 import tableStyle from "assets/jss/material-dashboard-pro-react/components/tableStyle.jsx";
 import generalStyle from "assets/jss/material-dashboard-pro-react/generalStyle.jsx";
+import { getCurves } from 'crypto';
 
 const styles = theme => ({
   ...tableStyle,
@@ -50,7 +53,7 @@ const categories = [
   {value: '3',label: 'Category 3',}
 ];
 
-class PurchaseRequisition extends React.Component {
+class RequestQuotation extends React.Component {
   state = {
     simpleSelect: "",
     type: '',
@@ -104,9 +107,6 @@ class PurchaseRequisition extends React.Component {
 
     }
   }
-
-
-
   render() {
     const { classes, tableHeaderColor } = this.props;
     const today = new Date();
@@ -173,87 +173,28 @@ class PurchaseRequisition extends React.Component {
       <form className={classes.container} noValidate autoComplete="off">
 	        <Card>
           <CardHeader color="primary">
-                <h4 className={classes.cardTitleWhite}>Purchase Requisition</h4>
+                <h4 className={classes.cardTitleWhite}>Request  For Quotation</h4>
 
               </CardHeader>
               <CardBody>
               <Grid container>
-              <GridItem xs={12} sm={12} md={12} lg={12}>
-                  <p style={generalStyle.text2}>Type of Requisition:</p>
-                  </GridItem>	
-
-                  <GridItem xs={12} sm={12} md={4}>
-
-                        <FormControl
-                          fullWidth
-                          className={classes.selectFormControl}
-                        >
-                          <InputLabel
-                            htmlFor="simple-select"
-                            className={classes.selectLabel}
-                          >
-                            Choose Requisition
-                          </InputLabel>
-                          <Select
-                            MenuProps={{
-                              className: classes.selectMenu
-                            }}
-                            classes={{
-                              select: classes.select
-                            }}
-                            value={this.state.simpleSelect}
-                            onChange={this.handleSimple}
-                            inputProps={{
-                              name: "simpleSelect",
-                              id: "simple-select"
-                            }}
-                          >
-                            <MenuItem
-                              disabled
-                              classes={{
-                                root: classes.selectMenuItem
-                              }}
-                            >
-                              Choose Requisition Type
-                            </MenuItem>
-                            <MenuItem
-                              classes={{
-                                root: classes.selectMenuItem,
-                                selected: classes.selectMenuItemSelected
-                              }}
-                              value="Contract"
-                            >
-                              Contract
-                            </MenuItem>
-                            <MenuItem
-                              classes={{
-                                root: classes.selectMenuItem,
-                                selected: classes.selectMenuItemSelected
-                              }}
-                              value="Non-Contract"
-                            >
-                             Non-Contract
-                            </MenuItem>                                                      
-                          </Select>
-                        </FormControl>
-                  </GridItem>	
-                  <GridItem xs={12} sm={12} md={4}/>
+                  <GridItem xs={12} sm={12} md={8}/>
                   <GridItem xs={12} sm={12} md={4}style={generalStyle.text2}>
                       Requisition No: 
                   </GridItem>
                   <GridItem xs={12} sm={12} md={4}>
-                  <CustomInput labelText="Required By" id="requestedby"
+                  <CustomInput id="requestedby"
                   formControlProps={{
                       fullWidth: true
                         }}
                     inputProps={{ 
                       disabled: true,
-                      value:"Required: "                  
+                      value:"Required By: "                  
                         }}
                       />
                   </GridItem>
                   <GridItem xs={12} sm={12} md={4}> 
-                      <CustomInput labelText="Employee ID" id="employeeid"
+                      <CustomInput  id="employeeid"
                         formControlProps={{
                           fullWidth: true
                         }} inputProps={{
@@ -262,62 +203,41 @@ class PurchaseRequisition extends React.Component {
                       />
                   </GridItem>   
                   <GridItem xs={12} sm={12} md={4}>
-                      <CustomInput required formControlProps={{
-                        fullWidth: true
+                      <CustomInput labelText="Date" id="date" required formControlProps={{
+                        fullWidth: true,
                         }}
                         inputProps={{
-                          disabled: true,
-                          value:{today}                 
+                          type: "date",
+                          style: {textAlign:"right"}              
                             }}
                       />
                   </GridItem>                   
-                  <GridItem xs={12} sm={4} md={4}>
-                      <CustomInput labelText=" Department" id="departmentname" required
+                  <GridItem xs={12} sm={4} md={4} style={generalStyle.positionRelative}>
+                      <CustomInput labelText="To" id="to" required
                         formControlProps={{
-                        fullWidth: true,
-                        style: {padding: "0 7px 7px 7px"}
-                        }}
-                      />
-                  </GridItem>
-                  <GridItem xs={12} sm={4} md={4}>
-                      <CustomInput labelText="Charge To" id="chargeto" required formControlProps={{
                         fullWidth: true
                         }}
+
+                      />
+                  <Note  style={generalStyle.positionIcon}/>
+                  </GridItem>
+                  <GridItem xs={12} sm={4} md={4}>
+                      <CustomInput labelText="Due Date" id="duedate" required formControlProps={{
+                        fullWidth: true
+                        }}
+                        inputProps={{
+                          type: "date",
+                            }}
                       />
                   </GridItem>   
                   <GridItem xs={12} sm={4} md={4}>
-                      <CustomInput labelText="Date Needed" id="dateneeded" required formControlProps={{
+                      <CustomInput labelText="Status" id="status" required formControlProps={{
                       fullWidth: true
                         }}
-                    inputProps={{                      
-                        }}
+        
                       />
                   </GridItem>              
-                  	{/* <GridItem xs={12} sm={8} md={8}>
-                      <CustomInput labelText="Purpose Of Use" id="purpose" required formControlProps={{
-                      fullWidth: true
-                        }}
-                        multiline={true} rows={3}
-                    inputProps={{                      
-                        }}
-                      />
-                  </GridItem>  */}          
-            
-                  <GridItem xs={12} sm={4} md={4}>
-                      <CustomInput labelText="Ship Via" id="ship" required formControlProps={{
-                        fullWidth: true
-                        }}
-                      />
-                  </GridItem> 
-                  <GridItem xs={12} sm={4} md={4}>
-                      <CustomInput labelText="Status" id="status" required formControlProps={{
-                        fullWidth: true
-                        }} inputProps={{  
-                          value:"Pending Submission",
-                          disabled:true                  
-                        }}
-                      />
-                  </GridItem> 
+                  
               </Grid>
                   <br />  
                   <div style={generalStyle.aboveTable}>
@@ -376,12 +296,11 @@ class PurchaseRequisition extends React.Component {
     );
   }
 }
-
-PurchaseRequisition.defaultProps = {
+RequestQuotation.defaultProps = {
   tableHeaderColor: "gray"
 };
 
-PurchaseRequisition.propTypes = {
+RequestQuotation.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
@@ -394,5 +313,5 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, null)(withStyles(styles)(PurchaseRequisition));
+export default connect(mapStateToProps, null)(withStyles(styles)(RequestQuotation));
 

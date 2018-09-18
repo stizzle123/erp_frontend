@@ -13,6 +13,10 @@
     "test": "jest",
     "eject": "react-scripts eject"
   },
+  "setupFiles": [
+    "<rootDir>/config/polyfills.js",
+    "<rootDir>/tests/setup.js"
+  ],
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -34,7 +38,9 @@
       "<rootDir>/node_modules/",
       "<rootDir>/src/"
     ],
-    "setupFiles": ["<rootDir>/tests/setup.js"]
+    "setupFiles": [
+      "<rootDir>/tests/setup.js"
+    ]
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0-beta.40",
@@ -61,11 +67,14 @@
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "file-loader": "^1.1.11",
     "html-webpack-plugin": "^3.2.0",
+    "jest": "^23.6.0",
     "node-sass": "^4.9.0",
     "postcss-cssnext": "^3.1.0",
     "postcss-import": "^11.1.0",
     "postcss-loader": "^2.1.5",
+    "redux-mock-store": "^1.5.3",
     "sass-loader": "^7.0.3",
+    "sinon": "^6.3.2",
     "style-loader": "^0.21.0",
     "webpack": "^4.11.1",
     "webpack-cli": "^3.0.3",
@@ -88,12 +97,12 @@
     "node-sass-chokidar": "1.3.0",
     "perfect-scrollbar": "^1.4.0",
     "prop-types": "^15.6.1",
-    "react": "^16.4.0",
+    "react": "^16.5.0",
     "react-big-calendar": "0.19.1",
     "react-bootstrap-sweetalert": "4.4.1",
     "react-chartist": "^0.13.1",
     "react-datetime": "2.14.0",
-    "react-dom": "^16.4.0",
+    "react-dom": "^16.5.0",
     "react-google-maps": "^9.4.5",
     "react-jvectormap": "0.0.3",
     "react-nouislider": "2.0.1",
