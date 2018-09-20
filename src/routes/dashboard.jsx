@@ -22,6 +22,7 @@ import Project from "../views/Project/index.js";
 import Log from "../views/Log/index.js";
 import Registration from "../views/RegistrationPage/index.js";
 import DashboardIcon from "@material-ui/icons/Dashboard";
+
 /* import Typography from "views/Typography/Typography.jsx";
 import Icons from "views/Icons/Icons.jsx";
 import Maps from "views/Maps/Maps.jsx";
@@ -31,62 +32,37 @@ import UpgradeToPro from "views/UpgradeToPro/UpgradeToPro.jsx"; */
 export const dashboardRoutes = [
   {
     path: "/dashboard",
-    sidebarName: "Dashboard",
-    navbarName: "Dashboard",
-    icon: HomeIcon,
     component: DashboardPage
   },
    {
     path: "/user",
-    sidebarName: "User Profile",
-    navbarName: "Profile",
-    icon: Person,
     component: UserProfile
   },
   {
     path: "/vendor/view/:id",
-    sidebarName: "Vendors List",
-    navbarName: "Vendors List",
-    icon: ContentPaste,
     component: ViewVendor
   },{
     path: "/vendor/type/:type",
-    sidebarName: "Vendors List",
-    navbarName: "Vendors List",
     component: VendorList
   },
   {
     path: "/vendor",
-    sidebarName: "Vendors List",
-    navbarName: "Vendors List",
     component: VendorList
   },
   {
     path: "/vendor/add",
-    sidebarName: "Vendor Details",
-    navbarName: "Vendor Details",
-    icon: AddIcon,
     component: AddVendor
   },
   {
     path: "/Project",
-    sidebarName: "Purchase Requisition",
-    navbarName: "Purchase Requisition",
-    icon: CreditCard,
     component: Project
   },
   {
     path: "/PurchaseOrder",
-    sidebarName: "Purchase Order",
-    navbarName: "Purchase Order",
-    icon:  AccountBalance,
     component: PurchaseOrder
-  },
+  }, 
   {
     path: "/Log",
-    sidebarName: "Report",
-    navbarName: "Report",
-    icon:  LibraryBooks,
     component: Log
   },
   { redirect: true, path: "/", to: "/dashboard", navbarName: "Redirect" }

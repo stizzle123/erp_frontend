@@ -87,41 +87,28 @@ class LoginInfo extends React.Component {
               <Card>
                 <CardHeader color="primary" style={{background: "linear-gradient(60deg, #000, #000)"}}>
                    <center><img src={logo} /></center>
-		           </CardHeader>
+                  
+		        </CardHeader>
               <CardBody>
               <Grid container>
+              <h4>Forgot Password</h4>
 		            <GridItem xs={12} sm={12} md={12}>
-                  <CustomInput labelText="Username" id="username" required formControlProps={{
-                        fullWidth: true
-                              }} inputProps={{
-		                      endAdornment: (
-                              <InputAdornment position="end">
-                              <Face />
-                              </InputAdornment>
-                               ),
-		                      onChange: this.handleChange,
-		                          }}/>
-                </GridItem>
-                <GridItem xs={12} sm={12} md={12}>
-                      <CustomInput labelText="Password"  id="password" required formControlProps={{
-                             fullWidth: true
-                              }}
-                            inputProps={{
-						    endAdornment: (
-                              <InputAdornment position="end">
-                              <LockOutline />
-                              </InputAdornment>
-                               ),
-                            type:"password",
-                            onChange: this.handleChange,
-                                }}
-                        />
+                        <CustomInput labelText="Email you registered with" id="username" required formControlProps={{
+                            fullWidth: true
+                                }} inputProps={{
+                                endAdornment: (
+                                <InputAdornment position="end">
+                                <Face />
+                                </InputAdornment>
+                                ),
+                                onChange: this.handleChange,
+                                    }}/>
                     </GridItem>
                     <GridItem xs={12} sm={6} md={12}>
-                          <Button type="submit" color="primary" onClick={this.login}>Login</Button>
+                          <Button type="submit" color="primary" onClick={this.checkPassword}>Submit</Button>
                         </GridItem>
                         <GridItem xs={12} sm={12} md={12}>
-                          <Link to="/register" >Are you a new Vendor? Click to create and account </Link>
+                            <Link to="/login" >Login</Link>
                         </GridItem>
 						        </Grid>
                   </CardBody>
@@ -129,9 +116,6 @@ class LoginInfo extends React.Component {
 					        <img src={logo2} />
 					        <CardFooter>
                     <Grid>
-                      <GridItem>
-				                <Link to="/forgotpassword" >Forgot Password?</Link>
-                      </GridItem>
 						        </Grid>
 					        </CardFooter>
 				        </Card>

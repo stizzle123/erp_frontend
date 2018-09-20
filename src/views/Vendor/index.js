@@ -69,10 +69,12 @@ componentDidUpdate(prevProps) {
 processJson(responseJson){
   let datas = [];
   responseJson.map((row)=>{
-    let arry = [];
-    arry.push(row._id, row.general_info.company_name, row.general_info.contact_name, row.general_info.contact_phone,
-    row.general_info.contact_email, row.status, row.classes);
-    datas.push(arry);
+    if(typeof row.general_info !== "undefined"){
+        let arry = [];
+        arry.push(row._id, row.general_info.company_name, row.general_info.contact_name, row.general_info.contact_phone,
+        row.general_info.contact_email, row.status, row.classes);
+        datas.push(arry);
+      }
   });
   const dataTable = {
     headerRow: ["Class","Company Name", "Contact Person", "Contact Telephone", "Contact Email", "Actions"],
