@@ -1,5 +1,5 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
+//import renderer from 'react-test-renderer';
 import Add  from './../../../src/views/PurchaseRequisition/add';
 import { Provider } from "react-redux";
 import configureMockStore from "redux-mock-store";
