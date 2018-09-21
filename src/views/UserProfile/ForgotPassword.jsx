@@ -23,12 +23,12 @@ import { withStyles } from '@material-ui/core/styles';
 import Progress from "components/Progress/Progress.jsx";
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import SnackbarContent from "components/Snackbar/SnackbarContent.jsx";
-
+import * as userAction from "../../actions/user"
 import loginPageStyle from "assets/jss/material-dashboard-pro-react/views/loginPageStyle.jsx";
 import StateLoader from "middleware/stateLoader";
 const stateLoader = new StateLoader();
 
-class LoginInfo extends React.Component {
+class ForgetPassword extends React.Component {
 
   state = {
     data: {username:'', password:''},
@@ -47,20 +47,9 @@ class LoginInfo extends React.Component {
     stateLoader.unsetState();
   }
 
-  login = (e) => {
-    {{debugger}}
+  getEmail = (e) => {
     e.preventDefault();
-    this.setState({loading:true});
-    AclAuth.authenticate(this.state.data.username, this.state.data.password, (err,user,token) => {
-      this.setState({loading:false});
-      if(err) {
-        this.setState({showError:true});
-      return;
-      }
-      let u = user;
-      u.token = token;
-      this.props.dispatch({type: USER_LOGGED_IN, user: u});
-    })
+    this.props.requestReset(this);
   }
 
   render() {
@@ -75,7 +64,7 @@ class LoginInfo extends React.Component {
         <div className={classes.container}>
 		      <GridContainer justify="center">
             <GridItem xs={12} sm={8} md={4}>
-            <form onSubmit={this.login}>
+            <form onSubmit={this.getEmail}>
             <Progress loading={this.state.loading}/>
               {(this.state.showError)?<SnackbarContent
                 message={
@@ -105,7 +94,7 @@ class LoginInfo extends React.Component {
                                     }}/>
                     </GridItem>
                     <GridItem xs={12} sm={6} md={12}>
-                          <Button type="submit" color="primary" onClick={this.checkPassword}>Submit</Button>
+                          <Button type="submit" color="primary">Submit</Button>
                         </GridItem>
                         <GridItem xs={12} sm={12} md={12}>
                             <Link to="/login" >Login</Link>
@@ -138,4 +127,13 @@ function mapStateToProps(state) {
     redirectToReferrer: state.auth.redirectToReferrer
   };
 }
-export default connect(mapStateToProps, null)(withStyles(loginPageStyle)(LoginInfo));
+
+function mapDispatchToProps(dispatch) {
+  return {
+    requestReset(e){
+      let email = e.state.data.username;
+      userAction.submitPasswordResetRequest(email);
+    }
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(loginPageStyle)(ForgetPassword));
