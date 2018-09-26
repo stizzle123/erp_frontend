@@ -27,13 +27,15 @@ import * as userAction from "../../actions/user"
 
 import loginPageStyle from "assets/jss/material-dashboard-pro-react/views/loginPageStyle.jsx";
 import StateLoader from "middleware/stateLoader";
+import Notification from '../Notifications/Index.jsx'
+
 const stateLoader = new StateLoader();
 
 class Resetpassword extends React.Component {
 
   state = {
     data: {password:'', confirmPassword:''},
-    newData: "",
+    resetMessage: {},
 	 card: {
     minWidth:12,
 	 }
@@ -68,7 +70,7 @@ class Resetpassword extends React.Component {
         <div className={classes.container}>
 		      <GridContainer justify="center">
             <GridItem xs={12} sm={8} md={4}>
-            <form onSubmit={this.reset}>
+            {(this.state.resetMessage.success === true)?<Notification error={false} message={this.state.resetMessage.message} />: ""}
             <Progress loading={this.state.loading}/>
               {(this.state.showError)?<SnackbarContent
                 message={
@@ -77,6 +79,8 @@ class Resetpassword extends React.Component {
                 close
                 color="danger"
               /> : ""}
+               {(this.state.resetMessage.success === true)? <Card> <CardBody> <h2>Click <Link to="/login" >here</Link> to Login</h2></CardBody></Card>:
+            <form onSubmit={this.reset}>
               <Card>
                 <CardHeader color="primary" style={{background: "linear-gradient(60deg, #000, #000)"}}>
                    <center><img src={logo} /></center>
@@ -125,7 +129,7 @@ class Resetpassword extends React.Component {
                  
 					        </CardFooter>
 				        </Card>
-            </form>
+            </form> }
           </GridItem>
         </GridContainer>
         </div>
@@ -148,7 +152,10 @@ function mapDispatchToProps(dispatch) {
     return {
         resetThePassword(e){
         let data = e.state.data;
-        userAction.resetPassword(data, e.props.match.params.token);
+        userAction.resetPassword(data, e.props.match.params.token, (json)=>{
+          e.setState({resetMessage:json});
+            console.log(e.state.resetMessage);
+        });
       }
     }
   }

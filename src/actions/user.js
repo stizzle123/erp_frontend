@@ -15,10 +15,12 @@ export function submitPasswordResetRequest(email, callback){
     })
 }
 
-export function resetPassword(data, token){
+export function resetPassword(data, token, callback){
   let middleware = new MiddleWare();
   middleware.makeConnection('/users/resetthepassword/'+token,'PUT', data).then((res)=>{
     return res.json();
+  }).then((e)=>{
+    callback(e);
   }).catch((e)=>{
     console.log("the error" + e);
   })}

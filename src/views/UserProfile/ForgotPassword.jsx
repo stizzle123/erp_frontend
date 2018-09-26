@@ -26,6 +26,7 @@ import SnackbarContent from "components/Snackbar/SnackbarContent.jsx";
 import * as userAction from "../../actions/user"
 import loginPageStyle from "assets/jss/material-dashboard-pro-react/views/loginPageStyle.jsx";
 import StateLoader from "middleware/stateLoader";
+import Notification from '../Notifications/Index.jsx'
 const stateLoader = new StateLoader();
 
 class ForgetPassword extends React.Component {
@@ -67,6 +68,7 @@ class ForgetPassword extends React.Component {
             <GridItem xs={12} sm={8} md={4}>
             <form onSubmit={this.getEmail}>
             <Progress loading={this.state.loading}/>
+            {(this.state.requestMessage.success == true)?<Notification error={false} message={this.state.requestMessage.message} />: ""}
               {(this.state.showError)?<SnackbarContent
                 message={
                   'Invalid email, please try again'
