@@ -49,7 +49,6 @@ class Index extends React.Component {
  
 
 handler(type, id){
-  console.log(type, id);
 }
 
 
@@ -61,7 +60,6 @@ componentDidMount(){
 }
 
 componentDidUpdate(prevProps) {
-  console.log(prevProps, "props");
   if (this.props.match.params.type !== prevProps.match.params.type) {
     vendorActions.findAllVendors(this.props, this.props.match.params.type);
   }
@@ -89,7 +87,6 @@ render(){
     if(this.props.data.length> 0){
       vendors = this.processJson(this.props.data);
     }
-    console.log(this.props);
     let data = vendors.dataRows.map((prop, key) => {
         return {
           id: key,
@@ -129,28 +126,19 @@ render(){
                  <Dvr />
               </Button>
               {/* use this button to remove the data row */}
-            {/*   <Button
+            {  <Button
                 justIcon
                 round
                 simple
                 onClick={() => {
-                  var data = this.state.data;
-                  data.find((o, i) => {
-                    if (o.id === key) {
-                      // here you should add some custom code so you can delete the data
-                      // from this component and from your server as well
-                      data.splice(i, 1);
-                      return true;
-                    }
-                    return false;
-                  });
-                  this.setState({ data: data });
+                 let data = this.props.data[key];
+                 vendorActions.deleteVendor(this.props, data.user)
                 }}
                 color="danger"
                 className="remove"
               >
                 <Close />
-              </Button>{" "} */}
+              </Button>}
             </div>
           )
         };

@@ -154,7 +154,6 @@ function mapDispatchToProps(dispatch) {
         let data = e.state.data;
         userAction.resetPassword(data, e.props.match.params.token, (json)=>{
           e.setState({resetMessage:json});
-            console.log(e.state.resetMessage);
         });
       }
     }

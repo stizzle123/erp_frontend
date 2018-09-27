@@ -97,3 +97,12 @@ export function submitVendorDetailsViaUserId(dispatch, userId, d){
       console.log(e);
     })
 }
+
+export function deleteVendor(props, user){
+    let middleware = new MiddleWare(props.user.token);
+    middleware.makeConnection('/vendors/deletevendor','DELETE', {"user":user}).then((res)=>{
+      console.log(user)
+    }).catch((e)=>{
+      console.log("the error" + e);
+    })
+}
