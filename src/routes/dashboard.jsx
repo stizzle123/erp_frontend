@@ -22,6 +22,9 @@ import ViewVendor from "../views/Vendor/view.js";
 import PurchaseOrder from "../views/PurchaseOrder/index.js";
 import AddPurchaseRequisition from "../views/PurchaseRequisition/add.js";
 import ListPurchaseRequisition from "../views/PurchaseRequisition/index.js";
+import ListCrud from "../views/Crud/index.js";
+import AddCrud from "../views/Crud/add.js";
+import ViewCrud from "../views/Crud/add.js";
 import Log from "../views/Log/index.js";
 import Registration from "../views/RegistrationPage/index.js";
 import DashboardIcon from "@material-ui/icons/Dashboard";
@@ -74,6 +77,18 @@ export const dashboardRoutes = [
   {
     path: "/Log",
     component: Log
+  },
+  {
+    path: "/crud/add/:type",
+    component: AddCrud
+  },
+  {
+    path: "/crud/view/:type/:id",
+    component: ViewCrud
+  },
+  {
+    path: "/crud/:type/",
+    component: ListCrud
   },
   { redirect: true, path: "/", to: "/dashboard", navbarName: "Redirect" }
 ];
@@ -196,10 +211,19 @@ export const AdminMenu = [
     ]
   },
  {
-   path: "/Log",
+   path: "/Setup",
+   collapse: true,
    name: "Setup",
    icon:  Settings,
-   component: Log
+   state: "openSetup",
+   views: [
+    {
+      path: "/crud/departments",
+      name: "Departments",
+      mini: "D",
+      component: ListCrud
+    }
+  ]
  },
 ];
 

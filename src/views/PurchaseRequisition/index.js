@@ -61,7 +61,6 @@ componentDidMount(){
 }
 
 componentDidUpdate(prevProps) {
-  console.log(prevProps, "props");
   if (this.props.match.params.type !== prevProps.match.params.type) {
     vendorActions.findAllVendors(this.props, this.props.match.params.type);
   }

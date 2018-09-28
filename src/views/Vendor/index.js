@@ -61,7 +61,6 @@ componentDidMount(){
 }
 
 componentDidUpdate(prevProps) {
-  console.log(prevProps, "props");
   if (this.props.match.params.type !== prevProps.match.params.type) {
     vendorActions.findAllVendors(this.props, this.props.match.params.type);
   }
@@ -87,7 +86,6 @@ render(){
     if(this.props.data.length> 0){
       vendors = this.processJson(this.props.data);
     }
-    console.log(this.props);
     let data = vendors.dataRows.map((prop, key) => {
         return {
           id: key,
