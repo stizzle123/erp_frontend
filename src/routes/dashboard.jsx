@@ -22,6 +22,7 @@ import Project from "../views/Project/index.js";
 import Log from "../views/Log/index.js";
 import Registration from "../views/RegistrationPage/index.js";
 import DashboardIcon from "@material-ui/icons/Dashboard";
+import ChangePassword from "../views/UserProfile/ChangePassword.jsx"
 
 /* import Typography from "views/Typography/Typography.jsx";
 import Icons from "views/Icons/Icons.jsx";
@@ -60,6 +61,10 @@ export const dashboardRoutes = [
   {
     path: "/PurchaseOrder",
     component: PurchaseOrder
+  }, 
+  {
+    path: "/changepassword",
+    component: ChangePassword
   }, 
   {
     path: "/Log",

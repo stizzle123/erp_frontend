@@ -25,6 +25,16 @@ export function resetPassword(data, token, callback){
     console.log("the error" + e);
   })}
 
+  export function changePassword(data , id){
+    let middleware = new MiddleWare();
+    console.log(data);
+    data.id = id;
+    middleware.makeConnection('/users/changeyourpassword/','PUT', data).then((res)=>{
+      console.log(res)
+    }).catch((e)=>{
+      console.log("the error" + e);
+    })}
+
   export function checktoken(token, callback){
     let middleware = new MiddleWare();
     middleware.makeConnection('/users/confirmtoken/'+token,'GET').then((response) => {
