@@ -67,6 +67,12 @@ export const dashboardRoutes = [
     component: ChangePassword
   }, 
   {
+    path: "/user",
+    name: "User Profile",
+    icon: Person,
+    component: UserProfile
+  }, 
+  {
     path: "/Log",
     component: Log
   },
@@ -80,12 +86,6 @@ export const AdminMenu = [
     icon: DashboardIcon,
     component: Dashboard
   },
-  {
-   path: "/user",
-   name: "User Profile",
-   icon: Person,
-   component: UserProfile
- },
  {
    path: "/vendor",
    name: "Vendors List",
