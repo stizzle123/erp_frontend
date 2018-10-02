@@ -36,6 +36,7 @@ class ChangePassword extends React.Component {
   state = {
     data: {oldPassword: '', password:'', confirmPassword:''},
     resetMessage: {},
+    showNotif: '',
 	 card: {
     minWidth:12,
 	 }
@@ -49,9 +50,12 @@ class ChangePassword extends React.Component {
   };
   componentDidMount(){
     stateLoader.unsetState();
-    console.log(this.props.user)
   }
-
+  componentWillReceiveProps(nextProps, nextState) {
+    if (this.state.resetMessage != nextState.resetMessage) {
+        this.setState({showNotif: true});
+    }
+  }
   changePassword = (e) => {
     e.preventDefault();
     this.props.ChangeYourPassword(this);
@@ -65,15 +69,8 @@ class ChangePassword extends React.Component {
         <div className={classes.container}>
 		      <GridContainer justify="center">
             <GridItem xs={12} sm={8} md={4}>
-            {(this.state.resetMessage.success === true)?<Notification error={false} message={this.state.resetMessage.message} />: ""}
+            {(this.state.resetMessage)?<Notification error={false} message={this.state.resetMessage.message} />: ""}
             <Progress loading={this.state.loading}/>
-              {(this.state.showError)?<SnackbarContent
-                message={
-                  'Invalid username and password, please try again'
-                }
-                close
-                color="danger"
-              /> : ""}
             <form onSubmit={this.changePassword}>
               <Card>
                 <CardHeader color="primary" style={{background: "linear-gradient(60deg, #000, #000)"}}>
@@ -163,7 +160,10 @@ function mapDispatchToProps(dispatch) {
     return {
       ChangeYourPassword(e){
         let data = e.state.data;
-        userAction.changePassword(data, e.props.user._id);
+        userAction.changePassword(data, e.props.user._id,  (json)=>{
+          e.setState({resetMessage:json});
+        });
+        console.log("the message"+e.state.resetMessage)
       }
     }
   }
