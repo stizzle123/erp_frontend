@@ -24,19 +24,21 @@ import Progress from "components/Progress/Progress.jsx";
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import SnackbarContent from "components/Snackbar/SnackbarContent.jsx";
 import * as userAction from "../../actions/user"
+
 import loginPageStyle from "assets/jss/material-dashboard-pro-react/views/loginPageStyle.jsx";
 import StateLoader from "middleware/stateLoader";
 import Notification from '../Notifications/Index.jsx'
+
 const stateLoader = new StateLoader();
 
-class ForgetPassword extends React.Component {
+class Resetpassword extends React.Component {
 
   state = {
-    data: {email:''},
+    data: {password:'', confirmPassword:''},
+    resetMessage: {},
 	 card: {
     minWidth:12,
-   },
-   requestMessage: {}
+	 }
   }
   handleChange = event => {
     let data = this.state.data;
@@ -47,71 +49,87 @@ class ForgetPassword extends React.Component {
   };
   componentDidMount(){
     stateLoader.unsetState();
+    userAction.checktoken(this.props.match.params.token, (json)=>{
+      this.setState({newData:json.tokenState});
+    });
   }
 
-  getEmail = (e) => {
+  reset = (e) => {
     e.preventDefault();
-    this.props.requestReset(this);
+    this.props.resetThePassword(this);
+
   }
 
   render() {
-	  const { classes } = this.props;
-    const { from } = this.props.location.state || { from: { pathname: '/' }}
-    if (this.props.redirectToReferrer === true) {
-      //console.log(from);
-      return <Redirect to="/dashboard" />
+    const { classes } = this.props;
+    if (this.state.newData === false) {
+      return <Redirect to="/login" />
     }
       return (
         <div className={classes.content} style={{backgroundColor:'#082356', backgroundImage:"url(" + bg + ")", backgroundRepeat:"no-repeat"}}>
         <div className={classes.container}>
 		      <GridContainer justify="center">
             <GridItem xs={12} sm={8} md={4}>
-            <form onSubmit={this.getEmail}>
+            {(this.state.resetMessage.success === true)?<Notification error={false} message={this.state.resetMessage.message} />: ""}
             <Progress loading={this.state.loading}/>
-            {(this.state.requestMessage.success == true)?<Notification error={false} message={this.state.requestMessage.message} />: ""}
               {(this.state.showError)?<SnackbarContent
                 message={
-                  'Invalid email, please try again'
+                  'Invalid username and password, please try again'
                 }
                 close
                 color="danger"
               /> : ""}
+               {(this.state.resetMessage.success === true)? <Card> <CardBody> <h2>Click <Link to="/login" >here</Link> to Login</h2></CardBody></Card>:
+            <form onSubmit={this.reset}>
               <Card>
                 <CardHeader color="primary" style={{background: "linear-gradient(60deg, #000, #000)"}}>
                    <center><img src={logo} /></center>
-                  
-		        </CardHeader>
+		           </CardHeader>
               <CardBody>
               <Grid container>
-              <h4>Forgot Password</h4>
-		            <GridItem xs={12} sm={12} md={12}>
-                        <CustomInput labelText="Email you registered with" id="email" required formControlProps={{
-                            fullWidth: true
-                                }} inputProps={{
-                                endAdornment: (
-                                <InputAdornment position="end">
-                                <Face />
-                                </InputAdornment>
-                                ),
-                                onChange: this.handleChange,
-                                    }}/>
+              <GridItem xs={12} sm={12} md={12}>
+                      <CustomInput labelText="Password"  id="password" required formControlProps={{
+                             fullWidth: true
+                              }}
+                            inputProps={{
+						    endAdornment: (
+                              <InputAdornment position="end">
+                              <LockOutline />
+                              </InputAdornment>
+                               ),
+                            type:"password",
+                            onChange: this.handleChange,
+                                }}
+                        />
+                    </GridItem>
+                <GridItem xs={12} sm={12} md={12}>
+                      <CustomInput labelText="Confirm Password"  id="confirmPassword" required formControlProps={{
+                             fullWidth: true
+                              }}
+                            inputProps={{
+						    endAdornment: (
+                              <InputAdornment position="end">
+                              <LockOutline />
+                              </InputAdornment>
+                               ),
+                            type:"password",
+                            onChange: this.handleChange,
+                                }}
+                        />
                     </GridItem>
                     <GridItem xs={12} sm={6} md={12}>
-                          <Button type="submit" color="primary">Submit</Button>
+                          <Button type="submit" color="primary" >Reset Password</Button>
                         </GridItem>
-                        <GridItem xs={12} sm={12} md={12}>
-                            <Link to="/login" >Login</Link>
-                        </GridItem>
+                    
 						        </Grid>
                   </CardBody>
                   <Progress loading={this.state.loading}/>
 					        <img src={logo2} />
 					        <CardFooter>
-                    <Grid>
-						        </Grid>
+                 
 					        </CardFooter>
 				        </Card>
-            </form>
+            </form> }
           </GridItem>
         </GridContainer>
         </div>
@@ -130,17 +148,15 @@ function mapStateToProps(state) {
     redirectToReferrer: state.auth.redirectToReferrer
   };
 }
-
 function mapDispatchToProps(dispatch) {
-  return {
-    requestReset(e){
-      let email = e.state.data.email;
-      userAction.submitPasswordResetRequest(email, (json)=>{
-        e.setState({requestMessage:json});
-        console.log(e.state.requestMessage);
-
-      });
+    return {
+        resetThePassword(e){
+        let data = e.state.data;
+        userAction.resetPassword(data, e.props.match.params.token, (json)=>{
+          e.setState({resetMessage:json});
+            console.log(e.state.resetMessage);
+        });
+      }
     }
   }
-}
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(loginPageStyle)(ForgetPassword));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(loginPageStyle)(Resetpassword));
