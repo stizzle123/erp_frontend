@@ -13,6 +13,7 @@ import ForgotPassword from "./views/UserProfile/ForgotPassword.jsx";
 import Resetpassword from "./views/UserProfile/Resetpassword.jsx";
 import RegistrationPage from "./views/RegistrationPage/index.js";
 
+
 const hist = createBrowserHistory();
 const store = configureStore();
 
@@ -24,6 +25,7 @@ ReactDOM.render(
         <Route path="/resetpassword/:token" exact component={Resetpassword} />
         <Route path="/forgotpassword" exact component={ForgotPassword} />
         <Route path="/register" exact component={RegistrationPage} />
+
         {indexRoutes.map((prop, key) => {
           return <PrivateRoute path={prop.path} component={prop.component} key={key} />;
         })}

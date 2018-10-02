@@ -31,11 +31,12 @@ import Notification from '../Notifications/Index.jsx'
 
 const stateLoader = new StateLoader();
 
-class Resetpassword extends React.Component {
+class ChangePassword extends React.Component {
 
   state = {
-    data: {password:'', confirmPassword:''},
+    data: {oldPassword: '', password:'', confirmPassword:''},
     resetMessage: {},
+    showNotif: '',
 	 card: {
     minWidth:12,
 	 }
@@ -49,44 +50,49 @@ class Resetpassword extends React.Component {
   };
   componentDidMount(){
     stateLoader.unsetState();
-    userAction.checktoken(this.props.match.params.token, (json)=>{
-      this.setState({newData:json.tokenState});
-    });
   }
-
-  reset = (e) => {
+  componentWillReceiveProps(nextProps, nextState) {
+    if (this.state.resetMessage != nextState.resetMessage) {
+        this.setState({showNotif: true});
+    }
+  }
+  changePassword = (e) => {
     e.preventDefault();
-    this.props.resetThePassword(this);
+    this.props.ChangeYourPassword(this);
 
   }
 
   render() {
     const { classes } = this.props;
-    if (this.state.newData === false) {
-      return <Redirect to="/login" />
-    }
       return (
         <div className={classes.content} style={{backgroundColor:'#082356', backgroundImage:"url(" + bg + ")", backgroundRepeat:"no-repeat"}}>
         <div className={classes.container}>
 		      <GridContainer justify="center">
             <GridItem xs={12} sm={8} md={4}>
-            {(this.state.resetMessage.success === true)?<Notification error={false} message={this.state.resetMessage.message} />: ""}
+            {(this.state.resetMessage)?<Notification error={false} message={this.state.resetMessage.message} />: ""}
             <Progress loading={this.state.loading}/>
-              {(this.state.showError)?<SnackbarContent
-                message={
-                  'Invalid username and password, please try again'
-                }
-                close
-                color="danger"
-              /> : ""}
-               {(this.state.resetMessage.success === true)? <Card> <CardBody> <h2>Click <Link to="/login" >here</Link> to Login</h2></CardBody></Card>:
-            <form onSubmit={this.reset}>
+            <form onSubmit={this.changePassword}>
               <Card>
                 <CardHeader color="primary" style={{background: "linear-gradient(60deg, #000, #000)"}}>
                    <center><img src={logo} /></center>
 		           </CardHeader>
               <CardBody>
               <Grid container>
+              <GridItem xs={12} sm={12} md={12}>
+                      <CustomInput labelText="Current Password"  id="oldPassword" required formControlProps={{
+                             fullWidth: true
+                              }}
+                            inputProps={{
+						    endAdornment: (
+                              <InputAdornment position="end">
+                              <LockOutline />
+                              </InputAdornment>
+                               ),
+                            type:"password",
+                            onChange: this.handleChange,
+                                }}
+                        />
+                    </GridItem>
               <GridItem xs={12} sm={12} md={12}>
                       <CustomInput labelText="Password"  id="password" required formControlProps={{
                              fullWidth: true
@@ -129,7 +135,7 @@ class Resetpassword extends React.Component {
                  
 					        </CardFooter>
 				        </Card>
-            </form> }
+            </form> 
           </GridItem>
         </GridContainer>
         </div>
@@ -145,17 +151,20 @@ const style = {
 
 function mapStateToProps(state) {
   return {
-    redirectToReferrer: state.auth.redirectToReferrer
+    redirectToReferrer: state.auth.redirectToReferrer,
+    user: state.auth.user,
+
   };
 }
 function mapDispatchToProps(dispatch) {
     return {
-        resetThePassword(e){
+      ChangeYourPassword(e){
         let data = e.state.data;
-        userAction.resetPassword(data, e.props.match.params.token, (json)=>{
+        userAction.changePassword(data, e.props.user._id,  (json)=>{
           e.setState({resetMessage:json});
         });
+        console.log("the message"+e.state.resetMessage)
       }
     }
   }
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(loginPageStyle)(Resetpassword));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(loginPageStyle)(ChangePassword));
