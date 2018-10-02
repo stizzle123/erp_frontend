@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-
 import Grid from '@material-ui/core/Grid';
 import GridItem from "../../components/Grid/GridItem.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
@@ -55,6 +54,34 @@ class GeneralInfo extends React.Component {
           contact_phone: props.data.contact_phone,
           contact_email: props.data.contact_email
         },
+        formErrors: { 
+          company_name: '',
+          reg_no: '',
+          office_address: '',
+          city: '',
+          state: '',
+          country: '',
+          coy_phone: '',
+          coy_email: '',
+          website: '',
+          contact_name: '',
+          designation: '',
+          contact_phone: '',
+          contact_email: ''
+        },
+        company_nameValid: '',
+        reg_noValid: '',
+        office_addressValid: '',
+        cityValid: '',
+        stateValid: '',
+        countryValid: '',
+        coy_phoneValid: '',
+        coy_emailValid: '',
+        websiteValid: '',
+        contact_nameValid: '',
+        designationValid: '',
+        contact_phoneValid: '',
+        contact_emailValid: '',
         loading: props.loader.loading,
         loader: props.loader
     };
@@ -62,11 +89,88 @@ class GeneralInfo extends React.Component {
 
   handleChange = event => {
     let data = this.state.data;
+    const name = event.target.id;
+    const value = event.target.value;
     data[[event.target.id]] = event.target.value; 
     this.setState({ 
       data : data,
-    });
+    }, 
+    () => { this.validateField(name, value)});
   };
+  validateField(fieldName, value) {
+    let fieldValidationErrors = this.state.formErrors;
+    let company_nameValid = this.state.company_nameValid;
+    let reg_noValid = this.state.reg_noValid;
+    let office_addressValid = this.state.office_addressValid
+    let cityValid = this.state.cityValid;
+    let stateValid = this.state.stateValid;
+    let countryValid = this.state.countryValid;
+    let coy_phoneValid = this.state.coy_phoneValid;
+    let coy_emailValid = this.state.coy_emailValid;
+    let websiteValid = this.state.websiteValid;
+    let contact_nameValid = this.state.contact_nameValid;
+    let designationValid = this.state. designationValid;
+    let contact_phoneValid = this.state.contact_phoneValid;
+    let contact_emailValid = this.state.contact_emailValid;
+
+   switch(fieldName) {
+     case 'company_name':
+     company_nameValid = value.length >= 3;
+     fieldValidationErrors.company_name = company_nameValid ? '': 'is invalid';
+     break;
+     case 'reg_no':
+     reg_noValid =value.length >= 3;
+     fieldValidationErrors.reg_no = reg_noValid  ? '': 'is invalid';
+     break;
+     case 'office_address':
+     office_addressValid =value.length >= 10;
+     fieldValidationErrors.office_address = office_addressValid  ? '': ' is invalid';
+     break;
+     case 'city':
+     cityValid = value.match(/^[a-zA-Z]+$/);
+     fieldValidationErrors.cityValid = cityValid  ? '': ' is invalid';
+     break;
+     case 'state':
+     stateValid = value.match(/^[a-zA-Z]+$/);
+     fieldValidationErrors.state = stateValid  ? '': ' is invalid';
+     break;
+     case 'country':
+     countryValid = value.match(/^[a-zA-Z]+$/);
+     fieldValidationErrors.country = countryValid  ? '': ' is invalid';
+     break;
+     case 'coy_email':
+     coy_emailValid =  value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
+     fieldValidationErrors.coy_email = coy_emailValid ? '': ' is invalid';
+     break;
+     case 'coy_phone':
+     coy_phoneValid =  value.length > 8 && value.length < 12;
+     fieldValidationErrors.coy_phone = coy_phoneValid ? '': ' is invalid';
+     break;
+     case 'website':
+     websiteValid =  value.length >= 12;
+     fieldValidationErrors.website = websiteValid ? '': ' is invalid';
+     break;
+     case 'contact_name':
+     contact_nameValid = value.match(/^[a-zA-Z]+$/);
+     fieldValidationErrors.contact_name = contact_nameValid  ? '': ' must be letters only';
+     break;
+     case 'designation':
+     designationValid = value.length >= 1;
+     fieldValidationErrors.designation = designationValid  ? '': ' is invalid';
+     break;
+     case 'contact_phone':
+     contact_phoneValid = value.length > 8 && value.length < 12;
+     fieldValidationErrors.contact_phone = contact_phoneValid  ? '': ' is invalid';
+     break;
+     case 'contact_email':
+     contact_emailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
+     fieldValidationErrors.contact_email = contact_emailValid ? '' : ' is invalid';
+     break;
+   default:
+     break;
+ } 
+}
+
 
   handleSave = e=>{
       e.preventDefault();
