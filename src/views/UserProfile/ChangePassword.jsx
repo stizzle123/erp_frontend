@@ -36,6 +36,7 @@ class ChangePassword extends React.Component {
   state = {
     data: {oldPassword: '', password:'', confirmPassword:''},
     resetMessage: {},
+    errorState: '',
     showNotif: '',
 	 card: {
     minWidth:12,
@@ -50,11 +51,6 @@ class ChangePassword extends React.Component {
   };
   componentDidMount(){
     stateLoader.unsetState();
-  }
-  componentWillReceiveProps(nextProps, nextState) {
-    if (this.state.resetMessage != nextState.resetMessage) {
-        this.setState({showNotif: true});
-    }
   }
   changePassword = (e) => {
     e.preventDefault();
@@ -73,7 +69,7 @@ class ChangePassword extends React.Component {
             <h4 className={classes.cardTitleWhite}>Change your Password</h4>
             </CardHeader>
             <CardBody>
-            {(this.state.resetMessage)?<Notification error={false} message={this.state.resetMessage.message} />: ""}
+            {(this.state.resetMessage)?<Notification error={this.state.errorState} message={this.state.resetMessage.message} />: ""}
             <Progress loading={this.state.loading}/>
             <form onSubmit={this.changePassword}>
               <Grid container>
@@ -155,8 +151,13 @@ function mapDispatchToProps(dispatch) {
         let data = e.state.data;
         userAction.changePassword(data, e.props.user._id,  (json)=>{
           e.setState({resetMessage:json});
+          if (e.state.resetMessage.success === false){
+            e.setState({errorState: true});
+          }
+          else {
+            e.setState({errorState: false});
+          }
         });
-        console.log("the message"+e.state.resetMessage)
       }
     }
   }
