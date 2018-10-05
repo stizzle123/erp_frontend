@@ -224,6 +224,13 @@ export const IacMenu = [
   },
 ];
 
+export const StaffMenu = [
+  {
+    path: "/dashboard",
+    name: "Dashboard",
+    icon: HomeIcon,
+  }
+];
 
 export const VendorMenu = [
   {
