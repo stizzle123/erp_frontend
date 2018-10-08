@@ -131,8 +131,10 @@ render(){
                 round
                 simple
                 onClick={() => {
-                 let data = this.props.data[key];
-                 vendorActions.deleteVendor(this.props, data.user)
+                  if(window.confirm('Delete this Vendor?')) {
+                    let data = this.props.data[key];
+                    vendorActions.deleteVendor(this.props, data.user)
+                  }
                 }}
                 color="danger"
                 className="remove"
