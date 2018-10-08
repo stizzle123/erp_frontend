@@ -44,34 +44,42 @@ class UserProfile extends React.Component {
           email: props.user.email,
           id: props.user._id,
           firstname: props.user.firstname,
-          lastname: props.user.lastname
-        
+          lastname: props.user.lastname,
+          eid: props.user.eid,
+          phone: props.user.phone,
+          city: props.user.city
         },
-        responseMessage: ''
+        responseMessage: '',
+        isEnabled: false
       }
+      this.enableEdit = this.enableEdit.bind(this)
     }
-  componentDidMount(){
-    console.log(this.props.user)
+
+  enableEdit(){
+    let isTrue = true;
+    this.setState({ 
+      isEnabled : isTrue
+    }) 
   }
 
   handleChange = event => {
-    let data = this.state.data;
-    const name = event.target.id;
-    const value = event.target.value;
-    data[[event.target.id]] = event.target.value; 
-    this.setState({ 
-      data : data
-    }) 
+    if(this.state.isEnabled === true){
+      let data = this.state.data;
+      data[[event.target.id]] = event.target.value; 
+      this.setState({ 
+        data : data
+      }) 
+    }
   };
 
   handleSave = e=>{
     e.preventDefault();
-    console.log(this.state.data)
     this.props.sendUserData(this);
 }
 //function UserProfile(props) {
   render() {
     const { classes, data } = this.props;
+    console.log(this.props.user)
   return (
     <div>
       <Grid container>
@@ -82,7 +90,8 @@ class UserProfile extends React.Component {
               <p className={classes.cardCategoryWhite}>Complete your profile</p>
             </CardHeader>
             <CardBody>
-            <form className={classes.container} noValidate autoComplete="off">
+            <form className={classes.container} noValidate autoComplete="off" >
+            <div><strong>Dept: </strong></div>
               <Grid container>
                 <GridItem xs={12} sm={12} md={4}>
                   <CustomInput
@@ -163,6 +172,7 @@ class UserProfile extends React.Component {
               </form>               
             </CardBody>
             <CardFooter>
+              <Button color="success" onClick={this.enableEdit}>Edit</Button>
               <Button color="primary" onClick={this.handleSave}>Update Profile</Button>
             </CardFooter>
           </Card>
@@ -205,9 +215,7 @@ function mapDispatchToProps(dispatch) {
     sendUserData(e){
       let data = e.state.data;
       userAction.updateProfile(data, (json)=>{
-        e.setState({responseMessage:json});
-        console.log(e.state.responseMessage);
-
+        e.setState({data:json.profile});
       });
     }
   }
