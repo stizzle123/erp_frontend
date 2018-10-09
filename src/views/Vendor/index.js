@@ -43,7 +43,8 @@ class Index extends React.Component {
     super(props);
     this.handler = this.handler.bind(this);
     this.state = { 
-      redirectTo:false
+      redirectTo:false,
+      data:[]
     };
   }
  
@@ -54,9 +55,6 @@ handler(type, id){
 
 componentDidMount(){
    vendorActions.findAllVendors(this.props);
-    /* else if(this.props.match.params.type){
-    vendorActions.findAllVendors(this.props, this.props.match.params.type);
-  } */
 }
 
 componentDidUpdate(prevProps) {
@@ -84,8 +82,11 @@ processJson(responseJson){
 render(){
     const { classes } = this.props;
     let vendors = {"dataRows":[]};
-    if(this.props.data.length> 0){
+  
+    if(this.state.data.length ==0 && this.props.data.length> 0){
       vendors = this.processJson(this.props.data);
+    }else if(this.state.data.length> 0){
+      vendors = this.processJson(this.state.data);
     }
     let data = vendors.dataRows.map((prop, key) => {
         return {
@@ -132,8 +133,11 @@ render(){
                 simple
                 onClick={() => {
                   if(window.confirm('Delete this Vendor?')) {
-                    let data = this.props.data[key];
-                    vendorActions.deleteVendor(this.props, data.user)
+                    let datum = this.props.data[key];
+                    let data = this.props.data;
+                    //vendorActions.deleteVendor(this.props, datum.user);
+                    delete data[key];
+                    this.setState({data: data })
                   }
                 }}
                 color="danger"
