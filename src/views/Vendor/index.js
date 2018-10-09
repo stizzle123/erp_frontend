@@ -54,12 +54,14 @@ handler(type, id){
 
 
 componentDidMount(){
+  (this.props.match.params.type)?
+  vendorActions.findAllVendors(this.props, this.props.match.params.type):
    vendorActions.findAllVendors(this.props);
 }
 
 componentDidUpdate(prevProps) {
   if (this.props.match.params.type !== prevProps.match.params.type) {
-    vendorActions.findAllVendors(this.props, this.props.match.params.type);
+    vendorActions.findAllVendors(this.props, this.props.match.params.type)
   }
 }
 processJson(responseJson){
@@ -127,7 +129,8 @@ render(){
                  <Dvr />
               </Button>
               {/* use this button to remove the data row */}
-            {  <Button
+            
+            { (this.props.user.role != "procurement")? <Button
                 justIcon
                 round
                 simple
@@ -144,7 +147,7 @@ render(){
                 className="remove"
               >
                 <Close />
-              </Button>}
+              </Button> : " "}
             </div>
           )
         };
