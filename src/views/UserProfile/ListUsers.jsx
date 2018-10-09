@@ -60,38 +60,66 @@ componentDidMount(){
 render(){
     console.log(this.state.users);
     const { classes } = this.props;
+    let userData = this.state.users.map((data, key) => {
+      {{debugger}}
+      return {
+        id: key,
+        firstname: data["firstname"],
+        lastname: data["lastname"],
+        email: data["email"],
+        eid: data["eid"],
+        department: data["department"],
+        role: data["role"],
+      };
+    });
         return (
         <div>
             <Card>
                 <CardHeader color="primary">
                    <h4 className={classes.cardTitleWhite}>Users</h4>
+                                    
+
                 </CardHeader>
                 <CardBody>
-                  <div style={{float: 'right', marginBottom:"50px"}}>
-                  <Button color="twitter">Add New User</Button>
+                  <div>
+                  <Button color="twitter" >Add New User</Button>
                   </div>
-                  <table>
-        <TableHead>
-          <tr>
-            <th>Email</th>
-            <th>EID</th>
-            <th>Dethartment</th>
-            <th>Role</th>
-          </tr>
-        </TableHead>
-        <TableBody>
-          {this.state.users.map(function(data, key){ 
-            return (
-              <tr>              
-                <td>{data.email}</td>
-                <td>{data.eid}</td>
-                <td>{data.department}</td>
-                <td>{data.role}</td>
-              </tr>
-            );
-          })}
-        </TableBody>
-      </table>
+                  <br/>
+                  <ReactTable
+                data={userData}
+                filterable
+                columns={[
+                  {
+                    Header: "First Name",
+                    accessor: "firsname"
+                  },
+                  {
+                    Header: "Last Name",
+                    accessor: "lastname"
+                  },
+                  {
+                    Header: "Email",
+                    accessor: "email"
+                  },
+                  {
+                    Header: "EID",
+                    accessor: "eid"
+                  },
+                  {
+                    Header: "Department",
+                    accessor: "department"
+                  },
+                  {
+                    Header: "Role",
+                    accessor: "role"
+                  },
+                  
+                ]}
+                defaultPageSize={10}
+                showPaginationTop
+                showPaginationBottom={false}
+                className="-striped -highlight"
+              />
                 </CardBody>
             </Card>
         </div>
