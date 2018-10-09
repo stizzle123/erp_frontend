@@ -43,7 +43,6 @@ class ListCrud extends React.Component {
 
     componentDidMount() {
         genericActions.fetchAll(this.props.match.params.type, (items)=>{
-            {{debugger}}
             this.setState({data : items});
         });
       }

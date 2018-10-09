@@ -222,6 +222,11 @@ export const AdminMenu = [
       name: "Departments",
       mini: "D",
       component: ListCrud
+    },{
+      path: "/crud/roles",
+      name: "Roles",
+      mini: "R",
+      component: ListCrud
     }
   ]
  },
