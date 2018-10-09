@@ -6,7 +6,7 @@ export function submitPasswordResetRequest(email, callback){
     let middleware = new MiddleWare();
     let data = {};
     data.email = email;
-    middleware.makeConnection('/users/requestResetToken','PUT', data).then((res)=>{
+    middleware.makeConnection('/users/requestresettoken','PUT', data).then((res)=>{
       return res.json()
     }).then((e)=>{
       callback(e);
@@ -43,4 +43,22 @@ export function resetPassword(data, token, callback){
     }).then((e)=>{
       callback(e);
     })
+}
+
+export function findAllStaff(props,callback){
+    let middleware = new MiddleWare(props.user.token);
+    middleware.makeConnection('/users/findallstaff/','GET').then((response) => {
+          return response.json();
+    }).then((e)=>{
+      callback(e);
+    })
+}
+
+export function addUser(props, data, callback){
+  let middleware = new MiddleWare(props.user.token);
+  middleware.makeConnection('/users/createnewuser/','POST', data).then((response) => {
+        return response.json();
+  }).then((e)=>{
+    callback(e);
+  })
 }

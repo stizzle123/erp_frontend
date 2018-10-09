@@ -14,6 +14,8 @@ import CreditCard from '@material-ui/icons/CreditCard';
 import LoginPage from "../views/LoginPage/index.js";
 import DashboardPage from "../views/Dashboard/Dashboard.jsx";
 import UserProfile from "../views/UserProfile/UserProfile.jsx";
+import ListUsers from "../views/UserProfile/ListUsers.jsx";
+import AddUser from "../views/UserProfile/AddUser.jsx";
 import VendorList from "../views/Vendor/index.js";
 import AddVendor from "../views/Vendor/add.js";
 import ViewVendor from "../views/Vendor/view.js";
@@ -38,6 +40,14 @@ export const dashboardRoutes = [
    {
     path: "/user",
     component: UserProfile
+  },
+  {
+    path: "/listusers",
+    component: ListUsers
+  },
+  {
+    path: "/adduser",
+    component: AddUser
   },
   {
     path: "/vendor/view/:id",
