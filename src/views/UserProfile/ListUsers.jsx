@@ -82,7 +82,7 @@ render(){
                 </CardHeader>
                 <CardBody>
                   <div>
-                  <Button color="twitter" >Add New User</Button>
+                  <Button color="twitter" to="/adduser" component={Link}>Add New User</Button>
                   </div>
                   <br/>
                   <ReactTable
