@@ -38,15 +38,15 @@ const styles = {
 class WorkReferences extends React.Component {
   state = {
     data:{
+      name:'',
+      phone:'',
+      address:'',
       coy_name:'',
       coy_address:'',
       contact_person:'',
       contact_designation:'',
       contact_email:'',
       contact_phone:'',
-      name:'',
-      phone:'',
-      address:'',
       email:''
     },
     redirect: false,
@@ -60,15 +60,13 @@ class WorkReferences extends React.Component {
     let re = /^[A-Za-z]+$/;
     return re.test(input);
 }
-isAlphanumeric(input){
-  let re = /^[a-z0-9]+$/i;
-    return re.test(input);
-}
+
 isPhoneNumber(input) {
-  if(!isNaN(input)  && (input.toString().length > 8 && input.toString().length < 12 )) {
-    return true
+  let re = /^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[\-\.\ \\\/]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?(\d+))?$/i
+  ;
+  return re.test(input);
 }
-}
+
 isNumber(input) {
   let re = /^[0-9]+$/;
   return re.test(input);
@@ -76,11 +74,6 @@ isNumber(input) {
 isEmail(input) {
     let re = /\S+@\S+\.\S+/;
     return re.test(input); 
-}
-isEmpty(input) {
-  if (input != ''){
-    return true
-  }
 }
 ValidURL(input) {
   var a  = document.createElement('a');
@@ -111,22 +104,22 @@ ValidURL(input) {
     this.props.vendor;
     //validate general_info
     const generalIinfo = this.props.vendor.general_info; 
-    if(!this.isAlphanumeric(generalIinfo.company_name)) {
+    if(!generalIinfo.company_name) {
       general_info_error_array.push("Company name is invalid");
     }
-    if(!this.isAlphanumeric(generalIinfo.reg_no)) {
+    if(!generalIinfo.reg_no) {
       general_info_error_array.push("reg number is invalid");
     }
-    if(!this.isEmpty(generalIinfo.office_address)) {
+    if(!generalIinfo.office_address) {
       general_info_error_array.push("office address is invalid");
     }
-    if(!this.isString(generalIinfo.city)) {
+    if(!generalIinfo.city) {
       general_info_error_array.push("city is invalid");
     }
-    if(!this.isString(generalIinfo.state)) {
+    if(!generalIinfo.state) {
       general_info_error_array.push("state is invalid");
     }
-    if(!this.isString(generalIinfo.country)) {
+    if(!generalIinfo.country) {
       general_info_error_array.push("country is invalid");
     }
     if(!this.isPhoneNumber(generalIinfo.coy_phone)) {
@@ -138,7 +131,7 @@ ValidURL(input) {
     if(!this.ValidURL(generalIinfo.website)) {
       general_info_error_array.push("website is invalid");
     }
-    if(!this.isString(generalIinfo.contact_name)) {
+    if(!generalIinfo.contact_name) {
       general_info_error_array.push("contact name is invalid");
     }
     if(!this.isString(generalIinfo.designation)) {
@@ -156,34 +149,37 @@ ValidURL(input) {
     if(!this.isNumber(businessInfo.year_established)) {
       business_info_error_array.push("year established is invalid");
     }
-   if(!this.isAlphanumeric(businessInfo.vat_no)) {
+   if(!businessInfo.vat_no) {
     business_info_error_array.push("VAT number is invalid");
     }
-    if(!this.isAlphanumeric(businessInfo.tax_no)) {
+    if(!businessInfo.employee_no) {
+      business_info_error_array.push("Employee number is invalid");
+      }
+    if(!businessInfo.tax_no) {
       business_info_error_array.push("tax number is invalid");
     }
-   if(!this.isAlphanumeric(businessInfo.product_related)) {
+   if(!this.isNumber(businessInfo.product_related)) {
     business_info_error_array.push("product related is invalid");
     }
-   if(!this.isAlphanumeric(businessInfo.service_related)) {
+   if(!this.isNumber(businessInfo.service_related)) {
     business_info_error_array.push("service related is invalid");
     }
   
     //validate bank details
     const bankDetail = this.props.vendor.bank_detail;
-    if(!this.isAlphanumeric(bankDetail.account_name)) {
+    if(!bankDetail.account_name) {
       bank_details_error_array.push("account name is invalid");
     }
     if(!this.isNumber(bankDetail.account_number)) {
       bank_details_error_array.push("account number is invalid");
     }
-    if(!this.isEmpty(bankDetail.bank)) {
+    if(!bankDetail.bank) {
       bank_details_error_array.push("bank is invalid");
     }
     if(!this.isNumber(bankDetail.sort_code)) {
       bank_details_error_array.push("sort code is invalid");
     }
-    if(!this.isAlphanumeric(bankDetail.branch)) {
+    if(!bankDetail.branch) {
       bank_details_error_array.push("branch is invalid");
     }
     if(!this.isPhoneNumber(bankDetail.contact_phone)) {
@@ -192,13 +188,13 @@ ValidURL(input) {
 
     //validate for 
     const workReference = this.state.data;
-    if(!this.isEmpty(workReference.coy_name)) {
+    if(!workReference.coy_name) {
       work_reference_error_array.push("company name is invalid");
     }
-    if(!this.isEmpty(workReference.coy_address)) {
+    if(!workReference.coy_address) {
       work_reference_error_array.push("company address is invalid");
     }
-    if(!this.isEmpty(workReference.contact_person)) {
+    if(!workReference.contact_person) {
       work_reference_error_array.push("contact person is invalid");
     }
     if(!this.isString(workReference.contact_designation)) {
@@ -210,10 +206,10 @@ ValidURL(input) {
     if(!this.isPhoneNumber(workReference.contact_phone)) {
       work_reference_error_array.push("contact telephone is invalid");
     }
-    if(!this.isEmpty(workReference.name)) {
+    if(!workReference.name) {
       work_reference_error_array.push("name is invalid");
     }
-    if(!this.isEmpty(workReference.address)) {
+    if(!workReference.address) {
       work_reference_error_array.push("address is invalid");
     }
     if(!this.isEmail(workReference.email)) {
@@ -259,7 +255,6 @@ else {
   }
 
   render() {
-    console.log("error_string" + this.state.error_string);
     const { classes } = this.props;
     return  (this.state.redirect)? 
     <Redirect to="/dashboard" /> 
