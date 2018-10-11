@@ -16,6 +16,8 @@ import RequestQuotation from "../views/RequestQuotation/index.js";
 import LoginPage from "../views/LoginPage/index.js";
 import DashboardPage from "../views/Dashboard/Dashboard.jsx";
 import UserProfile from "../views/UserProfile/UserProfile.jsx";
+import ListUsers from "../views/UserProfile/ListUsers.jsx";
+import AddUser from "../views/UserProfile/AddUser.jsx";
 import VendorList from "../views/Vendor/index.js";
 import AddVendor from "../views/Vendor/add.js";
 import ViewVendor from "../views/Vendor/view.js";
@@ -29,6 +31,8 @@ import Log from "../views/Log/index.js";
 import Registration from "../views/RegistrationPage/index.js";
 import Permission from "views/Roles/permission.js";
 import DashboardIcon from "@material-ui/icons/Dashboard";
+import ChangePassword from "../views/UserProfile/ChangePassword.jsx"
+
 /* import Typography from "views/Typography/Typography.jsx";
 import Icons from "views/Icons/Icons.jsx";
 import Maps from "views/Maps/Maps.jsx";
@@ -43,6 +47,14 @@ export const dashboardRoutes = [
    {
     path: "/user",
     component: UserProfile
+  },
+  {
+    path: "/listusers",
+    component: ListUsers
+  },
+  {
+    path: "/adduser",
+    component: AddUser
   },
   {
     path: "/vendor/view/:id",
@@ -78,7 +90,11 @@ export const dashboardRoutes = [
   {
     path: "/purchaseorder",
     component: PurchaseOrder
-  },
+  }, 
+  {
+    path: "/changepassword",
+    component: ChangePassword
+  }, 
   {
     path: "/log",
     component: Log

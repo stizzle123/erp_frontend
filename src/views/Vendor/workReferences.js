@@ -65,7 +65,7 @@ isAlphanumeric(input){
     return re.test(input);
 }
 isPhoneNumber(input) {
-  if(typeof input === 'number'&& (input.toString().length > 8 && input.toString().length < 12 )){
+  if(!isNaN(input)  && (input.toString().length > 8 && input.toString().length < 12 )) {
     return true
 }
 }
@@ -76,6 +76,11 @@ isNumber(input) {
 isEmail(input) {
     let re = /\S+@\S+\.\S+/;
     return re.test(input); 
+}
+isEmpty(input) {
+  if (input != ''){
+    return true
+  }
 }
 ValidURL(input) {
   var a  = document.createElement('a');
@@ -112,7 +117,7 @@ ValidURL(input) {
     if(!this.isAlphanumeric(generalIinfo.reg_no)) {
       general_info_error_array.push("reg number is invalid");
     }
-    if(!this.isAlphanumeric(generalIinfo.office_address)) {
+    if(!this.isEmpty(generalIinfo.office_address)) {
       general_info_error_array.push("office address is invalid");
     }
     if(!this.isString(generalIinfo.city)) {
@@ -148,9 +153,6 @@ ValidURL(input) {
 
     //validate business_info
     const businessInfo = this.props.vendor.business_info;
-    if(!this.isString(businessInfo.business_type)) {
-      business_info_error_array.push("business type is invalid");
-    }
     if(!this.isNumber(businessInfo.year_established)) {
       business_info_error_array.push("year established is invalid");
     }
@@ -175,7 +177,7 @@ ValidURL(input) {
     if(!this.isNumber(bankDetail.account_number)) {
       bank_details_error_array.push("account number is invalid");
     }
-    if(!this.isString(bankDetail.bank)) {
+    if(!this.isEmpty(bankDetail.bank)) {
       bank_details_error_array.push("bank is invalid");
     }
     if(!this.isNumber(bankDetail.sort_code)) {
@@ -190,13 +192,13 @@ ValidURL(input) {
 
     //validate for 
     const workReference = this.state.data;
-    if(!this.isAlphanumeric(workReference.coy_name)) {
-      work_reference_error_array.push("company is invalid");
+    if(!this.isEmpty(workReference.coy_name)) {
+      work_reference_error_array.push("company name is invalid");
     }
-    if(!this.isAlphanumeric(workReference.coy_address)) {
-      work_reference_error_array.push("company is invalid");
+    if(!this.isEmpty(workReference.coy_address)) {
+      work_reference_error_array.push("company address is invalid");
     }
-    if(!this.isString(workReference.contact_person)) {
+    if(!this.isEmpty(workReference.contact_person)) {
       work_reference_error_array.push("contact person is invalid");
     }
     if(!this.isString(workReference.contact_designation)) {
@@ -208,10 +210,10 @@ ValidURL(input) {
     if(!this.isPhoneNumber(workReference.contact_phone)) {
       work_reference_error_array.push("contact telephone is invalid");
     }
-    if(!this.isString(workReference.name)) {
+    if(!this.isEmpty(workReference.name)) {
       work_reference_error_array.push("name is invalid");
     }
-    if(!this.isString(workReference.address)) {
+    if(!this.isEmpty(workReference.address)) {
       work_reference_error_array.push("address is invalid");
     }
     if(!this.isEmail(workReference.email)) {

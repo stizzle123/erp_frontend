@@ -23,18 +23,20 @@ import { withStyles } from '@material-ui/core/styles';
 import Progress from "components/Progress/Progress.jsx";
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import SnackbarContent from "components/Snackbar/SnackbarContent.jsx";
-
+import * as userAction from "../../actions/user"
 import loginPageStyle from "assets/jss/material-dashboard-pro-react/views/loginPageStyle.jsx";
 import StateLoader from "middleware/stateLoader";
+import Notification from '../Notifications/Index.jsx'
 const stateLoader = new StateLoader();
 
-class LoginInfo extends React.Component {
+class ForgetPassword extends React.Component {
 
   state = {
-    data: {username:'', password:''},
+    data: {email:''},
 	 card: {
     minWidth:12,
-	 }
+   },
+   requestMessage: {}
   }
   handleChange = event => {
     let data = this.state.data;
@@ -47,20 +49,9 @@ class LoginInfo extends React.Component {
     stateLoader.unsetState();
   }
 
-  login = (e) => {
-    {{debugger}}
+  getEmail = (e) => {
     e.preventDefault();
-    this.setState({loading:true});
-    AclAuth.authenticate(this.state.data.username, this.state.data.password, (err,user,token) => {
-      this.setState({loading:false});
-      if(err) {
-        this.setState({showError:true});
-      return;
-      }
-      let u = user;
-      u.token = token;
-      this.props.dispatch({type: USER_LOGGED_IN, user: u});
-    })
+    this.props.requestReset(this);
   }
 
   render() {
@@ -75,11 +66,12 @@ class LoginInfo extends React.Component {
         <div className={classes.container}>
 		      <GridContainer justify="center">
             <GridItem xs={12} sm={8} md={4}>
-            <form onSubmit={this.login}>
+            <form onSubmit={this.getEmail}>
             <Progress loading={this.state.loading}/>
+            {(this.state.requestMessage.success == true)?<Notification error={false} message={this.state.requestMessage.message} />: ""}
               {(this.state.showError)?<SnackbarContent
                 message={
-                  'Invalid username and password, please try again'
+                  'Invalid email, please try again'
                 }
                 close
                 color="danger"
@@ -87,41 +79,28 @@ class LoginInfo extends React.Component {
               <Card>
                 <CardHeader color="primary" style={{background: "linear-gradient(60deg, #000, #000)"}}>
                    <center><img src={logo} /></center>
-		           </CardHeader>
+                  
+		        </CardHeader>
               <CardBody>
               <Grid container>
+              <h4>Forgot Password</h4>
 		            <GridItem xs={12} sm={12} md={12}>
-                  <CustomInput labelText="Username" id="username" required formControlProps={{
-                        fullWidth: true
-                              }} inputProps={{
-		                      endAdornment: (
-                              <InputAdornment position="end">
-                              <Face />
-                              </InputAdornment>
-                               ),
-		                      onChange: this.handleChange,
-		                          }}/>
-                </GridItem>
-                <GridItem xs={12} sm={12} md={12}>
-                      <CustomInput labelText="Password"  id="password" required formControlProps={{
-                             fullWidth: true
-                              }}
-                            inputProps={{
-						    endAdornment: (
-                              <InputAdornment position="end">
-                              <LockOutline />
-                              </InputAdornment>
-                               ),
-                            type:"password",
-                            onChange: this.handleChange,
-                                }}
-                        />
+                        <CustomInput labelText="Email you registered with" id="email" required formControlProps={{
+                            fullWidth: true
+                                }} inputProps={{
+                                endAdornment: (
+                                <InputAdornment position="end">
+                                <Face />
+                                </InputAdornment>
+                                ),
+                                onChange: this.handleChange,
+                                    }}/>
                     </GridItem>
                     <GridItem xs={12} sm={6} md={12}>
-                          <Button type="submit" color="primary" onClick={this.login}>Login</Button>
+                          <Button type="submit" color="primary">Submit</Button>
                         </GridItem>
                         <GridItem xs={12} sm={12} md={12}>
-                          <Link to="/register" >Are you a new Vendor? Click to create and account </Link>
+                            <Link to="/login" >Login</Link>
                         </GridItem>
 						        </Grid>
                   </CardBody>
@@ -129,9 +108,6 @@ class LoginInfo extends React.Component {
 					        <img src={logo2} />
 					        <CardFooter>
                     <Grid>
-                      <GridItem>
-				                <Link to="/forgotpassword" >Forgot Password?</Link>
-                      </GridItem>
 						        </Grid>
 					        </CardFooter>
 				        </Card>
@@ -154,4 +130,17 @@ function mapStateToProps(state) {
     redirectToReferrer: state.auth.redirectToReferrer
   };
 }
-export default connect(mapStateToProps, null)(withStyles(loginPageStyle)(LoginInfo));
+
+function mapDispatchToProps(dispatch) {
+  return {
+    requestReset(e){
+      let email = e.state.data.email;
+      userAction.submitPasswordResetRequest(email, (json)=>{
+        e.setState({requestMessage:json});
+        console.log(e.state.requestMessage);
+
+      });
+    }
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(loginPageStyle)(ForgetPassword));

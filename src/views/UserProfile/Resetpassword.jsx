@@ -23,15 +23,19 @@ import { withStyles } from '@material-ui/core/styles';
 import Progress from "components/Progress/Progress.jsx";
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import SnackbarContent from "components/Snackbar/SnackbarContent.jsx";
+import * as userAction from "../../actions/user"
 
 import loginPageStyle from "assets/jss/material-dashboard-pro-react/views/loginPageStyle.jsx";
 import StateLoader from "middleware/stateLoader";
+import Notification from '../Notifications/Index.jsx'
+
 const stateLoader = new StateLoader();
 
-class LoginInfo extends React.Component {
+class Resetpassword extends React.Component {
 
   state = {
-    data: {username:'', password:''},
+    data: {password:'', confirmPassword:''},
+    resetMessage: {},
 	 card: {
     minWidth:12,
 	 }
@@ -45,37 +49,28 @@ class LoginInfo extends React.Component {
   };
   componentDidMount(){
     stateLoader.unsetState();
+    userAction.checktoken(this.props.match.params.token, (json)=>{
+      this.setState({newData:json.tokenState});
+    });
   }
 
-  login = (e) => {
-    {{debugger}}
+  reset = (e) => {
     e.preventDefault();
-    this.setState({loading:true});
-    AclAuth.authenticate(this.state.data.username, this.state.data.password, (err,user,token) => {
-      this.setState({loading:false});
-      if(err) {
-        this.setState({showError:true});
-      return;
-      }
-      let u = user;
-      u.token = token;
-      this.props.dispatch({type: USER_LOGGED_IN, user: u});
-    })
+    this.props.resetThePassword(this);
+
   }
 
   render() {
-	  const { classes } = this.props;
-    const { from } = this.props.location.state || { from: { pathname: '/' }}
-    if (this.props.redirectToReferrer === true) {
-      //console.log(from);
-      return <Redirect to="/dashboard" />
+    const { classes } = this.props;
+    if (this.state.newData === false) {
+      return <Redirect to="/login" />
     }
       return (
         <div className={classes.content} style={{backgroundColor:'#082356', backgroundImage:"url(" + bg + ")", backgroundRepeat:"no-repeat"}}>
         <div className={classes.container}>
 		      <GridContainer justify="center">
             <GridItem xs={12} sm={8} md={4}>
-            <form onSubmit={this.login}>
+            {(this.state.resetMessage.success === true)?<Notification error={false} message={this.state.resetMessage.message} />: ""}
             <Progress loading={this.state.loading}/>
               {(this.state.showError)?<SnackbarContent
                 message={
@@ -84,25 +79,15 @@ class LoginInfo extends React.Component {
                 close
                 color="danger"
               /> : ""}
+               {(this.state.resetMessage.success === true)? <Card> <CardBody> <h2>Click <Link to="/login" >here</Link> to Login</h2></CardBody></Card>:
+            <form onSubmit={this.reset}>
               <Card>
                 <CardHeader color="primary" style={{background: "linear-gradient(60deg, #000, #000)"}}>
                    <center><img src={logo} /></center>
 		           </CardHeader>
               <CardBody>
               <Grid container>
-		            <GridItem xs={12} sm={12} md={12}>
-                  <CustomInput labelText="Username" id="username" required formControlProps={{
-                        fullWidth: true
-                              }} inputProps={{
-		                      endAdornment: (
-                              <InputAdornment position="end">
-                              <Face />
-                              </InputAdornment>
-                               ),
-		                      onChange: this.handleChange,
-		                          }}/>
-                </GridItem>
-                <GridItem xs={12} sm={12} md={12}>
+              <GridItem xs={12} sm={12} md={12}>
                       <CustomInput labelText="Password"  id="password" required formControlProps={{
                              fullWidth: true
                               }}
@@ -117,25 +102,34 @@ class LoginInfo extends React.Component {
                                 }}
                         />
                     </GridItem>
+                <GridItem xs={12} sm={12} md={12}>
+                      <CustomInput labelText="Confirm Password"  id="confirmPassword" required formControlProps={{
+                             fullWidth: true
+                              }}
+                            inputProps={{
+						    endAdornment: (
+                              <InputAdornment position="end">
+                              <LockOutline />
+                              </InputAdornment>
+                               ),
+                            type:"password",
+                            onChange: this.handleChange,
+                                }}
+                        />
+                    </GridItem>
                     <GridItem xs={12} sm={6} md={12}>
-                          <Button type="submit" color="primary" onClick={this.login}>Login</Button>
+                          <Button type="submit" color="primary" >Reset Password</Button>
                         </GridItem>
-                        <GridItem xs={12} sm={12} md={12}>
-                          <Link to="/register" >Are you a new Vendor? Click to create and account </Link>
-                        </GridItem>
+                    
 						        </Grid>
                   </CardBody>
                   <Progress loading={this.state.loading}/>
 					        <img src={logo2} />
 					        <CardFooter>
-                    <Grid>
-                      <GridItem>
-				                <Link to="/forgotpassword" >Forgot Password?</Link>
-                      </GridItem>
-						        </Grid>
+                 
 					        </CardFooter>
 				        </Card>
-            </form>
+            </form> }
           </GridItem>
         </GridContainer>
         </div>
@@ -154,4 +148,14 @@ function mapStateToProps(state) {
     redirectToReferrer: state.auth.redirectToReferrer
   };
 }
-export default connect(mapStateToProps, null)(withStyles(loginPageStyle)(LoginInfo));
+function mapDispatchToProps(dispatch) {
+    return {
+        resetThePassword(e){
+        let data = e.state.data;
+        userAction.resetPassword(data, e.props.match.params.token, (json)=>{
+          e.setState({resetMessage:json});
+        });
+      }
+    }
+  }
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(loginPageStyle)(Resetpassword));
