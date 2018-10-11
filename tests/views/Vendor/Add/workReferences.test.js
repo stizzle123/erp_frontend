@@ -1,5 +1,5 @@
 import React from 'react';
-import WorkReferences from '../workReferences';
+import WorkReferences from './../../../../src/views/Vendor/workReferences';
 import { shallow, mount, render, configure } from 'enzyme';
 import { Provider } from "react-redux";
 import configureMockStore from "redux-mock-store";
