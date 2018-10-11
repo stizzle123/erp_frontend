@@ -25,22 +25,35 @@ import CardIcon from "../../../components/Card/CardIcon.jsx";
 import CardBody from "../../../components/Card/CardBody.jsx";
 import CardFooter from "../../../components/Card/CardFooter.jsx";
 import Button from "../../../components/CustomButtons/Button.jsx";
-import * as vendorActions from 'actions/vendor';
+import * as vendorAction from '../../../actions/vendor'
 import {connect} from 'react-redux';
 
 import dashboardStyle from "../../../assets/jss/material-dashboard-pro-react/views/dashboardStyle.jsx";
+import generalInfo from "../../Vendor/generalInfo.js";
 
 class Iac extends React.Component {
   state = {
-    value: 0
+    value: 0,
+    pending:[],
+    approved: [],
+    blacklisted:[]
   };
 
   componentDidMount(){
-    vendorActions.findAllVendors(this.props, "pending");
+    vendorAction.findAllVendors(this.props, "pending");
+    vendorAction.findPendingVendorCount(this.props, (json)=>{
+      this.setState({pending:json});
+    });
+    vendorAction.findApprovedVendorCount(this.props, (json)=>{
+      this.setState({approved:json});
+    });
+    vendorAction.findBlacklistedVendorCount(this.props, (json)=>{
+      this.setState({blacklisted:json});
+    });
   }
   render() {
     const { classes } = this.props;
-    let data = this.props.data.dataRows.map((prop, key) => {
+    let data = this.state.pending.map((prop, key) => {
       return {
         id: key,
         companyname: prop[1],
@@ -62,7 +75,7 @@ class Iac extends React.Component {
               className="edit"
             >
                view
-            </Button>{" "}
+            </Button>
           </div>
         )
       };
@@ -76,7 +89,7 @@ class Iac extends React.Component {
                 <CardIcon color="info">
                   <ContentPaste />
                 </CardIcon>
-                <p className={classes.cardCategory}><h1>36</h1></p>
+                <p className={classes.cardCategory}><span>{this.state.pending.length}</span></p>
                 </CardHeader>
               <CardFooter stats>Pending Approvals</CardFooter>
             </Card>
@@ -88,7 +101,7 @@ class Iac extends React.Component {
                 <CardIcon color="warning">
                   <Person />
                 </CardIcon>
-                <p className={classes.cardCategory}><h1>620</h1></p>
+                <p className={classes.cardCategory}><span>{this.state.approved.length}</span></p>
                 </CardHeader>
               <CardFooter stats>Active Vendors</CardFooter>
             </Card>
@@ -100,7 +113,7 @@ class Iac extends React.Component {
                 <CardIcon color="warning">
                   <Cancel />
                 </CardIcon>
-                <p className={classes.cardCategory}><h1>15</h1></p>
+                <p className={classes.cardCategory}><span>{this.state.blacklisted.length}</span></p>
                 </CardHeader>
               <CardFooter stats>Blacklisted Vendors</CardFooter>
             </Card>
@@ -112,7 +125,7 @@ class Iac extends React.Component {
                 <CardIcon color="rose">
                   <DataUsage />
                 </CardIcon>
-                <p className={classes.cardCategory}><h1>87%</h1></p>
+                <p className={classes.cardCategory}><span>87%</span></p>
                 </CardHeader>
               <CardFooter stats>Overall Vendor Performance</CardFooter>
             </Card>
@@ -124,7 +137,7 @@ class Iac extends React.Component {
                 <CardIcon color="danger">
                   <Warning />
 		        </CardIcon>
-                <p className={classes.cardCategory}><h1>20%</h1></p>
+                <p className={classes.cardCategory}><span>20%</span></p>
                 </CardHeader>
               <CardFooter stats>Defect Rate</CardFooter>
             </Card>
@@ -136,7 +149,7 @@ class Iac extends React.Component {
                 <CardIcon color="success">
                  <AccessAlarms />
                 </CardIcon>
-               <p className={classes.cardCategory}><h1>85%</h1></p>
+               <p className={classes.cardCategory}><span>85%</span></p>
                </CardHeader>
               <CardFooter stats>On-time Supplies</CardFooter>
             </Card>
@@ -148,7 +161,7 @@ class Iac extends React.Component {
                 <CardIcon color="primary">
                   <Accessible />
                 </CardIcon>
-                <p className={classes.cardCategory}><h1>93%</h1></p>
+                <p className={classes.cardCategory}><span>93%</span></p>
                 </CardHeader>
               <CardFooter stats>Supplier Availability</CardFooter>
             </Card>

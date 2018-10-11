@@ -106,3 +106,36 @@ export function deleteVendor(props, user){
       console.log("the error" + e);
     })
 }
+
+export function findPendingVendorCount(props, callback){
+    let middleware = new MiddleWare(props.user.token);
+    middleware.makeConnection('/vendors/pending','GET').then((res)=>{
+        return res.json()
+    }).then((e)=>{
+      callback(e);
+    }).catch((e)=>{
+      console.log("the error" + e);
+    })
+}
+
+export function findApprovedVendorCount(props, callback){
+    let middleware = new MiddleWare(props.user.token);
+    middleware.makeConnection('/vendors/approved','GET').then((res)=>{
+        return res.json()
+    }).then((e)=>{
+      callback(e);
+    }).catch((e)=>{
+      console.log("the error" + e);
+    })
+}
+
+export function findBlacklistedVendorCount(props, callback){
+    let middleware = new MiddleWare(props.user.token);
+    middleware.makeConnection('/vendors/blacklisted','GET').then((res)=>{
+        return res.json()
+    }).then((e)=>{
+      callback(e);
+    }).catch((e)=>{
+      console.log("the error" + e);
+    })
+}
