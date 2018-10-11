@@ -109,6 +109,7 @@ class ListCrud extends React.Component {
                   >
                      <Close />
                   </Button>
+                  {(this.props.match.params.type == "roles")? <Link to={"/roles/permission/"+prop[0]} >Permission</Link>: ""}
                 </div>
               )
             };

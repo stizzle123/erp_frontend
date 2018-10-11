@@ -62,20 +62,23 @@ class AddCrud extends React.Component {
     render() {
       const { classes, data } = this.props;
       let field = this.state[this.props.match.params.type];
-      let additionalFields = field.map((f, key)=>{
-          return (
-            <GridItem xs={12} sm={12} md={6} key={key}>
-                <CustomInput labelText={Inflection.titleize(f)} id={f}
-                    formControlProps={{
-                    fullWidth: true
-                    }} inputProps={{
-                        onChange: (e)=>this.handleChange(e),
-                        value: this.state[f]
-                    }}
-                />
-            </GridItem>
-          )
-      });
+      let additionalFields = " ";
+      if(typeof field !== "undefined"){
+        additionalFields = field.map((f, key)=>{
+            return (
+                <GridItem xs={12} sm={12} md={6} key={key}>
+                    <CustomInput labelText={Inflection.titleize(f)} id={f}
+                        formControlProps={{
+                        fullWidth: true
+                        }} inputProps={{
+                            onChange: (e)=>this.handleChange(e),
+                            value: this.state[f]
+                        }}
+                    />
+                </GridItem>
+            )
+        });
+    }
       if(this.props.loader.loading){
         return (
           <div>
