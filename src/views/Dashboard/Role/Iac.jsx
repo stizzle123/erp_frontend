@@ -51,15 +51,41 @@ class Iac extends React.Component {
       this.setState({blacklisted:json});
     });
   }
+
+  processJson(responseJson){
+    let datas = [];
+    responseJson.map((row)=>{
+      if(typeof row.general_info !== "undefined"){
+          let arry = [];
+          arry.push(row._id, row.general_info.company_name, row.general_info.contact_name, row.general_info.contact_phone,
+          row.general_info.contact_email, row.classes);
+          datas.push(arry);
+        }
+    });
+
+  const dataTable = {
+    headerRow: ["Class","Company Name", "Contact Person", "Contact Telephone", "Contact Email", "Actions"],
+    footerRow: ["Class","Company Name", "Contact Person", "Contact Telephone", "Contact Email", "Actions"],
+    dataRows: datas}
+  return dataTable;
+}
+  
   render() {
     const { classes } = this.props;
-    let data = this.state.pending.map((prop, key) => {
-      return {
-        id: key,
-        companyname: prop[1],
-        contactperson: prop[2],
-        contacttelephone: prop[3],
-        contactemail: prop[4],
+    let vendors = {"dataRows":[]};
+    if(this.state.pending.length> 0){
+      vendors = this.processJson(this.state.pending);
+      console.log(vendors);
+      console.log(this.state.pending);
+    }
+    let data = vendors.dataRows.map((prop, key) => {
+        return {
+          id: key,
+          class: prop[6],
+          companyname: prop[1],
+          contactperson: prop[2],
+          contacttelephone: prop[3],
+          contactemail: prop[4],
         actions: (
           // we've added some custom button actions
           <div className="actions-right">
