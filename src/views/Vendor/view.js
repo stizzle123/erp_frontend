@@ -50,7 +50,6 @@ class View extends React.Component {
   }
 
   componentDidMount(){
-    {{debugger}}
     const vendorId = this.props.match.params.id;
     vendorActions.findVendorById(this.props, vendorId);
   }

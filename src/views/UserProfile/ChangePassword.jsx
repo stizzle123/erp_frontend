@@ -23,15 +23,20 @@ import { withStyles } from '@material-ui/core/styles';
 import Progress from "components/Progress/Progress.jsx";
 import GridContainer from "../../components/Grid/GridContainer.jsx";
 import SnackbarContent from "components/Snackbar/SnackbarContent.jsx";
+import * as userAction from "../../actions/user"
 
 import loginPageStyle from "assets/jss/material-dashboard-pro-react/views/loginPageStyle.jsx";
 import StateLoader from "middleware/stateLoader";
+import Notification from '../Notifications/Index.jsx'
+
 const stateLoader = new StateLoader();
 
-class LoginInfo extends React.Component {
+class ChangePassword extends React.Component {
 
   state = {
-    data: {username:'', password:''},
+    data: {oldPassword: '', password:'', confirmPassword:''},
+    resetMessage: {},
+    showNotif: '',
 	 card: {
     minWidth:12,
 	 }
@@ -46,63 +51,49 @@ class LoginInfo extends React.Component {
   componentDidMount(){
     stateLoader.unsetState();
   }
-
-  login = (e) => {
-    {{debugger}}
+  componentWillReceiveProps(nextProps, nextState) {
+    if (this.state.resetMessage != nextState.resetMessage) {
+        this.setState({showNotif: true});
+    }
+  }
+  changePassword = (e) => {
     e.preventDefault();
-    this.setState({loading:true});
-    AclAuth.authenticate(this.state.data.username, this.state.data.password, (err,user,token) => {
-      this.setState({loading:false});
-      if(err) {
-        this.setState({showError:true});
-      return;
-      }
-      let u = user;
-      u.token = token;
-      this.props.dispatch({type: USER_LOGGED_IN, user: u});
-    })
+    this.props.ChangeYourPassword(this);
+
   }
 
   render() {
-	  const { classes } = this.props;
-    const { from } = this.props.location.state || { from: { pathname: '/' }}
-    if (this.props.redirectToReferrer === true) {
-      //console.log(from);
-      return <Redirect to="/dashboard" />
-    }
+    const { classes } = this.props;
       return (
         <div className={classes.content} style={{backgroundColor:'#082356', backgroundImage:"url(" + bg + ")", backgroundRepeat:"no-repeat"}}>
         <div className={classes.container}>
 		      <GridContainer justify="center">
             <GridItem xs={12} sm={8} md={4}>
-            <form onSubmit={this.login}>
+            {(this.state.resetMessage)?<Notification error={false} message={this.state.resetMessage.message} />: ""}
             <Progress loading={this.state.loading}/>
-              {(this.state.showError)?<SnackbarContent
-                message={
-                  'Invalid username and password, please try again'
-                }
-                close
-                color="danger"
-              /> : ""}
+            <form onSubmit={this.changePassword}>
               <Card>
                 <CardHeader color="primary" style={{background: "linear-gradient(60deg, #000, #000)"}}>
                    <center><img src={logo} /></center>
 		           </CardHeader>
               <CardBody>
               <Grid container>
-		            <GridItem xs={12} sm={12} md={12}>
-                  <CustomInput labelText="Username" id="username" required formControlProps={{
-                        fullWidth: true
-                              }} inputProps={{
-		                      endAdornment: (
+              <GridItem xs={12} sm={12} md={12}>
+                      <CustomInput labelText="Current Password"  id="oldPassword" required formControlProps={{
+                             fullWidth: true
+                              }}
+                            inputProps={{
+						    endAdornment: (
                               <InputAdornment position="end">
-                              <Face />
+                              <LockOutline />
                               </InputAdornment>
                                ),
-		                      onChange: this.handleChange,
-		                          }}/>
-                </GridItem>
-                <GridItem xs={12} sm={12} md={12}>
+                            type:"password",
+                            onChange: this.handleChange,
+                                }}
+                        />
+                    </GridItem>
+              <GridItem xs={12} sm={12} md={12}>
                       <CustomInput labelText="Password"  id="password" required formControlProps={{
                              fullWidth: true
                               }}
@@ -117,25 +108,34 @@ class LoginInfo extends React.Component {
                                 }}
                         />
                     </GridItem>
+                <GridItem xs={12} sm={12} md={12}>
+                      <CustomInput labelText="Confirm Password"  id="confirmPassword" required formControlProps={{
+                             fullWidth: true
+                              }}
+                            inputProps={{
+						    endAdornment: (
+                              <InputAdornment position="end">
+                              <LockOutline />
+                              </InputAdornment>
+                               ),
+                            type:"password",
+                            onChange: this.handleChange,
+                                }}
+                        />
+                    </GridItem>
                     <GridItem xs={12} sm={6} md={12}>
-                          <Button type="submit" color="primary" onClick={this.login}>Login</Button>
+                          <Button type="submit" color="primary" >Reset Password</Button>
                         </GridItem>
-                        <GridItem xs={12} sm={12} md={12}>
-                          <Link to="/register" >Are you a new Vendor? Click to create and account </Link>
-                        </GridItem>
+                    
 						        </Grid>
                   </CardBody>
                   <Progress loading={this.state.loading}/>
 					        <img src={logo2} />
 					        <CardFooter>
-                    <Grid>
-                      <GridItem>
-				                <Link to="/forgotpassword" >Forgot Password?</Link>
-                      </GridItem>
-						        </Grid>
+                 
 					        </CardFooter>
 				        </Card>
-            </form>
+            </form> 
           </GridItem>
         </GridContainer>
         </div>
@@ -151,7 +151,20 @@ const style = {
 
 function mapStateToProps(state) {
   return {
-    redirectToReferrer: state.auth.redirectToReferrer
+    redirectToReferrer: state.auth.redirectToReferrer,
+    user: state.auth.user,
+
   };
 }
-export default connect(mapStateToProps, null)(withStyles(loginPageStyle)(LoginInfo));
+function mapDispatchToProps(dispatch) {
+    return {
+      ChangeYourPassword(e){
+        let data = e.state.data;
+        userAction.changePassword(data, e.props.user._id,  (json)=>{
+          e.setState({resetMessage:json});
+        });
+        console.log("the message"+e.state.resetMessage)
+      }
+    }
+  }
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(loginPageStyle)(ChangePassword));

@@ -25,6 +25,11 @@ import {connect} from 'react-redux';
 import regularFormsStyle from "assets/jss/material-dashboard-pro-react/views/regularFormsStyle.jsx";
 import tableStyle from "assets/jss/material-dashboard-pro-react/components/tableStyle.jsx";
 import generalStyle from "assets/jss/material-dashboard-pro-react/generalStyle.jsx";
+import DatePicker from 'react-datepicker';
+import * as genericActions from '../../actions/generic.js';
+import moment from 'moment';
+ 
+import 'react-datepicker/dist/react-datepicker.css';
 
 const styles = theme => ({
   ...tableStyle,
@@ -54,16 +59,19 @@ class PurchaseRequisition extends React.Component {
   state = {
     simpleSelect: "",
     type: '',
-    rowArray:[],
+    rowArray:[1,2],
     data:{
-      requisitiontype:'',
-      requestedby: this.props.user.fullname,
-      employeeid: "",
+      type:'',
+      requestedby: '',
+      eid: "",
       departmentname: "",
       chargeto: "",
-      dateneeded: ""
+      dateneeded: "",
+      status: 1
     },
-    lineItems:[]
+    lineItems:[],
+    startDate : moment(),
+    departments: [],
   };
 
 	handleChange = event => {
@@ -73,7 +81,20 @@ class PurchaseRequisition extends React.Component {
       data : data,
     });
 	};
-	
+  
+  handleDatePicker = date =>{
+    let data = this.state.data;
+    data["dateneeded"] = date;
+    this.setState({startDate: date});
+    this.setState({data: data});
+    this.toggleCalendar();
+  }
+
+  toggleCalendar = e=> {
+    e && e.preventDefault()
+    this.setState({isOpen: !this.state.isOpen})
+  }  
+
 	increaseRow = event=>{
 		let rowArray = this.state.rowArray;
 		rowArray.push(Date.now());
@@ -89,27 +110,57 @@ class PurchaseRequisition extends React.Component {
   handleLineItemChange= event =>{
     let lineItems = this.state.lineItems;
     this.state.rowArray.map((prop, key)=> {
+      key+1+"_"+category
+      key+1+"_"+itemdescription
+      key+1+"_"+quantity
+      key+1+"_"+unit
+    });
+  }
 
+  handleDepartmentChange= event =>{
+    let data = this.state.data;
+    data[[event.target.name]] = event.target.value;
+    data['chargeto'] = event.target.value;
+    this.setState({ 
+      data : data,
     });
   }
 
   handleSimple = event => {
-    this.setState({ [event.target.name]: event.target.value });
+    let data = this.state.data;
+    data['type'] = event.target.value 
+    this.setState({ data : data});
   };
-  componentDidMount(){
-    let tableArray = this.state.rowArray;
-    if( tableArray <= 2 ){
-      this.increaseRow();
-      this.increaseRow()
 
-    }
+  componentDidMount(){
+    let data = this.state.data;
+    data.requestedby = this.props.user.firstname +" "+ this.props.user.lastname
+    data.eid = this.props.user.eid ;
+
+    this.setState({ data : data});
+    genericActions.fetchAll("departments", (items)=>{
+      this.setState({departments : items});
+    });
   }
 
 
 
   render() {
     const { classes, tableHeaderColor } = this.props;
-    const today = new Date();
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+
+    if(dd<10) {
+        dd = '0'+dd
+    } 
+
+    if(mm<10) {
+        mm = '0'+mm
+    } 
+
+    today = mm + '/' + dd + '/' + yyyy;
   	const tableData = this.state.rowArray.map((prop, key)=> {
       return (
         <TableRow key={key}> 
@@ -118,7 +169,7 @@ class PurchaseRequisition extends React.Component {
             {key+1}
           </TableCell>
           <TableCell style={generalStyle.removeBorder}>
-              <CustomSelect labelText="Select" id={key+1+"category"} name="category" required
+              <CustomSelect labelText="Select" id={key+1+"_category"} name="category" required
                      onChange={(e)=>this.handleLineItemChange(e)}
                     formControlProps={{
                       style: {width:"130px",padding:"0", margin:"0"}              
@@ -136,20 +187,20 @@ class PurchaseRequisition extends React.Component {
               </CustomSelect>
           </TableCell>
           <TableCell className={classes.td}>
-                <CustomInput name="itemDescription" id={key+1+"itemdescription"} onChange={(e)=>this.handleLineItemChange(e)} required formControlProps={{  
+                <CustomInput name="itemDescription" id={key+1+"_itemdescription"} onChange={(e)=>this.handleLineItemChange(e)} required formControlProps={{  
                       style: {width:"300px", padding:"0", margin:"0"}              
            
                       }}
                     />
           </TableCell>
           <TableCell className={classes.td}>
-                <CustomInput name="quantity" id={key+1+"quantity"} onChange={(e)=>this.handleLineItemChange(e)} type="number" required formControlProps={{  
+                <CustomInput name="quantity" id={key+1+"_quantity"} onChange={(e)=>this.handleLineItemChange(e)} type="number" required formControlProps={{  
                       style: {width:"100px", padding:"0", margin:"0"}              
                     }}
                     />
           </TableCell>
           <TableCell className={classes.td}>
-                <CustomInput name="unit" id={key+1+"unit"} onChange={(e)=>this.handleLineItemChange(e)} type="number" required 
+                <CustomInput name="unit" id={key+1+"_unit"} onChange={(e)=>this.handleLineItemChange(e)} type="number" required 
                 formControlProps={{  
                       style: {width:"100px", padding:"0", margin:"0"}              
                     }}
@@ -161,7 +212,7 @@ class PurchaseRequisition extends React.Component {
     );
     let showVendorsName = false; 
 	  console.log(this.state);
-	if (this.state.simpleSelect === 'Contract'){
+	if (this.state.simpleSelect === 'Service'){
 		showVendorsName = true;
 	}else {
     showVendorsName = false;
@@ -174,17 +225,14 @@ class PurchaseRequisition extends React.Component {
 	        <Card>
           <CardHeader color="primary">
                 <h4 className={classes.cardTitleWhite}>Purchase Requisition</h4>
-
               </CardHeader>
               <CardBody>
               <Grid container>
-              <GridItem xs={12} sm={12} md={12} lg={12}>
+                <GridItem xs={12} sm={12} md={12} lg={12}>
                   <p style={generalStyle.text2}>Type of Requisition:</p>
-                  </GridItem>	
-
-                  <GridItem xs={12} sm={12} md={4}>
-
-                        <FormControl
+                </GridItem>	
+                <GridItem xs={12} sm={12} md={4}>
+                    <FormControl
                           fullWidth
                           className={classes.selectFormControl}
                         >
@@ -201,11 +249,11 @@ class PurchaseRequisition extends React.Component {
                             classes={{
                               select: classes.select
                             }}
-                            value={this.state.simpleSelect}
+                            value={this.state.data.type}
                             onChange={this.handleSimple}
                             inputProps={{
                               name: "simpleSelect",
-                              id: "simple-select"
+                              id: "type"
                             }}
                           >
                             <MenuItem
@@ -221,18 +269,18 @@ class PurchaseRequisition extends React.Component {
                                 root: classes.selectMenuItem,
                                 selected: classes.selectMenuItemSelected
                               }}
-                              value="Contract"
+                              value="Service"
                             >
-                              Contract
+                              Service
                             </MenuItem>
                             <MenuItem
                               classes={{
                                 root: classes.selectMenuItem,
                                 selected: classes.selectMenuItemSelected
                               }}
-                              value="Non-Contract"
+                              value="Product"
                             >
-                             Non-Contract
+                             Product
                             </MenuItem>                                                      
                           </Select>
                         </FormControl>
@@ -248,16 +296,16 @@ class PurchaseRequisition extends React.Component {
                         }}
                     inputProps={{ 
                       disabled: true,
-                      value:"Required: "                  
+                      value:"Required: "+ this.props.user.firstname +" "+ this.props.user.lastname                 
                         }}
                       />
                   </GridItem>
                   <GridItem xs={12} sm={12} md={4}> 
-                      <CustomInput labelText="Employee ID" id="employeeid"
+                      <CustomInput labelText="Employee ID" id="eid"
                         formControlProps={{
                           fullWidth: true
                         }} inputProps={{
-                          disabled: true, value: "Employee ID: "                 
+                          disabled: true, value: "Employee ID: " +this.props.user.eid                
                         }}
                       />
                   </GridItem>   
@@ -272,25 +320,53 @@ class PurchaseRequisition extends React.Component {
                       />
                   </GridItem>                   
                   <GridItem xs={12} sm={4} md={4}>
-                      <CustomInput labelText=" Department" id="departmentname" required
-                        formControlProps={{
-                        fullWidth: true,
-                        }}
-                      />
+                      <CustomSelect labelText="Select" id="departmentname" name="departmentname" required
+                            onChange={(e)=>this.handleDepartmentChange(e)}
+                            formControlProps={{
+                              style: {width:"130px",padding:"0", margin:"0"}              
+                            }} 
+                            value={this.state.data.departmentname}
+                            inputProps={{margin:"normal" }}
+                          style={{marginTop: "-3px",   borderBottomWidth:" 1px"
+                          }}
+                            >
+                                {this.state.departments.map(option => (
+                                  <MenuItem key={option.code} value={option.code} >
+                                    {option.name}
+                                  </MenuItem>
+                                ))}
+                      </CustomSelect>
                   </GridItem>
                   <GridItem xs={12} sm={4} md={4}>
                       <CustomInput labelText="Charge To" id="chargeto" required formControlProps={{
-                        fullWidth: true
+                        fullWidth: true, }} inputProps={{
+                            value: this.state.data.chargeto,
+                            disabled: true
                         }}
                       />
                   </GridItem>   
                   <GridItem xs={12} sm={4} md={4}>
-                      <CustomInput labelText="Date Needed" id="dateneeded" required formControlProps={{
-                      fullWidth: true
-                        }}
-                    inputProps={{                      
+                  <CustomInput labelText="Date Needed" required formControlProps={{
+                        fullWidth: true, }} 
+                        onFocus={this.toggleCalendar}
+                        inputProps={{
+                            value: this.state.startDate.format("DD-MM-YYYY"),
+                            onFocus: this.toggleCalendar
                         }}
                       />
+                      {
+                          this.state.isOpen && (
+                              <DatePicker
+                                  selected={this.state.startDate}
+                                  onChange={this.handleDatePicker}
+                                  showYearDropdown
+                                  dateFormatCalendar="MMMM"
+                                  scrollableYearDropdown
+                                  yearDropdownItemNumber={15}
+                                  withPortal
+                                  inline />
+                          )
+                      }
                   </GridItem>              
                   	{/* <GridItem xs={12} sm={8} md={8}>
                       <CustomInput labelText="Purpose Of Use" id="purpose" required formControlProps={{
@@ -305,7 +381,7 @@ class PurchaseRequisition extends React.Component {
                   <GridItem xs={12} sm={4} md={4}>
                       <CustomInput labelText="Ship Via" id="ship" required formControlProps={{
                         fullWidth: true
-                        }}
+                        }} inputProps={{ onChange:(e)=>{ this.handleChange(e)}}}
                       />
                   </GridItem> 
                   <GridItem xs={12} sm={4} md={4}>

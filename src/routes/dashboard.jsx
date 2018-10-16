@@ -16,15 +16,23 @@ import RequestQuotation from "../views/RequestQuotation/index.js";
 import LoginPage from "../views/LoginPage/index.js";
 import DashboardPage from "../views/Dashboard/Dashboard.jsx";
 import UserProfile from "../views/UserProfile/UserProfile.jsx";
+import ListUsers from "../views/UserProfile/ListUsers.jsx";
+import AddUser from "../views/UserProfile/AddUser.jsx";
 import VendorList from "../views/Vendor/index.js";
 import AddVendor from "../views/Vendor/add.js";
 import ViewVendor from "../views/Vendor/view.js";
 import PurchaseOrder from "../views/PurchaseOrder/index.js";
 import AddPurchaseRequisition from "../views/PurchaseRequisition/add.js";
 import ListPurchaseRequisition from "../views/PurchaseRequisition/index.js";
+import ListCrud from "../views/Crud/index.js";
+import AddCrud from "../views/Crud/add.js";
+import ViewCrud from "../views/Crud/add.js";
 import Log from "../views/Log/index.js";
 import Registration from "../views/RegistrationPage/index.js";
+import Permission from "views/Roles/permission.js";
 import DashboardIcon from "@material-ui/icons/Dashboard";
+import ChangePassword from "../views/UserProfile/ChangePassword.jsx"
+
 /* import Typography from "views/Typography/Typography.jsx";
 import Icons from "views/Icons/Icons.jsx";
 import Maps from "views/Maps/Maps.jsx";
@@ -39,6 +47,14 @@ export const dashboardRoutes = [
    {
     path: "/user",
     component: UserProfile
+  },
+  {
+    path: "/listusers",
+    component: ListUsers
+  },
+  {
+    path: "/adduser",
+    component: AddUser
   },
   {
     path: "/vendor/view/:id",
@@ -56,24 +72,44 @@ export const dashboardRoutes = [
     component: AddVendor
   },
   {
-    path: "/purchaserequisition/add",
+    path: "/roles/permission/:id",
+    component: Permission
+  },
+  {
+    path: "/requisition/add",
     component: AddPurchaseRequisition
   },
   {
-    path: "/RequestQuotation",
+    path: "/quotation",
     component: RequestQuotation
   },
   {
-    path: "/purchaserequisition",
+    path: "/requisition",
     component: ListPurchaseRequisition
   },
   {
-    path: "/PurchaseOrder",
+    path: "/purchaseorder",
     component: PurchaseOrder
+  }, 
+  {
+    path: "/changepassword",
+    component: ChangePassword
+  }, 
+  {
+    path: "/log",
+    component: Log
   },
   {
-    path: "/Log",
-    component: Log
+    path: "/crud/add/:type",
+    component: AddCrud
+  },
+  {
+    path: "/crud/view/:type/:id",
+    component: ViewCrud
+  },
+  {
+    path: "/crud/:type/",
+    component: ListCrud
   },
   { redirect: true, path: "/", to: "/dashboard", navbarName: "Redirect" }
 ];
@@ -141,22 +177,25 @@ export const AdminMenu = [
   icon: GridOn,
   views: [
     {
-      path: "/PurchaseRequisition",
+      path: "/requisition",
       name: "Purchase Requisition",
       mini: "PR",
-      component: ListPurchaseRequisition
+      component: ListPurchaseRequisition,
+      actions: ['add', 'edit', 'delete', 'admin_view']
     },
     {
-      path: "/RequestQuotation",
+      path: "/request_for_quotation",
       name: "Request for Quotation",
       mini: "RFQ",
-      component: RequestQuotation
+      component: RequestQuotation,
+      actions: ['add', 'edit', 'delete', 'admin_view' ]
     },
     {
-      path: "/PurchaseOrder",
+      path: "/purchase_order",
       name: "Purchase Order",
       mini: "PO",
-      component: PurchaseOrder
+      component: PurchaseOrder,
+      actions: ['add', 'edit', 'delete', 'admin_view']
     }]
   },
   {
@@ -170,7 +209,8 @@ export const AdminMenu = [
             path: "/vendor",
             name: "Vendors Mgt",
             mini: "VM",
-            component: VendorList
+            component: VendorList,
+            actions: ['add', 'edit','view', 'delete', 'admin_view' ]
           },
     ]
   }, 
@@ -196,46 +236,27 @@ export const AdminMenu = [
     ]
   },
  {
-   path: "/Log",
+   path: "/Setup",
+   collapse: true,
    name: "Setup",
    icon:  Settings,
-   component: Log
+   state: "openSetup",
+   views: [
+    {
+      path: "/crud/departments",
+      name: "Departments",
+      mini: "D",
+      component: ListCrud,
+      actions: ['add', 'edit','view', 'delete' ]
+    },{
+      path: "/crud/roles",
+      name: "Roles",
+      mini: "R",
+      component: ListCrud,
+      actions: ['add', 'edit','view', 'delete']
+    }
+  ]
  },
 ];
 
-export const IacMenu = [
-  {
-    path: "/dashboard",
-    name: "Dashboard",
-    icon: HomeIcon,
-  },
-  {
-    path: "/vendor/type/approved",
-    name: "Approved Vendors",
-    icon: GridOn,
-  },{
-    path: "/vendor/type/pending",
-    name: "Pending Approval",
-    icon: GridOn,
-  },{
-    path: "/vendor/type/blacklisted",
-    name: "Blacklisted Vendors",
-    icon: GridOn,
-  },
-];
 
-export const StaffMenu = [
-  {
-    path: "/dashboard",
-    name: "Dashboard",
-    icon: HomeIcon,
-  }
-];
-
-export const VendorMenu = [
-  {
-    path: "/dashboard",
-    name: "Dashboard",
-    icon: HomeIcon,
-  },
-];
