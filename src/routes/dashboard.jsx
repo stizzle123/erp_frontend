@@ -49,11 +49,11 @@ export const dashboardRoutes = [
     component: UserProfile
   },
   {
-    path: "/listusers",
+    path: "/user/index",
     component: ListUsers
   },
   {
-    path: "/adduser",
+    path: "/user/add",
     component: AddUser
   },
   {
@@ -253,6 +253,13 @@ export const AdminMenu = [
       name: "Roles",
       mini: "R",
       component: ListCrud,
+      actions: ['add', 'edit','view', 'delete']
+    },
+    {
+      path: "/user/index",
+      name: "Users",
+      mini: "U",
+      component: ListUsers,
       actions: ['add', 'edit','view', 'delete']
     }
   ]

@@ -55,13 +55,13 @@ componentDidMount(){
    userAction.findAllStaff(this.props, (json)=>{
     this.setState({users:json});
   });
+  
 }
 
 render(){
     console.log(this.state.users);
     const { classes } = this.props;
     let userData = this.state.users.map((data, key) => {
-      {{debugger}}
       return {
         id: key,
         firstname: data["firstname"],
@@ -82,7 +82,7 @@ render(){
                 </CardHeader>
                 <CardBody>
                   <div>
-                  <Button color="twitter" to="/adduser" component={Link}>Add New User</Button>
+                  <Button color="twitter" to="/user/add" component={Link}>Add New User</Button>
                   </div>
                   <br/>
                   <ReactTable

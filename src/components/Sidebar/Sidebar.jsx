@@ -246,6 +246,7 @@ class Sidebar extends React.Component {
           // if(this.state.permissions.indexOf(prop.path) == -1) {
           //   return
           // }
+          
           if (prop.collapse) {
             const navLinkClasses =
               classes.itemLink +

@@ -12,16 +12,13 @@ import dashboardStyle from "../../assets/jss/material-dashboard-pro-react/views/
 class Dashboard extends React.Component {
 
   render() {
-    if(this.props.user.role === "admin"){
+    //if(this.props.user.role === "admin"){
       return (<Admin />);
-    } else if (this.props.user.role === "vendor"){
+    /* } else if (this.props.user.role === "vendor"){
       return <Vendor />
     } else if (this.props.user.role === "iac"){
       return <Iac />
-    }
-   else if (this.props.user.role === "staff"){
-    return <Staff />
-    }
+    } */
   }
 }
 
