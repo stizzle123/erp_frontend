@@ -108,7 +108,7 @@ render(){
               </CardIcon>
               <h4 className={classes.cardIconTitle}>Purchase Requisition Records</h4>
               <div style={generalStyle.mt3}>
-                <Link to="/purchaserequisition/add">
+                <Link to="/requisition/add">
                 Create New
                 </Link>
               </div>

@@ -2,8 +2,8 @@ import * as loadAction from './loading';
 import MiddleWare from "../middleware/api";
 
 
-export function fetchAll(type, callback){
-    let m = new MiddleWare();
+export function fetchAll(type, token, callback){
+    let m = new MiddleWare(token);
     return m.makeConnection('/'+type+'/', m.GET).then((response) => {
         return response.json()
     }).then(        
@@ -13,8 +13,8 @@ export function fetchAll(type, callback){
     );
 }
 
-export function saveItem(type, data, callback){
-    let m = new MiddleWare();
+export function saveItem(type, token, data, callback){
+    let m = new MiddleWare(token);
     return m.makeConnection('/'+type+'/add/', m.POST, data).then((result) => {
         (result)=>{
             if(result.ok && result.statusText == "OK" && result.status == 200 )         
@@ -23,8 +23,8 @@ export function saveItem(type, data, callback){
     });   
 }
 
-export function deleteItem(type, id, callback){ 
-    let m = new MiddleWare();
+export function deleteItem(type, token, id, callback){ 
+    let m = new MiddleWare(token);
     return m.makeConnection('/'+type+'/delete/', m.DELETE , {id:id}).then((result) => {
         (result)=>{
             if(result.ok && result.statusText == "OK" && result.status == 200 )         

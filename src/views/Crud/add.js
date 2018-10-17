@@ -30,7 +30,8 @@ class AddCrud extends React.Component {
         super(props)
         this.props = props;
         this.state = {
-            departments : ['code'],
+            departments : ['code', 'slug'],
+            roles: ['slug'],
             data:{
                 name:'',
             }
@@ -39,7 +40,6 @@ class AddCrud extends React.Component {
     }
 
     handleChange = e => {
-        {{debugger}}
         let data = this.state.data;
         data[[e.target.id]] = e.target.value; 
         this.setState({ 
@@ -48,8 +48,7 @@ class AddCrud extends React.Component {
     }
 
     handleSubmit = e => {
-        {{debugger}}
-        genericActions.saveItem(this.props.match.params.type, this.state.data, function(isOk){
+        genericActions.saveItem(this.props.match.params.type, this.props.user.token, this.state.data, function(isOk){
             if(isOk) this.setState({data: {}});
             else alert("Couldn't submit an error occur");
         });

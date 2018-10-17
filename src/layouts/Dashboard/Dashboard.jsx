@@ -71,13 +71,9 @@ class App extends React.Component {
   render() {
     const { classes, ...rest } = this.props;
     let menu = [];
-    if(this.props.user.role === "admin"){
+    //if(this.props.user.role === "admin"){
       menu = AdminMenu;
-    } else if (this.props.user.role === "vendor"){
-      menu = VendorMenu;
-    }else if(this.props.user.role === "iac"){
-      menu =  IacMenu;
-    }
+    //} 
     const mainPanel =
       classes.mainPanel +
       " " +

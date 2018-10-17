@@ -55,6 +55,11 @@ const categories = [
   {value: '3',label: 'Category 3',}
 ];
 
+const shipvia = [
+  {slug: 'lagos', name:'Lagos Office'},
+  {slug: 'portharcourt', name:'Port-Harcourt'}
+]
+
 class PurchaseRequisition extends React.Component {
   state = {
     simpleSelect: "",
@@ -82,6 +87,7 @@ class PurchaseRequisition extends React.Component {
     });
 	};
   
+
   handleDatePicker = date =>{
     let data = this.state.data;
     data["dateneeded"] = date;
@@ -107,20 +113,27 @@ class PurchaseRequisition extends React.Component {
 		this.setState({rowArray:rowArray})
   }
 
-  handleLineItemChange= event =>{
+  handleLineItemChange= i=>event =>{
     let lineItems = this.state.lineItems;
-    this.state.rowArray.map((prop, key)=> {
-      key+1+"_"+category
-      key+1+"_"+itemdescription
-      key+1+"_"+quantity
-      key+1+"_"+unit
+    let lineItemsKey;
+    if(lineItems[i]){
+      lineItemsKey = lineItems[i];
+    }else{
+      lineItemsKey = {};
+    } 
+    lineItemsKey[[event.target.name]] = event.target.value;
+    lineItems[i] = lineItemsKey;
+    this.setState({
+      lineItems : lineItems
     });
   }
 
-  handleDepartmentChange= event =>{
+  handleSelectItem = event =>{
     let data = this.state.data;
     data[[event.target.name]] = event.target.value;
-    data['chargeto'] = event.target.value;
+    if(event.target.name == "departmentname"){
+      data['chargeto'] = event.target.value;
+    }
     this.setState({ 
       data : data,
     });
@@ -132,13 +145,22 @@ class PurchaseRequisition extends React.Component {
     this.setState({ data : data});
   };
 
+  handleSubmitForm = e=>{
+    console.log(this.state);
+  }
+
+  handleSaveForm = e=>{
+    
+  }
+
   componentDidMount(){
     let data = this.state.data;
+    data.requestor = this.props.user._id;
     data.requestedby = this.props.user.firstname +" "+ this.props.user.lastname
     data.eid = this.props.user.eid ;
 
     this.setState({ data : data});
-    genericActions.fetchAll("departments", (items)=>{
+    genericActions.fetchAll("departments", this.props.user.token, (items)=>{
       this.setState({departments : items});
     });
   }
@@ -162,15 +184,24 @@ class PurchaseRequisition extends React.Component {
 
     today = mm + '/' + dd + '/' + yyyy;
   	const tableData = this.state.rowArray.map((prop, key)=> {
+
+      let value;
+      if(this.state.lineItems[key]){
+        value = this.state.lineItems[key];
+        {{debugger}}
+      }
+      else{
+        value = {};
+      }
       return (
         <TableRow key={key}> 
           <TableCell component="th" style={{border: "none", padding: "0", width: "20px", textAlign: "center"}}>               
-            
             {key+1}
           </TableCell>
           <TableCell style={generalStyle.removeBorder}>
-              <CustomSelect labelText="Select" id={key+1+"_category"} name="category" required
-                     onChange={(e)=>this.handleLineItemChange(e)}
+              <CustomSelect labelText="Select" id="category" name="category" required
+                     onChange={this.handleLineItemChange(key)}
+                     value={value.category}
                     formControlProps={{
                       style: {width:"130px",padding:"0", margin:"0"}              
                     }} 
@@ -187,23 +218,28 @@ class PurchaseRequisition extends React.Component {
               </CustomSelect>
           </TableCell>
           <TableCell className={classes.td}>
-                <CustomInput name="itemDescription" id={key+1+"_itemdescription"} onChange={(e)=>this.handleLineItemChange(e)} required formControlProps={{  
-                      style: {width:"300px", padding:"0", margin:"0"}              
-           
-                      }}
+                <CustomInput id="itemdescription" 
+                required 
+                    formControlProps={{  
+                      style: {width:"300px", padding:"0", margin:"0"}
+                      }} 
+                    inputProps={{ name:"itemdescription", onChange: this.handleLineItemChange(key), value:value.itemdescription }}
                     />
           </TableCell>
           <TableCell className={classes.td}>
-                <CustomInput name="quantity" id={key+1+"_quantity"} onChange={(e)=>this.handleLineItemChange(e)} type="number" required formControlProps={{  
+                <CustomInput  id="quantity" type="number" required formControlProps={{  
                       style: {width:"100px", padding:"0", margin:"0"}              
-                    }}
+                    }}  inputProps={{name:"quantity", onChange: this.handleLineItemChange(key),value:value.quantity}}
                     />
           </TableCell>
           <TableCell className={classes.td}>
-                <CustomInput name="unit" id={key+1+"_unit"} onChange={(e)=>this.handleLineItemChange(e)} type="number" required 
-                formControlProps={{  
-                      style: {width:"100px", padding:"0", margin:"0"}              
-                    }}
+                <CustomInput name="unit" id="unit" type="number" required 
+                    formControlProps={{  
+                      style: {width:"100px", padding:"0", margin:"0"},  
+                      name: "unit"            
+                    }}  
+                    inputProps={{onChange: this.handleLineItemChange(key), 
+                      value:value.unit , name:"unit" }}
                   />
                   
           </TableCell>      
@@ -211,7 +247,6 @@ class PurchaseRequisition extends React.Component {
         )}
     );
     let showVendorsName = false; 
-	  console.log(this.state);
 	if (this.state.simpleSelect === 'Service'){
 		showVendorsName = true;
 	}else {
@@ -320,8 +355,8 @@ class PurchaseRequisition extends React.Component {
                       />
                   </GridItem>                   
                   <GridItem xs={12} sm={4} md={4}>
-                      <CustomSelect labelText="Select" id="departmentname" name="departmentname" required
-                            onChange={(e)=>this.handleDepartmentChange(e)}
+                      <CustomSelect labelText="Select" id="department" name="department" required
+                            onChange={(e)=>this.handleSelectItem(e)}
                             formControlProps={{
                               style: {width:"130px",padding:"0", margin:"0"}              
                             }} 
@@ -331,7 +366,7 @@ class PurchaseRequisition extends React.Component {
                           }}
                             >
                                 {this.state.departments.map(option => (
-                                  <MenuItem key={option.code} value={option.code} >
+                                  <MenuItem key={option._id} value={option._id} >
                                     {option.name}
                                   </MenuItem>
                                 ))}
@@ -379,10 +414,22 @@ class PurchaseRequisition extends React.Component {
                   </GridItem>  */}          
             
                   <GridItem xs={12} sm={4} md={4}>
-                      <CustomInput labelText="Ship Via" id="ship" required formControlProps={{
-                        fullWidth: true
-                        }} inputProps={{ onChange:(e)=>{ this.handleChange(e)}}}
-                      />
+                      <CustomSelect labelText="Ship Via" name="ship" required
+                            onChange={(e)=>this.handleSelectItem(e)}
+                            formControlProps={{
+                              style: {width:"130px",padding:"0", margin:"0"}              
+                            }} 
+                            value={this.state.data.ship}
+                            inputProps={{margin:"normal",  id:"ship" }}
+                          style={{marginTop: "-3px",   borderBottomWidth:" 1px"
+                          }}
+                            >
+                                {shipvia.map(option => (
+                                  <MenuItem key={option.slug} value={option.slug} >
+                                    {option.name}
+                                  </MenuItem>
+                                ))}
+                      </CustomSelect>
                   </GridItem> 
                   <GridItem xs={12} sm={4} md={4}>
                       <CustomInput labelText="Status" id="status" required formControlProps={{
@@ -436,10 +483,10 @@ class PurchaseRequisition extends React.Component {
               <CardFooter>
               <Grid container>
                 <GridItem xs={12} sm={6} md={2} additionalclass={classes.removeDivPadding} >
-                  <Button color="primary" onClick={this.handleGeneralInfoSave}>Save</Button>
+                  <Button color="primary" onClick={this.handleSaveForm}>Save</Button>
                 </GridItem>
                 <GridItem xs={12} sm={12} md={2}>
-                  <Button color="yellowgreen">Submit</Button>
+                  <Button color="yellowgreen"  onClick={this.handleSubmitForm}>Submit</Button>
                 </GridItem>
               </Grid>
             </CardFooter>

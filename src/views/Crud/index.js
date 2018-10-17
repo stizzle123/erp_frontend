@@ -42,7 +42,7 @@ class ListCrud extends React.Component {
     }
 
     componentDidMount() {
-        genericActions.fetchAll(this.props.match.params.type, (items)=>{
+        genericActions.fetchAll(this.props.match.params.type, this.props.user.token, (items)=>{
             this.setState({data : items});
         });
       }
@@ -96,7 +96,7 @@ class ListCrud extends React.Component {
                         var data = this.state.data;
                         data.find((o, i) => {
                             if (i === key) {
-                                genericActions.deleteItem(this.props.match.params.type, o._id);
+                                genericActions.deleteItem(this.props, o._id);
                                 data.splice(i, 1);
                                 return true;
                             }
