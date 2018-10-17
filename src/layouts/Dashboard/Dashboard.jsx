@@ -35,7 +35,8 @@ var ps;
 class App extends React.Component {
   state = {
     mobileOpen: false,
-    miniActive: false
+    miniActive: false,
+    permissions: []
   };
   handleDrawerToggle = () => {
     this.setState({ mobileOpen: !this.state.mobileOpen });
@@ -51,7 +52,9 @@ class App extends React.Component {
       });
       document.body.style.overflow = "hidden";
     }
+
   }
+  
   componentWillUnmount() {
     if (navigator.platform.indexOf("Win") > -1) {
       ps.destroy();
@@ -69,6 +72,7 @@ class App extends React.Component {
     this.setState({ miniActive: !this.state.miniActive });
   }
   render() {
+
     const { classes, ...rest } = this.props;
     let menu = [];
     if(this.props.user.role === "admin"){
@@ -93,6 +97,7 @@ class App extends React.Component {
       <div className={classes.wrapper}>
         <Sidebar
           routes={menu}
+          tip={this.state.permissions}
           logoText={""}
           logo={logo}
           image={image}

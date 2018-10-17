@@ -23,3 +23,18 @@ export function savePermission(props, state, callback){
         if(result.ok && result.statusText == "OK" && result.status == 200 ) callback(result.ok);
     }); 
 }
+
+export function resolvePermission(props, role, callback){
+    let middleware = new MiddleWare(props.user.token);
+    let data = {};
+    data.role =  role;
+    console.log(data);
+    return middleware.makeConnection('/roles/resolvepermission/', 'POST', data).then((response) => {
+        return response.json()
+    }).then(        
+        (responseJson)=>{
+            callback(responseJson);
+            props.dispatch(loadAction.LoadingSuccess());
+        }
+    );
+}

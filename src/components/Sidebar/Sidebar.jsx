@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import PerfectScrollbar from "perfect-scrollbar";
 import { NavLink } from "react-router-dom";
 import cx from "classnames";
+import * as roleAction from "../../actions/role";
 
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -43,6 +44,7 @@ class SidebarWrapper extends React.Component {
       ps.destroy();
     }
   }
+
   render() {
     const { className, user, headerLinks, links } = this.props;
     return (
@@ -65,7 +67,8 @@ class Sidebar extends React.Component {
       openTables: this.activeRoute("/tables"),
       openMaps: this.activeRoute("/maps"),
       openPages: this.activeRoute("-page"),
-      miniActive: true
+      miniActive: true,
+      permissions: [],
     };
     this.activeRoute.bind(this);
   }
@@ -78,6 +81,14 @@ class Sidebar extends React.Component {
     st[collapse] = !this.state[collapse];
     this.setState(st);
   }
+  componentWillMount() {
+    roleAction.resolvePermission(this.props, this.props.user.role, (json)=>{
+      this.setState({permissions:json});
+      console.log(this.state.permissions)
+    });
+
+  } 
+
   render() {
     const {
       classes,
@@ -232,6 +243,9 @@ class Sidebar extends React.Component {
           if (prop.redirect) {
             return null;
           }
+          // if(this.state.permissions.indexOf(prop.path) == -1) {
+          //   return
+          // }
           if (prop.collapse) {
             const navLinkClasses =
               classes.itemLink +
