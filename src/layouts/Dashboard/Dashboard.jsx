@@ -14,7 +14,7 @@ import Header from "components/Header/Header.jsx";
 import Footer from "components/Footer/Footer.jsx";
 import Sidebar from "components/Sidebar/Sidebar.jsx";
 import {connect} from 'react-redux';
-import {dashboardRoutes, AdminMenu, VendorMenu, IacMenu} from "routes/dashboard.jsx";
+import {dashboardRoutes, StaffMenu, AdminMenu, VendorMenu, IacMenu} from "routes/dashboard.jsx";
 import dashboardStyle from "assets/jss/material-dashboard-pro-react/layouts/dashboardStyle.jsx";
 import image from "assets/img/sidebars.png";
 import logo from "assets/img/logo.png";

@@ -314,13 +314,13 @@ class PurchaseOrder extends React.Component {
                   </div>
                   <div style ={{ overflowX: "scroll"}}>
                   <Table> 
-                    <TableHead  className={classes[tableHeaderColor + "TableHeader"]} style={{marginTop:"10px", color:"blue", borderBottomColor:"#333",borderBottomStyle:"solid", borderBottomWidth:"1px"}}>
+                    <TableHead  className={classes[tableHeaderColor + "TableHeader"]} style={{marginTop:"10px", color:"#1b4aa5", borderBottomColor:"#333",borderBottomStyle:"solid", borderBottomWidth:"1px"}}>
                       <TableRow>
-                        <TableCell className={classes.tableCell + " " + classes.tableHeadCell+" "+classes.td} style={{color: "blue", width:"55px"}}>Item No</TableCell>
-                        <TableCell className={classes.tableCell + " " + classes.tableHeadCell+" "+classes.td} style={{color: "blue"}}>Category</TableCell>
-                        <TableCell className={classes.tableCell + " " + classes.tableHeadCell+" "+classes.td} style={{color: "blue"}}>Item Description</TableCell>
-                        <TableCell className={classes.tableCell + " " + classes.tableHeadCell+" "+classes.td} style={{color: "blue", width: "70px"}}>Quantity</TableCell>
-                        <TableCell className={classes.tableCell + " " + classes.tableHeadCell+" "+classes.td} style={{color: "blue"}}>Unit</TableCell>
+                        <TableCell className={classes.tableCell + " " + classes.tableHeadCell+" "+classes.td} style={{color: "#1b4aa5", width:"55px"}}>Item No</TableCell>
+                        <TableCell className={classes.tableCell + " " + classes.tableHeadCell+" "+classes.td} style={{color: "#1b4aa5"}}>Category</TableCell>
+                        <TableCell className={classes.tableCell + " " + classes.tableHeadCell+" "+classes.td} style={{color: "#1b4aa5"}}>Item Description</TableCell>
+                        <TableCell className={classes.tableCell + " " + classes.tableHeadCell+" "+classes.td} style={{color: "#1b4aa5", width: "70px"}}>Quantity</TableCell>
+                        <TableCell className={classes.tableCell + " " + classes.tableHeadCell+" "+classes.td} style={{color: "#1b4aa5"}}>Unit</TableCell>
                       </TableRow>
                     </TableHead>
                     <div ></div>
@@ -388,7 +388,7 @@ class PurchaseOrder extends React.Component {
                </GridItem>
               </Grid>
               <div style={generalStyle.resultSection}>
-              <span style={{color:"blue", fontWeight:"700", margin:"7px"}}>Total:</span> 
+              <span style={{color:"#1b4aa5", fontWeight:"700", margin:"7px"}}>Total:</span> 
               </div>
               </CardBody>
               <CardFooter>

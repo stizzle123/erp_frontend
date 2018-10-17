@@ -1,6 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 import PropTypes from "prop-types";
+import { Link } from 'react-router-dom';
 ///import { Manager, Target, Popper } from "react-popper";
 
 // @material-ui/core components
@@ -217,6 +218,8 @@ class HeaderLinks extends React.Component {
           muiClasses={{
             label: rtlActive ? classes.labelRTL : ""
           }}
+          to="/user"
+          component={Link}
         >
           <Person
             className={
@@ -225,7 +228,7 @@ class HeaderLinks extends React.Component {
               (rtlActive
                 ? classes.links + " " + classes.linksRTL
                 : classes.links)
-            }
+            } 
           />
           <Hidden mdUp>
             <span className={classes.linkText}>

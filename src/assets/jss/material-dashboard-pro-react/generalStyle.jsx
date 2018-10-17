@@ -53,7 +53,7 @@ const generalStyle = {
         marginTop: "30px"
     },
     text2: {
-        color: "blue",
+        color: "#1b4aa5",
         marginTop: "30px",
         fontWeight: "700"
 
