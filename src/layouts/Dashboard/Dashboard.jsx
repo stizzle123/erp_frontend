@@ -14,7 +14,7 @@ import Header from "components/Header/Header.jsx";
 import Footer from "components/Footer/Footer.jsx";
 import Sidebar from "components/Sidebar/Sidebar.jsx";
 import {connect} from 'react-redux';
-import {dashboardRoutes, StaffMenu, AdminMenu, VendorMenu, IacMenu} from "routes/dashboard.jsx";
+import {dashboardRoutes, StaffMenu, AdminMenu, PpmMenu, VendorMenu, IacMenu} from "routes/dashboard.jsx";
 import dashboardStyle from "assets/jss/material-dashboard-pro-react/layouts/dashboardStyle.jsx";
 import image from "assets/img/sidebars.png";
 import logo from "assets/img/logo.png";
@@ -72,12 +72,7 @@ class App extends React.Component {
     this.setState({ miniActive: !this.state.miniActive });
   }
   render() {
-
-    const { classes, ...rest } = this.props;
-    let menu = [];
-    //if(this.props.user.role === "admin"){
-      menu = AdminMenu;
-    //} 
+    const { classes, ...rest } = this.props;     
     const mainPanel =
       classes.mainPanel +
       " " +
@@ -89,7 +84,7 @@ class App extends React.Component {
     return (
       <div className={classes.wrapper}>
         <Sidebar
-          routes={menu}
+          routes={AdminMenu}
           tip={this.state.permissions}
           logoText={""}
           logo={logo}

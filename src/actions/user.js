@@ -1,12 +1,12 @@
 import { USER_LOGIN, USER_LOGOUT } from './index';
 import MiddleWare from "../middleware/api";
 
-export function getProfileDetails(id){
-    let middleware = new MiddleWare();
-    let data = {};
-        data.id = id;
-    middleware.makeConnection('/users/getprofiledetails/'+data,'GET').then((response) => {
+export function getProfileDetails(props, id, callback){
+    let middleware = new MiddleWare(props.user.token);
+    middleware.makeConnection('/users/getprofiledetails/'+id,'GET').then((response) => {
           return response.json();
+    }).then((e)=>{
+      callback(e);
     }).catch((e)=>{
         console.log(e);
       })

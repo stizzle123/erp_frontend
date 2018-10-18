@@ -83,8 +83,7 @@ class Sidebar extends React.Component {
   }
   componentWillMount() {
     roleAction.resolvePermission(this.props, this.props.user.role, (json)=>{
-      this.setState({permissions:json});
-      console.log(this.state.permissions)
+      this.setState({permissions:json[0].permission});
     });
 
   } 
@@ -243,10 +242,9 @@ class Sidebar extends React.Component {
           if (prop.redirect) {
             return null;
           }
-          // if(this.state.permissions.indexOf(prop.path) == -1) {
-          //   return
-          // }
-          
+          if(this.state.permissions.indexOf(prop.path) === -1) {
+            return
+          }
           if (prop.collapse) {
             const navLinkClasses =
               classes.itemLink +
@@ -316,6 +314,9 @@ class Sidebar extends React.Component {
                     {prop.views.map((prop, key) => {
                       if (prop.redirect) {
                         return null;
+                      }
+                      if(this.state.permissions.indexOf(prop.path) === -1) {
+                        return
                       }
                       const navLinkClasses =
                         classes.collapseItemLink +

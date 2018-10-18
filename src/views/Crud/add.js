@@ -36,7 +36,6 @@ class AddCrud extends React.Component {
                 name:'',
             }
         }
-
     }
 
     handleChange = e => {
