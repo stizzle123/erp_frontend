@@ -22,12 +22,12 @@ import Add from "@material-ui/icons/Add";
 import PropTypes from "prop-types";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import purple from '@material-ui/core/colors/purple';
-import * as vendorActions from '../../actions/vendor';
+import * as prActions from '../../actions/purchaserequisition';
 import { Redirect } from 'react-router';
 import { Link } from "react-router-dom";
 import { cardTitle } from "assets/jss/material-dashboard-pro-react.jsx";
 import generalStyle from "assets/jss/material-dashboard-pro-react/generalStyle.jsx";
-
+import * as Status from 'utility/Status';
 import {connect} from 'react-redux';
 
 const styles = {
@@ -43,7 +43,7 @@ class Index extends React.Component {
     super(props);
     this.handler = this.handler.bind(this);
     this.state = { 
-      redirectTo:false
+      data:[]
     };
   }
  
@@ -54,40 +54,38 @@ handler(type, id){
 
 
 componentDidMount(){
-   vendorActions.findAllVendors(this.props);
-    /* else if(this.props.match.params.type){
-    vendorActions.findAllVendors(this.props, this.props.match.params.type);
-  } */
+  prActions.fetchAllRequistion(this.props.user.token , (docs)=>{
+    this.setState({data : docs});
+  });
 }
 
 componentDidUpdate(prevProps) {
   if (this.props.match.params.type !== prevProps.match.params.type) {
-    vendorActions.findAllVendors(this.props, this.props.match.params.type);
+    //vendorActions.findAllVendors(this.props, this.props.match.params.type);
   }
 }
 processJson(responseJson){
   let datas = [];
   responseJson.map((row)=>{
     let arry = [];
-    arry.push(row._id, row.general_info.company_name, row.general_info.contact_name, row.general_info.contact_phone,
-    row.general_info.contact_email, row.status, row.classes);
+    arry.push(row._id, row.requisitionno, row.requestor.firstname, row.requestor.lastname, 
+      row.department.name, row.status);
     datas.push(arry);
   });
   const dataTable = {
-    headerRow: ["Class","Company Name", "Contact Person", "Contact Telephone", "Contact Email", "Actions"],
-    footerRow: ["Class","Company Name", "Contact Person", "Contact Telephone", "Contact Email", "Actions"],
+    headerRow: ["#", "Requestor Name", "Department", "Status", "Actions"],
+    footerRow: ["#", "Requestor Name", "Department", "Status","Actions"],
     dataRows: datas}
   return dataTable;
 }
 
 render(){
     const { classes } = this.props;
-    let vendors = {"dataRows":[]};
-    if(this.props.data.length> 0){
-      vendors = this.processJson(this.props.data);
+    let prs = {"dataRows":[]};
+    if(this.state.data.length> 0){
+      prs = this.processJson(this.state.data);
     }
-    console.log(this.props);
-    let data = [{}];
+
     if(this.props.loader.loading){
       return (
         <div>
@@ -98,6 +96,20 @@ render(){
           </Grid>
         </div>)
     }else{
+      let mappedData = prs.dataRows.map((prop, key) => {
+        return {
+          id: prop[1],
+          requestor: prop[2]+" "+prop[3],
+          department: prop[4],
+          status: Status.getStatus(prop[5]),
+          actions: (
+            // we've added some custom button actions
+            <div className="actions-right">
+               <Link to={"/requisition/view/"+prop[0]} >View</Link>
+            </div>
+          )
+        };
+      });
     return (
       <GridContainer>
         <GridItem xs={12}>
@@ -106,29 +118,27 @@ render(){
               <CardIcon color="primary">
                 <Assignment />
               </CardIcon>
-              <h4 className={classes.cardIconTitle}>Purchase Requisition Records</h4>
-              <div style={generalStyle.mt3}>
-                <Link to="/requisition/add">
-                Create New
-                </Link>
-              </div>
+              <h3 className={classes.cardIconTitle}>Purchase Requisition Records</h3>
             </CardHeader>
             <CardBody>
+              <div>
+                  <Button color="twitter" to="/requisition/add" component={Link}>Add New Requisition</Button>
+              </div>
               <ReactTable
-                data={data}
+                data={mappedData}
                 filterable
                 columns={[
                   {
-                    Header: "Date",
-                    accessor: "date"
+                    Header: "#",
+                    accessor: "id"
                   },
                   {
-                    Header: "Req. No.",
-                    accessor: "reqno"
+                    Header: "Requestor",
+                    accessor: "requestor"
                   },
                   {
-                    Header: "Requested By",
-                    accessor: "requestedby"
+                    Header: "Department",
+                    accessor: "department"
                   },
                   {
                     Header: "Status",
@@ -165,7 +175,6 @@ Index.defaultProps = {
 }
 function mapStateToProps(state) {
   return {
-    data: state.vendors,
     loader: state.loader,
     user: state.auth.user,
   };

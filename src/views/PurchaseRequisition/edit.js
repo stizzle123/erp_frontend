@@ -28,9 +28,10 @@ import generalStyle from "assets/jss/material-dashboard-pro-react/generalStyle.j
 import DatePicker from 'react-datepicker';
 import * as prActions from '../../actions/purchaserequisition';
 import * as genericActions from 'actions/generic.js';
-import moment from 'moment';
 import Notification from 'views/Notifications/Index.jsx'
- 
+import moment from 'moment';
+import * as Status from 'utility/Status'; 
+
 import 'react-datepicker/dist/react-datepicker.css';
 
 const styles = theme => ({
@@ -62,7 +63,7 @@ const shipvia = [
   {slug: 'portharcourt', name:'Port-Harcourt Office'}
 ]
 
-class PurchaseRequisition extends React.Component {
+class Edit extends React.Component {
   state = {
     simpleSelect: "",
     type: '',
@@ -74,114 +75,44 @@ class PurchaseRequisition extends React.Component {
       departmentname: "",
       chargeto: "",
       dateneeded: "",
-      status: 1,
-      shipvia: "",
+      status: "01"
     },
     lineItems:[],
     startDate : moment(),
     departments: [],
   };
 
-	handleChange = event => {
-    let data = this.state.data;
-    data[[event.target.id]] = event.target.value; 
-    this.setState({ 
-      data : data,
-    });
-	};
-  
 
-  handleDatePicker = date =>{
-    let data = this.state.data;
-    data["dateneeded"] = date.format("DD-MM-YYYY")
-    this.setState({startDate: date});
-    this.setState({data: data});
-    this.toggleCalendar();
+  approveForm= e=>{
+    let data = {};
+    data.status = "011";
+    prActions.editRequisition(this.props.user.token, this.state.data._id, data, (isOk)=>{
+        if(isOk) this.setState({message:"Purchase requisition approved.", error:false });
+        else this.setState({message:"Error processing request.", error:true });
+    })
   }
 
-  toggleCalendar = e=> {
-    e && e.preventDefault()
-    this.setState({isOpen: !this.state.isOpen})
-  }  
-
-	increaseRow = event=>{
-		let rowArray = this.state.rowArray;
-		rowArray.push(Date.now());
-		this.setState({rowArray:rowArray})
-	}
-
-	removeRow = i =>event =>{
-		let rowArray = this.state.rowArray;
-		rowArray.splice(i,1);
-		this.setState({rowArray:rowArray})
-  }
-
-  handleLineItemChange= i=>event =>{
-    let lineItems = this.state.lineItems;
-    let lineItemsKey;
-    if(lineItems[i]){
-      lineItemsKey = lineItems[i];
-    }else{
-      lineItemsKey = {};
-    } 
-    lineItemsKey[[event.target.name]] = event.target.value;
-    lineItems[i] = lineItemsKey;
-    this.setState({
-      lineItems : lineItems
-    });
-  }
-
-  handleSelectItem = event =>{
-    let data = this.state.data;
-    data[[event.target.name]] = event.target.value;
-    if(event.target.name == "department"){
-      this.state.departments.map((v,i)=>{
-        if(event.target.value == v._id){
-          data['chargeto'] =  v.code;
-          return;
-        }
-      });
-    }
-    this.setState({ 
-      data : data,
-    });
-  }
-
-  handleSimple = event => {
-    let data = this.state.data;
-    data['type'] = event.target.value 
-    this.setState({ data : data});
-  };
-
-  handleSubmitForm = e=>{
-    let data = this.state.data;
-    data.lineitems = this.state.lineItems;
-    data.status = "01";
-    prActions.submitRequisition(this.props.user.token, data, (isOk)=>{
-      if(isOk){
-        this.setState({message:"Purchase requisition has been submitted.", error:false });
+  disapproveForm= e=>{
+    let data = {};
+    data.status = "010";
+    prActions.editRequisition(this.props.user.token, this.state.data._id, data, (isOk)=>{
+        if(isOk){
+        this.setState({message:"Purchase requisition has been disapproved.", error:false });
       } 
       else this.setState({message:"Error processing request.", error:true });
     })
   }
 
-  handleSaveForm = e=>{
-    let data = this.state.data;
-    data.lineitems = this.state.lineItems;
-    data.status = "00";
-    prActions.saveRequisition(this.props.user.token, data, (isOk)=>{
-      if(isOk) this.setState({data: {}});
-      else alert("Couldn't submit an error occur");
-    })
-  }
-
   componentDidMount(){
-    let data = this.state.data;
-    data.requestor = this.props.user._id;
-    data.requestedby = this.props.user.firstname +" "+ this.props.user.lastname
-    data.eid = this.props.user.eid ;
-
-    this.setState({ data : data});
+    const id = this.props.match.params.id;
+    prActions.findRequisitionById(this.props.user.token, id, (datum)=>{
+        let data = datum[0];
+        data.requestedby = data.requestor.firstname +" "+ data.requestor.lastname
+        data.eid = data.requestor.eid ;
+        data.department = data.department._id;
+        this.setState({ data : data});
+        this.setState({ lineItems : data.lineitems});
+    });
     genericActions.fetchAll("departments", this.props.user.token, (items)=>{
       this.setState({departments : items});
     });
@@ -210,7 +141,6 @@ class PurchaseRequisition extends React.Component {
       let value;
       if(this.state.lineItems[key]){
         value = this.state.lineItems[key];
-        {{debugger}}
       }
       else{
         value = {};
@@ -222,13 +152,11 @@ class PurchaseRequisition extends React.Component {
           </TableCell>
           <TableCell style={generalStyle.removeBorder}>
               <CustomSelect labelText="Select" id="category" name="category" required
-                     onChange={this.handleLineItemChange(key)}
                      value={value.category}
                     formControlProps={{
                       style: {width:"130px",padding:"0", margin:"0"}              
                     }} 
-                    inputProps={{margin:"normal" 
-                   }}
+                    inputProps={{disabled: true,margin:"normal" }}
                    style={{marginTop: "-3px",   borderBottomWidth:" 1px"
                   }}
                     >
@@ -241,17 +169,17 @@ class PurchaseRequisition extends React.Component {
           </TableCell>
           <TableCell className={classes.td}>
                 <CustomInput id="itemdescription" 
-                required 
+                        required 
                     formControlProps={{  
                       style: {width:"300px", padding:"0", margin:"0"}
                       }} 
-                    inputProps={{ name:"itemdescription", onChange: this.handleLineItemChange(key), value:value.itemdescription }}
+                    inputProps={{disabled: true, name:"itemdescription", value:value.itemdescription }}
                     />
           </TableCell>
           <TableCell className={classes.td}>
                 <CustomInput  id="quantity" type="number" required formControlProps={{  
                       style: {width:"100px", padding:"0", margin:"0"}              
-                    }}  inputProps={{name:"quantity", onChange: this.handleLineItemChange(key),value:value.quantity}}
+                    }}  inputProps={{disabled: true,name:"quantity",value:value.quantity}}
                     />
           </TableCell>
           <TableCell className={classes.td}>
@@ -260,7 +188,7 @@ class PurchaseRequisition extends React.Component {
                       style: {width:"100px", padding:"0", margin:"0"},  
                       name: "unit"            
                     }}  
-                    inputProps={{onChange: this.handleLineItemChange(key), 
+                    inputProps={{disabled: true, 
                       value:value.unit , name:"unit" }}
                   />
                   
@@ -268,12 +196,7 @@ class PurchaseRequisition extends React.Component {
         </TableRow>
         )}
     );
-    let showVendorsName = false; 
-	if (this.state.simpleSelect === 'Service'){
-		showVendorsName = true;
-	}else {
-    showVendorsName = false;
-  }
+    
     return (
 	<div>
 	<Grid container>
@@ -308,10 +231,10 @@ class PurchaseRequisition extends React.Component {
                               select: classes.select
                             }}
                             value={this.state.data.type}
-                            onChange={this.handleSimple}
                             inputProps={{
                               name: "simpleSelect",
-                              id: "type"
+                              id: "type",
+                              disabled: true,
                             }}
                           >
                             <MenuItem
@@ -345,7 +268,7 @@ class PurchaseRequisition extends React.Component {
                   </GridItem>	
                   <GridItem xs={12} sm={12} md={4}/>
                   <GridItem xs={12} sm={12} md={4}style={generalStyle.text2}>
-                      Requisition No: 
+                      Requisition No: {this.state.data.requisitionno}
                   </GridItem>
                   <GridItem xs={12} sm={12} md={4}>
                   <CustomInput labelText="Required By" id="requestedby"
@@ -379,12 +302,11 @@ class PurchaseRequisition extends React.Component {
                   </GridItem>                   
                   <GridItem xs={12} sm={4} md={4}>
                       <CustomSelect labelText="Select" id="department" name="department" required
-                            onChange={(e)=>this.handleSelectItem(e)}
                             formControlProps={{
                               style: {width:"130px",padding:"0", margin:"0"}              
                             }} 
                             value={this.state.data.department}
-                            inputProps={{margin:"normal" }}
+                            inputProps={{margin:"normal",disabled: true, }}
                           style={{marginTop: "-3px",   borderBottomWidth:" 1px"
                           }}
                             >
@@ -409,22 +331,9 @@ class PurchaseRequisition extends React.Component {
                         onFocus={this.toggleCalendar}
                         inputProps={{
                             value: this.state.startDate.format("DD-MM-YYYY"),
-                            onFocus: this.toggleCalendar
+                            disabled: true,
                         }}
                       />
-                      {
-                          this.state.isOpen && (
-                              <DatePicker
-                                  selected={this.state.startDate}
-                                  onChange={this.handleDatePicker}
-                                  showYearDropdown
-                                  dateFormatCalendar="MMMM"
-                                  scrollableYearDropdown
-                                  yearDropdownItemNumber={15}
-                                  withPortal
-                                  inline />
-                          )
-                      }
                   </GridItem>              
                   	{/* <GridItem xs={12} sm={8} md={8}>
                       <CustomInput labelText="Purpose Of Use" id="purpose" required formControlProps={{
@@ -438,12 +347,11 @@ class PurchaseRequisition extends React.Component {
             
                   <GridItem xs={12} sm={4} md={4}>
                       <CustomSelect labelText="Ship Via" name="shipvia" required
-                            onChange={(e)=>this.handleSelectItem(e)}
                             formControlProps={{
                               style: {width:"130px",padding:"0", margin:"0"}              
                             }} 
                             value={this.state.data.shipvia}
-                            inputProps={{margin:"normal",  id:"shipvia" }}
+                            inputProps={{margin:"normal",  id:"shipvia", disabled: true, }}
                           style={{marginTop: "-3px",   borderBottomWidth:" 1px"
                           }}
                             >
@@ -458,7 +366,7 @@ class PurchaseRequisition extends React.Component {
                       <CustomInput labelText="Status" id="status" required formControlProps={{
                         fullWidth: true
                         }} inputProps={{  
-                          value:"Pending Submission",
+                          value: Status["01"],
                           disabled:true                  
                         }}
                       />
@@ -490,29 +398,20 @@ class PurchaseRequisition extends React.Component {
                     </TableBody>
                   </Table> 
                 </div>
-                <div style={generalStyle.mt3}>
-               <span>Add New Line</span> 
-			          <Button
-                  justIcon
-                  round
-                  color="twitter"
-                  className={classes.marginRight}
-                  onClick={this.increaseRow}
-                >
-                  <Add className={classes.icons} />
-                </Button>
-                </div>
               </CardBody>
+              {
+                  (this.state.data.status == "011")? "":
               <CardFooter>
               <Grid container>
-                <GridItem xs={12} sm={6} md={2} additionalclass={classes.removeDivPadding} >
-                  <Button color="primary" onClick={this.handleSaveForm}>Save</Button>
+                <GridItem xs={12} sm={6} md={6}  >
+                  <Button color="primary" onClick={this.disapproveForm}>Disapprove</Button>
                 </GridItem>
-                <GridItem xs={12} sm={12} md={2}>
-                  <Button color="yellowgreen"  onClick={this.handleSubmitForm}>Submit</Button>
+                <GridItem xs={12} sm={6} md={6}>
+                  <Button color="yellowgreen"  onClick={this.approveForm}>Approve</Button>
                 </GridItem>
               </Grid>
             </CardFooter>
+              }
 	  		</Card>
       </form>
 	</GridItem>
@@ -522,11 +421,11 @@ class PurchaseRequisition extends React.Component {
   }
 }
 
-PurchaseRequisition.defaultProps = {
+Edit.defaultProps = {
   tableHeaderColor: "gray"
 };
 
-PurchaseRequisition.propTypes = {
+Edit.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
@@ -539,5 +438,5 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, null)(withStyles(styles)(PurchaseRequisition));
+export default connect(mapStateToProps, null)(withStyles(styles)(Edit));
 

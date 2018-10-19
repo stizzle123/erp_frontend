@@ -11,7 +11,7 @@ import SdStorage from '@material-ui/icons/SdStorage';
 import AccountBalance from '@material-ui/icons/AccountBalanceWallet';
 import CreditCard from '@material-ui/icons/CreditCard';
 import RequestQuotation from "../views/RequestQuotation/index.js";
-
+import AddQuotation from "../views/RequestQuotation/add.js";
 // core components/views
 import LoginPage from "../views/LoginPage/index.js";
 import DashboardPage from "../views/Dashboard/Dashboard.jsx";
@@ -23,6 +23,7 @@ import AddVendor from "../views/Vendor/add.js";
 import ViewVendor from "../views/Vendor/view.js";
 import PurchaseOrder from "../views/PurchaseOrder/index.js";
 import AddPurchaseRequisition from "../views/PurchaseRequisition/add.js";
+import ViewPurchaseRequisition from "../views/PurchaseRequisition/edit.js";
 import ListPurchaseRequisition from "../views/PurchaseRequisition/index.js";
 import ListCrud from "../views/Crud/index.js";
 import AddCrud from "../views/Crud/add.js";
@@ -80,8 +81,16 @@ export const dashboardRoutes = [
     component: AddPurchaseRequisition
   },
   {
+    path: "/requisition/view/:id",
+    component: ViewPurchaseRequisition
+  },
+  {
     path: "/quotation",
     component: RequestQuotation
+  },
+  {
+    path: "/quotation/add",
+    component: AddQuotation
   },
   {
     path: "/requisition",
@@ -184,14 +193,14 @@ export const AdminMenu = [
       actions: ['add', 'edit', 'delete', 'admin_view']
     },
     {
-      path: "/request_for_quotation",
+      path: "/quotation",
       name: "Request for Quotation",
       mini: "RFQ",
       component: RequestQuotation,
       actions: ['add', 'edit', 'delete', 'admin_view' ]
     },
     {
-      path: "/purchase_order",
+      path: "/order",
       name: "Purchase Order",
       mini: "PO",
       component: PurchaseOrder,
