@@ -45,9 +45,17 @@ class AddUser extends React.Component {
         optionsRole : [
           ],
           optionsDepartment : [
-          ]
+          ],
+          validationState : {
+            lastname: '',
+            firstname: '',
+            email:'',
+            eid:''
+          }
     }
 
+    
+   
     handleChange = event => {
       let data = this.state.data;
       data[[event.target.id]] = event.target.value; 
@@ -104,6 +112,7 @@ class AddUser extends React.Component {
                       inputProps={{
                           onChange: this.handleChange
                       }}  
+                      error
                     />
                   </GridItem>
                   <GridItem xs={12} sm={12} md={6}>
@@ -116,6 +125,7 @@ class AddUser extends React.Component {
                       inputProps={{
                           onChange: this.handleChange
                         }}  
+                        success
                     />
                   </GridItem>
                 </Grid>

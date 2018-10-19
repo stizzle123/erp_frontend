@@ -79,7 +79,7 @@ class EditUser extends React.Component {
     });
   }
 
-  handleSave = e =>{
+  handleSave = e => {
     e.preventDefault();
     let data = this.state.data;
     userAction.updateProfile(data, (json)=>{

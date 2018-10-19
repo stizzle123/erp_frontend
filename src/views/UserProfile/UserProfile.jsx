@@ -81,6 +81,7 @@ class UserProfile extends React.Component {
 }
 //function UserProfile(props) {
   render() {
+    console.log(this.state.data);
     const { classes, data } = this.props;
     console.log(this.props.user)
   return (
