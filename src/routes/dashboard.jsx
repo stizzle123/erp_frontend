@@ -18,6 +18,7 @@ import DashboardPage from "../views/Dashboard/Dashboard.jsx";
 import UserProfile from "../views/UserProfile/UserProfile.jsx";
 import ListUsers from "../views/UserProfile/ListUsers.jsx";
 import AddUser from "../views/UserProfile/AddUser.jsx";
+import EditUser from "../views/UserProfile/EditUser.jsx";
 import VendorList from "../views/Vendor/index.js";
 import AddVendor from "../views/Vendor/add.js";
 import ViewVendor from "../views/Vendor/view.js";
@@ -56,6 +57,10 @@ export const dashboardRoutes = [
   {
     path: "/user/add",
     component: AddUser
+  },
+  {
+    path: "/user/edit/:id",
+    component: EditUser
   },
   {
     path: "/vendor/view/:id",

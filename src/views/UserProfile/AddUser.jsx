@@ -38,7 +38,9 @@ const styles = {
 
 class AddUser extends React.Component {
     state = {
-        data: {},
+        data: {
+          type: "staff",
+        },
         responseMessage:{},
         optionsRole : [
           ],
@@ -68,7 +70,6 @@ class AddUser extends React.Component {
       userAction.addUser(this.props, data, (json)=>{
         this.setState({responseMessage:json});
       });
-    
     }
     componentDidMount(){
       genericActions.fetchAll("departments", this.props.user.token, (items)=>{
@@ -92,8 +93,34 @@ class AddUser extends React.Component {
                 <h4 className={classes.cardTitleWhite}>Add a User</h4>
               </CardHeader>
               <CardBody>
+              <Grid container>
+                  <GridItem xs={12} sm={12} md={6}>
+                    <CustomInput
+                      labelText="Lastname"
+                      id="lastname"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      inputProps={{
+                          onChange: this.handleChange
+                      }}  
+                    />
+                  </GridItem>
+                  <GridItem xs={12} sm={12} md={6}>
+                    <CustomInput
+                      labelText="Firstname"
+                      id="firstname"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      inputProps={{
+                          onChange: this.handleChange
+                        }}  
+                    />
+                  </GridItem>
+                </Grid>
                 <Grid container>
-                  <GridItem xs={12} sm={12} md={12}>
+                  <GridItem xs={12} sm={12} md={6}>
                     <CustomInput
                       labelText="Email"
                       id="email"
