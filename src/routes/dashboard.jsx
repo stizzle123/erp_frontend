@@ -67,6 +67,12 @@ export const dashboardRoutes = [
     component: ChangePassword
   }, 
   {
+    path: "/user",
+    name: "User Profile",
+    icon: Person,
+    component: UserProfile
+  }, 
+  {
     path: "/Log",
     component: Log
   },
@@ -80,12 +86,6 @@ export const AdminMenu = [
     icon: DashboardIcon,
     component: Dashboard
   },
-  {
-   path: "/user",
-   name: "User Profile",
-   icon: Person,
-   component: UserProfile
- },
  {
    path: "/vendor",
    name: "Vendors List",
@@ -137,6 +137,19 @@ export const IacMenu = [
     name: "Blacklisted Vendors",
     icon: LibraryBooks,
   },
+];
+
+export const ProcurementMenu = [
+  {
+    path: "/dashboard",
+    name: "Dashboard",
+    icon: HomeIcon,
+  },
+  {
+    path: "/vendor/type/approved",
+    name: "Approved Vendors",
+    icon: LibraryBooks,
+  }
 ];
 
 
