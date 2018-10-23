@@ -51,6 +51,7 @@ class WorkReferences extends React.Component {
     },
     redirect: false,
     errorLog:'',
+    error_string:''
   };
  
   componentDidMount(){
@@ -230,32 +231,31 @@ ValidURL(input) {
       error_string+="<p>"+value+"</p>";
     }
     
-    if(general_info_error_array.length > 1){
+    if(general_info_error_array.length > 0){
       errorState = true;
       general_info_error_array.forEach(addErrors)
     }
-    if(business_info_error_array.length > 1){
+    if(business_info_error_array.length > 0){
       errorState = true;
       business_info_error_array.forEach(addErrors)
     }
-    if(bank_details_error_array.length > 1){
+    if(bank_details_error_array.length > 0){
       errorState = true;
       bank_details_error_array.forEach(addErrors)
     }
-    if(work_reference_error_array.length > 1){
+    if(work_reference_error_array.length > 0){
       errorState = true;
       work_reference_error_array.forEach(addErrors);
     }
 
-if (error_string == '') {
- // this.props.submitVendor(this);
-}
-else {
-
-  this.setState({ 
-    errorLog : <div dangerouslySetInnerHTML={{ __html: error_string }}/>,
-  });
-}
+    if (error_string == '') {
+      this.props.submitVendor(this);
+    }
+    else {
+      this.setState({ 
+        errorLog : <div dangerouslySetInnerHTML={{ __html: error_string }}/>,
+      });
+    }
   }
 
   render() {

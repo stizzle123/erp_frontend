@@ -18,8 +18,11 @@ import CardBody from "components/Card/CardBody.jsx";
 import CardIcon from "components/Card/CardIcon.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
 import Button from "../../components/CustomButtons/Button.jsx";
-import Approve from "@material-ui/icons/ThumbUp";
-import View from "@material-ui/icons/Pageview";
+import FormControl from "@material-ui/core/FormControl";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+
+import Select from "@material-ui/core/Select";
 import { Link } from 'react-router-dom';
 import PropTypes from "prop-types";
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -175,6 +178,80 @@ render(){
               <h4 className={classes.cardIconTitle}>Vendors</h4>
             </CardHeader>
             <CardBody>
+            <Card> 
+              <CardBody>
+                <FormControl
+                      fullWidth
+                          className={classes.selectFormControl}
+                        >
+                          <InputLabel
+                            htmlFor="simple-select"
+                            className={classes.selectLabel}
+                          >
+                            Filter by Status
+                          </InputLabel>
+                          <Select
+                            MenuProps={{
+                              className: classes.selectMenu
+                            }}
+                            classes={{
+                              select: classes.select
+                            }}
+                            value={this.state.simpleSelect}
+                            onChange={this.handleSimple}
+                            inputProps={{
+                              name: "simpleSelect",
+                              id: "simple-select"
+                            }}
+                          >
+                            <MenuItem
+                              disabled
+                              classes={{
+                                root: classes.selectMenuItem
+                              }}
+                            >
+                              Choose Status
+                            </MenuItem>
+                            <MenuItem
+                              classes={{
+                                root: classes.selectMenuItem,
+                                selected: classes.selectMenuItemSelected
+                              }}
+                              value="2"
+                            >
+                              Approved
+                            </MenuItem>
+                            <MenuItem
+                              classes={{
+                                root: classes.selectMenuItem,
+                                selected: classes.selectMenuItemSelected
+                              }}
+                              value="2"
+                            >
+                              Pending Submission
+                            </MenuItem>
+                            <MenuItem
+                              classes={{
+                                root: classes.selectMenuItem,
+                                selected: classes.selectMenuItemSelected
+                              }}
+                              value="2"
+                            >
+                              Pending Approval
+                            </MenuItem>
+                            <MenuItem
+                              classes={{
+                                root: classes.selectMenuItem,
+                                selected: classes.selectMenuItemSelected
+                              }}
+                              value="2"
+                            >
+                              Blacklisted
+                            </MenuItem>
+                            </Select>
+                </FormControl>
+              </CardBody>
+            </Card>
               <ReactTable
                 data={data}
                 filterable
