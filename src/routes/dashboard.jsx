@@ -98,11 +98,15 @@ export const dashboardRoutes = [
     component: AddQuotation
   },
   {
+    path: "/quotation/myquote",
+    component: RequestQuotation
+  },
+  {
     path: "/requisition",
     component: ListPurchaseRequisition
   },
   {
-    path: "/purchaseorder",
+    path: "/order",
     component: PurchaseOrder
   }, 
   {
@@ -195,21 +199,21 @@ export const AdminMenu = [
       name: "Purchase Requisition",
       mini: "PR",
       component: ListPurchaseRequisition,
-      actions: ['add', 'edit', 'delete', 'admin_view']
+      actions: ['index','add', 'edit', 'delete', 'admin_view']
     },
     {
       path: "/quotation",
       name: "Request for Quotation",
       mini: "RFQ",
       component: RequestQuotation,
-      actions: ['add', 'edit', 'delete', 'admin_view' ]
+      actions: ['index','add', 'edit', 'delete', 'admin_view' ]
     },
     {
       path: "/order",
       name: "Purchase Order",
       mini: "PO",
       component: PurchaseOrder,
-      actions: ['add', 'edit', 'delete', 'admin_view']
+      actions: ['index','add', 'edit', 'delete', 'admin_view']
     }]
   },
   {
@@ -224,7 +228,7 @@ export const AdminMenu = [
             name: "Vendors Mgt",
             mini: "VM",
             component: VendorList,
-            actions: ['add', 'edit','view', 'delete', 'admin_view' ]
+            actions: ['index','add', 'edit','view', 'delete', 'admin_view', 'type' ]
           },
     ]
   }, 

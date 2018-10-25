@@ -34,8 +34,86 @@ const styles = {
     ...cardTitle,
     marginTop: "15px",
     marginBottom: "0px"
+  },
+    cardIconTitle: {
+      ...cardTitle,
+      marginTop: "15px",
+      marginBottom: "0px"
+    },
+    typo: {
+      paddingLeft: "25%",
+      marginBottom: "40px",
+      position: "relative"
+    },
+    note: {
+      fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+      bottom: "10px",
+      color: "#c0c1c2",
+      display: "block",
+      fontWeight: "400",
+      fontSize: "13px",
+      lineHeight: "13px",
+      left: "0",
+      marginLeft: "20px",
+      position: "absolute",
+      width: "260px"
+    },
+    ulStyle: {
+      listStyleType: "none",
+      overflow: "auto",
+      padding: "0",
+      borderBottom: "1px solid #000"
+    },
+    liStyle: {
+      float: "left",
+      paddingBottom: "15px",
+      fontWeight: "700",
+      lineHeight: "2",
+      width: "25%"
+    },
+    ap: {
+      fontWeight: "500"
+    },
+    shadow: {
+      boxShadow: "rgba(0, 0, 0, 0.085) 0.1px 0.125rem 0.25rem",
+      padding: "15px"
+    },
+    space1: {
+      height: "10px"
+    },
+    boxer: {
+      display: "table",
+      borderCollapse: "collapse",
+      width: "100%"
+    },
+    boxRow: {
+      display: "table-row",
+      cursor: "pointer",
+      "&:active": {
+        backgroundColor: "#fff",
+        borderLeft: "5px solid #3393FF"
+      },
+      "&:hover": {
+        backgroundColor: "#fff"
+      }
+    },
+    box: {
+      display: "table-cell",
+      verticalAlign: " top",
+      borderBottom: " 1px solid #ddd",
+      padding: "15px"
+    },
+    sidebar: {
+      minHeight: "70vh",
+      backgroundColor: "#f5f5f5"
+    },
+    boxHeader: {
+      fontWeight: "700",
+      backgroundColor: "#D3D3D3",
+      display: "table-row"
+    }
   }
-};
+  
 class Quote extends React.Component {
 
     constructor(props){
@@ -49,51 +127,71 @@ class Quote extends React.Component {
         let mappedData = this.props.quotes.map((prop, key) => {
             return [
                     key+1,
-                    prop.vendor.general_info.coy_name,
+                    prop.vendor.general_info.company_name,
                     prop.created,
                     prop.status
             ]
           });
         return (
             <div>
-                <GridContainer>
-                    <GridItem xs={12} sm={3} md={3}>
-                        <h4>Requestor : <br />{this.props.pr.requestor.firstname+" "+this.props.pr.requestor.lastname}</h4>
-                    </GridItem>
-                    <GridItem xs={12} sm={3} md={3}>
-                        <h4>Requisition No: <br />{this.props.pr.requisitionno}</h4>
-                    </GridItem> 
-                    <GridItem xs={12} sm={3} md={3}>
-                        <h4>Date Needed: <br />{this.props.pr.dateneeded}</h4>
-                    </GridItem> 
-                    <GridItem xs={12} sm={3} md={3}>
-                        <h4>Charge To: <br />{this.props.pr.chargeto}</h4>
-                    </GridItem> 
-                    <GridItem xs={12} sm={6} md={6}>
-                        <h4>Department: <br />{this.props.pr.department.name}</h4>
-                    </GridItem>                    
-                    <GridItem xs={12} sm={3} md={3}>
-                        <h4>Ship Via: <br />{this.props.pr.shipvia}</h4>
-                    </GridItem>    
-                    <GridItem xs={12} sm={3} md={3}>
-                        <h4>Status: <br />{Status.getStatus(this.props.pr.status)}</h4>
-                    </GridItem>                  
-                </GridContainer>
-                <GridContainer>
-                <GridItem xs={12}>
-                    <Card>
-                        <CardBody>
-                            <Table style={{height:"100px"}}
-                            tableHeaderColor="primary"
-                            tableHead={["#", "Vendor", "Created", "Status"]}
-                            tableData={mappedData}
-                            coloredColls={[3]}
-                            colorsColls={["primary"]}
-                            />
-                        </CardBody>
-                    </Card>
-                </GridItem>
-                </GridContainer>
+                <div>
+                      <ul className={classes.ulStyle}>
+                        <li className={classes.liStyle}>
+                          Requestor: <br />{" "}
+                          <span className={classes.ap}>{this.props.pr.requestor.firstname+" "+this.props.pr.requestor.lastname}</span>
+                        </li>
+                        <li className={classes.liStyle}>
+                          Requestion No: <br />{" "}
+                          <span className={classes.ap}>{this.props.pr.requisitionno}</span>
+                        </li>
+                        <li className={classes.liStyle}>
+                          Date Needed: <br />
+                          <span className={classes.ap}>{this.props.pr.dateneeded}</span>
+                        </li>
+                        <li className={classes.liStyle}>
+                          Charge To: <br />
+                          <span className={classes.ap}> {this.props.pr.chargeto}</span>
+                        </li>
+                      </ul>
+                    </div>
+                    <div>
+                      <ul className={classes.ulStyle}>
+                        <li className={classes.liStyle}>
+                          Department: <br />{" "}
+                          <span className={classes.ap}>{this.props.pr.department.code}</span>
+                        </li>
+                        <li className={classes.liStyle}>
+                          Delivery Mode: <br />{" "}
+                          <span className={classes.ap}>Digital (Download)</span>
+                        </li>
+                        <li className={classes.liStyle}>
+                          {" "}
+                          Status:
+                          <br />
+                          <span className={classes.ap}>{Status.getStatus(this.props.pr.status)}</span>
+                        </li>
+                      </ul>
+                    </div>
+                    <div className={classes.space1} />
+                    <h3>RFQ for this PR</h3>
+                    <div className={classes.shadow}>
+                      <Table
+                        tableHead={["#", "Vendor", "Created", "Status"]}
+                        tableData={mappedData}
+                        customCellClasses={[
+                          classes.center,
+                          classes.right,
+                          classes.right
+                        ]}
+                        customClassesForCells={[0, 4, 5]}
+                        customHeadCellClasses={[
+                          classes.center,
+                          classes.right,
+                          classes.right
+                        ]}
+                        customHeadClassesForCells={[0, 4, 5]}
+                      />
+                    </div>
             </div>
         );
     }

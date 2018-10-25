@@ -33,9 +33,10 @@ import tableStyle from "assets/jss/material-dashboard-pro-react/components/table
 import generalStyle from "assets/jss/material-dashboard-pro-react/generalStyle.jsx";
 import { getCurves } from 'crypto';
 import CardText from "components/Card/CardText.jsx";
-import * as prActions from '../../actions/purchaserequisition';
+import * as rfqActions from '../../actions/requestforquotation';
 import * as genericActions from 'actions/generic.js';
 import * as vendorActions from 'actions/vendor.js';
+import Notification from 'views/Notifications/Index.jsx';
 
 const styles = theme => ({
   ...tableStyle,
@@ -58,15 +59,13 @@ const categories = [
   {value: '3',label: 'Category 3',}
 ];
 
-
 class Add extends React.Component {
   state = {
     simpleSelect: "",
     type: '',
     rowArray:[],
-    data:{
-      checkedLineItems:[]
-    },
+    checkedLineItems:[],
+    selectedOption:[],
     lineItems:[],
     alert: null,
     show: false
@@ -81,12 +80,18 @@ class Add extends React.Component {
     genericActions.fetchAll("departments", this.props.user.token, (items)=>{
       this.setState({departments : items});
     });
+    vendorActions.searchVendor(this.props.user.token,"", (vendors)=>{
+      let options = vendors.map((v)=>{
+          return {value:v._id, label: v.general_info.company_name}
+      })
+      this.setState({options});
+    })
   }
 
   handleLineItems = i =>{
-    let checkedItems = this.state.data.checkedLineItems;
+    let checkedItems = this.state.checkedLineItems;
     let index = checkedItems.indexOf(i);
-    if(itemIndex > 0){
+    if(index > 0){
       checkedItems.splice(index, 1);
     }else{
       checkedItems.push(i);
@@ -95,29 +100,37 @@ class Add extends React.Component {
       checkedLineItems:checkedItems
     });
   }
-
+  
   handleChange = (selectedOption) => {
+    this.setState({ selectedOption });
+  }
+
+
+  submitQuote= ()=>{
     {{debugger}}
-    vendorActions.searchVendor(token,selectedOption, (vendors)=>{
-        this.setState({vendors: vendors});
-    })
+      let items = this.props.pr.lineitems.map((prop, key)=> {
+          if(this.state.checkedLineItems.indexOf(key)){
+            return prop;
+          }
+      });
+      rfqActions.submitQuotation(this.props.user.token, 
+        {items: items, vendors:  this.state.selectedOption, 
+          prId:this.props.pr._id}, (isOk)=>{
+            if(isOk){
+              this.setState({message:"RFQ succesfully sent to vendor", error:false });
+            } 
+            else this.setState({message:"An error occur while sending RFQ.", error:true });
+        });
   }
 
   render() {
     const { classes, tableHeaderColor } = this.props;
-    const tableData = this.state.rowArray.map((prop, key)=> {
-      let value;
-      if(this.state.lineItems[key]){
-        value = this.state.lineItems[key];
-      }
-      else{
-        value = {};
-      }
+    const tableData = this.props.pr.lineitems.map((prop, key)=> {
     const category = categories.map(option => {
-        if(value.category == option.value){
+        if(prop.category == option.value){
           return option.label
         } 
-      });
+    });
       return (
         <TableRow key={key}> 
           <TableCell component="th" style={{border: "none", padding: "0", width: "20px", textAlign: "center"}}>               
@@ -144,32 +157,33 @@ class Add extends React.Component {
               {category}
           </TableCell>
           <TableCell className={classes.td}>
-                {value.itemdescription}
+                {prop.itemdescription}
           </TableCell>
           <TableCell className={classes.td}>
-                {value.quantity}
+                {prop.quantity}
           </TableCell>
           <TableCell className={classes.td}>
-                {value.unit}
+                {prop.unit}
           </TableCell>      
         </TableRow>
         )}
     );
+
+
   	return (
         <div>
             <GridItem xs={12} sm={12} md={12}>
               <Card>
                 <CardBody>
+                <Notification error={this.state.error} message={this.state.message} />
                   <form>
-                  <Card>
-                    <CardBody>
                       <Grid container>
                         <GridItem xs={12} sm={12} md={11} lg={11}>
                           <Select
                               isMulti
-                              //value={selectedOption}
+                              value={this.state.selectedOption}
                               onChange={this.handleChange}
-                              options={this.state.vendors}
+                              options={this.state.options}
                           />
                         </GridItem>
                         <GridItem xs={12} sm={3} md={3} lg={3}>
@@ -181,7 +195,6 @@ class Add extends React.Component {
                         />
                         </GridItem>
                       </Grid>
-                    </CardBody>
                     <Grid container>
                       <GridItem xs={12} sm={12} md={12} lg={12}>
                           <div className={classes.tableResponsive} style ={{ overflowX: "scroll"}}>
@@ -202,9 +215,15 @@ class Add extends React.Component {
                         </div>
                       </GridItem>
                     </Grid>
-                  </Card>
               </form>
               </CardBody>
+              <CardFooter>
+              <Grid container>
+                <GridItem xs={12} sm={12} md={2}>
+                  <Button color="yellowgreen"  onClick={this.submitQuote}>Submit</Button>
+                </GridItem>
+              </Grid>              
+              </CardFooter>
               </Card>
             </GridItem>
         </div>

@@ -80,9 +80,9 @@ export function findVendorById(props,vendorId){
 }
 
 export function searchVendor(token,search, callback){
-    let middleware = new MiddleWare(token);
+    let m = new MiddleWare(token);
     ///props.dispatch(loadAction.Loading());
-    return middleware.makeConnection('/vendors/search/'+search,'GET').then((response) => {
+    return m.makeConnection('/vendors/search/'+search, m.GET).then((response) => {
         return response.json()
     }).then(        
         (responseJson)=>{

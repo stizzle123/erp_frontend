@@ -242,7 +242,7 @@ class Sidebar extends React.Component {
           if (prop.redirect) {
             return null;
           }
-          if(this.state.permissions.indexOf(prop.path) === -1) {
+          if(this.state.permissions.indexOf(prop.path) === -1 && this.props.user.role != "admin") {
             return
           }
           if (prop.collapse) {
@@ -315,7 +315,7 @@ class Sidebar extends React.Component {
                       if (prop.redirect) {
                         return null;
                       }
-                      if(this.state.permissions.indexOf(prop.path) === -1) {
+                      if(this.state.permissions.indexOf(prop.path) === -1  && this.props.user.role != "admin") {
                         return
                       }
                       const navLinkClasses =

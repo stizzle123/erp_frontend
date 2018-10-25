@@ -30,6 +30,7 @@ import sweetAlertStyle from "assets/jss/material-dashboard-pro-react/views/sweet
 import SweetAlert from "react-bootstrap-sweetalert";
 import Language from "@material-ui/icons/Language";
 import AddComponent from "./add";
+import QuotesComponent from "./quotes"
 import { connect } from "react-redux";
 
 const styles = {
@@ -120,7 +121,8 @@ class Index extends React.Component {
     this.state = {
       data: [],
       multipleSelect: [],
-      showForm: false
+      showForm: false,
+      submitRfq : true
     };
   }
 
@@ -140,20 +142,23 @@ class Index extends React.Component {
       this.props.user.token,
       pr._id,
       quotes => {
+        {{debugger}}
         this.setState({ quotes: quotes, pr: pr });
       }
     );
   };
+
   hideAlert = () => {
     this.setState({
       alert: null
     });
+    this.fetchQuotes(this.state.selectedPr);
   };
+
   showQuoteForm = () => {
     this.setState({
       alert: (
         <SweetAlert
-          showCancel
           style={{
             display: "block",
             marginTop: "-30%",
@@ -161,16 +166,13 @@ class Index extends React.Component {
             width: "65%"
           }}
           title="Request For Quote"
-          onConfirm={e => this.inputConfirmAlert(e)}
-          onCancel={() => this.hideAlert()}
+          onConfirm={() => this.hideAlert()}
+          confirmBtnText="Click to Close"
           confirmBtnCssClass={
             this.props.classes.button + " " + this.props.classes.info
           }
-          cancelBtnCssClass={
-            this.props.classes.button + " " + this.props.classes.danger
-          }
         >
-          <AddComponent pr={this.state.selectedPr} />
+          <AddComponent pr={this.state.selectedPr} submit={this.state.submitRfq} />
         </SweetAlert>
       )
     });
@@ -211,17 +213,10 @@ class Index extends React.Component {
     } else {
       let mappedData = this.state.data.map((prop, key) => {
         return (
-          <li className="actions-left" onClick={() => this.fetchQuotes(prop)}>
-            <h5>
-              {prop.requisitionno}
-              <br />
-              {prop.requestor.firstname + " " + prop.requestor.lastname},{" "}
-              {prop.created}
-              <br />
-              {prop.department.code}
-            </h5>
-            <hr />
-          </li>
+          <div className={classes.boxRow}  onClick={() => this.fetchQuotes(prop)}>
+            <div className={classes.box}>{prop.requisitionno}</div>
+            <div className={classes.box}>{prop.created}</div>
+          </div>
         );
       });
       return (
@@ -237,10 +232,6 @@ class Index extends React.Component {
               <CardBody>
                 <GridContainer justify="space-between">
                   <GridItem xs={12} sm={3} md={3}>
-                    {/* <ul>
-                  {mappedData}
-                  
-                </ul> */}
                     <GridContainer justify="space-between">
                       <GridItem xs={3}>
                         <Funnel style={{ marginTop: "25px" }} />
@@ -306,19 +297,7 @@ class Index extends React.Component {
                           <div className={classes.box}>RFQ</div>
                           <div className={classes.box}>DATE</div>
                         </div>
-
-                        <div className={classes.boxRow}>
-                          <div className={classes.box}>RFQ/103039031</div>
-                          <div className={classes.box}>10/10/2018</div>
-                        </div>
-                        <div className={classes.boxRow}>
-                          <div className={classes.box}>RFQ/103039031</div>
-                          <div className={classes.box}>10/10/2018</div>
-                        </div>
-                        <div className={classes.boxRow}>
-                          <div className={classes.box}>RFQ/103039031</div>
-                          <div className={classes.box}>10/10/2018</div>
-                        </div>
+                        {mappedData}
                       </div>
                     </div>
                   </GridItem>
@@ -332,87 +311,8 @@ class Index extends React.Component {
                         Request For Quote
                       </Button>
                     </div>
-                    {/* {this.state.alert}
-                  {(this.state.showRfq)? <Quotes pr={this.state.selectedPr}  quotes={this.state.quotes} />: ""} */}
-
-                    <div>
-                      <ul className={classes.ulStyle}>
-                        <li className={classes.liStyle}>
-                          Requestor: <br />{" "}
-                          <span className={classes.ap}>Kolawale Abobade</span>
-                        </li>
-                        <li className={classes.liStyle}>
-                          Requestion No: <br />{" "}
-                          <span className={classes.ap}>Kolawale Abobade</span>
-                        </li>
-                        <li className={classes.liStyle}>
-                          Date Needed: <br />
-                          <span className={classes.ap}>12/11/2018</span>
-                        </li>
-                        <li className={classes.liStyle}>
-                          Charge To: <br />
-                          <span className={classes.ap}> CSN-001</span>
-                        </li>
-                      </ul>
-                    </div>
-                    <div>
-                      <ul className={classes.ulStyle}>
-                        <li className={classes.liStyle}>
-                          Department: <br />{" "}
-                          <span className={classes.ap}>SMD</span>
-                        </li>
-                        <li className={classes.liStyle}>
-                          Delivery Mode: <br />{" "}
-                          <span className={classes.ap}>Digital (Download)</span>
-                        </li>
-                        <li className={classes.liStyle}>
-                          {" "}
-                          Status:
-                          <br />
-                          <span className={classes.ap}>Approved</span>
-                        </li>
-                      </ul>
-                    </div>
-                    <div className={classes.space1} />
-                    <h3>RFQ for this PR</h3>
-                    <div className={classes.shadow}>
-                      <Table
-                        tableHead={["#", "Vendor", "Created", "Status"]}
-                        tableData={[
-                          [
-                            "123457575",
-                            "Andrew Mike",
-                            "2/12/2018",
-                            "Awaiting Status"
-                          ],
-                          [
-                            "123457575",
-                            "Alex Mike",
-                            "2/12/2018",
-                            "Awaiting Status"
-                          ],
-
-                          [
-                            "123457575",
-                            "Paul Dickens",
-                            "2/12/2018",
-                            "Awaiting Status"
-                          ]
-                        ]}
-                        customCellClasses={[
-                          classes.center,
-                          classes.right,
-                          classes.right
-                        ]}
-                        customClassesForCells={[0, 4, 5]}
-                        customHeadCellClasses={[
-                          classes.center,
-                          classes.right,
-                          classes.right
-                        ]}
-                        customHeadClassesForCells={[0, 4, 5]}
-                      />
-                    </div>
+                    {this.state.alert}
+                    {(this.state.showRfq)? <QuotesComponent pr={this.state.selectedPr}  quotes={this.state.quotes} />: ""}
                   </GridItem>
                 </GridContainer>
               </CardBody>
