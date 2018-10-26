@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Inflection from 'inflection';
 import { withStyles } from '@material-ui/core/styles';
-
 import Grid from '@material-ui/core/Grid';
 import GridItem from "components/Grid/GridItem.jsx";
 import CustomInput from "components/CustomInput/CustomInput.jsx";
@@ -13,9 +12,9 @@ import CardFooter from "components/Card/CardFooter.jsx";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { cardTitle } from "assets/jss/material-dashboard-pro-react.jsx";
 import * as genericActions from 'actions/generic.js';
-
 import purple from '@material-ui/core/colors/purple';
 import {connect} from 'react-redux';
+import helpers from "../helpers";
 
 const styles = {
     cardIconTitle: {
@@ -34,7 +33,13 @@ class AddCrud extends React.Component {
             roles: ['slug'],
             data:{
                 name:'',
+            },
+            validationState : {
+                name: '',
+                code: '',
+                slug:'',
             }
+
         }
     }
 
@@ -44,8 +49,22 @@ class AddCrud extends React.Component {
         this.setState({ 
           data : data,
         });
+        this.validate(e.target.id, e.target.value);
     }
 
+    validate = (type, value) => {
+        switch (type) {
+          case "name":
+            const name = helpers.isEmpty(value) ? false : true;
+            this.setState({
+              validationState: {
+                ...this.state.validationState,
+                name
+              }
+            });
+            break;
+        }
+    }   
     handleSubmit = e => {
         genericActions.saveItem(this.props.match.params.type, this.props.user.token, this.state.data, function(isOk){
             if(isOk) this.setState({data: {}});
@@ -58,6 +77,7 @@ class AddCrud extends React.Component {
     }
 
     render() {
+        console.log(this.state.data.name);
       const { classes, data } = this.props;
       let field = this.state[this.props.match.params.type];
       let additionalFields = " ";
@@ -72,6 +92,16 @@ class AddCrud extends React.Component {
                             onChange: (e)=>this.handleChange(e),
                             value: this.state[f]
                         }}
+                        error={
+                            this.state.validationState.name === ""
+                              ? ""
+                              : this.state.validationState.name
+                          }
+                          success={
+                            this.state.validationState.name === ""
+                              ? ""
+                              : !this.state.validationState.name
+                          }
                     />
                 </GridItem>
             )
@@ -104,6 +134,16 @@ class AddCrud extends React.Component {
                                             onChange: (e)=>this.handleChange(e),
                                             value: this.state.name
                                         }}
+                                        error={
+                                            this.state.validationState.name === ""
+                                              ? ""
+                                              : this.state.validationState.name
+                                          }
+                                          success={
+                                            this.state.validationState.name === ""
+                                              ? ""
+                                              : !this.state.validationState.name
+                                          }
                                     />
                                 </GridItem>
                                 {additionalFields}
