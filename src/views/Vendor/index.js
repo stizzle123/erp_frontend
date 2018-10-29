@@ -44,17 +44,13 @@ class Index extends React.Component {
 
   constructor(props) {
     super(props);
-    this.handler = this.handler.bind(this);
+   /// this.handler = this.handler.bind(this);
     this.state = { 
       redirectTo:false,
-      data:[]
+      data:[],
+      status:""
     };
   }
- 
-
-handler(type, id){
-}
-
 
 componentDidMount(){
   (this.props.match.params.type)?
@@ -67,6 +63,12 @@ componentDidUpdate(prevProps) {
     vendorActions.findAllVendors(this.props, this.props.match.params.type)
   }
 }
+
+filterVendor = (e)=>{
+  vendorActions.findAllVendors(this.props, e.target.value)
+  this.setState({status: e.target.value})
+}
+
 processJson(responseJson){
   let datas = [];
   responseJson.map((row)=>{
@@ -178,6 +180,8 @@ render(){
               <h4 className={classes.cardIconTitle}>Vendors</h4>
             </CardHeader>
             <CardBody>
+            {
+              (this.props.user.role == "iac" || this.props.user.role == "admin")?
             <Card> 
               <CardBody>
                 <FormControl
@@ -197,15 +201,14 @@ render(){
                             classes={{
                               select: classes.select
                             }}
-                            value={this.state.simpleSelect}
-                            onChange={this.handleSimple}
+                            value={this.state.status}
+                            onChange={this.filterVendor}
                             inputProps={{
                               name: "simpleSelect",
                               id: "simple-select"
                             }}
                           >
                             <MenuItem
-                              disabled
                               classes={{
                                 root: classes.selectMenuItem
                               }}
@@ -217,7 +220,7 @@ render(){
                                 root: classes.selectMenuItem,
                                 selected: classes.selectMenuItemSelected
                               }}
-                              value="2"
+                              value="approved"
                             >
                               Approved
                             </MenuItem>
@@ -226,17 +229,15 @@ render(){
                                 root: classes.selectMenuItem,
                                 selected: classes.selectMenuItemSelected
                               }}
-                              value="2"
-                            >
-                              Pending Submission
+                              value="0">
+                              Just Registered
                             </MenuItem>
                             <MenuItem
                               classes={{
                                 root: classes.selectMenuItem,
                                 selected: classes.selectMenuItemSelected
                               }}
-                              value="2"
-                            >
+                              value="unapproved">
                               Pending Approval
                             </MenuItem>
                             <MenuItem
@@ -244,14 +245,14 @@ render(){
                                 root: classes.selectMenuItem,
                                 selected: classes.selectMenuItemSelected
                               }}
-                              value="2"
-                            >
+                              value="blacklisted">
                               Blacklisted
                             </MenuItem>
                             </Select>
                 </FormControl>
               </CardBody>
-            </Card>
+            </Card> : ""
+            }
               <ReactTable
                 data={data}
                 filterable
