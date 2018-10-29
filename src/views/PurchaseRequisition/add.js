@@ -58,9 +58,15 @@ const categories = [
 ];
 
 const shipvia = [
+  {slug: 'digital', name:'Digital (Download)'},
+  {slug: 'vendor', name:'Vendor Delivery'},
+  {slug: 'dhl', name:'DHL'},
+]
+
+/* const shipvia = [
   {slug: 'lagos', name:'Lagos Office'},
   {slug: 'portharcourt', name:'Port-Harcourt Office'}
-]
+] */
 
 class PurchaseRequisition extends React.Component {
   state = {
@@ -71,7 +77,7 @@ class PurchaseRequisition extends React.Component {
       type:'',
       requestedby: '',
       eid: "",
-      departmentname: "",
+      department: "",
       chargeto: "",
       dateneeded: "",
       status: 1,
@@ -138,6 +144,7 @@ class PurchaseRequisition extends React.Component {
       this.state.departments.map((v,i)=>{
         if(event.target.value == v._id){
           data['chargeto'] =  v.code;
+          data['departmentslug'] = v.slug; 
           return;
         }
       });
@@ -157,12 +164,13 @@ class PurchaseRequisition extends React.Component {
     let data = this.state.data;
     data.lineitems = this.state.lineItems;
     data.status = "01";
+    console.log(data);
     prActions.submitRequisition(this.props.user.token, data, (isOk)=>{
       if(isOk){
         this.setState({message:"Purchase requisition has been submitted.", error:false });
       } 
       else this.setState({message:"Error processing request.", error:true });
-    })
+    }) 
   }
 
   handleSaveForm = e=>{
@@ -268,12 +276,8 @@ class PurchaseRequisition extends React.Component {
         </TableRow>
         )}
     );
-    let showVendorsName = false; 
-	if (this.state.simpleSelect === 'Service'){
-		showVendorsName = true;
-	}else {
-    showVendorsName = false;
-  }
+
+
     return (
 	<div>
 	<Grid container>
@@ -476,15 +480,13 @@ class PurchaseRequisition extends React.Component {
                   <Table className={classes.table} > 
                     <TableHead  className={classes[tableHeaderColor + "TableHeader"]} style={{marginTop:"10px", color:"blue", borderBottomColor:"#333",borderBottomStyle:"solid", borderBottomWidth:"1px"}}>
                       <TableRow>
-                        <TableCell className={classes.tableCell + " " + classes.tableHeadCell+" "+classes.td} style={{color: "blue", width:"55px"}}>Item No</TableCell>
+                        <TableCell className={classes.tableCell + " " + classes.tableHeadCell+" "+classes.td} style={{color: "blue", width:"55px"}}>#</TableCell>
                         <TableCell className={classes.tableCell + " " + classes.tableHeadCell+" "+classes.td} style={{color: "blue"}}>Category</TableCell>
                         <TableCell className={classes.tableCell + " " + classes.tableHeadCell+" "+classes.td} style={{color: "blue"}}>Item Description</TableCell>
                         <TableCell className={classes.tableCell + " " + classes.tableHeadCell+" "+classes.td} style={{color: "blue", width: "70px"}}>Quantity</TableCell>
-                        <TableCell className={classes.tableCell + " " + classes.tableHeadCell+" "+classes.td} style={{color: "blue"}}>Unit</TableCell>
+                        <TableCell className={classes.tableCell + " " + classes.tableHeadCell+" "+classes.td} style={{color: "blue"}}>UOM</TableCell>
                       </TableRow>
                     </TableHead>
-                    <div ></div>
-
                     <TableBody>
                       {tableData}
                     </TableBody>

@@ -107,15 +107,14 @@ class Add extends React.Component {
 
 
   submitQuote= ()=>{
-    {{debugger}}
-      let items = this.props.pr.lineitems.map((prop, key)=> {
+      let items = this.props.pr.lineitems.filter((prop, key)=> {
           if(this.state.checkedLineItems.indexOf(key)){
             return prop;
           }
       });
       rfqActions.submitQuotation(this.props.user.token, 
         {items: items, vendors:  this.state.selectedOption, 
-          prId:this.props.pr._id}, (isOk)=>{
+          pr:this.props.pr}, (isOk)=>{
             if(isOk){
               this.setState({message:"RFQ succesfully sent to vendor", error:false });
             } 

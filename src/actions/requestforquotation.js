@@ -24,6 +24,17 @@ export function fetchQuotesByRequisitionId(token, id, callback){
     );
 }
 
+export function fetchVendorsQuotes(token, vendorId, callback){
+    let m = new MiddleWare(token);
+    return m.makeConnection('/purchase/quotation/vendor/'+vendorId, m.GET).then((response) => {
+        return response.json()
+    }).then(        
+        (responseJson)=>{
+            callback(responseJson);
+        }
+    );
+}
+
 export function findQuotationById(token, id, callback){
     let m = new MiddleWare(token);
     return m.makeConnection('/purchase/quotation/view/'+id, m.GET).then((response) => {
@@ -34,6 +45,16 @@ export function findQuotationById(token, id, callback){
             //props.dispatch(loadAction.LoadingSuccess());
         }
     );
+}
+
+export function submitVendorQuote(token, quoteid, data,callback){
+    let m = new MiddleWare(token);
+    const d = data;
+    d.id = quoteid;
+    return m.makeConnection('/purchase/quotation/submitvendorquote', m.POST, d).then(
+        (result)=>{
+            if(result.ok && result.statusText == "OK" && result.status == 200 ) callback(result.ok);
+    });  
 }
 
 export function submitQuotation(token, data, callback){
