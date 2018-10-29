@@ -1,4 +1,4 @@
-import { FETCH_VENDOR, FETCH_VENDORS, ADD_VENDOR, UPDATE_VENDOR, APPROVE_VENDOR, DELETE_VENDOR } from './index';
+import { FETCH_VENDOR, FETCH_VENDORS, ADD_VENDOR, UPDATE_VENDOR, APPROVE_VENDOR, DELETE_VENDOR, RECIEVE_GENERAL_INFO_DATA, RECIEVE_BUSINESS_INFO_DATA, RECIEVE_WORK_REFERENCE_DATA, RECIEVE_BANK_DETAIL_DATA } from './index';
 import * as loadAction from './loading';
 import MiddleWare from "../middleware/api";
 
@@ -20,7 +20,18 @@ export function approveVendorsAction(arry){
 export function deleteVendorsAction(arry){
     return {type: DELETE_VENDOR, data:arry};  
 }
-
+export function getGeneralInfoInputs(dispatch, d){
+dispatch({type: RECIEVE_GENERAL_INFO_DATA, data:d});
+}
+export function getBusinessInfoInputs(dispatch, d){
+    dispatch({type: RECIEVE_BUSINESS_INFO_DATA, data:d});
+}
+export function getBankDetailInputs(dispatch, d){
+    dispatch({type: RECIEVE_BANK_DETAIL_DATA, data:d});
+}
+export function getWorkReferenceInputs(dispatch, d){
+    dispatch({type: RECIEVE_WORK_REFERENCE_DATA, data:d});
+}
 export function findAllVendors(props, type=''){
 
     let middleware = new MiddleWare(props.user.token);
