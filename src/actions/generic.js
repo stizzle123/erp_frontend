@@ -18,9 +18,12 @@ export function saveItem(type, token, data, callback){
     return m.makeConnection('/'+type+'/add/', m.POST, data).then((result) => {
         (result)=>{
             if(result.ok && result.statusText == "OK" && result.status == 200 )         
-            callback(result.ok);
+            console.log(res.json())
+            return res.json()
         }
-    });   
+    }).then((e)=>{
+        callback(e);
+      });   
 }
 
 export function deleteItem(type, token, id, callback){ 

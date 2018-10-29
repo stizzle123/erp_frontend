@@ -147,7 +147,16 @@ class AddUser extends React.Component {
    else {
     this.setState({submitButtonState: true})
     userAction.addUser(this.props, data, json => {
-      this.setState({ responseMessage: json });
+      this.setState({ 
+        responseMessage: json,
+        data: {
+          type: "staff"
+        },
+        validationState: {}
+       },
+       () => {
+           console.log(this.state.data) 
+       });
     });
    } 
   };
@@ -161,7 +170,7 @@ class AddUser extends React.Component {
   }
 
   render() {
-    console.log(this.state.validationState);
+    console.log(this.state.data);
     const { classes } = this.props;
     return (
       <div>
@@ -190,8 +199,9 @@ class AddUser extends React.Component {
                           fullWidth: true
                         }}
                         inputProps={{
-                          onChange: this.handleChange
-                        }}
+                          onChange: (e)=>this.handleChange(e),
+                          value: this.state.data.lastname
+                                                }}
                         error={
                           this.state.validationState.lastname === ""
                             ? ""
@@ -212,8 +222,9 @@ class AddUser extends React.Component {
                           fullWidth: true
                         }}
                         inputProps={{
-                          onChange: this.handleChange
-                        }}
+                          onChange: (e)=>this.handleChange(e),
+                          value: this.state.data.firstname
+                                                }}
                         error={
                           this.state.validationState.firstname === ""
                             ? ""
@@ -231,13 +242,14 @@ class AddUser extends React.Component {
                     <GridItem xs={12} sm={12} md={6}>
                       <CustomInput
                         labelText="Email"
-                        id="email"
+                        id="email"                        
                         formControlProps={{
                           fullWidth: true
                         }}
                         inputProps={{
-                          onChange: this.handleChange
-                        }}
+                          onChange: (e)=>this.handleChange(e),
+                          value: this.state.data.email
+                                                }}
                         error={
                           this.state.validationState.email === ""
                             ? ""
@@ -258,8 +270,9 @@ class AddUser extends React.Component {
                           fullWidth: true
                         }}
                         inputProps={{
-                          onChange: this.handleChange
-                        }}
+                          onChange: (e)=>this.handleChange(e),
+                          value: this.state.data.eid
+                               }}
                         error={
                           this.state.validationState.eid === ""
                             ? ""

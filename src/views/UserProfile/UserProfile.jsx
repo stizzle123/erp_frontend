@@ -52,7 +52,7 @@ class UserProfile extends React.Component {
         },
         ValidationState: {
           lastname: '',
-          firstname: true,
+          firstname: '',
           email: '',
           eid: '',
           role: '',
@@ -122,34 +122,25 @@ validate = (type, value) => {
       const eid = helpers.isEmpty(value) ? false : true;
       this.setState({
         ValidationState: {
-          ...this.state.validationState,
+          ...this.state.ValidationState,
           eid
         }
       });
       break;
-    case "department":
-      const department = helpers.isEmpty(value) ? false : true;
+    case "city":
+      const city = helpers.isEmpty(value) ? false : true;
       this.setState({
-        validationState: {
-          ...this.state.validationState,
-          department
+        ValidationState: {
+          ...this.state.ValidationState,
+          city
         }
       });
-      break;
-    case "role":
-      const role = helpers.isEmpty(value) ? false : true;
-      this.setState({
-        validationState: {
-          ...this.state.validationState,
-          role
-        }
-      });
-  }
 };
+}
 //function UserProfile(props) {
   render() {
     const { classes, data } = this.props;
-    console.log( this.state.ValidationState);
+    console.log(this.state.data);
   return (
     <div>
       <Grid container>
@@ -196,16 +187,16 @@ validate = (type, value) => {
                       onChange: this.handleChange,
                       defaultValue: this.state.data.firstname
                     }}
-                    // error={
-                    //   this.state.validationState.firstname === ""
-                    //     ? ""
-                    //     : this.state.validationState.firstname
-                    // }
-                    // success={
-                    //   this.state.validationState.firstname === ""
-                    //     ? ""
-                    //     : !this.state.validationState.firstname
-                    // }
+                    error={
+                      this.state.ValidationState.firstname === ""
+                        ? ""
+                        : this.state.ValidationState.firstname
+                    }
+                    success={
+                      this.state.ValidationState.firstname === ""
+                        ? ""
+                        : !this.state.ValidationState.firstname
+                    }
                   />
                 </GridItem> 
                 <GridItem xs={12} sm={12} md={4}>
@@ -232,16 +223,16 @@ validate = (type, value) => {
                       onChange: this.handleChange,
                       value: this.state.data.eid
                     }}
-                    // error={
-                    //   this.state.validationState.eid === ""
-                    //     ? ""
-                    //     : this.state.validationState.eid
-                    // }
-                    // success={
-                    //   this.state.validationState.eid === ""
-                    //     ? ""
-                    //     : !this.state.validationState.eid
-                    // }
+                    error={
+                      this.state.ValidationState.eid === ""
+                        ? ""
+                        : this.state.ValidationState.eid
+                    }
+                    success={
+                      this.state.ValidationState.eid === ""
+                        ? ""
+                        : !this.state.ValidationState.eid
+                    }
                   />
                 </GridItem>
                 <GridItem xs={12} sm={12} md={4}>

@@ -38,7 +38,10 @@ class AddCrud extends React.Component {
                 name: '',
                 code: '',
                 slug:'',
-            }
+            },
+            response: "",
+            responseState: false
+
 
         }
     }
@@ -63,13 +66,34 @@ class AddCrud extends React.Component {
               }
             });
             break;
+            case "slug":
+            const slug = helpers.isEmpty(value) ? false : true;
+            this.setState({
+              validationState: {
+                ...this.state.validationState,
+                slug
+              }
+            });
+            break;
+            case "code":
+            const code = helpers.isEmpty(value) ? false : true;
+            this.setState({
+              validationState: {
+                ...this.state.validationState,
+                code
+              }
+            });
+            break;
+
         }
     }   
     handleSubmit = e => {
-        genericActions.saveItem(this.props.match.params.type, this.props.user.token, this.state.data, function(isOk){
-            if(isOk) this.setState({data: {}});
-            else alert("Couldn't submit an error occur");
-        });
+        genericActions.saveItem(this.props.match.params.type, this.props.user.token, this.state.data,  (json)=>{
+            this.setState({
+                data:json, 
+               
+            });
+          });
     }
 
     componentDidMount(){
@@ -77,7 +101,7 @@ class AddCrud extends React.Component {
     }
 
     render() {
-        console.log(this.state.data.name);
+      console.log(this.state.data);
       const { classes, data } = this.props;
       let field = this.state[this.props.match.params.type];
       let additionalFields = " ";
@@ -93,14 +117,14 @@ class AddCrud extends React.Component {
                             value: this.state[f]
                         }}
                         error={
-                            this.state.validationState.name === ""
+                            this.state.validationState[f] === ""
                               ? ""
-                              : this.state.validationState.name
+                              : this.state.validationState[f]
                           }
                           success={
-                            this.state.validationState.name === ""
+                            this.state.validationState[f] === ""
                               ? ""
-                              : !this.state.validationState.name
+                              : !this.state.validationState[f]
                           }
                     />
                 </GridItem>
