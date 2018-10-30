@@ -121,15 +121,41 @@ class Quote extends React.Component {
         this.props = props;
         this.state = {data: {}}
     }
+    showQuoteDetails = () => {
+      this.setState({
+        alert: (
+          <SweetAlert
+            style={{
+              display: "block",
+              marginTop: "-30%",
+              marginLeft: "-30%",
+              width: "65%"
+            }}
+            title="Request For Quote"
+            onConfirm={() => this.hideAlert()}
+            confirmBtnText="Click to Close"
+            confirmBtnCssClass={
+              this.props.classes.button + " " + this.props.classes.info
+            }
+          >
+            <AddComponent pr={this.state.selectedPr} submit={this.state.submitRfq} />
+          </SweetAlert>
+        )
+      });
+    };
 
     render(){
         const { classes } = this.props;
         let mappedData = this.props.quotes.map((prop, key) => {
+          const dt = new Date(prop.created);
+          const status = Status.getStatus(prop.status);
             return [
                     key+1,
                     prop.vendor.general_info.company_name,
-                    prop.created,
-                    prop.status
+                    dt.toISOString().split('T')[0],
+                    status,
+                    "click to view"
+                    
             ]
           });
         return (
@@ -176,7 +202,7 @@ class Quote extends React.Component {
                     <h3>RFQ for this PR</h3>
                     <div className={classes.shadow}>
                       <Table
-                        tableHead={["#", "Vendor", "Created", "Status"]}
+                        tableHead={["#", "Vendor", "Created", "Status", ""]}
                         tableData={mappedData}
                         customCellClasses={[
                           classes.center,

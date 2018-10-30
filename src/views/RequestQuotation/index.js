@@ -30,7 +30,7 @@ import sweetAlertStyle from "assets/jss/material-dashboard-pro-react/views/sweet
 import SweetAlert from "react-bootstrap-sweetalert";
 import Language from "@material-ui/icons/Language";
 import AddComponent from "./add";
-import QuotesComponent from "./quotes"
+import QuotesComponent from "./quotes";
 import { connect } from "react-redux";
 
 const styles = {
@@ -212,10 +212,11 @@ class Index extends React.Component {
       );
     } else {
       let mappedData = this.state.data.map((prop, key) => {
+        let date = new Date(prop.created);
         return (
           <div className={classes.boxRow}  onClick={() => this.fetchQuotes(prop)}>
             <div className={classes.box}>{prop.requisitionno}</div>
-            <div className={classes.box}>{prop.created}</div>
+            <div className={classes.box}>{date.toISOString().split('T')[0]}</div>
           </div>
         );
       });
@@ -231,7 +232,7 @@ class Index extends React.Component {
               </CardHeader>
               <CardBody>
                 <GridContainer justify="space-between">
-                  <GridItem xs={12} sm={3} md={3}>
+                  <GridItem xs={12} sm={4} md={4}>
                     <GridContainer justify="space-between">
                       <GridItem xs={3}>
                         <Funnel style={{ marginTop: "25px" }} />
@@ -294,14 +295,14 @@ class Index extends React.Component {
                     <div className={classes.sidebar}>
                       <div className={classes.boxer}>
                         <div className={classes.boxHeader}>
-                          <div className={classes.box}>RFQ</div>
+                          <div className={classes.box}>REQ</div>
                           <div className={classes.box}>DATE</div>
                         </div>
                         {mappedData}
                       </div>
                     </div>
                   </GridItem>
-                  <GridItem xs={12} sm={9} md={9}>
+                  <GridItem xs={12} sm={8} md={8}>
                     <div>
                       <Button
                         color="twitter"

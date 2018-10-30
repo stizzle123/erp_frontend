@@ -12,6 +12,7 @@ import AccountBalance from '@material-ui/icons/AccountBalanceWallet';
 import CreditCard from '@material-ui/icons/CreditCard';
 import RequestQuotation from "../views/RequestQuotation/index.js";
 import AddQuotation from "../views/RequestQuotation/add.js";
+import MyQuotation from "../views/RequestQuotation/myquote.js";
 // core components/views
 import LoginPage from "../views/LoginPage/index.js";
 import DashboardPage from "../views/Dashboard/Dashboard.jsx";
@@ -103,8 +104,8 @@ export const dashboardRoutes = [
     component: AddQuotation
   },
   {
-    path: "/quotation/myquote",
-    component: RequestQuotation
+    path: "/quotation/myquotes",
+    component: MyQuotation
   },
   {
     path: "/requisition",
@@ -212,6 +213,13 @@ export const AdminMenu = [
       mini: "RFQ",
       component: RequestQuotation,
       actions: ['index','add', 'edit', 'delete', 'admin_view' ]
+    },
+    {
+      path: "/quotation/myquotes",
+      name: "Quotation Request",
+      mini: "RFQ",
+      component: MyQuotation,
+      actions: [ 'edit' ]
     },
     {
       path: "/order",
