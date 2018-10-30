@@ -76,6 +76,14 @@ export function findAllStaff(props,callback){
     })
 }
 
+export function findOnlyStaff(props,callback){
+  let middleware = new MiddleWare(props.user.token);
+  middleware.makeConnection('/users/findonlystaff/','GET').then((response) => {
+        return response.json();
+  }).then((e)=>{
+    callback(e);
+  })
+}
 export function addUser(props, data, callback){
   let middleware = new MiddleWare(props.user.token);
   middleware.makeConnection('/users/createnewuser/','POST', data).then((response) => {

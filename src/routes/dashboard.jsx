@@ -32,6 +32,7 @@ import ViewCrud from "../views/Crud/add.js";
 import Log from "../views/Log/index.js";
 import Registration from "../views/RegistrationPage/index.js";
 import Permission from "views/Roles/permission.js";
+import EditDepartment from "views/Departments/index.js";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import ChangePassword from "../views/UserProfile/ChangePassword.jsx"
 
@@ -81,6 +82,10 @@ export const dashboardRoutes = [
     path: "/roles/permission/:id",
     component: Permission
   },
+  {
+  path: "/departments/edit/:id",
+  component: EditDepartment
+},
   {
     path: "/requisition/add",
     component: AddPurchaseRequisition

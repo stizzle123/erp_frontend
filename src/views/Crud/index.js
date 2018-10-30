@@ -66,6 +66,7 @@ class ListCrud extends React.Component {
         let data = {"dataRows":[]};
         if(this.state.data.length> 0){
           data = this.parseJsonTotableData(this.state.data);
+          console.log(data)
         }
 
         let mappedData = data.dataRows.map((prop, key) => {
@@ -81,12 +82,13 @@ class ListCrud extends React.Component {
                     simple
                     onClick={() => {
                       let obj = data.find(o => o.id === key);
-                      this.setState({redirectTo:data.dataRows[[obj.id]][0]})
-                      }}
+                      this.setState({redirectTo:data.dataRows[[obj.id]][0]})                      }}
                     color="warning"
                     className="edit"
                   >
-                     <Dvr />
+                  
+                  {(this.props.match.params.type == "departments")? <Link to={"/departments/edit/"+prop[0]} ><Dvr /></Link>: ""}
+
                   </Button>
                   <Button
                     justIcon
