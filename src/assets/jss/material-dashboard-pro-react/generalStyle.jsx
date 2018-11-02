@@ -49,8 +49,14 @@ const generalStyle = {
         marginTop: "-3px",   
         borderBottomWidth:" 1px"
     },
-    pt2: {
+    pt3: {
+        paddingTop: "30px"
+    },
+    pt2_5: {
         paddingTop: "25px"
+    },
+    pt1_5: {
+        paddingTop: "15px"
     },
     mt3: {
         marginTop: "30px"
@@ -117,7 +123,7 @@ const generalStyle = {
     minWidth:"92px"
   },
   tableTd3: {
-    padding: "4px 12px",
+    padding: "4px 10.5px",
     border: "1px solid #d9d7ce",
     borderCollapse: "collapse",
     maxWidth:"78px"
@@ -207,6 +213,12 @@ const generalStyle = {
         display: "inline-block",
         verticalAlign: "middle"
     },
+    POLabel2: {
+        float: "none", 
+        display: "inline-block",
+        verticalAlign: "middle",
+        margin: "5px 0"
+        },
     POinput: {
         float: "none", 
         display: "inline-block",
@@ -230,6 +242,20 @@ const generalStyle = {
     POtitle: {
         fontWeight: "bold",
         padding:"10px 0"
+    },
+    POinput2: {
+        float: "none", 
+        display: "inline-block",
+        verticalAlign: "middle",
+        outline: "0",
+        borderWidth: "0 0 1px",
+        borderColor: "#000",
+        float:"right",
+        maxWidth:"150px"
+    },
+    divider: {
+     height: "1px",
+     background: "#000"
     }
 
 }

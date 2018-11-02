@@ -284,39 +284,45 @@ class Pdf extends Component {
                 </div>
               </div>
               <div>
-                <h2>Additional Terms:</h2>
+                <p style={generalStyle.POtitle}>Additional Terms:</p>
 
                 <p>
                   Total order value excludes VAT which is remitted directly to
-                  FIRS
+                  FIRS.<br /> This purchase order is subject to the Terms and Conditions as
+                  attached.
                 </p>
 
                 <p>
                   Credit Terms: 5 days upon receipt of payment from Chevron
                 </p>
+                <div style={generalStyle.divider} />
                 <h4>Invoicing and payment shall be done as follows:</h4>
-                <ul>
+                <ul style={{padding: "0 15px"}}>
                   <li>US Dollars Portion: Sixty Percent (60%) US$</li>
                   <li>NGN Portion: Forty Percent (40%) NGN</li>
                 </ul>
-                <p>
-                  
-                  This purchase order is subject to the Terms and Conditions as
-                  attached
-                </p>
-
                 <Grid container>
-                  <GridItem xs={6}>
+                  <GridItem xs={7}>
+                    <div>
+                    <label style={generalStyle.POLabel2} for="input">
+                       Prepared by:
+                      </label>
+                      <input
+                        style={generalStyle.POinput2}
+                        type="text"
+                        id="your-input"
+                      />
+                    </div>
                     <div>
                       <span>
                         <strong>Reviewed by:</strong>
                         <br />
                       </span>
-                      <label style={generalStyle.POLabel} for="input">
+                      <label style={generalStyle.POLabel2} for="input">
                         Reviewer Signature:
                       </label>
                       <input
-                        style={generalStyle.POinput}
+                        style={generalStyle.POinput2}
                         type="text"
                         id="your-input"
                       />
@@ -326,21 +332,21 @@ class Pdf extends Component {
                         <strong>Authorized and Approved By:</strong>
                         <br />
                       </span>
-                      <label style={generalStyle.POLabel} for="input">
+                      <label style={generalStyle.POLabel2} for="input">
                         Authorizer’s Signature:
                       </label>
                       <input
-                        style={generalStyle.POinput}
+                        style={generalStyle.POinput2}
                         type="text"
                         id="your-input"
                       />
                     </div>
                     <div>
-                      <label style={generalStyle.POLabel} for="input">
+                      <label style={generalStyle.POLabel2} for="input">
                         Approver’s Signature:
                       </label>
                       <input
-                        style={generalStyle.POinput}
+                        style={generalStyle.POinput2}
                         type="text"
                         id="your-input"
                       />
@@ -350,44 +356,33 @@ class Pdf extends Component {
                         <strong>Vendor:</strong>
                         <br />
                       </span>
-                      <label style={generalStyle.POLabel} for="input">
+                      <label style={generalStyle.POLabel2} for="input">
                         Signature:
                       </label>
                       <input
-                        style={generalStyle.POinput}
+                        style={generalStyle.POinput2}
                         type="text"
                         id="your-input"
                       />
                     </div>
                   </GridItem>
-                  <GridItem xs={6}>
-                    <div style={generalStyle.pt2}>
+                  <GridItem xs={5}>
+                    <div style={generalStyle.pt3}>
                       <label style={generalStyle.POLabel} for="input">
                         Date:
                       </label>
                       <input
-                        style={generalStyle.POinput}
+                        style={generalStyle.POinput2}
                         type="text"
                         id="your-input"
                       />
                     </div>
-                    <div style={generalStyle.pt2}>
+                    <div style={generalStyle.pt2_5}>
                       <label style={generalStyle.POLabel} for="input">
                         Date:
                       </label>
                       <input
-                        style={generalStyle.POinput}
-                        type="text"
-                        id="your-input"
-                      />
-                    </div>
-                    <div>
-                      <br />
-                      <label style={generalStyle.POLabel} for="input">
-                        Date:
-                      </label>
-                      <input
-                        style={generalStyle.POinput}
+                        style={generalStyle.POinput2}
                         type="text"
                         id="your-input"
                       />
@@ -398,7 +393,18 @@ class Pdf extends Component {
                         Date:
                       </label>
                       <input
-                        style={generalStyle.POinput}
+                        style={generalStyle.POinput2}
+                        type="text"
+                        id="your-input"
+                      />
+                    </div>
+                    <div style={generalStyle.pt1_5}>
+                      <br />
+                      <label style={generalStyle.POLabel} for="input">
+                        Date:
+                      </label>
+                      <input
+                        style={generalStyle.POinput2}
                         type="text"
                         id="your-input"
                       />
