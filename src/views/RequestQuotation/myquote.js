@@ -25,6 +25,7 @@ import CardIcon from "components/Card/CardIcon.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
 import Button from "../../components/CustomButtons/Button.jsx";
 import Funnel from "@material-ui/icons/FilterList";
+
 import PropTypes from "prop-types";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import purple from "@material-ui/core/colors/purple";
@@ -38,6 +39,7 @@ import CustomSelect from "components/CustomInput/CustomSelect.jsx";
 import { connect } from "react-redux";
 import generalStyle from "assets/jss/material-dashboard-pro-react/generalStyle.jsx";
 import tableStyle from "assets/jss/material-dashboard-pro-react/components/tableStyle.jsx";
+
 
 const styles = {
   ...generalStyle,
@@ -157,7 +159,7 @@ class Index extends React.Component {
   fetchQuotes(quote){
     this.setState({ quote: quote, showRfq: true });
   }
-
+ 
   handleSelect = event =>{
     let data = this.state.data;
     data[[event.target.name]] = event.target.value;
@@ -359,6 +361,7 @@ class Index extends React.Component {
                     </div>: 
                     ""
                     }
+                    {this.state.alert}
                   </GridItem>
                 </GridContainer>
               </CardBody>

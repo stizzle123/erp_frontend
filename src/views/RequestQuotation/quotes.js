@@ -13,8 +13,7 @@ import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
 import Card from "components/Card/Card.jsx";
 import CardBody from "components/Card/CardBody.jsx";
-import CardIcon from "components/Card/CardIcon.jsx";
-import CardHeader from "components/Card/CardHeader.jsx";
+import CardFooter from "components/Card/CardFooter.jsx";
 import Button from "../../components/CustomButtons/Button.jsx";
 import PropTypes from "prop-types";
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -28,12 +27,24 @@ import Table from "components/Table/Table.jsx";
 import * as Status from 'utility/Status';
 import * as rfqActions from '../../actions/requestforquotation';
 import {connect} from 'react-redux';
+import SweetAlert from "react-bootstrap-sweetalert";
+import TableCore from '@material-ui/core/Table';
+import TableRow from '@material-ui/core/TableRow';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import sweetAlertStyle from "assets/jss/material-dashboard-pro-react/views/sweetAlertStyle.jsx";
+
 
 const styles = {
+  ...sweetAlertStyle,
   cardIconTitle: {
     ...cardTitle,
     marginTop: "15px",
     marginBottom: "0px"
+  },
+  sweetAlert: {
+      marginTop: '0'
   },
     cardIconTitle: {
       ...cardTitle,
@@ -121,24 +132,70 @@ class Quote extends React.Component {
         this.props = props;
         this.state = {data: {}}
     }
-    showQuoteDetails = () => {
+
+
+
+    hideAlert() {
+      this.setState({
+        alert: null
+      });
+    }
+
+    showQuoteDetails = (quote) => event=> {
+      const { classes, tableHeaderColor } = this.props;
+      const tableData2 = quote.lineitems.map((prop, key)=> {
+      return (
+        <TableRow key={key}>
+          <TableCell className={classes.td}>
+              {prop.itemdescription }
+          </TableCell>
+          <TableCell className={classes.td}>
+              {prop.quantity}
+          </TableCell>
+          <TableCell className={classes.td}>
+              {prop.unit}   
+          </TableCell> 
+          <TableCell className={classes.td}>
+              {prop.price}
+          </TableCell>      
+        </TableRow>
+        )}
+    );
       this.setState({
         alert: (
           <SweetAlert
-            style={{
-              display: "block",
-              marginTop: "-30%",
-              marginLeft: "-30%",
-              width: "65%"
-            }}
             title="Request For Quote"
             onConfirm={() => this.hideAlert()}
             confirmBtnText="Click to Close"
             confirmBtnCssClass={
               this.props.classes.button + " " + this.props.classes.info
             }
-          >
-            <AddComponent pr={this.state.selectedPr} submit={this.state.submitRfq} />
+          > 
+              {
+                (quote.lineitems.length >0)?
+                <div className={classes.tableResponsive} style ={{ overflowX: "scroll"}}>
+                  <Card>
+                    <CardBody>
+                      <TableCore className={classes.table} > 
+                        <TableHead  className={classes[tableHeaderColor + "TableHeader"]} style={{marginTop:"10px", color:"blue", borderBottomColor:"#333",borderBottomStyle:"solid", borderBottomWidth:"1px"}}>
+                          <TableRow>
+                            <TableCell className={classes.tableCell + " " + classes.tableHeadCell+" "+classes.td} style={{color: "blue"}}>Description</TableCell>
+                            <TableCell className={classes.tableCell + " " + classes.tableHeadCell+" "+classes.td} style={{color: "blue", width: "70px"}}>Qty</TableCell>
+                            <TableCell className={classes.tableCell + " " + classes.tableHeadCell+" "+classes.td} style={{color: "blue"}}>UOM</TableCell>
+                            <TableCell className={classes.tableCell + " " + classes.tableHeadCell+" "+classes.td} style={{color: "blue"}}>Price</TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                        {tableData2}
+                        </TableBody>
+                      </TableCore> 
+                    </CardBody>
+                    <CardFooter>              
+                    </CardFooter>
+                  </Card>
+                </div>: 
+                ""
+                }
           </SweetAlert>
         )
       });
@@ -154,7 +211,7 @@ class Quote extends React.Component {
                     prop.vendor.general_info.company_name,
                     dt.toISOString().split('T')[0],
                     status,
-                    "click to view"
+                    <Button color="yellowgreen"  onClick={this.showQuoteDetails(prop)}>View</Button>
                     
             ]
           });
@@ -217,6 +274,8 @@ class Quote extends React.Component {
                         ]}
                         customHeadClassesForCells={[0, 4, 5]}
                       />
+                      
+                    {this.state.alert}
                     </div>
             </div>
         );

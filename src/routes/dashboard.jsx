@@ -13,6 +13,7 @@ import CreditCard from '@material-ui/icons/CreditCard';
 import RequestQuotation from "../views/RequestQuotation/index.js";
 import AddQuotation from "../views/RequestQuotation/add.js";
 import MyQuotation from "../views/RequestQuotation/myquote.js";
+import Pdf from "../views/RequestQuotation/pdf";
 // core components/views
 import LoginPage from "../views/LoginPage/index.js";
 import DashboardPage from "../views/Dashboard/Dashboard.jsx";
@@ -86,6 +87,10 @@ export const dashboardRoutes = [
   {
   path: "/departments/edit/:id",
   component: EditDepartment
+},
+{
+  path: "/pdf",
+  component: Pdf
 },
   {
     path: "/requisition/add",
