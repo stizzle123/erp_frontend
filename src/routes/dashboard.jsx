@@ -13,6 +13,7 @@ import CreditCard from '@material-ui/icons/CreditCard';
 import RequestQuotation from "../views/RequestQuotation/index.js";
 import AddQuotation from "../views/RequestQuotation/add.js";
 import MyQuotation from "../views/RequestQuotation/myquote.js";
+import Pdf from "../views/RequestQuotation/pdf";
 // core components/views
 import LoginPage from "../views/LoginPage/index.js";
 import DashboardPage from "../views/Dashboard/Dashboard.jsx";
@@ -35,6 +36,7 @@ import ViewCrud from "../views/Crud/add.js";
 import Log from "../views/Log/index.js";
 import Registration from "../views/RegistrationPage/index.js";
 import Permission from "views/Roles/permission.js";
+import EditDepartment from "views/Departments/index.js";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import ChangePassword from "../views/UserProfile/ChangePassword.jsx"
 
@@ -84,6 +86,14 @@ export const dashboardRoutes = [
     path: "/roles/permission/:id",
     component: Permission
   },
+  {
+  path: "/departments/edit/:id",
+  component: EditDepartment
+},
+{
+  path: "/pdf",
+  component: Pdf
+},
   {
     path: "/requisition/add",
     component: AddPurchaseRequisition

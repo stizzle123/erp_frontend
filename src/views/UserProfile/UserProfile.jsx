@@ -15,6 +15,7 @@ import CardFooter from "../../components/Card/CardFooter.jsx";
 import avatar from "../../assets/img/faces/marc.jpg";
 import {connect} from 'react-redux';
 import * as userAction from "../../actions/user"
+import helpers from "../helpers";
 
 const styles = {
   cardCategoryWhite: {
@@ -35,7 +36,6 @@ const styles = {
   }
 };
 
-
 class UserProfile extends React.Component {
   constructor(props) {
     super(props);
@@ -49,11 +49,19 @@ class UserProfile extends React.Component {
           department: props.user.department,
           role: props.user.role,
           city: props.user.city,
-
         },
+        ValidationState: {
+          lastname: '',
+          firstname: '',
+          email: '',
+          eid: '',
+          role: '',
+          department: ''
+        },
+        submitButtonState: false,
         responseMessage: '',
         isEnabled: false
-      }
+      },
       this.enableEdit = this.enableEdit.bind(this),
       this.handleChange = this.handleChange.bind(this)
     }
@@ -71,7 +79,8 @@ class UserProfile extends React.Component {
       data[[event.target.id]] = event.target.value; 
       this.setState({ 
         data : data
-      }) 
+      });
+      this.validate(event.target.id, event.target.value);
     }
   };
 
@@ -79,11 +88,59 @@ class UserProfile extends React.Component {
     e.preventDefault();
     this.props.sendUserData(this);
 }
+
+validate = (type, value) => {
+  switch (type) {
+    case "lastname":
+      const lastname = helpers.isEmpty(value) ? false : true;
+      this.setState({
+        ValidationState: {
+          ...this.state.ValidationState,
+          lastname
+        }
+      });
+      break;
+    case "firstname":
+      const firstname = helpers.isEmpty(value) ? false : true;
+      this.setState({
+        ValidationState: {
+          ...this.state.ValidationState,
+          firstname
+        }
+      });
+      break;
+    case "email":
+      const email = helpers.isEmail(value) ? false : true;
+      this.setState({
+        ValidationState: {
+          ...this.state.ValidationState,
+          email
+        }
+      });
+      break;
+    case "eid":
+      const eid = helpers.isEmpty(value) ? false : true;
+      this.setState({
+        ValidationState: {
+          ...this.state.ValidationState,
+          eid
+        }
+      });
+      break;
+    case "city":
+      const city = helpers.isEmpty(value) ? false : true;
+      this.setState({
+        ValidationState: {
+          ...this.state.ValidationState,
+          city
+        }
+      });
+};
+}
 //function UserProfile(props) {
   render() {
-    console.log(this.state.data);
     const { classes, data } = this.props;
-    console.log(this.props.user)
+    console.log(this.state.data);
   return (
     <div>
       <Grid container>
@@ -107,6 +164,16 @@ class UserProfile extends React.Component {
                       onChange: this.handleChange,
                       defaultValue: this.state.data.lastname
                     }}
+                    error={
+                      this.state.ValidationState.lastname === ""
+                        ? ""
+                        : this.state.ValidationState.lastname
+                    }
+                    success={
+                      this.state.ValidationState.lastname === ""
+                        ? ""
+                        : !this.state.ValidationState.lastname
+                    }
                   />
                   
                 </GridItem>
@@ -120,6 +187,16 @@ class UserProfile extends React.Component {
                       onChange: this.handleChange,
                       defaultValue: this.state.data.firstname
                     }}
+                    error={
+                      this.state.ValidationState.firstname === ""
+                        ? ""
+                        : this.state.ValidationState.firstname
+                    }
+                    success={
+                      this.state.ValidationState.firstname === ""
+                        ? ""
+                        : !this.state.ValidationState.firstname
+                    }
                   />
                 </GridItem> 
                 <GridItem xs={12} sm={12} md={4}>
@@ -146,6 +223,16 @@ class UserProfile extends React.Component {
                       onChange: this.handleChange,
                       value: this.state.data.eid
                     }}
+                    error={
+                      this.state.ValidationState.eid === ""
+                        ? ""
+                        : this.state.ValidationState.eid
+                    }
+                    success={
+                      this.state.ValidationState.eid === ""
+                        ? ""
+                        : !this.state.ValidationState.eid
+                    }
                   />
                 </GridItem>
                 <GridItem xs={12} sm={12} md={4}>
