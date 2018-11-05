@@ -120,13 +120,13 @@ const generalStyle = {
     padding: "6px 12px",
     border: "1px solid #d9d7ce",
     borderCollapse: "collapse",
-    minWidth:"92px"
+    minWidth:"60px"
   },
   tableTd3: {
-    padding: "4px 10.5px",
+    padding: "4px 5px",
     border: "1px solid #d9d7ce",
     borderCollapse: "collapse",
-    maxWidth:"78px"
+    minWidth:"66px"
   },
   sTable: {
     display: "block",
@@ -226,7 +226,8 @@ const generalStyle = {
         outline: "0",
         borderWidth: "0",
         borderColor: "#000",
-        marginBottom: "5px"
+        marginBottom: "5px",
+        marginLeft:""
     },
     space20: {
         height:"20px"
@@ -256,6 +257,16 @@ const generalStyle = {
     divider: {
      height: "1px",
      background: "#000"
+    },
+    fixedHeader: {
+        position: 'absolute',
+        top: '0%',
+        left: '0%',
+    },
+    fixedFooter: {
+        position: 'absolute',
+        bottom: '0%',
+        left: '0%'
     }
 
 }

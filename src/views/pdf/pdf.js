@@ -3,13 +3,10 @@ import React, { Component } from "react";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { connect } from "react-redux";
 import { PDFExport } from "@progress/kendo-react-pdf";
-import { faGithub, faMedium } from "@fortawesome/free-brands-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import canvg from "canvg";
-import ReactDOMServer from "react-dom/server";
 import generalStyle from "../../assets/jss/material-dashboard-pro-react/generalStyle.jsx";
 import Grid from "@material-ui/core/Grid";
 import GridItem from "../../components/Grid/GridItem.jsx";
+import pdfTemplate from "./pdfTemplate";
 
 const styles = {
   cardCategoryWhite: {
@@ -37,6 +34,7 @@ class Pdf extends Component {
     super();
     (this.state = {
       data: [],
+      footerHeader: [],
       products: [
         {
           id: 1,
@@ -75,15 +73,19 @@ class Pdf extends Component {
       (this.canvLoaded = false);
   }
 
+
   exportPDF = () => {
     this.po_doc.save();
   };
 
-  componentDidMount() {}
+  
+
+  componentDidMount() {
+    
+  }
 
   render() {
     const { classes, data } = this.props;
-
     const tableData = this.state.products.map(prop => {
       return (
         <tr>
@@ -117,7 +119,9 @@ class Pdf extends Component {
           </button>
         </div>
         <PDFExport
-          paperSize={"Letter"}
+          pageTemplate={pdfTemplate}
+          paperSize="A4"
+          margin="1cm"
           fileName="_____.pdf"
           title=""
           subject=""
@@ -127,56 +131,26 @@ class Pdf extends Component {
           <div
             style={{
               height: "auto",
-              width: 580,
-              padding: "15px",
+              width: "500px",
+              padding: "100px 7px",
               backgroundColor: "white",
-              margin: "20",
               overflowX: "hidden",
               overflowY: "hidden",
               fontFamily: "Arial",
-              fontSize: "11px"
+              fontSize: "11px",
+              position: "relative",
+
+      
             }}
-          >
+            ref={(elem) => this.myPdf = elem}
+            >
             <div>
-              <table style={generalStyle.PO}>
-                <tbody>
-                  <tr>
-                    <td rowSpan="2" width="20%" style={generalStyle.POTopth}>
-                      <img
-                        src="https://yt3.ggpht.com/a-/AJLlDp1AuBq98VdMQejTaohdCOu0NxYe0twL_rKNCw=s900-mo-c-c0xffffffff-rj-k-no"
-                        alt=""
-                        width="50%"
-                      />
-                    </td>
-                    <td colSpan="2" style={generalStyle.POTopth}>
-                      <center>
-                        <span style={generalStyle.text11}>ISO 9001:2015</span>
-                        <br />
-                        <span style={generalStyle.text13}>
-                          PROCUREMENT MANAGEMENT SYSTEM MANUAL PROCEDURES
-                        </span>
-                        <br />
-                        <span style={generalStyle.text14}>
-                          RS-PMG-PUR-P-1016 PROCUREMENT
-                        </span>
-                      </center>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style={generalStyle.text5} width="60%">
-                      Revision: 16
-                    </td>
-                    <td style={generalStyle.text6} width="40%">
-                      Effective Date: 23 May 2018
-                    </td>
-                  </tr>
-                </tbody>
-              </table><br />
+              <br />
               <div style={generalStyle.POtitle}>RS-PMG-PUR-P-1016–4 PURCHASE ORDER FORM</div>
 
               <Grid container>
-                <GridItem xs={6} />
-                <GridItem xs={6} style={generalStyle.alignLeft}>
+                <GridItem xs={7} />
+                <GridItem xs={5} style={generalStyle.alignLeft}>
                   <div style={generalStyle.noPaddingMargin}>
                     <label style={generalStyle.POLabel} for="input">
                       PO Number:
@@ -221,11 +195,11 @@ class Pdf extends Component {
                 </GridItem>
               </Grid>
               <Grid container style={{margin: "14px 0", position:"relative"}}>
-                <GridItem xs={6} style={generalStyle.alignLeft}>
+                <GridItem xs={7} style={generalStyle.alignLeft}>
                   <span style={generalStyle.strong7}>To:</span><br/>
                   Skysite offshore access  west Africa, <br/> 25A Theophilus Orji street,<br/> Lekki, Lagos
                 </GridItem>
-                <GridItem xs={6} style={generalStyle.floatRight}>
+                <GridItem xs={5} >
                   <span style={generalStyle.strong7}>Ship To:</span><br/> Russelsmith Nig Ltd <br/>KM 14 Lekki - Epe Express Road,<br/> Lekki Phase 1, Lekki
                 </GridItem>
               </Grid>
@@ -301,6 +275,7 @@ class Pdf extends Component {
                   <li>US Dollars Portion: Sixty Percent (60%) US$</li>
                   <li>NGN Portion: Forty Percent (40%) NGN</li>
                 </ul>
+                
                 <Grid container>
                   <GridItem xs={7}>
                     <div>
@@ -418,7 +393,6 @@ class Pdf extends Component {
 <p><strong>Address: RusselSmith Nigeria Ltd. Cheryn’s Place, 3 Swiss Trade Drive, Ikota Lekki, Lagos </strong></p>
 
                 </div>
-                <div style={{borderTop:"1px solid #000"}}><span>RS-PMG-PUR-P-1016 Procurement</span> <span style={{float:"right"}}> Printed Copies are Uncontrolled Copies</span></div>
 
               </div>
             </div>

@@ -13,7 +13,7 @@ import CreditCard from '@material-ui/icons/CreditCard';
 import RequestQuotation from "../views/RequestQuotation/index.js";
 import AddQuotation from "../views/RequestQuotation/add.js";
 import MyQuotation from "../views/RequestQuotation/myquote.js";
-import Pdf from "../views/RequestQuotation/pdf";
+import Pdf from "../views/pdf/pdf";
 // core components/views
 import LoginPage from "../views/LoginPage/index.js";
 import DashboardPage from "../views/Dashboard/Dashboard.jsx";
