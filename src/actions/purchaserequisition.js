@@ -40,3 +40,4 @@ export function editRequisition(token, id, data, callback){
         if(result.ok && result.statusText == "OK" && result.status == 200 )callback(result.ok);
     }); 
 }
+

@@ -142,7 +142,6 @@ class Index extends React.Component {
       this.props.user.token,
       pr._id,
       quotes => {
-        {{debugger}}
         this.setState({ quotes: quotes, pr: pr });
       }
     );

@@ -24,6 +24,8 @@ import VendorList from "../views/Vendor/index.js";
 import AddVendor from "../views/Vendor/add.js";
 import ViewVendor from "../views/Vendor/view.js";
 import PurchaseOrder from "../views/PurchaseOrder/index.js";
+import PurchaseOrderAdd from "../views/PurchaseOrder/add.js";
+import PurchaseOrderView from "../views/PurchaseOrder/view.js";
 import AddPurchaseRequisition from "../views/PurchaseRequisition/add.js";
 import ViewPurchaseRequisition from "../views/PurchaseRequisition/edit.js";
 import ListPurchaseRequisition from "../views/PurchaseRequisition/index.js";
@@ -109,7 +111,15 @@ export const dashboardRoutes = [
   {
     path: "/order",
     component: PurchaseOrder
-  }, 
+  },   
+  {
+    path: "/order/add",
+    component: PurchaseOrderAdd
+  },  
+  {
+    path: "/order/view/:id",
+    component: PurchaseOrderView
+  },
   {
     path: "/changepassword",
     component: ChangePassword

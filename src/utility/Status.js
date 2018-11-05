@@ -7,9 +7,15 @@ export const STATUS = {
     "RFQ02": "Vendor Responded",
     "RFQ03": "Procurement Approved",
     "RFQ04": "Procurement Disapproved, With Reason", 
-    "PO01": "Approved and Awaiting Delivery",
-    "PO02": "Delivered",
-    "X": "REQUEST CANCELLED", 
+    "PO00": "PO Saved",
+    "PO01": "Awaiting Line Manager Review Approval",
+    "POX1": "Line Manager Decline Approval With Reason",
+    "PO01": "Line Manager Approved and Awaiting HOD Approval",
+    "POX2": "HOD Declined Approval With Reason",
+    "PO02": "HOD Approved and Awaiting CEO Approval",
+    "PO03": "CEO Approved",
+    "POX3": "CEO Declined Approval With Reason",
+    "X": "Request Cancelled", 
 };
 
 export function getStatus(status){
