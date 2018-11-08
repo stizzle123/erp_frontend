@@ -80,14 +80,8 @@ handleChange = event => {
 };
 
 handleSubmit = event =>{
-  let items = this.state.quotes.filter((prop, key)=> {
-    if(this.state.checkeditems.indexOf(key)){
-      return prop;
-    }
-  });
   let data = this.state.data;
-  data.lineitems = items;
-  console.log(this.state);
+  data.lineitems = this.state.checkeditems;
   poActions.submitPO(this.props.user.token, data, (isOk)=>{
     if(isOk){
       this.setState({message:"Purchase Order created succesfully", error:false });
@@ -112,6 +106,7 @@ handleCheckedItems = i =>{
 handleItemChange= event =>{
     const { classes} = this.props;
     this.handleChange(event);
+    {{debugger}}
     rfqActions.fetchAllQuoteforVendor(this.props.user.token, event.target.value, (quotes)=>{
         this.setState({quotes});
         let grandTotal = this.state.data.grand_total;
@@ -124,7 +119,7 @@ handleItemChange= event =>{
                   control={
                     <Checkbox
                         tabIndex={-1}
-                        onClick={() => this.handleCheckedItems(key)}
+                        onClick={() => this.handleCheckedItems(prop._id)}
                         checkedIcon={
                           <Check className={classes.checkedIcon} />
                         }
@@ -141,7 +136,7 @@ handleItemChange= event =>{
                     {key+1}
                 </TableCell>
                 <TableCell className={classes.td}>
-                    {prop.itemdescription }
+                    {prop.description }
                 </TableCell>
                 <TableCell className={classes.td}>
                     {prop.quantity}

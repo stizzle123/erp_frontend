@@ -64,6 +64,7 @@ componentDidUpdate(prevProps) {
     //vendorActions.findAllVendors(this.props, this.props.match.params.type);
   }
 }
+
 processJson(responseJson){
   let datas = [];
   responseJson.map((row)=>{

@@ -23,6 +23,7 @@ import TableBody from '@material-ui/core/TableBody';
 import Print from '@material-ui/icons/Print';
 import Checkbox from '@material-ui/core/Checkbox';
 import Check from "@material-ui/icons/Check";
+import FormControl from '@material-ui/core/FormControl';
 import {connect} from 'react-redux';
 
 import { cardTitle } from "assets/jss/material-dashboard-pro-react.jsx";
@@ -32,6 +33,8 @@ import generalStyle from "assets/jss/material-dashboard-pro-react/generalStyle.j
 import * as poActions from '../../actions/purchaseorder';
 import * as rfqActions from '../../actions/requestforquotation';
 import Notification from 'views/Notifications/Index.jsx';
+import * as Uom from "utility/Uom";
+import * as Status from 'utility/Status';
 
 const shipto = [
     {slug: 'lagos', name:'Lagos Office'},
@@ -140,8 +143,14 @@ class View extends React.Component {
         po:{
             vendor: {
                 general_info: {}
-            }
-        }
+            },
+            requestor:{},
+            vat: "",
+            discount:"",
+            servicecharge: "",
+            freightcharges:""
+        },
+        items:[]
     },
     vendors:[],
     quotes:[],
@@ -149,10 +158,41 @@ class View extends React.Component {
     checkeditems:[]
   };
 
+  handleChange= e =>{
+    const action = e.target.value;
+    let showReason = (action == "disapprove")? true: false;
+    this.setState({showReason, action});
+  }
+
+  handleFormChange= e=>{
+    const reason = e.target.value;
+    this.setState({reason});
+  }
+
+
+  submitForm= e=>{
+    let data = {};
+    let message = ""
+    if(this.state.action == "approve"){
+      data.status = "011";
+      message = "Purchase requisition approved.";
+    }else{
+      data.status = "010";
+      data.reason = this.state.reason;
+      message = "Purchase requisition has been disapproved.";
+    }
+    prActions.editRequisition(this.props.user.token, this.state.data._id, data, (isOk)=>{
+        if(isOk) this.setState({message: message, error:false });
+        else this.setState({message:"Error processing request.", error:true });
+    })
+  }
+
 
     parseRow (){
     const { classes} = this.props;
-    const table_data = this.state.doc.po.map((prop, key)=> {
+    const table_data = this.state.doc.items.map((prop, key)=> {
+      {{debugger}}
+      const uom = Uom.getUom(prop.uom);
             return (
             <TableRow key={key}> 
                 <TableCell component="th" style={{border: "none", padding: "0", width: "20px", textAlign: "center"}}>
@@ -162,16 +202,16 @@ class View extends React.Component {
                     {prop.description }
                 </TableCell>
                 <TableCell className={classes.td}>
-                    {prop.qty}
+                    {prop.quantity}
                 </TableCell>
                 <TableCell className={classes.td}>
-                    {prop.uom}   
+                    {uom.name}   
                 </TableCell>   
                 <TableCell className={classes.td}>
                     {prop.price}   
                 </TableCell>   
                 <TableCell className={classes.td}>
-                    {prop.price*prop.qty}   
+                    {prop.price*prop.quantity}   
                 </TableCell> 
             </TableRow>
             )}
@@ -180,14 +220,15 @@ class View extends React.Component {
 }
 
 componentDidMount(){
-    poActions.fetchPurchaseOrderById(this.props.user.token, this.props.match.params.id,  (doc)=>{
-        this.setState({doc});
+    poActions.fetchPurchaseOrderById(this.props.user.token, this.props.match.params.id,  (doc)=>{ 
+      this.setState({doc});
+      this.parseRow ();
     });
 }
 
 render() {
     const { classes, tableHeaderColor } = this.props;
-    ///this.parseRow ();
+
     return (
 	<div>
     <Notification error={this.state.error} message={this.state.message} />
@@ -203,7 +244,7 @@ render() {
                         <ul className={classes.ulStyle}>
                             <li className={classes.liStyle}>
                             EID: <br />{" "}
-                            <span className={classes.ap}>{this.state.doc.po.eid}</span>
+                            <span className={classes.ap}>{this.state.doc.po.requestor.eid}</span>
                             </li>
                             <li className={classes.liStyle}>
                             Purchase Order No: <br />{" "}
@@ -214,8 +255,28 @@ render() {
                             <span className={classes.ap}>{this.state.doc.po.shipto}</span>
                             </li>
                             <li className={classes.liStyle}>
+                            Address: <br />
+                            <span className={classes.ap}> </span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <ul className={classes.ulStyle}>
+                            <li className={classes.liStyle}>
+                              Vendor: <br />{" "}
+                            <span className={classes.ap}>{this.state.doc.po.vendor.general_info.company_name}</span>
+                            </li>
+                            <li className={classes.liStyle}>
+                              Date Needed: <br />{" "}
+                            <span className={classes.ap}>{}</span>
+                            </li>
+                            <li className={classes.liStyle}>
+                            Date Delivered: <br />
+                            <span className={classes.ap}>{}</span>
+                            </li>
+                            <li className={classes.liStyle}>
                             Status: <br />
-                            <span className={classes.ap}> {this.state.doc.po.status}</span>
+                            <span className={classes.ap}> {Status.getStatus(this.state.doc.po.status)}</span>
                             </li>
                         </ul>
                     </div>
@@ -242,41 +303,110 @@ render() {
                 <div/>
                 <Grid container>
                 <GridItem xs={3}>
-                    <CustomInput labelText="Discount "
-                        formControlProps={{
-                          fullWidth: true
-                        }} inputProps={{
-                          disabled: true, value: this.state.doc.po.discount               
-                        }}
-                      />
+                <CustomInput labelText="Discount" id="discount"  formControlProps={{  
+                      style: {width:"100%"}              
+                      }} inputProps={{ disabled: true, value: this.state.doc.po.discount}}
+                    />
                 </GridItem>
                 <GridItem xs={3}>
-                   <h4> {this.state.doc.po.vat} %</h4>
+                     <CustomInput labelText="VAT" id="vat" formControlProps={{  
+                      style: {width:"100%"}             
+                      }} inputProps={{ disabled: true, value: this.state.doc.po.vat}}  
+                    />
                 </GridItem>
                 <GridItem xs={3}>
-                    <h4> {this.state.doc.po.freightcharges}</h4>
+                     <CustomInput labelText="Freight Charges" id="freightcharges" formControlProps={{  
+                      style: {width:"100%"}             
+                      }} inputProps={{ disabled: true, value: this.state.doc.po.freightcharges }}
+                    />
                 </GridItem>
                 <GridItem xs={3}>
-                    <h4> {this.state.doc.po.servicecharge}</h4>
+                     <CustomInput labelText="Service Charges" id="servicecharge" formControlProps={{  
+                      style: {width:"100%"}              
+                      }}  inputProps={{  disabled: true, value: this.state.doc.po.servicecharge}}
+                    />
                 </GridItem> 
               </Grid>
               <div style={generalStyle.resultSection}>
                 <span style={{color:"#1b4aa5", fontWeight:"700", margin:"7px"}}>Total:</span>
                  <span style={{float:"right",color:"#1b4aa5", fontWeight:"700"}}>
-                    {this.state.doc.po.total}
+                    {this.state.doc.po.grand_total}
                  </span>
               </div>
               </CardBody>
-              <CardFooter>
-              <Grid container>
-                <GridItem xs={12} sm={6} md={2} additionalclass={classes.removeDivPadding} >
-                  <Button color="primary" onClick={this.handleSave}>Reject</Button>
-                </GridItem>
-                <GridItem xs={12} sm={12} md={2}>
-                  <Button color="yellowgreen" onClick={this.handleSubmit}>Approve</Button>
-                </GridItem>
-              </Grid>
-            </CardFooter>
+                  {
+                    (this.props.user._id != this.state.doc.po.requestor._id)? 
+                    <CardFooter>
+                    <Grid container>
+                    {
+                      (this.state.showReason)?
+                      <GridItem xs={12} sm={12} md={12}>
+                        <CustomInput labelText="Reason" id="reason" required formControlProps={{
+                            fullWidth: true
+                            }} inputProps={{  
+                              name: "reason",
+                              value: this.state.data.reason,
+                              onChange:  this.handleFormChange             
+                            }}
+                          />
+                      </GridItem>
+                      : ""
+                      }
+                      <GridItem xs={12} sm={6} md={6}>
+                      <FormControl
+                            fullWidth
+                            className={classes.selectFormControl}
+                          >
+                      <Select
+                              MenuProps={{
+                                className: classes.selectMenu
+                              }}
+                              classes={{
+                                select: classes.select
+                              }}
+                              value={this.state.action}
+                              inputProps={{
+                                name: "simpleSelect",
+                                id: "type",
+                              }}
+                              onChange={this.handleChange}
+                            >
+                              <MenuItem
+                                classes={{
+                                  root: classes.selectMenuItem
+                                }}
+                              >
+                                Choose Action
+                              </MenuItem>
+                              <MenuItem
+                                classes={{
+                                  root: classes.selectMenuItem,
+                                  selected: classes.selectMenuItemSelected
+                                }}
+                                value="approve"
+                              >
+                                Approve
+                              </MenuItem>
+                              <MenuItem
+                                classes={{
+                                  root: classes.selectMenuItem,
+                                  selected: classes.selectMenuItemSelected
+                                }}
+                                value="disapprove"
+                              >
+                              Disapprove
+                              </MenuItem>                                                      
+                            </Select>
+                          </FormControl>
+                      </GridItem>
+                      <GridItem xs={12} sm={6} md={6}>
+                        <Button color="yellowgreen"  onClick={this.submitForm}>Submit</Button>
+                      </GridItem>
+                    </Grid>
+                  </CardFooter>
+                  :
+                  ""
+                  }
 	  		</Card>
       </form>
 	</GridItem>

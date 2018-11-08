@@ -31,6 +31,7 @@ import * as genericActions from 'actions/generic.js';
 import Notification from 'views/Notifications/Index.jsx'
 import moment from 'moment';
 import * as Status from 'utility/Status'; 
+import * as Uom from "utility/Uom";
 
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -45,8 +46,6 @@ const styles = theme => ({
     fontWeight: '700',
     fontSize: '15px',
   },
-
- 
    removeDivPadding:{ maxWidth: "12%"}
 });
  
@@ -59,8 +58,9 @@ const categories = [
 ];
 
 const shipvia = [
-  {slug: 'lagos', name:'Lagos Office'},
-  {slug: 'portharcourt', name:'Port-Harcourt Office'}
+  {slug: 'digital', name:'Digital (Download)'},
+  {slug: 'vendor', name:'Vendor Delivery'},
+  {slug: 'dhl', name:'DHL'},
 ]
 
 class Edit extends React.Component {
@@ -75,41 +75,52 @@ class Edit extends React.Component {
       departmentname: "",
       chargeto: "",
       dateneeded: "",
-      status: "01"
+      status: "01",
+      requestor:{},
+      department:{}
     },
     lineItems:[],
     startDate : moment(),
     departments: [],
+    action: '',
+    reason:""
   };
 
-
-  approveForm= e=>{
-    let data = {};
-    data.status = "011";
-    prActions.editRequisition(this.props.user.token, this.state.data._id, data, (isOk)=>{
-        if(isOk) this.setState({message:"Purchase requisition approved.", error:false });
-        else this.setState({message:"Error processing request.", error:true });
-    })
+  handleChange= e =>{
+    const action = e.target.value;
+    let showReason = (action == "disapprove")? true: false;
+    this.setState({showReason, action});
   }
 
-  disapproveForm= e=>{
+  handleFormChange= e=>{
+    const reason = e.target.value;
+    this.setState({reason});
+  }
+
+
+  submitForm= e=>{
     let data = {};
-    data.status = "010";
+    let message = ""
+    if(this.state.action == "approve"){
+      data.status = "011";
+      message = "Purchase requisition approved.";
+    }else{
+      data.status = "010";
+      data.reason = this.state.reason;
+      message = "Purchase requisition has been disapproved.";
+    }
     prActions.editRequisition(this.props.user.token, this.state.data._id, data, (isOk)=>{
-        if(isOk){
-        this.setState({message:"Purchase requisition has been disapproved.", error:false });
-      } 
-      else this.setState({message:"Error processing request.", error:true });
+        if(isOk) this.setState({message: message, error:false });
+        else this.setState({message:"Error processing request.", error:true });
     })
   }
 
   componentDidMount(){
     const id = this.props.match.params.id;
-    prActions.findRequisitionById(this.props.user.token, id, (datum)=>{
-        let data = datum[0];
+    prActions.findRequisitionById(this.props.user.token, id, (data)=>{
         data.requestedby = data.requestor.firstname +" "+ data.requestor.lastname
         data.eid = data.requestor.eid ;
-        data.department = data.department._id;
+        data.dept = data.department._id;
         this.setState({ data : data});
         this.setState({ lineItems : data.lineitems});
     });
@@ -145,6 +156,8 @@ class Edit extends React.Component {
       else{
         value = {};
       }
+      const uom = Uom.getUom(value.uom);
+
       return (
         <TableRow key={key}> 
           <TableCell component="th" style={{border: "none", padding: "0", width: "20px", textAlign: "center"}}>               
@@ -183,13 +196,13 @@ class Edit extends React.Component {
                     />
           </TableCell>
           <TableCell className={classes.td}>
-                <CustomInput name="unit" id="unit" type="number" required 
+                <CustomInput name="unit" id="unit" required 
                     formControlProps={{  
                       style: {width:"100px", padding:"0", margin:"0"},  
-                      name: "unit"            
+       
                     }}  
                     inputProps={{disabled: true, 
-                      value:value.unit , name:"unit" }}
+                      value: uom.name, name:"uom" }}
                   />
                   
           </TableCell>      
@@ -305,7 +318,7 @@ class Edit extends React.Component {
                             formControlProps={{
                               style: {width:"130px",padding:"0", margin:"0"}              
                             }} 
-                            value={this.state.data.department}
+                            value={this.state.data.dept}
                             inputProps={{margin:"normal",disabled: true, }}
                           style={{marginTop: "-3px",   borderBottomWidth:" 1px"
                           }}
@@ -366,7 +379,7 @@ class Edit extends React.Component {
                       <CustomInput labelText="Status" id="status" required formControlProps={{
                         fullWidth: true
                         }} inputProps={{  
-                          value: Status["01"],
+                          value: Status.getStatus(this.state.data.status),
                           disabled:true                  
                         }}
                       />
@@ -374,8 +387,8 @@ class Edit extends React.Component {
               </Grid>
                   <br />  
                   <div style={generalStyle.aboveTable}>
-                  <div style={generalStyle.aboveTableIcon}><span><Checkbox  value="Budgetary" />Budgetary</span>
-                  <span><Checkbox value="Extra Budgetary" />Extra Budgetary</span>
+                  <div style={generalStyle.aboveTableIcon}><span></span>
+                  <span><Checkbox checked={(this.state.data.isextrabudget)? true : false } disabled="true" />Extra Budgetary</span>
                   </div>
                   
 
@@ -400,17 +413,77 @@ class Edit extends React.Component {
                 </div>
               </CardBody>
               {
-                  (this.state.data.status == "011")? "":
-              <CardFooter>
-              <Grid container>
-                <GridItem xs={12} sm={6} md={6}  >
-                  <Button color="primary" onClick={this.disapproveForm}>Disapprove</Button>
-                </GridItem>
-                <GridItem xs={12} sm={6} md={6}>
-                  <Button color="yellowgreen"  onClick={this.approveForm}>Approve</Button>
-                </GridItem>
-              </Grid>
-            </CardFooter>
+                  (this.props.user._id == this.state.data.department.hod)? 
+                  <CardFooter>
+                  <Grid container>
+                  {
+                    (this.state.showReason)?
+                    <GridItem xs={12} sm={12} md={12}>
+                      <CustomInput labelText="Reason" id="reason" required formControlProps={{
+                          fullWidth: true
+                          }} inputProps={{  
+                            name: "reason",
+                            value: this.state.data.reason,
+                            onChange:  this.handleFormChange             
+                          }}
+                        />
+                    </GridItem>
+                    : ""
+                    }
+                    <GridItem xs={12} sm={6} md={6}>
+                    <FormControl
+                          fullWidth
+                          className={classes.selectFormControl}
+                        >
+                    <Select
+                            MenuProps={{
+                              className: classes.selectMenu
+                            }}
+                            classes={{
+                              select: classes.select
+                            }}
+                            value={this.state.action}
+                            inputProps={{
+                              name: "simpleSelect",
+                              id: "type",
+                            }}
+                            onChange={this.handleChange}
+                          >
+                            <MenuItem
+                              classes={{
+                                root: classes.selectMenuItem
+                              }}
+                            >
+                              Choose Action
+                            </MenuItem>
+                            <MenuItem
+                              classes={{
+                                root: classes.selectMenuItem,
+                                selected: classes.selectMenuItemSelected
+                              }}
+                              value="approve"
+                            >
+                              Approve
+                            </MenuItem>
+                            <MenuItem
+                              classes={{
+                                root: classes.selectMenuItem,
+                                selected: classes.selectMenuItemSelected
+                              }}
+                              value="disapprove"
+                            >
+                             Disapprove
+                            </MenuItem>                                                      
+                          </Select>
+                        </FormControl>
+                    </GridItem>
+                    <GridItem xs={12} sm={6} md={6}>
+                      <Button color="yellowgreen"  onClick={this.submitForm}>Submit</Button>
+                    </GridItem>
+                  </Grid>
+                </CardFooter>
+                :
+                ""
               }
 	  		</Card>
       </form>

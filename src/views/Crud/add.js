@@ -91,7 +91,6 @@ class AddCrud extends React.Component {
         genericActions.saveItem(this.props.match.params.type, this.props.user.token, this.state.data,  (json)=>{
             this.setState({
                 data:json, 
-               
             });
           });
     }
@@ -101,7 +100,6 @@ class AddCrud extends React.Component {
     }
 
     render() {
-      console.log(this.state.data);
       const { classes, data } = this.props;
       let field = this.state[this.props.match.params.type];
       let additionalFields = " ";

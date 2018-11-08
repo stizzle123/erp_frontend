@@ -34,7 +34,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import sweetAlertStyle from "assets/jss/material-dashboard-pro-react/views/sweetAlertStyle.jsx";
-
+import * as Uom from "utility/Uom";
 
 const styles = {
   ...sweetAlertStyle,
@@ -144,27 +144,28 @@ class Quote extends React.Component {
     showQuoteDetails = (quote) => event=> {
       const { classes, tableHeaderColor } = this.props;
       const tableData2 = quote.lineitems.map((prop, key)=> {
-      return (
-        <TableRow key={key}>
-          <TableCell className={classes.td}>
-              {prop.itemdescription }
-          </TableCell>
-          <TableCell className={classes.td}>
-              {prop.quantity}
-          </TableCell>
-          <TableCell className={classes.td}>
-              {prop.unit}   
-          </TableCell> 
-          <TableCell className={classes.td}>
-              {prop.price}
-          </TableCell>      
-        </TableRow>
-        )}
+        const uom = Uom.getUom(prop.uom);
+        return (
+          <TableRow key={key}>
+            <TableCell className={classes.td}>
+                {prop.itemdescription }
+            </TableCell>
+            <TableCell className={classes.td}>
+                {prop.quantity}
+            </TableCell>
+            <TableCell className={classes.td}>
+                {uom.name}   
+            </TableCell> 
+            <TableCell className={classes.td}>
+                {prop.price}
+            </TableCell>      
+          </TableRow>
+          )}
     );
       this.setState({
         alert: (
           <SweetAlert
-            title="Request For Quote"
+            title={"Quote for "+quote.vendor.general_info.company_name}
             onConfirm={() => this.hideAlert()}
             confirmBtnText="Click to Close"
             confirmBtnCssClass={
