@@ -66,7 +66,6 @@ class ListCrud extends React.Component {
         let data = {"dataRows":[]};
         if(this.state.data.length> 0){
           data = this.parseJsonTotableData(this.state.data);
-          console.log(data)
         }
 
         let mappedData = data.dataRows.map((prop, key) => {
@@ -95,6 +94,7 @@ class ListCrud extends React.Component {
                     round
                     simple
                     onClick={() => {
+                      if (window.confirm('Are you sure you wish to delete this item?')){
                         var data = this.state.data;
                         data.find((o, i) => {
                             if (i === key) {
@@ -105,6 +105,7 @@ class ListCrud extends React.Component {
                             return false;
                         });
                         this.setState({ data: data });
+                      }
                      }}
                     color="danger"
                     className="edit"

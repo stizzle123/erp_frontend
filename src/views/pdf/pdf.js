@@ -73,16 +73,11 @@ class Pdf extends Component {
       (this.canvLoaded = false);
   }
 
-
   exportPDF = () => {
     this.po_doc.save();
   };
 
-  
-
-  componentDidMount() {
-    
-  }
+  componentDidMount() {}
 
   render() {
     const { classes, data } = this.props;
@@ -138,15 +133,15 @@ class Pdf extends Component {
               overflowY: "hidden",
               fontFamily: "Arial",
               fontSize: "11px",
-              position: "relative",
-
-      
+              position: "relative"
             }}
-            ref={(elem) => this.myPdf = elem}
-            >
+            ref={elem => (this.myPdf = elem)}
+          >
             <div>
               <br />
-              <div style={generalStyle.POtitle}>RS-PMG-PUR-P-1016–4 PURCHASE ORDER FORM</div>
+              <div style={generalStyle.POtitle}>
+                RS-PMG-PUR-P-1016–4 PURCHASE ORDER FORM
+              </div>
 
               <Grid container>
                 <GridItem xs={7} />
@@ -194,13 +189,22 @@ class Pdf extends Component {
                   <div style={generalStyle.space20} />
                 </GridItem>
               </Grid>
-              <Grid container style={{margin: "14px 0", position:"relative"}}>
+              <Grid
+                container
+                style={{ margin: "14px 0", position: "relative" }}
+              >
                 <GridItem xs={7} style={generalStyle.alignLeft}>
-                  <span style={generalStyle.strong7}>To:</span><br/>
-                  Skysite offshore access  west Africa, <br/> 25A Theophilus Orji street,<br/> Lekki, Lagos
+                  <span style={generalStyle.strong7}>To:</span>
+                  <br />
+                  Skysite offshore access west Africa, <br /> 25A Theophilus
+                  Orji street,
+                  <br /> Lekki, Lagos
                 </GridItem>
-                <GridItem xs={5} >
-                  <span style={generalStyle.strong7}>Ship To:</span><br/> Russelsmith Nig Ltd <br/>KM 14 Lekki - Epe Express Road,<br/> Lekki Phase 1, Lekki
+                <GridItem xs={5}>
+                  <span style={generalStyle.strong7}>Ship To:</span>
+                  <br /> Russelsmith Nig Ltd <br />
+                  KM 14 Lekki - Epe Express Road,
+                  <br /> Lekki Phase 1, Lekki
                 </GridItem>
               </Grid>
               <div style={generalStyle.tableDiv}>
@@ -262,25 +266,24 @@ class Pdf extends Component {
 
                 <p>
                   Total order value excludes VAT which is remitted directly to
-                  FIRS.<br /> This purchase order is subject to the Terms and Conditions as
-                  attached.
+                  FIRS.
+                  <br /> This purchase order is subject to the Terms and
+                  Conditions as attached.
                 </p>
 
-                <p>
-                  Credit Terms: 5 days upon receipt of payment from Chevron
-                </p>
+                <p>Credit Terms: 5 days upon receipt of payment from Chevron</p>
                 <div style={generalStyle.divider} />
                 <h4>Invoicing and payment shall be done as follows:</h4>
-                <ul style={{padding: "0 15px"}}>
+                <ul style={{ padding: "0 15px" }}>
                   <li>US Dollars Portion: Sixty Percent (60%) US$</li>
                   <li>NGN Portion: Forty Percent (40%) NGN</li>
                 </ul>
-                
+
                 <Grid container>
                   <GridItem xs={7}>
                     <div>
-                    <label style={generalStyle.POLabel2} for="input">
-                       Prepared by:
+                      <label style={generalStyle.POLabel2} for="input">
+                        Prepared by:
                       </label>
                       <input
                         style={generalStyle.POinput2}
@@ -388,12 +391,19 @@ class Pdf extends Component {
                   </GridItem>
                 </Grid>
                 <div>
-                    <br/>
-                    <p>Please, do not hesitate to either call us on 07069000900 or e-mail us at customerservice@russelsmithgroup.com to express your view of our business dealings with you.</p>
-<p><strong>Address: RusselSmith Nigeria Ltd. Cheryn’s Place, 3 Swiss Trade Drive, Ikota Lekki, Lagos </strong></p>
-
+                  <br />
+                  <p>
+                    Please, do not hesitate to either call us on 07069000900 or
+                    e-mail us at customerservice@russelsmithgroup.com to express
+                    your view of our business dealings with you.
+                  </p>
+                  <p>
+                    <strong>
+                      Address: RusselSmith Nigeria Ltd. Cheryn’s Place, 3 Swiss
+                      Trade Drive, Ikota Lekki, Lagos{" "}
+                    </strong>
+                  </p>
                 </div>
-
               </div>
             </div>
           </div>
