@@ -72,7 +72,7 @@ class AddUser extends React.Component {
   handleChangeSelect = e => {
     let data = this.state.data;
     data[[e.target.name]] = e.target.value;
-    this.setState({
+    this.setState({ 
       data: data
     });
     this.validate(event.target.id, event.target.value);
@@ -141,24 +141,17 @@ class AddUser extends React.Component {
     e.preventDefault();
     let data = this.state.data;
     let validationState = this.state.validationState;
-    if (Object.values(validationState).indexOf(true) > -1) {
-      this.setState({submitButtonState: false})
-   }
-   else {
     this.setState({submitButtonState: true})
     userAction.addUser(this.props, data, json => {
       this.setState({ 
         responseMessage: json,
-        data: {
-          type: "staff"
-        },
+        data: json.user,
         validationState: {}
        },
        () => {
            console.log(this.state.data) 
        });
     });
-   } 
   };
   componentDidMount() {
     genericActions.fetchAll("departments", this.props.user.token, items => {

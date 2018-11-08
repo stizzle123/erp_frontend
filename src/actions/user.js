@@ -14,7 +14,6 @@ export function getProfileDetails(props, id, callback){
 
 export function updateProfile(data, callback){
     let middleware = new MiddleWare();
-    console.log("from action"+data)
     middleware.makeConnection('/users/updateprofiledata','PUT', data).then((res)=>{
       return res.json()
     }).then((e)=>{

@@ -16,6 +16,7 @@ import avatar from "../../assets/img/faces/marc.jpg";
 import {connect} from 'react-redux';
 import * as userAction from "../../actions/user"
 import helpers from "../helpers";
+import Notification from "../Notifications/Index.jsx";
 
 const styles = {
   cardCategoryWhite: {
@@ -59,7 +60,7 @@ class UserProfile extends React.Component {
           department: ''
         },
         submitButtonState: false,
-        responseMessage: '',
+        responseMessage: [],
         isEnabled: false
       },
       this.enableEdit = this.enableEdit.bind(this),
@@ -140,10 +141,17 @@ validate = (type, value) => {
 //function UserProfile(props) {
   render() {
     const { classes, data } = this.props;
-    console.log(this.state.data);
   return (
     <div>
       <Grid container>
+      {this.state.responseMessage.success === true ? (
+            <Notification
+              error={false}
+              message={this.state.responseMessage.message}
+            />
+          ) : (
+            ""
+          )}
         <GridItem xs={12} sm={12} md={8}>
           <Card>
             <CardHeader color="primary">
@@ -162,7 +170,7 @@ validate = (type, value) => {
                       fullWidth: true
                     }}inputProps={{
                       onChange: this.handleChange,
-                      defaultValue: this.state.data.lastname
+                      value: this.state.data.lastname
                     }}
                     error={
                       this.state.ValidationState.lastname === ""
@@ -185,7 +193,7 @@ validate = (type, value) => {
                       fullWidth: true
                     }}inputProps={{
                       onChange: this.handleChange,
-                      defaultValue: this.state.data.firstname
+                      value: this.state.data.firstname
                     }}
                     error={
                       this.state.ValidationState.firstname === ""
@@ -207,7 +215,8 @@ validate = (type, value) => {
                       fullWidth: true
                     }}inputProps={{
                       onChange: this.handleChange,
-                      value: this.state.data.email
+                      value: this.state.data.email,
+                      readOnly: true,
                     }}
                   />
                 </GridItem> 
@@ -221,7 +230,9 @@ validate = (type, value) => {
                       fullWidth: true
                     }}inputProps={{
                       onChange: this.handleChange,
-                      value: this.state.data.eid
+                      value: this.state.data.eid,
+                      readOnly: true
+
                     }}
                     error={
                       this.state.ValidationState.eid === ""
@@ -243,7 +254,8 @@ validate = (type, value) => {
                       fullWidth: true
                     }}inputProps={{
                       onChange: this.handleChange,
-                      value: this.state.data.role
+                      value: this.state.data.role,
+                      readOnly: true
                     }}
                   />
                   </GridItem>
@@ -255,7 +267,8 @@ validate = (type, value) => {
                       fullWidth: true
                     }}inputProps={{
                       onChange: this.handleChange,
-                      value: this.state.data.city
+                      value: this.state.data.city,
+                      readOnly: true
                     }}
                   />
                 </GridItem>
@@ -286,7 +299,7 @@ function mapDispatchToProps(dispatch) {
     sendUserData(e){
       let data = e.state.data;
       userAction.updateProfile(data, (json)=>{
-        e.setState({data:json.profile});
+        e.setState({responseMessage:json});
       });
     }
   }

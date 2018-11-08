@@ -15,6 +15,7 @@ import * as genericActions from 'actions/generic.js';
 import purple from '@material-ui/core/colors/purple';
 import {connect} from 'react-redux';
 import helpers from "../helpers";
+import Notification from "../Notifications/Index.jsx";
 
 const styles = {
     cardIconTitle: {
@@ -31,6 +32,7 @@ class AddCrud extends React.Component {
         this.state = {
             departments : ['code', 'slug'],
             roles: ['slug'],
+            expenseheader:['slug', 'department'],
             data:{
                 name:'',
             },
@@ -38,8 +40,9 @@ class AddCrud extends React.Component {
                 name: '',
                 code: '',
                 slug:'',
+                department:''
             },
-            response: "",
+            responseMessage: [],
             responseState: false
 
 
@@ -47,12 +50,12 @@ class AddCrud extends React.Component {
     }
 
     handleChange = e => {
+        this.validate(e.target.id, e.target.value);
         let data = this.state.data;
         data[[e.target.id]] = e.target.value; 
         this.setState({ 
           data : data,
         });
-        this.validate(e.target.id, e.target.value);
     }
 
     validate = (type, value) => {
@@ -87,13 +90,11 @@ class AddCrud extends React.Component {
 
         }
     }   
-    handleSubmit = e => {
-        genericActions.saveItem(this.props.match.params.type, this.props.user.token, this.state.data,  (json)=>{
-            this.setState({
-                data:json, 
-               
-            });
-          });
+    handleSubmit = () => {
+        genericActions.saveItem(this.props.match.params.type, this.props.user.token, this.state.data, (json)=>{
+            this.setState({responseMessage:json});          
+            })
+          
     }
 
     componentDidMount(){
@@ -101,7 +102,6 @@ class AddCrud extends React.Component {
     }
 
     render() {
-      console.log(this.state.data);
       const { classes, data } = this.props;
       let field = this.state[this.props.match.params.type];
       let additionalFields = " ";
@@ -144,6 +144,10 @@ class AddCrud extends React.Component {
       return (
         <div>
           <Grid container>
+          <Notification
+              error={!this.state.responseMessage.success}
+              message={this.state.responseMessage.message}
+            />
             <GridItem xs={12} sm={12} md={12}>
             <h3> Add {Inflection.titleize(this.props.match.params.type)}</h3>
                 <form className={classes.container} autoComplete="off">

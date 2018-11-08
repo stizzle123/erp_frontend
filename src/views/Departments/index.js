@@ -40,28 +40,73 @@ const styles = {
 class Index extends React.Component {
   state = {
     data: {},
-    users: []
+    users: [],
+    validationState : {
+      name: '',
+      code: '',
+      slug:'',
+  },
+  responseMessage:[]
   };
 
+  validate = (type, value) => {
+    switch (type) {
+      case "name":
+        const name = helpers.isEmpty(value) ? false : true;
+        this.setState({
+          validationState: {
+            ...this.state.validationState,
+            name
+          }
+        });
+        break;
+        case "slug":
+        const slug = helpers.isEmpty(value) ? false : true;
+        this.setState({
+          validationState: {
+            ...this.state.validationState,
+            slug
+          }
+        });
+        break;
+        case "code":
+        const code = helpers.isEmpty(value) ? false : true;
+        this.setState({
+          validationState: {
+            ...this.state.validationState,
+            code
+          }
+        });
+        break;
+
+    }
+}   
+
   handleChange = event => {
+    this.validate(event.target.id, event.target.value);
     let data = this.state.data;
     data[[event.target.id]] = event.target.value;
     this.setState({
       data: data
     });
-    this.validate(event.target.id, event.target.value);
   };
 
   handleChangeSelect = e => {
+    this.validate(event.target.id, event.target.value);
     let data = this.state.data;
     data[[e.target.name]] = e.target.value;
     this.setState({
       data: data
     });
-    this.validate(event.target.id, event.target.value);
   };
 
- 
+  handleSubmit = () => {
+    departmentAction.updateDepartment(this.props, this.state.data, (json)=>{
+        this.setState({responseMessage:json});          
+        })
+      
+}
+
   componentDidMount() {
   departmentAction.findDepartmentById(this.props, this.props.match.params.id,(json)=>{
     this.setState({data: json[0]})
@@ -79,6 +124,14 @@ userAction.findOnlyStaff(this.props, (json)=>{
     return (
       <div>
         <Grid container>
+        {this.state.responseMessage.success === true ? (
+            <Notification
+              error={false}
+              message={this.state.responseMessage.message}
+            />
+          ) : (
+            ""
+          )}
           <GridItem xs={12} sm={12} md={8}>
             <form>
               <Card>
@@ -98,6 +151,16 @@ userAction.findOnlyStaff(this.props, (json)=>{
                           value: this.state.data.name,
                           labelText:"Name",
                             }}
+                            error={
+                              this.state.validationState.name === ""
+                                ? ""
+                                : this.state.validationState.name
+                            }
+                            success={
+                              this.state.validationState.name === ""
+                                ? ""
+                                : !this.state.validationState.name
+                            }
                       />
                     </GridItem>
                     <GridItem xs={12} sm={12} md={12}>
@@ -111,6 +174,16 @@ userAction.findOnlyStaff(this.props, (json)=>{
                           value: this.state.data.slug,
                           labelText: "slug"
                                                 }}
+                                                error={
+                                                  this.state.validationState.slug === ""
+                                                    ? ""
+                                                    : this.state.validationState.slug
+                                                }
+                                                success={
+                                                  this.state.validationState.slug === ""
+                                                    ? ""
+                                                    : !this.state.validationState.slug
+                                                }
                       />
                     </GridItem>
                     <GridItem xs={12} sm={12} md={6}>
@@ -143,7 +216,7 @@ userAction.findOnlyStaff(this.props, (json)=>{
                   </Grid>
                 </CardBody>
                 <CardFooter>
-                  <Button color="primary">
+                  <Button color="primary" onClick={this.handleSubmit}>
                     Submit
                   </Button>
                 </CardFooter>

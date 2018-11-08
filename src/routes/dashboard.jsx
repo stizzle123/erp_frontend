@@ -292,6 +292,13 @@ export const AdminMenu = [
       actions: ['add', 'edit','view', 'delete']
     },
     {
+      path: "/crud/expenseheader",
+      name: "Expense Header",
+      mini: "C",
+      component: ListCrud,
+      actions: ['add', 'edit','view', 'delete']
+    },
+    {
       path: "/user/index",
       name: "Users",
       mini: "U",

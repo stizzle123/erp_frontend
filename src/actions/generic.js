@@ -15,15 +15,13 @@ export function fetchAll(type, token, callback){
 
 export function saveItem(type, token, data, callback){
     let m = new MiddleWare(token);
-    return m.makeConnection('/'+type+'/add/', m.POST, data).then((result) => {
-        (result)=>{
-            if(result.ok && result.statusText == "OK" && result.status == 200 )         
-            console.log(res.json())
-            return res.json()
-        }
+    return m.makeConnection('/'+type+'/add/', m.POST, data).then((res) => {
+        return res.json()
     }).then((e)=>{
         callback(e);
-      });   
+      }).catch((e)=>{
+        console.log("the error" + e);
+      })  
 }
 
 export function deleteItem(type, token, id, callback){ 
