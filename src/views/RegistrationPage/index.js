@@ -73,7 +73,6 @@ class RegisterPage extends React.Component {
       this.setState({showCheckNotice:true})
       return;
     }
-    {{debugger}}
     let middleware = new MiddleWare();
     let data = {};
     data.email = this.state.email;
