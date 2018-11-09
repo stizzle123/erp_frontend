@@ -14,6 +14,7 @@ import RequestQuotation from "../views/RequestQuotation/index.js";
 import AddQuotation from "../views/RequestQuotation/add.js";
 import MyQuotation from "../views/RequestQuotation/myquote.js";
 import Pdf from "../views/pdf/pdf";
+import importRecords from "../views/importRecords/index"
 // core components/views
 import LoginPage from "../views/LoginPage/index.js";
 import DashboardPage from "../views/Dashboard/Dashboard.jsx";
@@ -91,6 +92,10 @@ export const dashboardRoutes = [
 {
   path: "/pdf",
   component: Pdf
+},
+{
+  path: "/import-records",
+  component: importRecords
 },
   {
     path: "/requisition/add",

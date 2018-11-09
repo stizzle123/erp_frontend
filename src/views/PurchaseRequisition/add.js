@@ -164,7 +164,6 @@ class PurchaseRequisition extends React.Component {
     let data = this.state.data;
     data.lineitems = this.state.lineItems;
     data.status = "01";
-    console.log(data);
     prActions.submitRequisition(this.props.user.token, data, (isOk)=>{
       if(isOk){
         this.setState({message:"Purchase requisition has been submitted.", error:false });
