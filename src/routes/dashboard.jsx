@@ -91,7 +91,7 @@ export const dashboardRoutes = [
   component: EditDepartment
 },
 {
-  path: "/pdf",
+  path: "/pdf/:id",
   component: Pdf
 },
   {

@@ -8,7 +8,7 @@ export const STATUS = {
     "RFQ03": "Procurement Approved",
     "RFQ04": "Procurement Disapproved, With Reason", 
     "PO00": "PO Saved",
-    "PO01": "Awaiting Line Manager Review Approval",
+    "POX0": "Awaiting Line Manager Review and Approval",
     "POX1": "Line Manager Decline Approval With Reason",
     "PO01": "Line Manager Approved and Awaiting HOD Approval",
     "POX2": "HOD Declined Approval With Reason",

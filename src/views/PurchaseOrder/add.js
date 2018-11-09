@@ -173,7 +173,7 @@ formulatePricing = event => {
             data.grand_total=grandTotal-event.target.value;
             data.discount = event.target.value;
             break;
-        case "frieghtcharges":
+        case "freightcharges":
             data.grand_total = parseInt(grandTotal)+parseInt(event.target.value);
             data.frieghtcharges = event.target.value;
             break;
@@ -312,7 +312,7 @@ render() {
                 <GridItem xs={3}>
                      <CustomInput labelText="Service Charges" id="servicecharge" formControlProps={{  
                       style: {width:"100%"}              
-                      }}  inputProps={{ name:"servicecharges", onBlur: this.formulatePricing }}
+                      }}  inputProps={{ name:"servicecharge", onBlur: this.formulatePricing }}
                     />
                 </GridItem> 
               </Grid>

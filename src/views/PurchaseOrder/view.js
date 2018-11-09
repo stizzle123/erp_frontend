@@ -155,7 +155,10 @@ class View extends React.Component {
     vendors:[],
     quotes:[],
     table_data:[],
-    checkeditems:[]
+    checkeditems:[],
+    showReason:"",
+    reason:"",
+    action:""
   };
 
   handleChange= e =>{
@@ -174,24 +177,27 @@ class View extends React.Component {
     let data = {};
     let message = ""
     if(this.state.action == "approve"){
-      data.status = "011";
-      message = "Purchase requisition approved.";
+      data.type = this.state.action;
+      message = "Purchase Order approved.";
     }else{
-      data.status = "010";
       data.reason = this.state.reason;
-      message = "Purchase requisition has been disapproved.";
+      data.type = this.state.action;
+      message = "Purchase Order has been disapproved.";
     }
-    prActions.editRequisition(this.props.user.token, this.state.data._id, data, (isOk)=>{
+    poActions.editPurchaseOrder(this.props.user.token, this.props.match.params.id, data, (isOk)=>{
         if(isOk) this.setState({message: message, error:false });
         else this.setState({message:"Error processing request.", error:true });
     })
   }
 
+  openPDF = e=>{
+      var win = window.open('/pdf/'+this.props.match.params.id, '_blank');
+      win.focus();
+  }
 
-    parseRow (){
+  parseRow (){
     const { classes} = this.props;
     const table_data = this.state.doc.items.map((prop, key)=> {
-      {{debugger}}
       const uom = Uom.getUom(prop.uom);
             return (
             <TableRow key={key}> 
@@ -233,6 +239,7 @@ render() {
 	<div>
     <Notification error={this.state.error} message={this.state.message} />
 	<Grid container>
+    
     <GridItem xs={12} sm={12} md={12}>
       <form className={classes.container} noValidate autoComplete="off">
 	        <Card>
@@ -241,6 +248,12 @@ render() {
                 </CardHeader>
                 <CardBody>
                     <div>
+                    <ul className={classes.ulStyle}>
+                      <li className={classes.liStyle} onClick={this.openPDF} style={{cursor:"pointer"}}>
+                          <Print  style={generalStyle.printIcon}/>
+                          <span style={generalStyle.fs1}> Print</span>
+                      </li>
+                    </ul>
                         <ul className={classes.ulStyle}>
                             <li className={classes.liStyle}>
                             EID: <br />{" "}
@@ -345,7 +358,7 @@ render() {
                             fullWidth: true
                             }} inputProps={{  
                               name: "reason",
-                              value: this.state.data.reason,
+                              value: this.state.reason,
                               onChange:  this.handleFormChange             
                             }}
                           />

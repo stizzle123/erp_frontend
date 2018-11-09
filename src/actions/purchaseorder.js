@@ -33,3 +33,11 @@ export function fetchPurchaseOrderById(token, id, callback){
             }
         );   
 }
+
+export function editPurchaseOrder(token, id, data, callback){
+    let m = new MiddleWare(token);
+    return m.makeConnection('/purchase/order/update/'+id, m.POST, data).then((result)=>{
+        {{debugger}}
+        if(result.ok && result.statusText == "OK" && result.status == 200 )callback(result.ok);
+    }); 
+}
