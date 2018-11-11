@@ -90,6 +90,18 @@ export function findVendorById(props,vendorId){
     );
 }
 
+export function searchVendor(token,search, callback){
+    let m = new MiddleWare(token);
+    ///props.dispatch(loadAction.Loading());
+    return m.makeConnection('/vendors/search/'+search, m.GET).then((response) => {
+        return response.json()
+    }).then(        
+        (responseJson)=>{
+            callback(responseJson);
+        }
+    );
+}
+
 export function submitVendorDetailsViaUserId(dispatch, userId, d){
     let middleware = new MiddleWare();
     let data = {};

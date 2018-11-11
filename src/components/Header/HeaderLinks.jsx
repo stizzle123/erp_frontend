@@ -227,7 +227,7 @@ class HeaderLinks extends React.Component {
               (rtlActive
                 ? classes.links + " " + classes.linksRTL
                 : classes.links)
-            }
+            } 
           />
           <Hidden mdUp>
             <span className={classes.linkText}>
