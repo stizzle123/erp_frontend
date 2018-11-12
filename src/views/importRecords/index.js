@@ -5,17 +5,36 @@ import MiddleWare from "middleware/api";
 export default class Index extends React.Component {
 
     componentDidMount(){
+
+        
+    }
+   roman_to_int = (c) => {
+        switch (c){
+        case 'I': return 1;
+        case 'II': return 2;
+        case 'III': return 3;
+        case undefined: return '';
+        default: return '';
+        }
     }
     importRecord() {
         for (var i = 0; i < record.length; i++) {
-            console.log( record[i]);
             //Do something
             let middleware = new MiddleWare();
     let data = {};
-    data.email = record[i].FIELD7;
+    data.email = record[i].FIELD8;
     data.password = "password";
     data.coy_name = record[i].FIELD3;
     data.role = "vendor";
+    data.classes = record[i].FIELD11;
+    data.contact_name = record[i].FIELD7;
+    data.contact_phone = record[i].FIELD10;
+    data.office_address = record[i].FIELD4;
+    data.state = record[i].FIELD6;
+    data.country = record[i].FIELD5;
+    data.website = record[i].FIELD9;
+    data.product_related = record[i].FIELD1;
+    data.supplier_id = record[i].FIELD2;
     middleware.makeConnection('/users/import','POST', data).then((response) => {
       if(response.ok && response.status == 200){
           console.log("success")
