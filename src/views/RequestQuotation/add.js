@@ -37,6 +37,7 @@ import * as rfqActions from '../../actions/requestforquotation';
 import * as genericActions from 'actions/generic.js';
 import * as vendorActions from 'actions/vendor.js';
 import Notification from 'views/Notifications/Index.jsx';
+import * as Uom from "utility/Uom";
 
 const styles = theme => ({
   ...tableStyle,
@@ -91,7 +92,7 @@ class Add extends React.Component {
   handleLineItems = i =>{
     let checkedItems = this.state.checkedLineItems;
     let index = checkedItems.indexOf(i);
-    if(index > 0){
+    if(index > -1){
       checkedItems.splice(index, 1);
     }else{
       checkedItems.push(i);
@@ -108,7 +109,7 @@ class Add extends React.Component {
 
   submitQuote= ()=>{
       let items = this.props.pr.lineitems.filter((prop, key)=> {
-          if(this.state.checkedLineItems.indexOf(key)){
+          if(this.state.checkedLineItems.indexOf(key) > -1){
             return prop;
           }
       });
@@ -130,6 +131,7 @@ class Add extends React.Component {
           return option.label
         } 
     });
+    const uom = Uom.getUom(prop.uom);
       return (
         <TableRow key={key}> 
           <TableCell component="th" style={{border: "none", padding: "0", width: "20px", textAlign: "center"}}>               
@@ -162,7 +164,7 @@ class Add extends React.Component {
                 {prop.quantity}
           </TableCell>
           <TableCell className={classes.td}>
-                {prop.unit}
+                {uom.name}
           </TableCell>      
         </TableRow>
         )}

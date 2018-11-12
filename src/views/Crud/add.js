@@ -90,11 +90,12 @@ class AddCrud extends React.Component {
 
         }
     }   
-    handleSubmit = () => {
-        genericActions.saveItem(this.props.match.params.type, this.props.user.token, this.state.data, (json)=>{
-            this.setState({responseMessage:json});          
-            })
-          
+    handleSubmit = e => {
+        genericActions.saveItem(this.props.match.params.type, this.props.user.token, this.state.data,  (json)=>{
+            this.setState({
+                data:json, 
+            });
+          });
     }
 
     componentDidMount(){
