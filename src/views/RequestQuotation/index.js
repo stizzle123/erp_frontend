@@ -122,7 +122,8 @@ class Index extends React.Component {
       data: [],
       multipleSelect: [],
       showForm: false,
-      submitRfq : true
+      submitRfq : true,
+      sortByType:"default"
     };
   }
 
@@ -153,6 +154,54 @@ class Index extends React.Component {
     });
     this.fetchQuotes(this.state.selectedPr);
   };
+
+  sortBy = (type) => {
+    switch (type) {
+      case "date":
+      let mappedData = this.state.data.map((prop, key) => {
+        let date = new Date(prop.created);
+        return (
+          <div className={classes.boxRow}  onClick={() => this.fetchQuotes(prop)}>
+            <div className={classes.box}>{prop.requisitionno}</div>
+            <div className={classes.box}>{date.toISOString().split('T')[0]}</div>
+          </div>
+        );
+      });
+        break;
+        case "department":
+        let mappedData = this.state.data.map((prop, key) => {
+          let date = new Date(prop.created);
+          return (
+            <div className={classes.boxRow}  onClick={() => this.fetchQuotes(prop)}>
+              <div className={classes.box}>{prop.requisitionno}</div>
+              <div className={classes.box}>{date.toISOString().split('T')[0]}</div>
+            </div>
+          );
+        });
+          break;   
+        case "rfq":
+        let mappedData = this.state.data.map((prop, key) => {
+          let date = new Date(prop.created);
+          return (
+            <div className={classes.boxRow}  onClick={() => this.fetchQuotes(prop)}>
+              <div className={classes.box}>{prop.requisitionno}</div>
+              <div className={classes.box}>{date.toISOString().split('T')[0]}</div>
+            </div>
+          );
+        });
+        break;
+      case "default":
+      let mappedData = this.state.data.map((prop, key) => {
+        let date = new Date(prop.created);
+        return (
+          <div className={classes.boxRow}  onClick={() => this.fetchQuotes(prop)}>
+            <div className={classes.box}>{prop.requisitionno}</div>
+            <div className={classes.box}>{date.toISOString().split('T')[0]}</div>
+          </div>
+        );
+      });
+  };
+  }
 
   showQuoteForm = () => {
     this.setState({
@@ -210,15 +259,7 @@ class Index extends React.Component {
         </div>
       );
     } else {
-      let mappedData = this.state.data.map((prop, key) => {
-        let date = new Date(prop.created);
-        return (
-          <div className={classes.boxRow}  onClick={() => this.fetchQuotes(prop)}>
-            <div className={classes.box}>{prop.requisitionno}</div>
-            <div className={classes.box}>{date.toISOString().split('T')[0]}</div>
-          </div>
-        );
-      });
+     this.sortBy(this.state.sortByType)
       return (
         <GridContainer>
           <GridItem xs={12}>

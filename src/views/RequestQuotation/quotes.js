@@ -140,7 +140,7 @@ class Quote extends React.Component {
         alert: null
       });
     }
-
+  
     showQuoteDetails = (quote) => event=> {
       const { classes, tableHeaderColor } = this.props;
       const tableData2 = quote.lineitems.map((prop, key)=> {
@@ -221,11 +221,11 @@ class Quote extends React.Component {
                 <div>
                       <ul className={classes.ulStyle}>
                         <li className={classes.liStyle}>
-                          Requestor: <br />{" "}
+                          Requestor: <br />
                           <span className={classes.ap}>{this.props.pr.requestor.firstname+" "+this.props.pr.requestor.lastname}</span>
                         </li>
                         <li className={classes.liStyle}>
-                          Requestion No: <br />{" "}
+                          Requestion No: <br />
                           <span className={classes.ap}>{this.props.pr.requisitionno}</span>
                         </li>
                         <li className={classes.liStyle}>
@@ -241,16 +241,15 @@ class Quote extends React.Component {
                     <div>
                       <ul className={classes.ulStyle}>
                         <li className={classes.liStyle}>
-                          Department: <br />{" "}
+                          Department: <br />
                           <span className={classes.ap}>{this.props.pr.department.code}</span>
                         </li>
                         <li className={classes.liStyle}>
-                          Delivery Mode: <br />{" "}
+                          Delivery Mode: <br />
                           <span className={classes.ap}>Digital (Download)</span>
                         </li>
                         <li className={classes.liStyle}>
-                          {" "}
-                          Status:
+=                          Status:
                           <br />
                           <span className={classes.ap}>{Status.getStatus(this.props.pr.status)}</span>
                         </li>
