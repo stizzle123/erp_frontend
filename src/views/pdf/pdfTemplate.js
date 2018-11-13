@@ -5,7 +5,7 @@ export default class PdfTemplate extends React.Component {
     render() {
         return (
             <div>
-             <div style={{ position: "absolute", top: "10px", left: "2px", right: "2px"}}>
+             <div style={generalStyle.header}>
         <table style={generalStyle.PO}>
                 <tbody>
                   <tr>
@@ -41,7 +41,7 @@ export default class PdfTemplate extends React.Component {
                 </tbody>
               </table>       
                </div>
-        <div style={{ position: "absolute", bottom: "15px",  left: "2px", right: "2px"}}>
+        <div style={generalStyle.footer}>
         <div style={{borderTop:"1px solid #000"}} ><span>RS-PMG-PUR-P-1016 Procurement</span> <span style={{float:"right"}}> Printed Copies are Uncontrolled Copies</span></div>
         </div>
             </div>

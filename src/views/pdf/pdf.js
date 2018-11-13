@@ -262,7 +262,7 @@ class Pdf extends Component {
                 </div>
               </div>
               <div>
-                <p style={generalStyle.POtitle}>Additional Terms:</p>
+                <p style={generalStyle.POtitle2}>Additional Terms:</p>
 
                 <p>
                   Total order value excludes VAT which is remitted directly to
