@@ -75,8 +75,8 @@ class AddTabs extends React.Component {
                   tabName: "General Information",
                   tabIcon: BugReport,
                   tabContent: (
-                    <GeneralInfo data={this.props.vendor.general_info}/>
-                  )
+                    <GeneralInfo data={this.props.vendor.general_info} />
+                  ),
                 },
                 {
                   tabName: "Business Information",

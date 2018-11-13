@@ -135,7 +135,11 @@ export const dashboardRoutes = [
     component: ChangePassword
   }, 
   {
-    path: "/log",
+    path: "/user",
+    component: UserProfile
+  }, 
+  {
+    path: "/Log",
     component: Log
   },
   {
@@ -160,6 +164,12 @@ export const AdminMenu = [
     icon: DashboardIcon,
     component: Dashboard
   },
+ {
+   path: "/vendor",
+   name: "Vendors List",
+   icon: ContentPaste,
+   component: VendorList
+ },
  {
    collapse: true,
    path: "/budgets",
@@ -317,6 +327,19 @@ export const AdminMenu = [
     }
   ]
  },
+];
+
+export const ProcurementMenu = [
+  {
+    path: "/dashboard",
+    name: "Dashboard",
+    icon: HomeIcon,
+  },
+  {
+    path: "/vendor/type/approved",
+    name: "Approved Vendors",
+    icon: LibraryBooks,
+  }
 ];
 
 
