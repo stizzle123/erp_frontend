@@ -67,11 +67,12 @@ class Add extends React.Component {
     vendors:[],
     quotes:[],
     table_data:[],
-    checkeditems:[]
+    checkeditems:[],
+    checkeditemsprice:{},
+    cummulativeprice: 0
   };
 
 handleChange = event => {
-  {{debugger}}
     let data = this.state.data;
     data[[event.target.name]] = event.target.value; 
     this.setState({ 
@@ -93,25 +94,29 @@ handleSubmit = event =>{
 handleCheckedItems = i =>{
     let checkeditems = this.state.checkeditems;
     let index = checkeditems.indexOf(i);
-    if(index > 0){
+    let cummulativeprice = 0;
+    if(index > -1){
       checkeditems.splice(index, 1);
+      cummulativeprice  = this.state.cummulativeprice - parseInt(this.state.checkeditemsprice[i]);
     }else{
       checkeditems.push(i);
+      cummulativeprice  = this.state.cummulativeprice + parseInt(this.state.checkeditemsprice[i]);
     }
     this.setState({
-      checkeditems
+      checkeditems, cummulativeprice
     });
+    this.calcPrice( "", cummulativeprice);
 }
 
 handleItemChange= event =>{
     const { classes} = this.props;
     this.handleChange(event);
-    {{debugger}}
+    let itemsprice = this.state.checkeditemsprice;
     rfqActions.fetchAllQuoteforVendor(this.props.user.token, event.target.value, (quotes)=>{
         this.setState({quotes});
         let grandTotal = this.state.data.grand_total;
         const table_data = this.state.quotes.map((prop, key)=> {
-          grandTotal = grandTotal + prop.price*prop.quantity;
+          itemsprice[prop._id] = ((prop.price*prop.quantity)/100).toFixed(2);
             return (
             <TableRow key={key}> 
                 <TableCell component="th" style={{border: "none", padding: "0", width: "20px", textAlign: "center"}}>                   
@@ -145,45 +150,51 @@ handleItemChange= event =>{
                     {prop.unit}   
                 </TableCell>   
                 <TableCell className={classes.td}>
-                    {prop.price}   
+                    {(prop.price/100).toFixed(2)}   
                 </TableCell>   
                 <TableCell className={classes.td}>
-                    {prop.price*prop.quantity}   
+                    {((prop.price*prop.quantity)/100).toFixed(2)}   
                 </TableCell> 
             </TableRow>
             )}
         );
+
         let data = this.state.data;
-        data.grand_total = grandTotal;
-        this.setState({data, table_data });
+        this.setState({data, table_data, itemsprice });
     });
 }
 
 formulatePricing = event => {
     const name = event.target.name;
-    const grandTotal = this.state.data.grand_total;
-    let data = this.state.data;
-    switch (name){
-        case "vat":
-            const vat = (event.target.value)? event.target.value: this.state.data.vat;
-            data.grand_total = parseInt(grandTotal)+grandTotal*(parseInt(vat)/100);
-            data.vat = vat;
-            break;
-        case "discount":
-            data.grand_total=grandTotal-event.target.value;
-            data.discount = event.target.value;
-            break;
-        case "freightcharges":
-            data.grand_total = parseInt(grandTotal)+parseInt(event.target.value);
-            data.frieghtcharges = event.target.value;
-            break;
-        case "servicecharge":
-            data.grand_total = parseInt(grandTotal)+parseInt(event.target.value);
-            data.servicecharge = event.target.value;
-            break;
-    }
-    this.setState({ data });
+    this.calcPrice(name, this.state.cummulativeprice);
 };
+
+calcPrice = (name, currentPrice)=>{
+  const grandTotal = currentPrice;
+  let data = this.state.data;
+  switch (name){
+      default:
+          const vat = this.state.data.vat;
+          data.grand_total = parseInt(grandTotal)+grandTotal*(parseInt(vat)/100);
+          break;
+      case "discount":
+          const discount = (event.target.value)? event.target.value: this.state.data.discount;
+          data.grand_total=grandTotal-parseInt(discount);
+          data.discount = discount;
+          break;
+      case "freightcharges":
+          const freightcharges = (event.target.value)? event.target.value: this.state.data.freightcharges;
+          data.grand_total = parseInt(grandTotal)+parseInt(freightcharges);
+          data.freightcharges = event.target.value;
+          break;
+      case "servicecharge":
+          const servicecharge = (event.target.value)? event.target.value: this.state.data.servicecharge;
+          data.grand_total = parseInt(grandTotal)+parseInt(servicecharge);
+          data.servicecharge = event.target.value;
+          break;
+  }
+  this.setState({ data });
+}
 
 componentDidMount(){
     rfqActions.fetchUniqueVendorFromQuote(this.props.user.token, (vendors)=>{
@@ -300,7 +311,7 @@ render() {
                 <GridItem xs={3}>
                      <CustomInput labelText="VAT" id="vat" formControlProps={{  
                       style: {width:"100%"}             
-                      }} inputProps={{placeholder: this.state.data.vat+" %", name:"vat", onBlur: this.formulatePricing}}  
+                      }} inputProps={{value: this.state.data.vat+" %", name:"vat"}}  
                     />
                 </GridItem>
                 <GridItem xs={3}>

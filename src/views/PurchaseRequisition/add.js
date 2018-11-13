@@ -73,6 +73,7 @@ class PurchaseRequisition extends React.Component {
   state = {
     simpleSelect: "",
     type: '',
+    expenseheaders:[],
     rowArray:[1,2],
     data:{
       type:'',
@@ -194,6 +195,9 @@ class PurchaseRequisition extends React.Component {
     genericActions.fetchAll("departments", this.props.user.token, (items)=>{
       this.setState({departments : items});
     });
+    genericActions.fetchAll("expenseheader", this.props.user.token, (items)=>{
+      this.setState({expenseheaders : items});
+    });
   }
 
 
@@ -240,9 +244,9 @@ class PurchaseRequisition extends React.Component {
                    style={{marginTop: "-3px",   borderBottomWidth:" 1px"
                   }}
                     >
-                        {categories.map(option => (
-                          <MenuItem key={option.value} value={option.value} >
-                            {option.label}
+                        {this.state.expenseheaders.map(option => (
+                          <MenuItem key={option._id} value={option._id} >
+                            {option.name}
                           </MenuItem>
                         ))}
               </CustomSelect>

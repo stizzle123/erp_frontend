@@ -227,7 +227,8 @@ const generalStyle = {
         borderWidth: "0",
         borderColor: "#000",
         marginBottom: "5px",
-        marginLeft:""
+        marginLeft:"",
+        width: "70px"
     },
     space20: {
         height:"20px"
@@ -242,7 +243,12 @@ const generalStyle = {
     },
     POtitle: {
         fontWeight: "bold",
-        padding:"10px 0"
+        padding:"10px 0",
+        marginTop:"-30px"
+    },    
+    POtitle2: {
+        fontWeight: "bold",
+        padding:"10px 0",
     },
     POinput2: {
         float: "none", 
@@ -258,6 +264,15 @@ const generalStyle = {
      height: "1px",
      background: "#000"
     },
+    header: {
+        position: "absolute", 
+        top: "10px", 
+        left: "2px",
+        right: "2px",
+        fontFamily: "arial, helvetica, sans-serif",
+        fontSize:"9px",
+        padding: "10px 25px"
+    },
     fixedHeader: {
         position: 'absolute',
         top: '0%',
@@ -267,6 +282,15 @@ const generalStyle = {
         position: 'absolute',
         bottom: '0%',
         left: '0%'
+    },
+    footer: {
+        position: "absolute", 
+        bottom: "15px",  
+        left: "2px", 
+        right: "2px",
+        fontFamily: "arial, helvetica, sans-serif",
+        fontSize:"9px",
+        padding: "0 25px"
     }
 
 }
