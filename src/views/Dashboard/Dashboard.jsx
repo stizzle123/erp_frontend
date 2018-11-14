@@ -6,19 +6,22 @@ import {connect} from 'react-redux';
 import Admin from "./Role/Admin.jsx";
 import Vendor from "./Role/Vendor.jsx";
 import Iac from "./Role/Iac.jsx";
-import Staff from "./Role/Staff.jsx";
+import Procurement from "./Role/Procurement.jsx";
 import dashboardStyle from "../../assets/jss/material-dashboard-pro-react/views/dashboardStyle.jsx";
 
 class Dashboard extends React.Component {
 
   render() {
-    //if(this.props.user.role === "admin"){
-      return (<Admin />);
-    /* } else if (this.props.user.role === "vendor"){
+    if (this.props.user.role === "vendor"){
       return <Vendor />
-    } else if (this.props.user.role === "iac"){
+    } else{
+      return (<Admin />);
+    } 
+    /*if (this.props.user.role === "iac"){
       return <Iac />
-    } */
+    } else if (this.props.user.role === "procurement"){
+      return <Procurement />
+    }*/
   }
 }
 
