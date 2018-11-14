@@ -123,7 +123,7 @@ class Index extends React.Component {
       multipleSelect: [],
       showForm: false,
       submitRfq : true,
-      sortByType:"default"
+      sortByType:"date"
     };
   }
 
@@ -156,10 +156,13 @@ class Index extends React.Component {
   };
 
   sortBy = (type) => {
+    const classes= this.props;
     switch (type) {
-      case "date":
-      let mappedData = this.state.data.map((prop, key) => {
-        let date = new Date(prop.created);
+  case "date": {
+    const mappedData = [].concat(this.state.data)
+    .sort((a, b) => a.created > b.created)
+    .map((prop, key) => {
+        const date = new Date(prop.created);
         return (
           <div className={classes.boxRow}  onClick={() => this.fetchQuotes(prop)}>
             <div className={classes.box}>{prop.requisitionno}</div>
@@ -167,10 +170,12 @@ class Index extends React.Component {
           </div>
         );
       });
-        break;
-        case "department":
-        let mappedData = this.state.data.map((prop, key) => {
-          let date = new Date(prop.created);
+
+        return mappedData;
+          }
+        case "department": {
+        const mappedData = this.state.data.map((prop, key) => {
+          const date = new Date(prop.created);
           return (
             <div className={classes.boxRow}  onClick={() => this.fetchQuotes(prop)}>
               <div className={classes.box}>{prop.requisitionno}</div>
@@ -178,10 +183,23 @@ class Index extends React.Component {
             </div>
           );
         });
-          break;   
-        case "rfq":
-        let mappedData = this.state.data.map((prop, key) => {
-          let date = new Date(prop.created);
+          return mappedData;   
+        }
+        case "rfq": {
+          const mappedData = this.state.data.map((prop, key) => {
+            const date = new Date(prop.created);
+            return (
+              <div className={classes.boxRow}  onClick={() => this.fetchQuotes(prop)}>
+                <div className={classes.box}>{prop.requisitionno}</div>
+                <div className={classes.box}>{date.toISOString().split('T')[0]}</div>
+              </div>
+            );
+          });
+          return mappedData;
+        }
+      case "default": {
+        const mappedData = this.state.data.map((prop, key) => {
+          const date = new Date(prop.created);
           return (
             <div className={classes.boxRow}  onClick={() => this.fetchQuotes(prop)}>
               <div className={classes.box}>{prop.requisitionno}</div>
@@ -189,18 +207,14 @@ class Index extends React.Component {
             </div>
           );
         });
-        break;
-      case "default":
-      let mappedData = this.state.data.map((prop, key) => {
-        let date = new Date(prop.created);
-        return (
-          <div className={classes.boxRow}  onClick={() => this.fetchQuotes(prop)}>
-            <div className={classes.box}>{prop.requisitionno}</div>
-            <div className={classes.box}>{date.toISOString().split('T')[0]}</div>
-          </div>
-        );
-      });
+        return mappedData;
+      }
+     
   };
+  }
+
+  getValue = (e) => {
+    alert(e.target.value)
   }
 
   showQuoteForm = () => {
@@ -242,7 +256,7 @@ class Index extends React.Component {
 
   render() {
     const { classes } = this.props;
-
+  console.log(this.sortBy(this.state.sortByType));
     if (this.props.loader.loading) {
       return (
         <div>
@@ -259,7 +273,6 @@ class Index extends React.Component {
         </div>
       );
     } else {
-     this.sortBy(this.state.sortByType)
       return (
         <GridContainer>
           <GridItem xs={12}>
@@ -306,6 +319,7 @@ class Index extends React.Component {
                                 selected: classes.selectMenuItemSelected
                               }}
                               value="2"
+                              onClick={this.getValue}
                             >
                               Department
                             </MenuItem>
@@ -324,6 +338,8 @@ class Index extends React.Component {
                                 selected: classes.selectMenuItemSelected
                               }}
                               value="4"
+                              onClick={this.getValue}
+
                             >
                               RFQ
                             </MenuItem>
@@ -338,7 +354,7 @@ class Index extends React.Component {
                           <div className={classes.box}>REQ</div>
                           <div className={classes.box}>DATE</div>
                         </div>
-                        {mappedData}
+                        {this.sortBy(this.state.sortByType)}
                       </div>
                     </div>
                   </GridItem>
