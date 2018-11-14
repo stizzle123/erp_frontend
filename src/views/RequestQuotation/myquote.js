@@ -142,7 +142,8 @@ class Index extends React.Component {
       showForm: false,
       submitRfq : true,
       quote: {lineitems:[]},
-      docs:[]
+      docs:[],
+      expenseheaders:[],
     };
   }
   componentWillMount(){
@@ -171,7 +172,7 @@ class Index extends React.Component {
   submitQuote = ()=>{
     let data = this.state.data;
     rfqActions.submitVendorQuote( this.props.user.token, this.state.quote._id, data, docs=>{
-
+        if(docs)alert("Quote submitted succesfully");
     })
   }
 

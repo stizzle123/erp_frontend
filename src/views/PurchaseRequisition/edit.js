@@ -83,7 +83,8 @@ class Edit extends React.Component {
     startDate : moment(),
     departments: [],
     action: '',
-    reason:""
+    reason:"",
+    expenseheaders:[],
   };
 
   handleChange= e =>{
@@ -126,6 +127,9 @@ class Edit extends React.Component {
     });
     genericActions.fetchAll("departments", this.props.user.token, (items)=>{
       this.setState({departments : items});
+    });
+    genericActions.fetchAll("expenseheader", this.props.user.token, (items)=>{
+      this.setState({expenseheaders : items});
     });
   }
 
@@ -173,9 +177,9 @@ class Edit extends React.Component {
                    style={{marginTop: "-3px",   borderBottomWidth:" 1px"
                   }}
                     >
-                        {categories.map(option => (
-                          <MenuItem key={option.value} value={option.value} >
-                            {option.label}
+                        {this.state.expenseheaders.map(option => (
+                          <MenuItem key={option._id} value={option._id} >
+                            {option.name}
                           </MenuItem>
                         ))}
               </CustomSelect>
@@ -472,7 +476,7 @@ class Edit extends React.Component {
                               }}
                               value="disapprove"
                             >
-                             Disapprove
+                             Reject
                             </MenuItem>                                                      
                           </Select>
                         </FormControl>

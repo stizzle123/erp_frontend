@@ -366,6 +366,7 @@ render() {
                       : ""
                       }
                       <GridItem xs={12} sm={6} md={6}>
+                      <h4>Choose Action &darr;</h4>
                       <FormControl
                             fullWidth
                             className={classes.selectFormControl}
@@ -384,13 +385,6 @@ render() {
                               }}
                               onChange={this.handleChange}
                             >
-                              <MenuItem
-                                classes={{
-                                  root: classes.selectMenuItem
-                                }}
-                              >
-                                Choose Action
-                              </MenuItem>
                               <MenuItem
                                 classes={{
                                   root: classes.selectMenuItem,

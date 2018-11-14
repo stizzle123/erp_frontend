@@ -130,7 +130,7 @@ class Quote extends React.Component {
     constructor(props){
         super(props)
         this.props = props;
-        this.state = {data: {}}
+        this.state = {data: {},expenseheaders:[]}
     }
 
 
@@ -204,6 +204,7 @@ class Quote extends React.Component {
 
     render(){
         const { classes } = this.props;
+        let date = new Date(this.props.pr.dateneeded);
         let mappedData = this.props.quotes.map((prop, key) => {
           const dt = new Date(prop.created);
           const status = Status.getStatus(prop.status);
@@ -230,7 +231,7 @@ class Quote extends React.Component {
                         </li>
                         <li className={classes.liStyle}>
                           Date Needed: <br />
-                          <span className={classes.ap}>{this.props.pr.dateneeded}</span>
+                          <span className={classes.ap}>{date.toISOString().split('T')[0]}</span>
                         </li>
                         <li className={classes.liStyle}>
                           Charge To: <br />

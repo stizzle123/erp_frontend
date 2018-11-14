@@ -7,7 +7,6 @@ import PaymentIcon from '@material-ui/icons/Payment';
 import HomeIcon from '@material-ui/icons/Home';
 import AddIcon from '@material-ui/icons/Add';
 import LibraryBooks from '@material-ui/icons/LibraryBooks';
-
 import Settings from '@material-ui/icons/Settings';
 import SdStorage from '@material-ui/icons/SdStorage';
 import AccountBalance from '@material-ui/icons/AccountBalanceWallet';
@@ -137,11 +136,7 @@ export const dashboardRoutes = [
     component: ChangePassword
   }, 
   {
-    path: "/user",
-    component: UserProfile
-  }, 
-  {
-    path: "/Log",
+    path: "/log",
     component: Log
   },
   {
