@@ -407,7 +407,7 @@ render() {
                                 }}
                                 value="disapprove"
                               >
-                              Disapprove
+                                Reject
                               </MenuItem>                                                      
                             </Select>
                           </FormControl>

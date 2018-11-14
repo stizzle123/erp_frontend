@@ -6,6 +6,8 @@ import GridOn from '@material-ui/icons/GridOn';
 import PaymentIcon from '@material-ui/icons/Payment';
 import HomeIcon from '@material-ui/icons/Home';
 import AddIcon from '@material-ui/icons/Add';
+import LibraryBooks from '@material-ui/icons/LibraryBooks';
+
 import Settings from '@material-ui/icons/Settings';
 import SdStorage from '@material-ui/icons/SdStorage';
 import AccountBalance from '@material-ui/icons/AccountBalanceWallet';
@@ -135,7 +137,11 @@ export const dashboardRoutes = [
     component: ChangePassword
   }, 
   {
-    path: "/log",
+    path: "/user",
+    component: UserProfile
+  }, 
+  {
+    path: "/Log",
     component: Log
   },
   {
@@ -160,6 +166,12 @@ export const AdminMenu = [
     icon: DashboardIcon,
     component: Dashboard
   },
+ {
+   path: "/vendor",
+   name: "Vendors List",
+   icon: ContentPaste,
+   component: VendorList
+ },
  {
    collapse: true,
    path: "/budgets",
@@ -317,6 +329,19 @@ export const AdminMenu = [
     }
   ]
  },
+];
+
+export const ProcurementMenu = [
+  {
+    path: "/dashboard",
+    name: "Dashboard",
+    icon: HomeIcon,
+  },
+  {
+    path: "/vendor/type/approved",
+    name: "Approved Vendors",
+    icon: LibraryBooks,
+  }
 ];
 
 

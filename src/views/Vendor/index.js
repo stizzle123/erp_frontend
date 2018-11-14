@@ -18,8 +18,11 @@ import CardBody from "components/Card/CardBody.jsx";
 import CardIcon from "components/Card/CardIcon.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
 import Button from "../../components/CustomButtons/Button.jsx";
-import Approve from "@material-ui/icons/ThumbUp";
-import View from "@material-ui/icons/Pageview";
+import FormControl from "@material-ui/core/FormControl";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+
+import Select from "@material-ui/core/Select";
 import { Link } from 'react-router-dom';
 import PropTypes from "prop-types";
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -41,29 +44,31 @@ class Index extends React.Component {
 
   constructor(props) {
     super(props);
-    this.handler = this.handler.bind(this);
+   /// this.handler = this.handler.bind(this);
     this.state = { 
-      redirectTo:false
+      redirectTo:false,
+      data:[],
+      status:""
     };
   }
- 
-
-handler(type, id){
-}
-
 
 componentDidMount(){
+  (this.props.match.params.type)?
+  vendorActions.findAllVendors(this.props, this.props.match.params.type):
    vendorActions.findAllVendors(this.props);
-    /* else if(this.props.match.params.type){
-    vendorActions.findAllVendors(this.props, this.props.match.params.type);
-  } */
 }
 
 componentDidUpdate(prevProps) {
   if (this.props.match.params.type !== prevProps.match.params.type) {
-    vendorActions.findAllVendors(this.props, this.props.match.params.type);
+    vendorActions.findAllVendors(this.props, this.props.match.params.type)
   }
 }
+
+filterVendor = (e)=>{
+  vendorActions.findAllVendors(this.props, e.target.value)
+  this.setState({status: e.target.value})
+}
+
 processJson(responseJson){
   let datas = [];
   responseJson.map((row)=>{
@@ -84,8 +89,11 @@ processJson(responseJson){
 render(){
     const { classes } = this.props;
     let vendors = {"dataRows":[]};
-    if(this.props.data.length> 0){
+  
+    if(this.state.data.length ==0 && this.props.data.length> 0){
       vendors = this.processJson(this.props.data);
+    }else if(this.state.data.length> 0){
+      vendors = this.processJson(this.state.data);
     }
     let data = vendors.dataRows.map((prop, key) => {
         return {
@@ -126,19 +134,25 @@ render(){
                  <Dvr />
               </Button>
               {/* use this button to remove the data row */}
-            {  <Button
+            
+            { (this.props.user.role != "procurement")? <Button
                 justIcon
                 round
                 simple
                 onClick={() => {
-                 let data = this.props.data[key];
-                 vendorActions.deleteVendor(this.props, data.user)
+                  if(window.confirm('Delete this Vendor?')) {
+                    let datum = this.props.data[key];
+                    let data = this.props.data;
+                    //vendorActions.deleteVendor(this.props, datum.user);
+                    delete data[key];
+                    this.setState({data: data })
+                  }
                 }}
                 color="danger"
                 className="remove"
               >
                 <Close />
-              </Button>}
+              </Button> : " "}
             </div>
           )
         };
@@ -166,6 +180,79 @@ render(){
               <h4 className={classes.cardIconTitle}>Vendors</h4>
             </CardHeader>
             <CardBody>
+            {
+              (this.props.user.role == "iac" || this.props.user.role == "admin")?
+            <Card> 
+              <CardBody>
+                <FormControl
+                      fullWidth
+                          className={classes.selectFormControl}
+                        >
+                          <InputLabel
+                            htmlFor="simple-select"
+                            className={classes.selectLabel}
+                          >
+                            Filter by Status
+                          </InputLabel>
+                          <Select
+                            MenuProps={{
+                              className: classes.selectMenu
+                            }}
+                            classes={{
+                              select: classes.select
+                            }}
+                            value={this.state.status}
+                            onChange={this.filterVendor}
+                            inputProps={{
+                              name: "simpleSelect",
+                              id: "simple-select"
+                            }}
+                          >
+                            <MenuItem
+                              classes={{
+                                root: classes.selectMenuItem
+                              }}
+                            >
+                              Choose Status
+                            </MenuItem>
+                            <MenuItem
+                              classes={{
+                                root: classes.selectMenuItem,
+                                selected: classes.selectMenuItemSelected
+                              }}
+                              value="approved"
+                            >
+                              Approved
+                            </MenuItem>
+                            <MenuItem
+                              classes={{
+                                root: classes.selectMenuItem,
+                                selected: classes.selectMenuItemSelected
+                              }}
+                              value="0">
+                              Just Registered
+                            </MenuItem>
+                            <MenuItem
+                              classes={{
+                                root: classes.selectMenuItem,
+                                selected: classes.selectMenuItemSelected
+                              }}
+                              value="unapproved">
+                              Pending Approval
+                            </MenuItem>
+                            <MenuItem
+                              classes={{
+                                root: classes.selectMenuItem,
+                                selected: classes.selectMenuItemSelected
+                              }}
+                              value="blacklisted">
+                              Blacklisted
+                            </MenuItem>
+                            </Select>
+                </FormControl>
+              </CardBody>
+            </Card> : ""
+            }
               <ReactTable
                 data={data}
                 filterable
