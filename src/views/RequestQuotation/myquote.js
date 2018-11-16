@@ -10,11 +10,11 @@ import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-import Table from '@material-ui/core/Table';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import TableBody from '@material-ui/core/TableBody';
+import Table from "@material-ui/core/Table";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import TableBody from "@material-ui/core/TableBody";
 
 // core components
 import GridItem from "../../components/Grid/GridItem.jsx";
@@ -25,13 +25,14 @@ import CardIcon from "components/Card/CardIcon.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
 import Button from "../../components/CustomButtons/Button.jsx";
 import Funnel from "@material-ui/icons/FilterList";
+import DatePicker from "react-datepicker";
 
 import PropTypes from "prop-types";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import purple from "@material-ui/core/colors/purple";
 import * as rfqActions from "../../actions/requestforquotation";
-import * as vendorActions from '../../actions/vendor';
-import * as Status from 'utility/Status';
+import * as vendorActions from "../../actions/vendor";
+import * as Status from "utility/Status";
 import { cardTitle } from "assets/jss/material-dashboard-pro-react.jsx";
 import Language from "@material-ui/icons/Language";
 import CustomInput from "components/CustomInput/CustomInput.jsx";
@@ -40,6 +41,7 @@ import { connect } from "react-redux";
 import generalStyle from "assets/jss/material-dashboard-pro-react/generalStyle.jsx";
 import tableStyle from "assets/jss/material-dashboard-pro-react/components/tableStyle.jsx";
 import * as Uom from "utility/Uom";
+import moment from "moment";
 
 const styles = {
   ...generalStyle,
@@ -123,67 +125,112 @@ const styles = {
   }
 };
 
-const creditTerms = [
-  {value: '0', label:'Advance',},
-  {value: '1',label: '30 days',},
-  {value: '2',label: '45 days',},
-  {value: '3',label: '60 days',}
+const availability = [
+  { value: true, label: "Yes" },
+  { value: false, label: "No" }
 ];
-
+const creditTerms = [
+  { value: "0", label: "Advance" },
+  { value: "1", label: "30 days" },
+  { value: "2", label: "45 days" },
+  { value: "3", label: "60 days" }
+];
+const currencies = [
+  { value: "0", label: "₦" },
+  { value: "1", label: "$" },
+  { value: "2", label: "£" },
+  { value: "3", label: "€" },
+  { value: "4", label: "₹" }
+];
 class Index extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       data: {
-        items:{},
-        creditterms:""
+        items: {},
+        creditterms: "",
+        currency: "₦",
+        availability: true
       },
       multipleSelect: [],
       showForm: false,
-      submitRfq : true,
-      quote: {lineitems:[]},
-      docs:[]
+      submitRfq: true,
+      quote: { lineitems: [] },
+      docs: [],
+      startDate: moment()
     };
   }
-  componentWillMount(){
+  componentWillMount() {
     const userId = this.props.user._id;
     vendorActions.findVendorByUserId(this.props, userId);
   }
 
   componentDidMount() {
-    rfqActions.fetchVendorsQuotes(this.props.user.token, this.props.vendor._id, docs => {
-      this.setState({ docs: docs });
-    });
+    rfqActions.fetchVendorsQuotes(
+      this.props.user.token,
+      this.props.vendor._id,
+      docs => {
+        this.setState({ docs: docs });
+      }
+    );
   }
 
-  fetchQuotes(quote){
-    this.setState({ quote: quote, showRfq: true });
-  }
- 
-  handleSelect = event =>{
+  fetchQuotes(quote) {
+    let items = {};
     let data = this.state.data;
-    data[[event.target.name]] = event.target.value;
-    this.setState({ 
-      data : data,
+    quote.lineitems.map((item, i) => {
+      items[[i]] = {
+        price: "",
+        currency: "",
+        availability: true,
+        availabilityDate: ""
+      };
     });
+    data.items = items;
+    this.setState({ quote: quote, showRfq: true, data });
   }
 
-  submitQuote = ()=>{
+  toggleCalendar = e => {
+    e && e.preventDefault();
+    this.setState({ isOpen: !this.state.isOpen });
+  };
+
+  submitQuote = () => {
     let data = this.state.data;
-    rfqActions.submitVendorQuote( this.props.user.token, this.state.quote._id, data, docs=>{
+    {
+      {
+        debugger;
+      }
+    }
+    return;
+    rfqActions.submitVendorQuote(
+      this.props.user.token,
+      this.state.quote._id,
+      data,
+      docs => {}
+    );
+  };
 
-    })
-  }
-
-  setItem =  i => event =>{
+  setItem = i => event => {
     let items = this.state.data.items;
-    items[[i]] = event.target.value;
+    {
+      {
+        debugger;
+      }
+    }
+    if (event._d) {
+      this.toggleCalendar();
+      this.setState({ startDate: event });
+      items[[i]][[event.target.name]] = event.format("MM/DD/YYYY");
+    } else {
+      items[[i]][[event.target.name]] = event.target.value;
+    }
     let data = this.state.data;
     data.items = items;
-    this.setState({ 
-      data : data,
-    });    
-  }
+    this.setState({
+      data: data
+    });
+  };
 
   componentDidUpdate(prevProps) {
     if (this.props.match.params.type !== prevProps.match.params.type) {
@@ -193,182 +240,365 @@ class Index extends React.Component {
 
   render() {
     const { classes, tableHeaderColor } = this.props;
-      let mappedData = this.state.docs.map((prop, key) => {
-        let date = new Date(prop.created);
-        return (
-          <div className={classes.boxRow}  onClick={() => this.fetchQuotes(prop)}>
-            <div className={classes.box}>{prop.no}</div>
-            <div className={classes.box}>{date.toISOString().split('T')[0]}</div>
-          </div>
-        );
-      });
-
-      const tableData = this.state.quote.lineitems.map((prop, key)=> {
-        const uom = Uom.getUom(prop.uom);
-        return (
-          <TableRow key={key}>
-            <TableCell className={classes.td}>
-                {prop.itemdescription }
-            </TableCell>
-            <TableCell className={classes.td}>
-                {prop.quantity}
-            </TableCell>
-            <TableCell className={classes.td}>
-                {uom.name}   
-            </TableCell> 
-            <TableCell className={classes.td}>
-              <CustomInput name="price" id="price" type="number" required 
-                    formControlProps={{  
-                      style: {width:"60px", padding:"0", margin:"0",},  
-                      name: "unit"            
-                    }}  
-                    inputProps={{ name:"price" , onChange: this.setItem(key), 
-                    style:{fontSize:"11px"}, value:this.state.data.items[key]}}
-                  />
-            </TableCell>      
-          </TableRow>
-          )}
-      );
-
+    let mappedData = this.state.docs.map((prop, key) => {
+      let date = new Date(prop.created);
       return (
-        <GridContainer>
-          <GridItem xs={12}>
-            <Card>
-              <CardHeader color="success" icon>
-                <CardIcon color="success">
-                  <Language />
-                </CardIcon>
-                <h2 className={classes.cardIconTitle}>My Quotes</h2>
-              </CardHeader>
-              <CardBody>
-                <GridContainer justify="space-between">
-                  <GridItem xs={12} sm={4} md={4}>
-                    <GridContainer justify="space-between">
-                      <GridItem xs={3}>
-                        <Funnel style={{ marginTop: "25px" }} />
-                      </GridItem>
+        <div className={classes.boxRow} onClick={() => this.fetchQuotes(prop)}>
+          <div className={classes.box}>{prop.no}</div>
+          <div className={classes.box}>{date.toISOString().split("T")[0]}</div>
+        </div>
+      );
+    });
 
-                      <GridItem xs={9} style={{ marginBottom: "13px" }}>
-                        <FormControl
-                          fullWidth
-                          className={classes.selectFormControl}
+    const tableData = this.state.quote.lineitems.map((prop, key) => {
+      const uom = Uom.getUom(prop.uom);
+      return (
+        <TableRow key={key}>
+          <TableCell className={classes.td}>{prop.itemdescription}</TableCell>
+          <TableCell className={classes.td}>{prop.quantity}</TableCell>
+          <TableCell className={classes.td}>{uom.name}</TableCell>
+          <TableCell className={classes.td}>
+            <CustomInput
+              name="price"
+              id="price"
+              type="number"
+              required
+              formControlProps={{
+                style: { width: "60px", padding: "0", margin: "0" },
+                name: "unit"
+              }}
+              inputProps={{
+                name: "price",
+                onChange: this.setItem(key),
+                style: { fontSize: "11px" },
+                value: this.state.data.items[key]["price"]
+              }}
+            />
+          </TableCell>
+          <TableCell className={classes.td}>
+            <CustomSelect
+              id="currency"
+              name="currency"
+              options={this.state.data.currency}
+              required
+              formControlProps={{
+                style: { padding: "0", margin: "0", width: "auto" }
+              }}
+              onChange={this.setItem(key)}
+              inputProps={{
+                margin: "normal",
+                value: this.state.data.items[key]["currency"]
+              }}
+              style={{
+                marginTop: "-3px",
+                borderBottomWidth: " 1px"
+              }}
+            >
+              {currencies.map(option => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </CustomSelect>
+          </TableCell>
+          <TableCell className={classes.td}>
+            {this.state.data.items[key]["availability"] == true ? (
+              <CustomSelect
+                id="availability"
+                name="availability"
+                required
+                formControlProps={{
+                  style: { padding: "0", margin: "0", width: "auto" }
+                }}
+                onChange={this.setItem(key)}
+                inputProps={{
+                  margin: "normal",
+                  value: this.state.data.items[key]["availability"]
+                }}
+                style={{
+                  marginTop: "-3px",
+                  borderBottomWidth: " 1px"
+                }}
+              >
+                {availability.map(option => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </CustomSelect>
+            ) : (
+              <span>
+                <CustomInput
+                  labelText="Date Available"
+                  name="availabilityDate"
+                  required
+                  formControlProps={{
+                    fullWidth: true
+                  }}
+                  onFocus={this.toggleCalendar}
+                  inputProps={{
+                    value: this.state.startDate.format("MM/DD/YYYY"),
+                    onFocus: this.toggleCalendar
+                  }}
+                />
+                {this.state.isOpen && (
+                  <DatePicker
+                    selected={this.state.startDate}
+                    onChange={this.setItem(key)}
+                    showYearDropdown
+                    dateFormatCalendar="MMMM"
+                    scrollableYearDropdown
+                    yearDropdownItemNumber={15}
+                    withPortal
+                    inline
+                  />
+                )}
+              </span>
+            )}
+          </TableCell>
+        </TableRow>
+      );
+    });
+
+    return (
+      <GridContainer>
+        <GridItem xs={12}>
+          <Card>
+            <CardHeader color="success" icon>
+              <CardIcon color="success">
+                <Language />
+              </CardIcon>
+              <h2 className={classes.cardIconTitle}>My Quotes</h2>
+            </CardHeader>
+            <CardBody>
+              <GridContainer justify="space-between">
+                <GridItem xs={12} sm={4} md={4}>
+                  <GridContainer justify="space-between">
+                    <GridItem xs={3}>
+                      <Funnel style={{ marginTop: "25px" }} />
+                    </GridItem>
+
+                    <GridItem xs={9} style={{ marginBottom: "13px" }}>
+                      <FormControl
+                        fullWidth
+                        className={classes.selectFormControl}
+                      >
+                        <InputLabel
+                          htmlFor="multiple-select"
+                          className={classes.selectLabel}
                         >
-                          <InputLabel
-                            htmlFor="multiple-select"
-                            className={classes.selectLabel}
-                          >
-                            Sort By
-                          </InputLabel>
-                          <Select
-                            multiple
-                            value={this.state.multipleSelect}
-                            onChange={this.handleMultiple}
-                            MenuProps={{ className: classes.selectMenu }}
-                            classes={{ select: classes.select }}
-                            inputProps={{
-                              name: "multipleSelect",
-                              id: "multiple-select"
+                          Sort By
+                        </InputLabel>
+                        <Select
+                          multiple
+                          value={this.state.multipleSelect}
+                          onChange={this.handleMultiple}
+                          MenuProps={{ className: classes.selectMenu }}
+                          classes={{ select: classes.select }}
+                          inputProps={{
+                            name: "multipleSelect",
+                            id: "multiple-select"
+                          }}
+                        >
+                          <MenuItem
+                            classes={{
+                              root: classes.selectMenuItem,
+                              selected: classes.selectMenuItemSelected
                             }}
+                            value="2"
                           >
-                            <MenuItem
-                              classes={{
-                                root: classes.selectMenuItem,
-                                selected: classes.selectMenuItemSelected
-                              }}
-                              value="2"
-                            >
-                              Department
-                            </MenuItem>
-                            <MenuItem
-                              classes={{
-                                root: classes.selectMenuItem,
-                                selected: classes.selectMenuItemSelected
-                              }}
-                              value="3"
-                            >
-                              Date
-                            </MenuItem>
-                            <MenuItem
-                              classes={{
-                                root: classes.selectMenuItem,
-                                selected: classes.selectMenuItemSelected
-                              }}
-                              value="4"
-                            >
-                              RFQ
-                            </MenuItem>
-                          </Select>
-                        </FormControl>
-                      </GridItem>
-                    </GridContainer>
+                            Department
+                          </MenuItem>
+                          <MenuItem
+                            classes={{
+                              root: classes.selectMenuItem,
+                              selected: classes.selectMenuItemSelected
+                            }}
+                            value="3"
+                          >
+                            Date
+                          </MenuItem>
+                          <MenuItem
+                            classes={{
+                              root: classes.selectMenuItem,
+                              selected: classes.selectMenuItemSelected
+                            }}
+                            value="4"
+                          >
+                            RFQ
+                          </MenuItem>
+                        </Select>
+                      </FormControl>
+                    </GridItem>
+                  </GridContainer>
 
-                    <div className={classes.sidebar}>
-                      <div className={classes.boxer}>
-                        <div className={classes.boxHeader}>
-                          <div className={classes.box}>RFQ</div>
-                          <div className={classes.box}>DATE</div>
-                        </div>
-                        {mappedData}
+                  <div className={classes.sidebar}>
+                    <div className={classes.boxer}>
+                      <div className={classes.boxHeader}>
+                        <div className={classes.box}>RFQ</div>
+                        <div className={classes.box}>DATE</div>
                       </div>
+                      {mappedData}
                     </div>
-                  </GridItem>
-                  <GridItem xs={12} sm={8} md={8}>
-                  {
-                    (this.state.quote.lineitems.length >0)?
-                    <div className={classes.tableResponsive} style ={{ overflowX: "scroll"}}>
-                      <Card>
+                  </div>
+                </GridItem>
+                <GridItem xs={12} sm={8} md={8}>
+                  {this.state.quote.lineitems.length > 0 ? (
+                    <div
+                      className={classes.tableResponsive}
+                      style={{ overflowX: "scroll" }}
+                    >
+                      <Card style={{ width: "750px" }}>
                         <CardBody>
-                          <Table className={classes.table} > 
-                            <TableHead  className={classes[tableHeaderColor + "TableHeader"]} style={{marginTop:"10px", color:"blue", borderBottomColor:"#333",borderBottomStyle:"solid", borderBottomWidth:"1px"}}>
+                          <Table className={classes.table}>
+                            <TableHead
+                              className={
+                                classes[tableHeaderColor + "TableHeader"]
+                              }
+                              style={{
+                                marginTop: "10px",
+                                color: "blue",
+                                borderBottomColor: "#333",
+                                borderBottomStyle: "solid",
+                                borderBottomWidth: "1px"
+                              }}
+                            >
                               <TableRow>
-                                <TableCell className={classes.tableCell + " " + classes.tableHeadCell+" "+classes.td} style={{color: "blue"}}>Description</TableCell>
-                                <TableCell className={classes.tableCell + " " + classes.tableHeadCell+" "+classes.td} style={{color: "blue", width: "70px"}}>Qty</TableCell>
-                                <TableCell className={classes.tableCell + " " + classes.tableHeadCell+" "+classes.td} style={{color: "blue"}}>UOM</TableCell>
-                                <TableCell className={classes.tableCell + " " + classes.tableHeadCell+" "+classes.td} style={{color: "blue"}}>Price</TableCell>
+                                <TableCell
+                                  className={
+                                    classes.tableCell +
+                                    " " +
+                                    classes.tableHeadCell +
+                                    " " +
+                                    classes.td
+                                  }
+                                  style={{ color: "blue" }}
+                                >
+                                  Description
+                                </TableCell>
+                                <TableCell
+                                  className={
+                                    classes.tableCell +
+                                    " " +
+                                    classes.tableHeadCell +
+                                    " " +
+                                    classes.td
+                                  }
+                                  style={{ color: "blue" }}
+                                >
+                                  Qty
+                                </TableCell>
+                                <TableCell
+                                  className={
+                                    classes.tableCell +
+                                    " " +
+                                    classes.tableHeadCell +
+                                    " " +
+                                    classes.td
+                                  }
+                                  style={{ color: "blue" }}
+                                >
+                                  UOM
+                                </TableCell>
+                                <TableCell
+                                  className={
+                                    classes.tableCell +
+                                    " " +
+                                    classes.tableHeadCell +
+                                    " " +
+                                    classes.td
+                                  }
+                                  style={{ color: "blue" }}
+                                >
+                                  Price
+                                </TableCell>
+                                <TableCell
+                                  className={
+                                    classes.tableCell +
+                                    " " +
+                                    classes.tableHeadCell +
+                                    " " +
+                                    classes.td
+                                  }
+                                  style={{ color: "blue" }}
+                                >
+                                  Currency
+                                </TableCell>
+                                <TableCell
+                                  className={
+                                    classes.tableCell +
+                                    " " +
+                                    classes.tableHeadCell +
+                                    " " +
+                                    classes.td
+                                  }
+                                  style={{ color: "blue" }}
+                                >
+                                  Availability
+                                </TableCell>
                               </TableRow>
                             </TableHead>
-                            <TableBody>
-                                {tableData}
-                            </TableBody>
-                          </Table> 
+                            <TableBody>{tableData}</TableBody>
+                          </Table>
                         </CardBody>
                         <CardFooter>
                           <Grid container>
                             <GridItem xs={12} sm={12} md={12}>
-                              <CustomSelect labelText="Select Credit Terms"  id="creditterms" name="creditterms" required
-                                  formControlProps={{
-                                      style: {padding:"0", margin:"0", width:"300px"}              
-                                    }} 
-                                    onChange={this.handleSelect}
-                                    inputProps={{margin:"normal", value: this.state.data.creditterms}}
-                                    style={{
-                                      marginTop: "-3px",   borderBottomWidth:" 1px"
-                                    }}
-                                    >
-                                        {creditTerms.map(option => (
-                                          <MenuItem key={option.value} value={option.value} >
-                                            {option.label}
-                                          </MenuItem>
-                                        ))}
-                              </CustomSelect>                            
+                              <CustomSelect
+                                labelText="Select Credit Terms"
+                                id="creditterms"
+                                name="creditterms"
+                                required
+                                formControlProps={{
+                                  style: {
+                                    padding: "0",
+                                    margin: "0",
+                                    width: "300px"
+                                  }
+                                }}
+                                onChange={this.handleSelect}
+                                inputProps={{
+                                  margin: "normal",
+                                  value: this.state.data.creditterms
+                                }}
+                                style={{
+                                  marginTop: "-3px",
+                                  borderBottomWidth: " 1px"
+                                }}
+                              >
+                                {creditTerms.map(option => (
+                                  <MenuItem
+                                    key={option.value}
+                                    value={option.value}
+                                  >
+                                    {option.label}
+                                  </MenuItem>
+                                ))}
+                              </CustomSelect>
                             </GridItem>
                             <GridItem xs={12} sm={12} md={6}>
-                              <Button color="yellowgreen"  onClick={this.submitQuote}>Submit</Button>
+                              <Button
+                                color="yellowgreen"
+                                onClick={this.submitQuote}
+                              >
+                                Submit
+                              </Button>
                             </GridItem>
-                          </Grid>              
+                          </Grid>
                         </CardFooter>
                       </Card>
-                    </div>: 
+                    </div>
+                  ) : (
                     ""
-                    }
-                    {this.state.alert}
-                  </GridItem>
-                </GridContainer>
-              </CardBody>
-            </Card>
-          </GridItem>
-        </GridContainer>
-      );
+                  )}
+                  {this.state.alert}
+                </GridItem>
+              </GridContainer>
+            </CardBody>
+          </Card>
+        </GridItem>
+      </GridContainer>
+    );
   }
 }
 

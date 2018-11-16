@@ -1,9 +1,9 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import MenuItem from '@material-ui/core/MenuItem';
+import React from "react";
+import PropTypes from "prop-types";
+import { withStyles } from "@material-ui/core/styles";
+import MenuItem from "@material-ui/core/MenuItem";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Grid from '@material-ui/core/Grid';
+import Grid from "@material-ui/core/Grid";
 import GridItem from "components/Grid/GridItem.jsx";
 import Card from "components/Card/Card.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
@@ -14,330 +14,514 @@ import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import CustomInput from "components/CustomInput/CustomInput.jsx";
 import CustomSelect from "components/CustomInput/CustomSelect.jsx";
-import Table from '@material-ui/core/Table';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import TableBody from '@material-ui/core/TableBody';
+import Table from "@material-ui/core/Table";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import TableBody from "@material-ui/core/TableBody";
 import Plus from "@material-ui/icons/Add";
-import Print from '@material-ui/icons/Print';
-import Checkbox from '@material-ui/core/Checkbox';
+import Print from "@material-ui/icons/Print";
+import Checkbox from "@material-ui/core/Checkbox";
 import Check from "@material-ui/icons/Check";
-import {connect} from 'react-redux';
+import { connect } from "react-redux";
 
 import regularFormsStyle from "assets/jss/material-dashboard-pro-react/views/regularFormsStyle.jsx";
 import tableStyle from "assets/jss/material-dashboard-pro-react/components/tableStyle.jsx";
 import generalStyle from "assets/jss/material-dashboard-pro-react/generalStyle.jsx";
-import * as poActions from '../../actions/purchaseorder';
-import * as rfqActions from '../../actions/requestforquotation';
-import Notification from 'views/Notifications/Index.jsx';
-
-const shipto = [
-    {slug: 'lagos', name:'Lagos Office'},
-    {slug: 'portharcourt', name:'Port-Harcourt Office'}
-  ]
+import * as poActions from "../../actions/purchaseorder";
+import * as rfqActions from "../../actions/requestforquotation";
+import * as locationAction from "../../actions/location";
+import Notification from "views/Notifications/Index.jsx";
 
 const styles = theme => ({
   ...tableStyle,
   ...regularFormsStyle,
 
-  td:{
-    border: 'none',
-    margin: '0 10px',
-    padding: '0 10px',
-    fontWeight: '700',
-    fontSize: '15px',
+  td: {
+    border: "none",
+    margin: "0 10px",
+    padding: "0 10px",
+    fontWeight: "700",
+    fontSize: "15px"
   },
 
- 
-   removeDivPadding:{ maxWidth: "12%"}
+  removeDivPadding: { maxWidth: "12%" }
 });
- 
 
 class Add extends React.Component {
   state = {
-    data:{
+    data: {
       vendor: "",
-      shipto:"",
-      creditterms:"",
+      shipto: "",
+      creditterms: "",
       grand_total: 0,
       vat: 5,
       lineitems: []
     },
-    vendors:[],
-    quotes:[],
-    table_data:[],
-    checkeditems:[]
+    vendors: [],
+    quotes: [],
+    table_data: [],
+    checkeditems: [],
+    locations: [],
+    address: ""
   };
 
-handleChange = event => {
-  {{debugger}}
+  handleChange = event => {
+    {
+      {
+        debugger;
+      }
+    }
     let data = this.state.data;
-    data[[event.target.name]] = event.target.value; 
-    this.setState({ 
-        data : data,
+    data[[event.target.name]] = event.target.value;
+    this.setState({
+      data: data
     });
-};
+  };
 
-handleSubmit = event =>{
-  let data = this.state.data;
-  data.lineitems = this.state.checkeditems;
-  poActions.submitPO(this.props.user.token, data, (isOk)=>{
-    if(isOk){
-      this.setState({message:"Purchase Order created succesfully", error:false });
-    } 
-    else this.setState({message:"Error creating purchase order.", error:true });
-  });
-}
+  handleSubmit = event => {
+    let data = this.state.data;
+    data.lineitems = this.state.checkeditems;
+    poActions.submitPO(this.props.user.token, data, isOk => {
+      if (isOk) {
+        this.setState({
+          message: "Purchase Order created succesfully",
+          error: false
+        });
+      } else
+        this.setState({
+          message: "Error creating purchase order.",
+          error: true
+        });
+    });
+  };
 
-handleCheckedItems = i =>{
+  handleCheckedItems = i => {
     let checkeditems = this.state.checkeditems;
     let index = checkeditems.indexOf(i);
-    if(index > 0){
+    if (index > 0) {
       checkeditems.splice(index, 1);
-    }else{
+    } else {
       checkeditems.push(i);
     }
     this.setState({
       checkeditems
     });
-}
+  };
 
-handleItemChange= event =>{
-    const { classes} = this.props;
+  handleItemChange = event => {
+    const { classes } = this.props;
     this.handleChange(event);
-    {{debugger}}
-    rfqActions.fetchAllQuoteforVendor(this.props.user.token, event.target.value, (quotes)=>{
-        this.setState({quotes});
+    rfqActions.fetchAllQuoteforVendor(
+      this.props.user.token,
+      event.target.value,
+      quotes => {
+        this.setState({ quotes });
         let grandTotal = this.state.data.grand_total;
-        const table_data = this.state.quotes.map((prop, key)=> {
-          grandTotal = grandTotal + prop.price*prop.quantity;
-            return (
-            <TableRow key={key}> 
-                <TableCell component="th" style={{border: "none", padding: "0", width: "20px", textAlign: "center"}}>                   
-                  <FormControlLabel
+        const table_data = this.state.quotes.map((prop, key) => {
+          grandTotal = grandTotal + prop.price * prop.quantity;
+          return (
+            <TableRow key={key}>
+              <TableCell
+                component="th"
+                style={{
+                  border: "none",
+                  padding: "0",
+                  width: "20px",
+                  textAlign: "center"
+                }}
+              >
+                <FormControlLabel
                   control={
                     <Checkbox
-                        tabIndex={-1}
-                        onClick={() => this.handleCheckedItems(prop._id)}
-                        checkedIcon={
-                          <Check className={classes.checkedIcon} />
-                        }
-                        icon={<Check className={classes.uncheckedIcon} />}
-                        classes={{
-                          checked: classes.checked
-                        }}
+                      tabIndex={-1}
+                      onClick={() => this.handleCheckedItems(prop._id)}
+                      checkedIcon={<Check className={classes.checkedIcon} />}
+                      icon={<Check className={classes.uncheckedIcon} />}
+                      classes={{
+                        checked: classes.checked
+                      }}
                     />
                   }
-                      classes={{
-                        label: classes.label
-                      }}
-                  />
-                    {key+1}
-                </TableCell>
-                <TableCell className={classes.td}>
-                    {prop.description }
-                </TableCell>
-                <TableCell className={classes.td}>
-                    {prop.quantity}
-                </TableCell>
-                <TableCell className={classes.td}>
-                    {prop.unit}   
-                </TableCell>   
-                <TableCell className={classes.td}>
-                    {prop.price}   
-                </TableCell>   
-                <TableCell className={classes.td}>
-                    {prop.price*prop.quantity}   
-                </TableCell> 
+                  classes={{
+                    label: classes.label
+                  }}
+                />
+                {key + 1}
+              </TableCell>
+              <TableCell className={classes.td}>{prop.description}</TableCell>
+              <TableCell className={classes.td}>{prop.quantity}</TableCell>
+              <TableCell className={classes.td}>{prop.unit}</TableCell>
+              <TableCell className={classes.td}>{prop.price}</TableCell>
+              <TableCell className={classes.td}>
+                {prop.price * prop.quantity}
+              </TableCell>
             </TableRow>
-            )}
-        );
+          );
+        });
         let data = this.state.data;
         data.grand_total = grandTotal;
-        this.setState({data, table_data });
-    });
-}
+        this.setState({ data, table_data });
+      }
+    );
+  };
 
-formulatePricing = event => {
+  formulatePricing = event => {
     const name = event.target.name;
     const grandTotal = this.state.data.grand_total;
     let data = this.state.data;
-    switch (name){
-        case "vat":
-            const vat = (event.target.value)? event.target.value: this.state.data.vat;
-            data.grand_total = parseInt(grandTotal)+grandTotal*(parseInt(vat)/100);
-            data.vat = vat;
-            break;
-        case "discount":
-            data.grand_total=grandTotal-event.target.value;
-            data.discount = event.target.value;
-            break;
-        case "freightcharges":
-            data.grand_total = parseInt(grandTotal)+parseInt(event.target.value);
-            data.frieghtcharges = event.target.value;
-            break;
-        case "servicecharge":
-            data.grand_total = parseInt(grandTotal)+parseInt(event.target.value);
-            data.servicecharge = event.target.value;
-            break;
+    switch (name) {
+      case "vat":
+        const vat = event.target.value
+          ? event.target.value
+          : this.state.data.vat;
+        data.grand_total =
+          parseInt(grandTotal) + grandTotal * (parseInt(vat) / 100);
+        data.vat = vat;
+        break;
+      case "discount":
+        data.grand_total = grandTotal - event.target.value;
+        data.discount = event.target.value;
+        break;
+      case "freightcharges":
+        data.grand_total = parseInt(grandTotal) + parseInt(event.target.value);
+        data.frieghtcharges = event.target.value;
+        break;
+      case "servicecharge":
+        data.grand_total = parseInt(grandTotal) + parseInt(event.target.value);
+        data.servicecharge = event.target.value;
+        break;
     }
     this.setState({ data });
-};
-
-componentDidMount(){
-    rfqActions.fetchUniqueVendorFromQuote(this.props.user.token, (vendors)=>{
-        this.setState({vendors})
+  };
+  selectedLocation(e) {
+    locationAction.getAddress(this.props, e.target.value, json => {
+      this.setState({ address: json });
     });
-}
+  }
 
-render() {
+  componentDidMount() {
+    rfqActions.fetchUniqueVendorFromQuote(this.props.user.token, vendors => {
+      this.setState({ vendors });
+    });
+    locationAction.getLocation(this.props, json => {
+      this.setState({ locations: json });
+    });
+  }
+
+  render() {
     const { classes, tableHeaderColor } = this.props;
     return (
-	<div>
-    <Notification error={this.state.error} message={this.state.message} />
-	<Grid container>
-    <GridItem xs={12} sm={12} md={12}>
-      <form className={classes.container} noValidate autoComplete="off">
-	        <Card>
+      <div>
+        <Notification error={this.state.error} message={this.state.message} />
+        <Grid container>
+          <GridItem xs={12} sm={12} md={12}>
+            <form className={classes.container} noValidate autoComplete="off">
+              <Card>
                 <CardHeader color="primary">
-                    <h4 className={classes.cardTitleWhite}>Purchase Order</h4>
+                  <h4 className={classes.cardTitleWhite}>Purchase Order</h4>
                 </CardHeader>
                 <CardBody>
-                <Grid container>
-                  <GridItem xs={12} sm={12} md={8} style={generalStyle.positionRelative}> 
-                    <Print  style={generalStyle.printIcon}/>
-                    <span style={generalStyle.fs1}> Print</span>
-                  </GridItem>
-                  <GridItem xs={12} sm={12} md={4}style={generalStyle.text2}>
-                      Requisition Order No: 
-                  </GridItem>
-                  <GridItem xs={12} sm={12} md={8}>
-                    <CustomSelect labelText="Vendor:" name="vendor" id="vendor" 
-                        onChange={(e)=>this.handleItemChange(e)}
+                  <Grid container>
+                    <GridItem
+                      xs={12}
+                      sm={12}
+                      md={8}
+                      style={generalStyle.positionRelative}
+                    >
+                      <Print style={generalStyle.printIcon} />
+                      <span style={generalStyle.fs1}> Print</span>
+                    </GridItem>
+                    <GridItem xs={12} sm={12} md={4} style={generalStyle.text2}>
+                      Purchase Order No:
+                    </GridItem>
+                    <GridItem xs={12} sm={12} md={8}>
+                      <CustomSelect
+                        labelText="Vendor:"
+                        name="vendor"
+                        id="vendor"
+                        onChange={e => this.handleItemChange(e)}
                         value={this.state.data.vendor}
                         formControlProps={{
-                        style: {width:"100%",padding:"0", marginTop:"14px"}              
-                        }} 
-                        inputProps={{margin:"normal" 
-                    }}
-                    style={{marginTop: "-3px",   borderBottomWidth:" 1px"
-                    }}
-                        >
-                            {this.state.vendors.map(option => (
-                            <MenuItem key={option.vendor._id} value={option.vendor._id} >
-                                {option.vendor.general_info.company_name}
-                            </MenuItem>
-                            ))}
-                    </CustomSelect>
-                  </GridItem>
-                  <GridItem xs={12} sm={12} md={4}> 
-                      <CustomInput  id="employeeid" labelText="Employee ID: "
+                          style: {
+                            width: "100%",
+                            padding: "0",
+                            marginTop: "14px"
+                          }
+                        }}
+                        inputProps={{ margin: "normal" }}
+                        style={{ marginTop: "-3px", borderBottomWidth: " 1px" }}
+                      >
+                        {this.state.vendors.map(option => (
+                          <MenuItem
+                            key={option.vendor._id}
+                            value={option.vendor._id}
+                          >
+                            {option.vendor.general_info.company_name}
+                          </MenuItem>
+                        ))}
+                      </CustomSelect>
+                    </GridItem>
+                    <GridItem xs={12} sm={12} md={4}>
+                      <CustomInput
+                        id="employeeid"
+                        labelText="Employee ID: "
                         formControlProps={{
                           fullWidth: true
-                        }} inputProps={{
-                          disabled: true, value: this.props.user.eid                
+                        }}
+                        inputProps={{
+                          disabled: true,
+                          value: this.props.user.eid
                         }}
                       />
-                  </GridItem>   
-                  <GridItem xs={12} sm={4} md={4}>
-                      <CustomSelect labelText="Ship To" name="shipto" id="shipto" required
-                            onChange={(e)=>this.handleChange(e)}
-                            formControlProps={{
-                              style: {width:"130px",padding:"0", margin:"0"}              
-                            }} 
-                            value={this.state.data.shipto}
-                            inputProps={{margin:"normal",  id:"shipto" }}
-                          style={{marginTop: "-3px",   borderBottomWidth:" 1px"
-                          }}
-                            >
-                                {shipto.map(option => (
-                                  <MenuItem key={option.slug} value={option.slug} >
-                                    {option.name}
-                                  </MenuItem>
-                                ))}
+                    </GridItem>
+                    <GridItem xs={12} sm={4} md={4}>
+                      <CustomSelect
+                        labelText="Ship To"
+                        name="shipto"
+                        id="shipto"
+                        required
+                        onChange={e => {
+                          this.handleChange(e);
+                          this.selectedLocation(e);
+                        }}
+                        formControlProps={{
+                          style: { width: "130px", padding: "0", margin: "0" }
+                        }}
+                        value={this.state.data.shipto}
+                        inputProps={{ margin: "normal", id: "shipto" }}
+                        style={{ marginTop: "-3px", borderBottomWidth: " 1px" }}
+                      >
+                        {this.state.locations.map(option => (
+                          <MenuItem key={option.slug} value={option.slug}>
+                            {option.name}
+                          </MenuItem>
+                        ))}
                       </CustomSelect>
-                  </GridItem>   
-                  <GridItem xs={12} sm={4} md={4}>
-                    <CustomInput labelText="Status" id="status" required formControlProps={{
-                        fullWidth: true
-                        }} inputProps={{  
-                          value:"Pending Submission",
-                          disabled:true                  
+                    </GridItem>
+                    <GridItem xs={12} sm={4} md={4}>
+                      <CustomInput
+                        labelText="Status"
+                        id="status"
+                        required
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          value: "Pending Submission",
+                          disabled: true
                         }}
                       />
-                  </GridItem>                                
-                  
-              </Grid>
+                    </GridItem>
+                    <GridItem xs={12} sm={4} md={4}>
+                      <CustomInput
+                        labelText="Address"
+                        id="address"
+                        required
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          value: this.state.address,
+                          disabled: true
+                        }}
+                      />
+                    </GridItem>
+                  </Grid>
                   <br />
-                  <div style ={{ overflowX: "scroll"}}>
-                  <Table> 
-                    <TableHead  className={classes[tableHeaderColor + "TableHeader"]} style={{marginTop:"10px", color:"#1b4aa5", borderBottomColor:"#333",borderBottomStyle:"solid", borderBottomWidth:"1px"}}>
-                      <TableRow>
-                        <TableCell className={classes.tableCell + " " + classes.tableHeadCell+" "+classes.td} style={{color: "#1b4aa5", width:"55px"}}>Item No</TableCell>
-                        <TableCell className={classes.tableCell + " " + classes.tableHeadCell+" "+classes.td} style={{color: "#1b4aa5"}}>Item Description</TableCell>
-                        <TableCell className={classes.tableCell + " " + classes.tableHeadCell+" "+classes.td} style={{color: "#1b4aa5", width: "70px"}}>Quantity</TableCell>
-                        <TableCell className={classes.tableCell + " " + classes.tableHeadCell+" "+classes.td} style={{color: "#1b4aa5"}}>UOM</TableCell>
-                        <TableCell className={classes.tableCell + " " + classes.tableHeadCell+" "+classes.td} style={{color: "#1b4aa5"}}>Unit</TableCell>
-                        <TableCell className={classes.tableCell + " " + classes.tableHeadCell+" "+classes.td} style={{color: "#1b4aa5"}}>Total</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <div ></div>
+                  <div style={{ overflowX: "scroll" }}>
+                    <Table>
+                      <TableHead
+                        className={classes[tableHeaderColor + "TableHeader"]}
+                        style={{
+                          marginTop: "10px",
+                          color: "#1b4aa5",
+                          borderBottomColor: "#333",
+                          borderBottomStyle: "solid",
+                          borderBottomWidth: "1px"
+                        }}
+                      >
+                        <TableRow>
+                          <TableCell
+                            className={
+                              classes.tableCell +
+                              " " +
+                              classes.tableHeadCell +
+                              " " +
+                              classes.td
+                            }
+                            style={{ color: "#1b4aa5", width: "55px" }}
+                          >
+                            Item No
+                          </TableCell>
+                          <TableCell
+                            className={
+                              classes.tableCell +
+                              " " +
+                              classes.tableHeadCell +
+                              " " +
+                              classes.td
+                            }
+                            style={{ color: "#1b4aa5" }}
+                          >
+                            Item Description
+                          </TableCell>
+                          <TableCell
+                            className={
+                              classes.tableCell +
+                              " " +
+                              classes.tableHeadCell +
+                              " " +
+                              classes.td
+                            }
+                            style={{ color: "#1b4aa5", width: "70px" }}
+                          >
+                            Quantity
+                          </TableCell>
+                          <TableCell
+                            className={
+                              classes.tableCell +
+                              " " +
+                              classes.tableHeadCell +
+                              " " +
+                              classes.td
+                            }
+                            style={{ color: "#1b4aa5" }}
+                          >
+                            UOM
+                          </TableCell>
+                          <TableCell
+                            className={
+                              classes.tableCell +
+                              " " +
+                              classes.tableHeadCell +
+                              " " +
+                              classes.td
+                            }
+                            style={{ color: "#1b4aa5" }}
+                          >
+                            Unit
+                          </TableCell>
+                          <TableCell
+                            className={
+                              classes.tableCell +
+                              " " +
+                              classes.tableHeadCell +
+                              " " +
+                              classes.td
+                            }
+                            style={{ color: "#1b4aa5" }}
+                          >
+                            Total
+                          </TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <div />
 
-                    <TableBody>
-                      {this.state.table_data}
-                    </TableBody>
-                  </Table> 
-                </div>
-                <div/>
-                <Grid container>
-                <GridItem xs={3}>
-                <CustomInput labelText="Discount" id="discount"  formControlProps={{  
-                      style: {width:"100%"}              
-                      }} inputProps={{ name:"discount", onBlur: this.formulatePricing }}
-                    />
-                </GridItem>
-                <GridItem xs={3}>
-                     <CustomInput labelText="VAT" id="vat" formControlProps={{  
-                      style: {width:"100%"}             
-                      }} inputProps={{placeholder: this.state.data.vat+" %", name:"vat", onBlur: this.formulatePricing}}  
-                    />
-                </GridItem>
-                <GridItem xs={3}>
-                     <CustomInput labelText="Freight Charges" id="freightcharges" formControlProps={{  
-                      style: {width:"100%"}             
-                      }} inputProps={{ name:"freightcharges", onBlur: this.formulatePricing }}
-                    />
-                </GridItem>
-                <GridItem xs={3}>
-                     <CustomInput labelText="Service Charges" id="servicecharge" formControlProps={{  
-                      style: {width:"100%"}              
-                      }}  inputProps={{ name:"servicecharge", onBlur: this.formulatePricing }}
-                    />
-                </GridItem> 
-              </Grid>
-              <div style={generalStyle.resultSection}>
-                <span style={{color:"#1b4aa5", fontWeight:"700", margin:"7px"}}>Total:</span>
-                 <span style={{float:"right",color:"#1b4aa5", fontWeight:"700"}}>
-                    {this.state.data.grand_total}
-                 </span>
-              </div>
-              </CardBody>
-              <CardFooter>
-              <Grid container>
-                <GridItem xs={12} sm={6} md={2} additionalclass={classes.removeDivPadding} >
-                  <Button color="primary" onClick={this.handleSave}>Save</Button>
-                </GridItem>
-                <GridItem xs={12} sm={12} md={2}>
-                  <Button color="yellowgreen" onClick={this.handleSubmit}>Submit</Button>
-                </GridItem>
-              </Grid>
-            </CardFooter>
-	  		</Card>
-      </form>
-	</GridItem>
-</Grid>
-</div>
+                      <TableBody>{this.state.table_data}</TableBody>
+                    </Table>
+                  </div>
+                  <div />
+                  <Grid container>
+                    <GridItem xs={3}>
+                      <CustomInput
+                        labelText="Discount"
+                        id="discount"
+                        formControlProps={{
+                          style: { width: "100%" }
+                        }}
+                        inputProps={{
+                          name: "discount",
+                          onBlur: this.formulatePricing
+                        }}
+                      />
+                    </GridItem>
+                    <GridItem xs={3}>
+                      <CustomInput
+                        labelText="VAT"
+                        id="vat"
+                        formControlProps={{
+                          style: { width: "100%" }
+                        }}
+                        inputProps={{
+                          placeholder: this.state.data.vat + " %",
+                          name: "vat",
+                          onBlur: this.formulatePricing
+                        }}
+                      />
+                    </GridItem>
+                    <GridItem xs={3}>
+                      <CustomInput
+                        labelText="Freight Charges"
+                        id="freightcharges"
+                        formControlProps={{
+                          style: { width: "100%" }
+                        }}
+                        inputProps={{
+                          name: "freightcharges",
+                          onBlur: this.formulatePricing
+                        }}
+                      />
+                    </GridItem>
+                    <GridItem xs={3}>
+                      <CustomInput
+                        labelText="Service Charges"
+                        id="servicecharge"
+                        formControlProps={{
+                          style: { width: "100%" }
+                        }}
+                        inputProps={{
+                          name: "servicecharge",
+                          onBlur: this.formulatePricing
+                        }}
+                      />
+                    </GridItem>
+                  </Grid>
+                  <div style={generalStyle.resultSection}>
+                    <span
+                      style={{
+                        color: "#1b4aa5",
+                        fontWeight: "700",
+                        margin: "7px"
+                      }}
+                    >
+                      Total:
+                    </span>
+                    <span
+                      style={{
+                        float: "right",
+                        color: "#1b4aa5",
+                        fontWeight: "700"
+                      }}
+                    >
+                      {this.state.data.grand_total}
+                    </span>
+                  </div>
+                </CardBody>
+                <CardFooter>
+                  <Grid container>
+                    <GridItem
+                      xs={12}
+                      sm={6}
+                      md={2}
+                      additionalclass={classes.removeDivPadding}
+                    >
+                      <Button color="primary" onClick={this.handleSave}>
+                        Save
+                      </Button>
+                    </GridItem>
+                    <GridItem xs={12} sm={12} md={2}>
+                      <Button color="yellowgreen" onClick={this.handleSubmit}>
+                        Submit
+                      </Button>
+                    </GridItem>
+                  </Grid>
+                </CardFooter>
+              </Card>
+            </form>
+          </GridItem>
+        </Grid>
+      </div>
     );
   }
 }
@@ -346,17 +530,18 @@ Add.defaultProps = {
 };
 
 Add.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 };
-
 
 function mapStateToProps(state) {
   return {
     user: state.auth.user,
     loading: state.loader.loading,
-    loader : state.loader
+    loader: state.loader
   };
 }
 
-export default connect(mapStateToProps, null)(withStyles(styles)(Add));
-
+export default connect(
+  mapStateToProps,
+  null
+)(withStyles(styles)(Add));
