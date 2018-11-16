@@ -315,6 +315,14 @@ export const AdminMenu = [
       component: ListCrud,
       actions: ['add', 'edit','view', 'delete']
     },
+    ,
+    {
+      path: "/crud/locations",
+      name: "Locations",
+      mini: "C",
+      component: ListCrud,
+      actions: ['add', 'edit','view', 'delete']
+    },
     {
       path: "/user/index",
       name: "Users",
@@ -332,11 +340,11 @@ export const ProcurementMenu = [
     name: "Dashboard",
     icon: HomeIcon,
   },
-  {
-    path: "/vendor/type/approved",
-    name: "Approved Vendors",
-    icon: LibraryBooks,
-  }
+  // {
+  //   path: "/vendor/type/approved",
+  //   name: "Approved Vendors",
+  //   icon: LibraryBooks,
+  // }
 ];
 
 
