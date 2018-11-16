@@ -36,6 +36,13 @@ const styles = {
   }
 };
 
+const Types = [
+    {name: "CEO", value:"ceo"},
+    {name: "Head Of Department", value:"hod"},
+    {name: "Manager", value:"manager"},
+    {name: "Staff", value:"staff"}
+]
+
 class AddUser extends React.Component {
   state = {
     data: {
@@ -44,7 +51,8 @@ class AddUser extends React.Component {
       firstname: "",
       email: "",
       eid: "",
-      department: ""
+      department: "",
+      line_manager:""
     },
     responseMessage: {},
     optionsRole: [],
@@ -57,7 +65,8 @@ class AddUser extends React.Component {
       role: "",
       department: ""
     },
-    submitButtonState: false
+    submitButtonState: false,
+    users:[]
   };
 
   handleChange = event => {
@@ -75,6 +84,11 @@ class AddUser extends React.Component {
     this.setState({ 
       data: data
     });
+    if(e.target.name =="line_manager"){
+      /* userAction.findManagers(this.props.user.token, users=>{
+        this.setState({users});
+      }) */
+    }
     this.validate(event.target.id, event.target.value);
   };
 
@@ -160,6 +174,9 @@ class AddUser extends React.Component {
     genericActions.fetchAll("roles", this.props.user.token, items => {
       this.setState({ optionsRole: items });
     });
+    userAction.findManagers(this.props.user.token, users=>{
+      this.setState({users});
+    })
   }
 
   render() {
@@ -334,6 +351,52 @@ class AddUser extends React.Component {
                         {this.state.optionsRole.map(function(data, key) {
                           return (
                             <MenuItem name="role" key={key} value={data.slug}>
+                              {data.name}
+                            </MenuItem>
+                          );
+                        })}
+                      </CustomSelect>
+                    </GridItem>
+                    <GridItem xs={12} sm={12} md={6}>
+                      <CustomSelect
+                        labelText="Select Line Manager"
+                        name="line_manager"
+                        required
+                        value={this.state.data.line_manager}
+                        onChange={e => this.handleChangeSelect(e)}
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          margin: "normal"
+                        }}
+                      >
+                        {this.state.users.map(function(data, key) {
+                          return (
+                            <MenuItem name="role" key={key} value={data._id}>
+                              {data.firstname +" "+data.lastname}
+                            </MenuItem>
+                          );
+                        })}
+                      </CustomSelect>
+                    </GridItem>
+                    <GridItem xs={12} sm={12} md={6}>
+                      <CustomSelect
+                        labelText="User Type"
+                        name="type"
+                        required
+                        value={this.state.data.type}
+                        onChange={e => this.handleChangeSelect(e)}
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          margin: "normal"
+                        }}
+                      >
+                        {Types.map(function(data, key) {
+                          return (
+                            <MenuItem name="type" key={key} value={data.value}>
                               {data.name}
                             </MenuItem>
                           );

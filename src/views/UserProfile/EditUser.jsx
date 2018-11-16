@@ -38,12 +38,18 @@ const styles = {
   }
 };
 
+const Types = [
+  {name: "CEO", value:"ceo"},
+  {name: "Head Of Department", value:"hod"},
+  {name: "Manager", value:"manager"},
+  {name: "Staff", value:"staff"}
+]
 
 class EditUser extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-        data: [],
+        data: {},
         responseMessage: '',
         responseState: '',
         isEnabled: false,
@@ -51,6 +57,7 @@ class EditUser extends React.Component {
         ],
         optionsRole : [
         ],
+        users:[]
       }
       this.enableEdit = this.enableEdit.bind(this),
       this.handleChange = this.handleChange.bind(this)
@@ -83,7 +90,6 @@ class EditUser extends React.Component {
     e.preventDefault();
     let data = this.state.data;
     userAction.updateProfile(data, (json)=>{
-        console.log(json);
       this.setState({
           responseState: json.success,
           responseMessage:json.message,
@@ -103,6 +109,9 @@ componentDidMount(){
     genericActions.fetchAll("roles", this.props.user.token, (items)=>{
       this.setState({optionsRole : items});
     });
+    userAction.findManagers(this.props.user.token, users=>{
+      this.setState({users});
+    })
   }
   render() {
     const { classes, data } = this.props;
@@ -194,6 +203,52 @@ componentDidMount(){
                   })}
                     </CustomSelect>
                   </GridItem>
+                  <GridItem xs={12} sm={12} md={6}>
+                      <CustomSelect
+                        labelText="Select Line Manager"
+                        name="line_manager"
+                        required
+                        value={this.state.data.line_manager}
+                        onChange={e => this.handleChangeSelect(e)}
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          margin: "normal"
+                        }}
+                      >
+                        {this.state.users.map(function(data, key) {
+                          return (
+                            <MenuItem name="role" key={key} value={data._id}>
+                              {data.firstname +" "+data.lastname}
+                            </MenuItem>
+                          );
+                        })}
+                      </CustomSelect>
+                    </GridItem>
+                    <GridItem xs={12} sm={12} md={6}>
+                      <CustomSelect
+                        labelText="User Type"
+                        name="type"
+                        required
+                        value={this.state.data.type}
+                        onChange={e => this.handleChangeSelect(e)}
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          margin: "normal"
+                        }}
+                      >
+                        {Types.map(function(data, key) {
+                          return (
+                            <MenuItem name="type" key={key} value={data.value}>
+                              {data.name}
+                            </MenuItem>
+                          );
+                        })}
+                      </CustomSelect>
+                    </GridItem>
               </Grid>
               </form>               
             </CardBody>
