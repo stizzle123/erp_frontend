@@ -157,7 +157,8 @@ class Index extends React.Component {
       submitRfq: true,
       quote: { lineitems: [] },
       docs: [],
-      startDate: moment()
+      startDate: moment(),
+      expenseheaders:[]
     };
   }
   componentWillMount() {
@@ -195,21 +196,12 @@ class Index extends React.Component {
     this.setState({ isOpen: !this.state.isOpen });
   };
 
-  submitQuote = () => {
+  submitQuote = ()=>{
     let data = this.state.data;
-    {
-      {
-        debugger;
-      }
-    }
-    return;
-    rfqActions.submitVendorQuote(
-      this.props.user.token,
-      this.state.quote._id,
-      data,
-      docs => {}
-    );
-  };
+    rfqActions.submitVendorQuote( this.props.user.token, this.state.quote._id, data, docs=>{
+        if(docs)alert("Quote submitted succesfully");
+    })
+  }
 
   setItem = i => event => {
     let items = this.state.data.items;

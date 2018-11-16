@@ -100,7 +100,7 @@ render(){
               <CardIcon color="primary">
                 <Assignment />
               </CardIcon>
-              <h3 className={classes.cardIconTitle}>Purchase Requisition Records</h3>
+              <h3 className={classes.cardIconTitle}>Purchase Order</h3>
             </CardHeader>
             <CardBody>
               <div>
