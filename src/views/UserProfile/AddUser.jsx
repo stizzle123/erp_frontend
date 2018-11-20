@@ -46,7 +46,7 @@ const Types = [
 class AddUser extends React.Component {
   state = {
     data: {
-      type: "staff",
+      type: "",
       lastname: "",
       firstname: "",
       email: "",
@@ -54,7 +54,7 @@ class AddUser extends React.Component {
       department: "",
       line_manager:""
     },
-    responseMessage: {},
+    responseMessage: "",
     optionsRole: [],
     optionsDepartment: [],
     validationState: {
@@ -152,20 +152,24 @@ class AddUser extends React.Component {
 
 
   getformData = e => {
-    e.preventDefault();
     let data = this.state.data;
-    let validationState = this.state.validationState;
-    this.setState({submitButtonState: true})
+    //let validationState = this.state.validationState;
     userAction.addUser(this.props, data, json => {
-      this.setState({ 
-        responseMessage: json,
-        data: json.user,
-        validationState: {}
-       },
-       () => {
-           console.log(this.state.data) 
-       });
+      if(json.success){
+        this.setState({ 
+          responseMessage: json.message,
+          data: json.user,
+          validationState: {}
+         })
+      }else{
+        this.setState({ 
+          responseMessage: json.message,
+          validationState: {}
+         })
+      }
+    
     });
+    //this.setState({submitButtonState: true})
   };
   componentDidMount() {
     genericActions.fetchAll("departments", this.props.user.token, items => {
@@ -185,10 +189,10 @@ class AddUser extends React.Component {
     return (
       <div>
         <Grid container>
-          {this.state.responseMessage.success === true ? (
+          {this.state.responseMessage ? (
             <Notification
               error={false}
-              message={this.state.responseMessage.message}
+              message={this.state.responseMessage}
             />
           ) : (
             ""
@@ -234,7 +238,7 @@ class AddUser extends React.Component {
                         inputProps={{
                           onChange: (e)=>this.handleChange(e),
                           value: this.state.data.firstname
-                                                }}
+                        }}
                         error={
                           this.state.validationState.firstname === ""
                             ? ""
@@ -259,7 +263,7 @@ class AddUser extends React.Component {
                         inputProps={{
                           onChange: (e)=>this.handleChange(e),
                           value: this.state.data.email
-                                                }}
+                        }}
                         error={
                           this.state.validationState.email === ""
                             ? ""

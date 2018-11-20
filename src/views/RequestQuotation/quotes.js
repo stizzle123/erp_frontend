@@ -123,9 +123,7 @@ const styles = {
     backgroundColor: "#D3D3D3",
     display: "table-row"
   }
-<<<<<<< HEAD
 };
-=======
   
 class Quote extends React.Component {
 
@@ -134,15 +132,6 @@ class Quote extends React.Component {
         this.props = props;
         this.state = {data: {},expenseheaders:[]}
     }
-
->>>>>>> 36ea4b65a2d6d40bc61012aa1b1e0dcf06773143
-
-class Quote extends React.Component {
-  constructor(props) {
-    super(props);
-    this.props = props;
-    this.state = { data: {} };
-  }
 
   hideAlert() {
     this.setState({
@@ -256,85 +245,6 @@ class Quote extends React.Component {
     });
   };
 
-<<<<<<< HEAD
-  render() {
-    const { classes } = this.props;
-    let mappedData = this.props.quotes.map((prop, key) => {
-      const dt = new Date(prop.created);
-      const status = Status.getStatus(prop.status);
-      return [
-        key + 1,
-        prop.vendor.general_info.company_name,
-        dt.toISOString().split("T")[0],
-        status,
-        <Button color="yellowgreen" onClick={this.showQuoteDetails(prop)}>
-          View
-        </Button>
-      ];
-    });
-    return (
-      <div>
-        <div>
-          <ul className={classes.ulStyle}>
-            <li className={classes.liStyle}>
-              Requestor: <br />
-              <span className={classes.ap}>
-                {this.props.pr.requestor.firstname +
-                  " " +
-                  this.props.pr.requestor.lastname}
-              </span>
-            </li>
-            <li className={classes.liStyle}>
-              Requestion No: <br />
-              <span className={classes.ap}>{this.props.pr.requisitionno}</span>
-            </li>
-            <li className={classes.liStyle}>
-              Date Needed: <br />
-              <span className={classes.ap}>{this.props.pr.dateneeded}</span>
-            </li>
-            <li className={classes.liStyle}>
-              Charge To: <br />
-              <span className={classes.ap}> {this.props.pr.chargeto}</span>
-            </li>
-          </ul>
-        </div>
-        <div>
-          <ul className={classes.ulStyle}>
-            <li className={classes.liStyle}>
-              Department: <br />
-              <span className={classes.ap}>
-                {this.props.pr.department.code}
-              </span>
-            </li>
-            <li className={classes.liStyle}>
-              Delivery Mode: <br />
-              <span className={classes.ap}>Digital (Download)</span>
-            </li>
-            <li className={classes.liStyle}>
-              Status:
-              <br />
-              <span className={classes.ap}>
-                {Status.getStatus(this.props.pr.status)}
-              </span>
-            </li>
-          </ul>
-        </div>
-        <div className={classes.space1} />
-        <h3>RFQ for this PR</h3>
-        <div className={classes.shadow}>
-          <Table
-            tableHead={["#", "Vendor", "Created", "Status", ""]}
-            tableData={mappedData}
-            customCellClasses={[classes.center, classes.right, classes.right]}
-            customClassesForCells={[0, 4, 5]}
-            customHeadCellClasses={[
-              classes.center,
-              classes.right,
-              classes.right
-            ]}
-            customHeadClassesForCells={[0, 4, 5]}
-          />
-=======
     render(){
         const { classes } = this.props;
         let date = new Date(this.props.pr.dateneeded);
@@ -415,13 +325,6 @@ class Quote extends React.Component {
             </div>
         );
     }
->>>>>>> 36ea4b65a2d6d40bc61012aa1b1e0dcf06773143
-
-          {this.state.alert}
-        </div>
-      </div>
-    );
-  }
 }
 
 Quote.propTypes = {

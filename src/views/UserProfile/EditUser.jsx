@@ -39,10 +39,10 @@ const styles = {
 };
 
 const Types = [
-  {name: "CEO", value:"ceo"},
-  {name: "Head Of Department", value:"hod"},
-  {name: "Manager", value:"manager"},
-  {name: "Staff", value:"staff"}
+    {name: "CEO", value:"ceo"},
+    {name: "Head Of Department", value:"hod"},
+    {name: "Manager", value:"manager"},
+    {name: "Staff", value:"staff"}
 ]
 
 class EditUser extends React.Component {
@@ -99,9 +99,11 @@ class EditUser extends React.Component {
       }
     });}
 componentDidMount(){
+  {{debugger}}
     userAction.getProfileDetails(this.props, this.props.match.params.id, (json)=>{
+        {{debugger}}
         this.setState({data:json});
-        console.log(json)
+        //console.log(json)
       });
     genericActions.fetchAll("departments", this.props.user.token, (items)=>{
       this.setState({optionsDepartment : items});
