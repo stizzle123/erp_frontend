@@ -13,17 +13,46 @@ export function fetchAll(type, token, callback) {
     });
 }
 
+export function findOne(type, id,token, callback) {
+  let m = new MiddleWare(token);
+  return m.makeConnection("/" + type + "/view/"+id, m.GET)
+    .then(response => {
+      return response.json();
+    })
+    .then(responseJson => {
+      callback(responseJson);
+    });
+}
+
+export function saveEdit(type, id,token, callback) {
+  let m = new MiddleWare(token);
+  return m.makeConnection("/" + type + "/edit/"+id, m.GET)
+    .then(response => {
+      return response.json();
+    })
+    .then(responseJson => {
+      callback(responseJson);
+    });
+}
+
 export function saveItem(type, token, data, callback) {
   let m = new MiddleWare(token);
-  return m
-    .makeConnection("/" + type + "/add/", m.POST, data)
-    .then(res => {
+  return m.makeConnection("/" + type + "/add/", m.POST, data).then(res => {
       return res.json();
-    })
-    .then(e => {
+    }).then(e => {
       callback(e);
-    })
-    .catch(e => {
+    }).catch(e => {
+      console.log("the error" + e);
+    });
+}
+
+export function updateItem(type, id,token, data, callback) {
+  let m = new MiddleWare(token);
+  return m.makeConnection("/" + type + "/edit/"+id, m.POST, data).then(res => {
+      return res.json();
+    }).then(e => {
+      callback(e);
+    }).catch(e => {
       console.log("the error" + e);
     });
 }

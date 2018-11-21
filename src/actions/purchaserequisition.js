@@ -41,3 +41,10 @@ export function editRequisition(token, id, data, callback){
     }); 
 }
 
+export function updateRequisition(token, id, data, callback){
+    let m = new MiddleWare(token);
+    return m.makeConnection('/purchasing/requisition/resubmitted/'+id, m.POST, data).then((result)=>{
+        if(result.ok && result.statusText == "OK" && result.status == 200 )callback(result.ok);
+    })
+}
+

@@ -63,15 +63,12 @@ class Add extends React.Component {
     table_data: [],
     checkeditems: [],
     locations: [],
-    address: ""
+    address: "",
+    checkeditemsprice:{},
+    cummulativeprice: 0
   };
 
-  handleChange = event => {
-    {
-      {
-        debugger;
-      }
-    }
+handleChange = event => {
     let data = this.state.data;
     data[[event.target.name]] = event.target.value;
     this.setState({

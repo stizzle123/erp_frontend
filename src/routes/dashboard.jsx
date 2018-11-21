@@ -33,6 +33,7 @@ import ViewPurchaseRequisition from "../views/PurchaseRequisition/edit.js";
 import ListPurchaseRequisition from "../views/PurchaseRequisition/index.js";
 import ListCrud from "../views/Crud/index.js";
 import AddCrud from "../views/Crud/add.js";
+import EditCrud from "../views/Crud/edit.js";
 import ViewCrud from "../views/Crud/add.js";
 import Log from "../views/Log/index.js";
 import Registration from "../views/RegistrationPage/index.js";
@@ -146,6 +147,10 @@ export const dashboardRoutes = [
   {
     path: "/crud/view/:type/:id",
     component: ViewCrud
+  },  
+  {
+    path: "/crud/edit/:type/:id",
+    component: EditCrud
   },
   {
     path: "/crud/:type/",
