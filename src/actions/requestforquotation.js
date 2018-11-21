@@ -93,3 +93,10 @@ export function fetchAllQuoteforVendor(token, id, callback){
             //props.dispatch(loadAction.LoadingSuccess());
     }); 
 }
+export function submitAcceptQuote(token, data, callback){
+    let m = new MiddleWare(token);
+    return m.makeConnection('/purchase/quotation/accept_qoute', m.POST, data).then(
+        (result)=>{
+            if(result.ok && result.statusText == "OK" && result.status == 200 ) callback(result.ok);
+    });   
+}

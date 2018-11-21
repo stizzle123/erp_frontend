@@ -58,7 +58,6 @@ class Add extends React.Component {
       vat: 5,
       lineitems: []
     },
-<<<<<<< HEAD
     vendors: [],
     quotes: [],
     table_data: [],
@@ -73,17 +72,6 @@ class Add extends React.Component {
         debugger;
       }
     }
-=======
-    vendors:[],
-    quotes:[],
-    table_data:[],
-    checkeditems:[],
-    checkeditemsprice:{},
-    cummulativeprice: 0
-  };
-
-handleChange = event => {
->>>>>>> 36ea4b65a2d6d40bc61012aa1b1e0dcf06773143
     let data = this.state.data;
     data[[event.target.name]] = event.target.value;
     this.setState({
@@ -120,12 +108,8 @@ handleChange = event => {
     this.setState({
       checkeditems, cummulativeprice
     });
-<<<<<<< HEAD
-  };
-=======
     this.calcPrice( "", cummulativeprice);
 }
->>>>>>> 36ea4b65a2d6d40bc61012aa1b1e0dcf06773143
 
   handleItemChange = event => {
     const { classes } = this.props;
