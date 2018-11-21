@@ -3,6 +3,8 @@ import ReactTable from "react-table";
 import "react-table/react-table.css";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
+import Typography from "@material-ui/core/Typography";
+import Modal from "@material-ui/core/Modal";
 // @material-ui/icons
 import Assignment from "@material-ui/icons/Assignment";
 import Dvr from "@material-ui/icons/Dvr";
@@ -14,6 +16,7 @@ import GridItem from "../../components/Grid/GridItem.jsx";
 import Card from "components/Card/Card.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
+import CardHeader from "components/Card/CardHeader.jsx";
 import Button from "../../components/CustomButtons/Button.jsx";
 import PropTypes from "prop-types";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -133,36 +136,41 @@ const styles = {
   },
   closeButtonSetting: {
     position: "absolute",
-    top:" 10px",
+    top: " 10px",
     right: "30px"
   },
   select: {
-    position:" relative",
+    position: " relative",
     cursor: "pointer",
     backgroundColor: "transparent",
     border: "none",
     borderBottom: "1px solid #9e9e9e",
-    outline:" none",
-    height:" 3rem",
+    outline: " none",
+    height: " 3rem",
     lineHeight: "3rem",
     width: "200px",
     fontSize: "16px",
     margin: "0 0 8px 0",
     padding: "0",
-    display:" block",
+    display: " block",
     userSelect: "none",
-    zIndex:" 1"
+    zIndex: " 1"
   },
   option: {
     clear: "both",
-    color:" rgba(0,0,0,0.87)",
+    color: " rgba(0,0,0,0.87)",
     cursor: "pointer",
     minHeight: "50px",
     lineHeight: "1.5rem",
     width: "100%",
     textAlign: "left"
+  },
+  positionCenter: {
+    position: "fixed",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)"
   }
-
 };
 const yesNo = [
   { value: true, label: "Accept" },
@@ -173,92 +181,85 @@ class Quote extends React.Component {
   constructor(props) {
     super(props);
     this.props = props;
-    this.state = { 
+    this.state = {
       data: {},
-      accepted: '',
-      rejection_reason: '',expenseheaders:[]
+      accepted: true,
+      rejection_reason: "",
+      open: false
     };
   }
-
   hideAlert() {
-    this.setState({
-      alert: null
-    });
+    this.setState({ open: false });
   }
-
   handleChangeSelect = e => {
-    this.setState({ 
+    this.setState({
       accepted: e.target.value
     });
+    this.forceUpdate();
   };
   handleChange = e => {
-    this.setState({ 
+    this.setState({
       rejection_reason: e.target.value
     });
   };
-  submitAccepted= ()=> {
+  submitAccepted = () => {
     const data = {};
-    data.accepted = this.state.accepted; 
+    data.accepted = this.state.accepted;
     data.id = this.props.quotes[0]._id;
-    data.rejection_reason = th.state.rejection_reason;
-    rfqActions.submitAcceptQuote(this.props.user.token, data, ()=>{
-      console.log(data);
-    })
-  }
+    data.rejection_reason = this.state.rejection_reason;
+    rfqActions.submitAcceptQuote(this.props.user.token, data, () => {});
+  };
 
-  rejectionInputField = (val) => {
-    if (val == 'false') {
-      return <CustomInput
-      labelText="Rejection Reason"
-      id="rejection_reason"
-      formControlProps={{
-        fullWidth: true
-      }}
-      inputProps={{
-        onChange: (e)=>this.handleChange(e),
-        value: this.state.data.rejection_reason
-                              }}
-    />;
-    }
-    
-  }
-
-
-  showQuoteDetails = quote => event => {
-    debugger
-    const { classes, tableHeaderColor } = this.props;
-    const tableData2 = quote.lineitems.map((prop, key) => {
-      const uom = Uom.getUom(prop.uom);
+  rejectionInputField = val => {
+    if (val == "false") {
       return (
-        <TableRow key={key}>
-          <TableCell className={classes.td}>{prop.itemdescription}</TableCell>
-          <TableCell className={classes.td}>{prop.quantity}</TableCell>
-          <TableCell className={classes.td}>{uom.name}</TableCell>
-          <TableCell className={classes.td}>{prop.price}</TableCell>
-        </TableRow>
+        <CustomInput
+          labelText="Rejection Reason"
+          id="rejection_reason"
+          formControlProps={{
+            fullWidth: true
+          }}
+          inputProps={{
+            onChange: e => this.handleChange(e),
+            value: this.state.data.rejection_reason
+          }}
+        />
       );
-    });
-    this.setState({
-      alert: (
-        <SweetAlert
-          title={"Quote for " + quote.vendor.general_info.company_name}
-          onConfirm={() => this.hideAlert()}
-          confirmBtnCssClass={
-            this.props.classes.hideElement
-          }
-          className={this.props.classes.pr}
-        >
-          {quote.lineitems.length > 0 ? (
-            <div
-              className={classes.tableResponsive}
-              style={{ overflowX: "scroll" }}
-            >
-            <Close onClick={() => this.hideAlert()} className={classes.closeButtonSetting}/>
+    }
+  };
+
+  showQuoteDetails = () => {
+    this.setState({ open: true });
+  };
+
+  render() {
+    const { classes } = this.props;
+    let mappedData = this.props.quotes.map((prop, key) => {
+      const dt = new Date(prop.created);
+      const status = Status.getStatus(prop.status);
+      return [
+        key + 1,
+        prop.vendor.general_info.company_name,
+        dt.toISOString().split("T")[0],
+        status,
+        <Button color="yellowgreen" onClick={this.showQuoteDetails}>
+          View
+        </Button>,
+        <Modal className={this.props.classes.pr} open={this.state.open}>
+          {prop.lineitems.length > 0 ? (
+            <div className={classes.positionCenter}>
               <Card>
+                <CardHeader>
+                  <h3>Quote for {prop.vendor.general_info.company_name}</h3>
+                  <Close
+                    onClick={() => this.hideAlert()}
+                    className={classes.closeButtonSetting}
+                  />
+                </CardHeader>
                 <CardBody>
                   <TableCore className={classes.table}>
                     <TableHead
-                      className={classes[tableHeaderColor + "TableHeader"]}
+                      className={classes.tableHeaderColor}
                       style={{
                         marginTop: "10px",
                         color: "blue",
@@ -318,62 +319,69 @@ class Quote extends React.Component {
                         </TableCell>
                       </TableRow>
                     </TableHead>
-                    <TableBody>{tableData2}</TableBody>
+                    <TableBody>
+                      {prop.lineitems.map((prop, key) => {
+                        const uom = Uom.getUom(prop.uom);
+                        return (
+                          <TableRow key={key}>
+                            <TableCell className={classes.td}>
+                              {prop.itemdescription}
+                            </TableCell>
+                            <TableCell className={classes.td}>
+                              {prop.quantity}
+                            </TableCell>
+                            <TableCell className={classes.td}>
+                              {uom.name}
+                            </TableCell>
+                            <TableCell className={classes.td}>
+                              {prop.price}
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
                   </TableCore>
-                  <br/>
+                  <br />
                   {this.rejectionInputField(this.state.accepted)}
                 </CardBody>
                 <CardFooter>
-                  <div>
-               
-                  </div>
-                <select
-                                id="accepted"
-                                name="accepted"
-                                required
-                                className={this.props.classes.select}
-                                onChange={e => this.handleChangeSelect(e)}
-                              >
-                               <option value="" disabled selected className={this.props.classes.option} >Accept/Reject</option>
-                                {yesNo.map(option => (
-                                  <option
-                                    value={option.value}
-                                    key={option.value}
-                                    className={this.props.classes.option}
-                                  >
-                                    {option.label}
-                                  </option>
-                                ))}
-                              </select>
+                  <div />
+                  <select
+                    id="accepted"
+                    name="accepted"
+                    required
+                    className={this.props.classes.select}
+                    onChange={this.handleChangeSelect}
+                  >
+                    <option
+                      value=""
+                      disabled
+                      defaultValue
+                      className={this.props.classes.option}
+                    >
+                      Accept/Reject
+                    </option>
+                    {yesNo.map(option => (
+                      <option
+                        value={option.value}
+                        key={option.value}
+                        className={this.props.classes.option}
+                      >
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
 
-                <Button color="yellowgreen" onClick={this.submitAccepted}>
-                submit
-                </Button>
+                  <Button color="yellowgreen" onClick={this.submitAccepted}>
+                    submit
+                  </Button>
                 </CardFooter>
               </Card>
             </div>
           ) : (
             ""
           )}
-        </SweetAlert>
-      )
-    });
-  };
-
-  render() {
-    console.log(this.state.accepted);
-    const { classes } = this.props;
-    let mappedData = this.props.quotes.map((prop, key) => {
-      const dt = new Date(prop.created);
-      const status = Status.getStatus(prop.status);
-      return [
-        key + 1,
-        prop.vendor.general_info.company_name,
-        dt.toISOString().split("T")[0],
-        status,
-        <Button color="yellowgreen" onClick={this.showQuoteDetails(prop)}>
-          View
-        </Button>
+        </Modal>
       ];
     });
     return (
@@ -438,8 +446,6 @@ class Quote extends React.Component {
             ]}
             customHeadClassesForCells={[0, 4, 5]}
           />
-
-          {this.state.alert}
         </div>
       </div>
     );
