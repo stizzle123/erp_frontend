@@ -150,7 +150,8 @@ class Index extends React.Component {
         items: {},
         creditterms: "",
         currency: "₦",
-        availability: true
+        availability: true,
+        availableDate:""
       },
       multipleSelect: [],
       showForm: false,
@@ -213,7 +214,7 @@ class Index extends React.Component {
     if (event._d) {
       this.toggleCalendar();
       this.setState({ startDate: event });
-      items[[i]][[event.target.name]] = event.format("MM/DD/YYYY");
+      items[[i]]['availableDate'] = event.format("MM/DD/YYYY");
     } else {
       items[[i]][[event.target.name]] = event.target.value;
     }

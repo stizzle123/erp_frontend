@@ -51,17 +51,10 @@ const styles = theme => ({
 });
  
 
-const categories = [
-  {value: '0', label:'Select',},
-  {value: '1',label: 'Category 1',},
-  {value: '2',label: 'Category 2',},
-  {value: '3',label: 'Category 3',}
-];
-
 const shipvia = [
   {slug: 'digital', name:'Digital (Download)'},
   {slug: 'vendor', name:'Vendor Delivery'},
-  {slug: 'dhl', name:'DHL'},
+  {slug: 'courier', name:'Courier'},
 ]
 
 /* const shipvia = [
