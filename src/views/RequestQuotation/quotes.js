@@ -206,6 +206,23 @@ class Quote extends React.Component {
     })
   }
 
+  rejectionInputField = (val) => {
+    if (val == 'false') {
+      return <CustomInput
+      labelText="Rejection Reason"
+      id="rejection_reason"
+      formControlProps={{
+        fullWidth: true
+      }}
+      inputProps={{
+        onChange: (e)=>this.handleChange(e),
+        value: this.state.data.rejection_reason
+                              }}
+    />;
+    }
+    
+  }
+
 
   showQuoteDetails = quote => event => {
     const { classes, tableHeaderColor } = this.props;
@@ -303,22 +320,7 @@ class Quote extends React.Component {
                     <TableBody>{tableData2}</TableBody>
                   </TableCore>
                   <br/>
-                  {this.state.accepted ? (
-            <CustomInput
-            labelText="Rejection Reason"
-            id="rejection_reason"
-            formControlProps={{
-              fullWidth: true
-            }}
-            inputProps={{
-              onChange: (e)=>this.handleChange(e),
-              value: this.state.data.rejection_reason
-                                    }}
-          />
-          ) : (
-            ""
-          )}
-                  
+                  {this.rejectionInputField(this.state.accepted)}
                 </CardBody>
                 <CardFooter>
                   <div>
