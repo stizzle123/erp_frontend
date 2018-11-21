@@ -225,6 +225,7 @@ class Quote extends React.Component {
 
 
   showQuoteDetails = quote => event => {
+    debugger
     const { classes, tableHeaderColor } = this.props;
     const tableData2 = quote.lineitems.map((prop, key) => {
       const uom = Uom.getUom(prop.uom);

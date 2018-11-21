@@ -121,7 +121,7 @@ const sortParams = [
 class Index extends React.Component {
   constructor(props) {
     super(props);
-    this.handler = this.handler.bind(this);
+   // this.handler = this.handler.bind(this);
     this.state = {
       data: [],
       multipleSelect: [],

@@ -185,7 +185,11 @@ class Index extends React.Component {
         price: "",
         currency: "",
         availability: true,
-        availabilityDate: ""
+        availableDate: "",
+        description: item.itemdescription,
+        uom:item.uom,
+        category:item.category,
+        quantity: item.quantity
       };
     });
     data.items = items;
@@ -204,13 +208,16 @@ class Index extends React.Component {
     })
   }
 
+  handleSelect = event => {
+    let data = this.state.data;
+    data[[event.target.name]] = event.target.value;
+    this.setState({
+      data: data
+    });
+  };
+
   setItem = i => event => {
     let items = this.state.data.items;
-    {
-      {
-        debugger;
-      }
-    }
     if (event._d) {
       this.toggleCalendar();
       this.setState({ startDate: event });
@@ -275,11 +282,12 @@ class Index extends React.Component {
               options={this.state.data.currency}
               required
               formControlProps={{
-                style: { padding: "0", margin: "0", width: "auto" }
+                style: { padding: "0", margin: "0", width: "5px" }
               }}
               onChange={this.setItem(key)}
               inputProps={{
                 margin: "normal",
+                style: { fontSize: "11px" },
                 value: this.state.data.items[key]["currency"]
               }}
               style={{
