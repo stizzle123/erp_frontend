@@ -178,19 +178,21 @@ class Index extends React.Component {
   }
 
   fetchQuotes(quote) {
-    let items = {};
+    let items = [];
     let data = this.state.data;
-    quote.lineitems.map((item, i) => {
-      items[[i]] = {
+    quote.lineitems.map((it, i) => {
+      var item= {};
+      item = {
         price: "",
         currency: "",
         availability: true,
         availableDate: "",
-        description: item.itemdescription,
-        uom:item.uom,
-        category:item.category,
-        quantity: item.quantity
+        description: it.itemdescription,
+        uom: it.uom,
+        category:it.category,
+        quantity: it.quantity
       };
+      items.push(item);
     });
     data.items = items;
     this.setState({ quote: quote, showRfq: true, data });

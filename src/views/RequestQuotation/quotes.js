@@ -185,7 +185,8 @@ class Quote extends React.Component {
       data: {},
       accepted: true,
       rejection_reason: "",
-      open: false
+      open: false,
+      openkey:""
     };
   }
   hideAlert() {
@@ -228,8 +229,9 @@ class Quote extends React.Component {
     }
   };
 
-  showQuoteDetails = () => {
-    this.setState({ open: true });
+  showQuoteDetails = (key) => {
+    debugger
+    this.setState({ open: true, openkey:key });
   };
 
   render() {
@@ -237,14 +239,43 @@ class Quote extends React.Component {
     let mappedData = this.props.quotes.map((prop, key) => {
       const dt = new Date(prop.created);
       const status = Status.getStatus(prop.status);
+      let tableBody = ""
+      let d=new Date();
+       tableBody= prop.lineitems.map((prop,k) => {
+        const uom = Uom.getUom(prop.uom);
+        d = (prop.availableDate)? prop.availableDate: d;
+         return <TableRow key={k}>
+            <TableCell className={classes.td}>
+              {prop.itemdescription}
+            </TableCell>
+            <TableCell className={classes.td}>
+              {prop.quantity}
+            </TableCell>
+            <TableCell className={classes.td}>
+              {uom.name}
+            </TableCell>
+            <TableCell className={classes.td}>
+              {prop.price}
+            </TableCell>
+            <TableCell className={classes.td}>
+              {
+                (prop.availablity && prop.price)?
+                  "In Stock"
+                :
+                "Out of Stock till - "+d.toISOString().split("T")[0]
+                }
+            </TableCell>
+          </TableRow>
+      })
       return [
         key + 1,
         prop.vendor.general_info.company_name,
         dt.toISOString().split("T")[0],
         status,
-        <Button color="yellowgreen" onClick={this.showQuoteDetails}>
+        <Button color="yellowgreen" onClick={()=>{this.showQuoteDetails(key)}}>
           View
         </Button>,
+        (this.state.openkey==key)?
         <Modal className={this.props.classes.pr} open={this.state.open}>
           {prop.lineitems.length > 0 ? (
             <div className={classes.positionCenter}>
@@ -317,28 +348,22 @@ class Quote extends React.Component {
                         >
                           Price
                         </TableCell>
+                        <TableCell
+                          className={
+                            classes.tableCell +
+                            " " +
+                            classes.tableHeadCell +
+                            " " +
+                            classes.td
+                          }
+                          style={{ color: "blue" }}
+                        >
+                          Is Available
+                        </TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {prop.lineitems.map((prop, key) => {
-                        const uom = Uom.getUom(prop.uom);
-                        return (
-                          <TableRow key={key}>
-                            <TableCell className={classes.td}>
-                              {prop.itemdescription}
-                            </TableCell>
-                            <TableCell className={classes.td}>
-                              {prop.quantity}
-                            </TableCell>
-                            <TableCell className={classes.td}>
-                              {uom.name}
-                            </TableCell>
-                            <TableCell className={classes.td}>
-                              {prop.price}
-                            </TableCell>
-                          </TableRow>
-                        );
-                      })}
+                      {tableBody}
                     </TableBody>
                   </TableCore>
                   <br />
@@ -382,6 +407,7 @@ class Quote extends React.Component {
             ""
           )}
         </Modal>
+        : ""  
       ];
     });
     return (
