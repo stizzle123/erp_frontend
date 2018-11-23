@@ -93,6 +93,10 @@ const styles = {
       backgroundColor: "#fff",
       borderLeft: "5px solid #3393FF"
     },
+    "&:focus": {
+      backgroundColor: "#fff",
+      borderLeft: "5px solid #3393FF"
+    },
     "&:hover": {
       backgroundColor: "#fff"
     }
@@ -159,6 +163,14 @@ class Index extends React.Component {
     this.fetchQuotes(this.state.selectedPr);
   };
 
+  
+  addActiveClass = (name) => {
+    this.setState({
+      active: name
+    });
+    
+  };
+
   sortBy = type => {
     switch (type) {
       case "date": {
@@ -169,7 +181,7 @@ class Index extends React.Component {
             const date = new Date(prop.created);
             return (
               <div
-                className={this.props.classes.boxRow}
+                className={this.props.classes.boxRow + "  " + (this.state.active === key ? 'active' : '')}
                 onClick={() => this.fetchQuotes(prop)}
               >
                 <div className={this.props.classes.box}>
@@ -192,7 +204,7 @@ class Index extends React.Component {
             const date = new Date(prop.created);
             return (
               <div
-                className={this.props.classes.boxRow}
+                className={this.props.classes.boxRow + "  " + (this.state.active === key ? 'active' : '')}
                 onClick={() => this.fetchQuotes(prop)}
               >
                 <div className={this.props.classes.box}>
@@ -214,7 +226,7 @@ class Index extends React.Component {
             const date = new Date(prop.created);
             return (
               <div
-                className={this.props.classes.boxRow}
+                className={this.props.classes.boxRow + "  " + (this.state.active === key ? 'active' : '')}
                 onClick={() => this.fetchQuotes(prop)}
               >
                 <div className={this.props.classes.box}>
@@ -233,8 +245,11 @@ class Index extends React.Component {
           const date = new Date(prop.created);
           return (
             <div
-              className={this.props.classes.boxRow}
-              onClick={() => this.fetchQuotes(prop)}
+              className={this.props.classes.boxRow + "  " + (this.state.active === key ? 'active' : '')}
+               onClick={()=> {
+                          this.fetchQuotes(prop);
+                          this.addActiveClass(key);
+                        }}
             >
               <div className={this.props.classes.box}>{prop.requisitionno}</div>
               <div className={this.props.classes.box}>
