@@ -1,8 +1,15 @@
 import React from "react";
 import record from "./records";
-import MiddleWare from "middleware/api";
+import * as userAction from "../../actions/user";
+import Notification from "../Notifications/Index.jsx";
 
 export default class Index extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      responseMessage: {}
+    };
+  }
   componentDidMount() {}
   roman_to_int = c => {
     switch (c) {
@@ -16,9 +23,8 @@ export default class Index extends React.Component {
         return "";
     }
   };
-  importRecord =()=> {
+  importRecord = () => {
     for (var i = 0; i < record.length; i++) {
-      let middleware = new MiddleWare();
       let data = {};
       data.email = record[i].FIELD8;
       data.password = "password";
@@ -33,13 +39,11 @@ export default class Index extends React.Component {
       data.website = record[i].FIELD9;
       data.product_related = record[i].FIELD1;
       data.supplier_id = record[i].FIELD2;
-      middleware
-        .makeConnection("/users/import", "POST", data)
-        .then(response => {
-          console.log(response)
-        })
+      userAction.importUser(data, json => {
+        this.setState({ responseMessage: json });
+      });
     }
-  }
+  };
 
   render() {
     // const recordData = record.map((data) => {
@@ -57,6 +61,14 @@ export default class Index extends React.Component {
     // })
     return (
       <div>
+        {this.state.responseMessage ? (
+          <Notification
+            error={!this.state.responseMessage.success}
+            message={this.state.responseMessage.message}
+          />
+        ) : (
+          ""
+        )}
         <h2>records</h2>
         <button onClick={this.importRecord}>Click</button>
       </div>
