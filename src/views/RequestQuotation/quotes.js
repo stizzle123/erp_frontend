@@ -259,10 +259,12 @@ class Quote extends React.Component {
             </TableCell>
             <TableCell className={classes.td}>
               {
-                (prop.availablity && prop.price)?
+                (prop.availablity)?
                   "In Stock"
                 :
+                (prop.price)?
                 "Out of Stock till - "+d.toISOString().split("T")[0]
+                : ""
                 }
             </TableCell>
           </TableRow>
