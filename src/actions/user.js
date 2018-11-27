@@ -34,14 +34,11 @@ export function updateProfile(data, callback) {
 export function importUser(data, callback) {
   let middleware = new MiddleWare();
   middleware
-    .makeConnection("/users/import", "POST", data)
-    .then(res => {
+    .makeConnection("/users/import", "POST", data).then(res => {
       return res.json();
-    })
-    .then(e => {
+    }).then(e => {
       callback(e);
-    })
-    .catch(e => {
+    }).catch(e => {
       console.log("the error" + e);
     });
 }

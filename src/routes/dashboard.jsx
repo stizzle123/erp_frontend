@@ -41,6 +41,7 @@ import Permission from "views/Roles/permission.js";
 import EditDepartment from "views/Departments/index.js";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import ChangePassword from "../views/UserProfile/ChangePassword.jsx"
+import importRecords from "../views/importRecords/index"
 
 /* import Typography from "views/Typography/Typography.jsx";
 import Icons from "views/Icons/Icons.jsx";
@@ -53,6 +54,10 @@ export const dashboardRoutes = [
     path: "/dashboard",
     component: DashboardPage
   },
+  {
+    path: "/import-records",
+    component: importRecords
+   },
    {
     path: "/user",
     component: UserProfile
@@ -91,11 +96,11 @@ export const dashboardRoutes = [
   {
   path: "/departments/edit/:id",
   component: EditDepartment
-},
-{
+  },
+  {
   path: "/pdf/:id",
   component: Pdf
-},
+  },
   {
     path: "/requisition/add",
     component: AddPurchaseRequisition
