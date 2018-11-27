@@ -15,7 +15,6 @@ import RequestQuotation from "../views/RequestQuotation/index.js";
 import AddQuotation from "../views/RequestQuotation/add.js";
 import MyQuotation from "../views/RequestQuotation/myquote.js";
 import Pdf from "../views/pdf/pdf";
-import importRecords from "../views/importRecords/index"
 // core components/views
 import LoginPage from "../views/LoginPage/index.js";
 import DashboardPage from "../views/Dashboard/Dashboard.jsx";
@@ -34,6 +33,7 @@ import ViewPurchaseRequisition from "../views/PurchaseRequisition/edit.js";
 import ListPurchaseRequisition from "../views/PurchaseRequisition/index.js";
 import ListCrud from "../views/Crud/index.js";
 import AddCrud from "../views/Crud/add.js";
+import EditCrud from "../views/Crud/edit.js";
 import ViewCrud from "../views/Crud/add.js";
 import Log from "../views/Log/index.js";
 import Registration from "../views/RegistrationPage/index.js";
@@ -96,10 +96,6 @@ export const dashboardRoutes = [
   path: "/pdf/:id",
   component: Pdf
 },
-{
-  path: "/import-records",
-  component: importRecords
-},
   {
     path: "/requisition/add",
     component: AddPurchaseRequisition
@@ -151,6 +147,10 @@ export const dashboardRoutes = [
   {
     path: "/crud/view/:type/:id",
     component: ViewCrud
+  },  
+  {
+    path: "/crud/edit/:type/:id",
+    component: EditCrud
   },
   {
     path: "/crud/:type/",
@@ -166,6 +166,12 @@ export const AdminMenu = [
     icon: DashboardIcon,
     component: Dashboard
   },
+ {
+   path: "/vendor",
+   name: "Vendors List",
+   icon: ContentPaste,
+   component: VendorList
+ },
  {
    collapse: true,
    path: "/budgets",
@@ -314,6 +320,14 @@ export const AdminMenu = [
       component: ListCrud,
       actions: ['add', 'edit','view', 'delete']
     },
+    ,
+    {
+      path: "/crud/locations",
+      name: "Locations",
+      mini: "C",
+      component: ListCrud,
+      actions: ['add', 'edit','view', 'delete']
+    },
     {
       path: "/user/index",
       name: "Users",
@@ -331,11 +345,11 @@ export const ProcurementMenu = [
     name: "Dashboard",
     icon: HomeIcon,
   },
-  {
-    path: "/vendor/type/approved",
-    name: "Approved Vendors",
-    icon: LibraryBooks,
-  }
+  // {
+  //   path: "/vendor/type/approved",
+  //   name: "Approved Vendors",
+  //   icon: LibraryBooks,
+  // }
 ];
 
 

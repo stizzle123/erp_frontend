@@ -38,7 +38,8 @@ class AddCrud extends React.Component {
       locations: ["slug", "address"],
       optionsDepartment: [],
       data: {
-        name: ""
+        name: "",
+        slug: ""
       },
       validationState: {
         name: "",
@@ -101,14 +102,10 @@ class AddCrud extends React.Component {
     }
   };
   handleSubmit = e => {
-    genericActions.saveItem(
-      this.props.match.params.type,
-      this.props.user.token,
-      this.state.data,
-      json => {
-        this.setState({
-          responseMessage: json
-        });
+    genericActions.updateItem(this.props.match.params.type, this.props.match.params.id,this.props.user.token, this.state.data, json => {
+      if(json.ok){
+        alert("Details edited succesfully");
+      }
       }
     );
   };
@@ -118,6 +115,10 @@ class AddCrud extends React.Component {
     genericActions.fetchAll("departments", this.props.user.token, items => {
       this.setState({ optionsDepartment: items });
     });
+    genericActions.findOne(this.props.match.params.type, this.props.match.params.id, this.props.user.token, (doc)=>{
+      this.setState({data:doc});
+    });
+
   }
 
   render() {
@@ -136,7 +137,7 @@ class AddCrud extends React.Component {
               }}
               inputProps={{
                 onChange: e => this.handleChange(e),
-                value: this.state[f]
+                value: this.state.data[f]
               }}
               error={
                 this.state.validationState[f] === ""
@@ -177,7 +178,7 @@ class AddCrud extends React.Component {
               message={this.state.responseMessage.message}
             />
             <GridItem xs={12} sm={12} md={12}>
-              <h3> Add {Inflection.titleize(this.props.match.params.type)}</h3>
+              <h3> Edit {Inflection.titleize(this.props.match.params.type)}</h3>
               <form className={classes.container} autoComplete="off">
                 <Card>
                   <CardBody>
@@ -191,7 +192,7 @@ class AddCrud extends React.Component {
                           }}
                           inputProps={{
                             onChange: e => this.handleChange(e),
-                            value: this.state.name
+                            value: this.state.data.name
                           }}
                           error={
                             this.state.validationState.name === ""

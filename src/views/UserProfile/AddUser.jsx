@@ -36,17 +36,25 @@ const styles = {
   }
 };
 
+const Types = [
+    {name: "CEO", value:"ceo"},
+    {name: "Head Of Department", value:"hod"},
+    {name: "Manager", value:"manager"},
+    {name: "Staff", value:"staff"}
+]
+
 class AddUser extends React.Component {
   state = {
     data: {
-      type: "staff",
+      type: "",
       lastname: "",
       firstname: "",
       email: "",
       eid: "",
-      department: ""
+      department: "",
+      line_manager:""
     },
-    responseMessage: {},
+    responseMessage: "",
     optionsRole: [],
     optionsDepartment: [],
     validationState: {
@@ -57,7 +65,8 @@ class AddUser extends React.Component {
       role: "",
       department: ""
     },
-    submitButtonState: false
+    submitButtonState: false,
+    users:[]
   };
 
   handleChange = event => {
@@ -75,6 +84,11 @@ class AddUser extends React.Component {
     this.setState({ 
       data: data
     });
+    if(e.target.name =="line_manager"){
+      /* userAction.findManagers(this.props.user.token, users=>{
+        this.setState({users});
+      }) */
+    }
     this.validate(event.target.id, event.target.value);
   };
 
@@ -138,20 +152,24 @@ class AddUser extends React.Component {
 
 
   getformData = e => {
-    e.preventDefault();
     let data = this.state.data;
-    let validationState = this.state.validationState;
-    this.setState({submitButtonState: true})
+    //let validationState = this.state.validationState;
     userAction.addUser(this.props, data, json => {
-      this.setState({ 
-        responseMessage: json,
-        data: json.user,
-        validationState: {}
-       },
-       () => {
-           console.log(this.state.data) 
-       });
+      if(json.success){
+        this.setState({ 
+          responseMessage: json.message,
+          data: json.user,
+          validationState: {}
+         })
+      }else{
+        this.setState({ 
+          responseMessage: json.message,
+          validationState: {}
+         })
+      }
+    
     });
+    //this.setState({submitButtonState: true})
   };
   componentDidMount() {
     genericActions.fetchAll("departments", this.props.user.token, items => {
@@ -160,6 +178,9 @@ class AddUser extends React.Component {
     genericActions.fetchAll("roles", this.props.user.token, items => {
       this.setState({ optionsRole: items });
     });
+    userAction.findManagers(this.props.user.token, users=>{
+      this.setState({users});
+    })
   }
 
   render() {
@@ -168,10 +189,10 @@ class AddUser extends React.Component {
     return (
       <div>
         <Grid container>
-          {this.state.responseMessage.success === true ? (
+          {this.state.responseMessage ? (
             <Notification
               error={false}
-              message={this.state.responseMessage.message}
+              message={this.state.responseMessage}
             />
           ) : (
             ""
@@ -217,7 +238,7 @@ class AddUser extends React.Component {
                         inputProps={{
                           onChange: (e)=>this.handleChange(e),
                           value: this.state.data.firstname
-                                                }}
+                        }}
                         error={
                           this.state.validationState.firstname === ""
                             ? ""
@@ -242,7 +263,7 @@ class AddUser extends React.Component {
                         inputProps={{
                           onChange: (e)=>this.handleChange(e),
                           value: this.state.data.email
-                                                }}
+                        }}
                         error={
                           this.state.validationState.email === ""
                             ? ""
@@ -334,6 +355,52 @@ class AddUser extends React.Component {
                         {this.state.optionsRole.map(function(data, key) {
                           return (
                             <MenuItem name="role" key={key} value={data.slug}>
+                              {data.name}
+                            </MenuItem>
+                          );
+                        })}
+                      </CustomSelect>
+                    </GridItem>
+                    <GridItem xs={12} sm={12} md={6}>
+                      <CustomSelect
+                        labelText="Select Line Manager"
+                        name="line_manager"
+                        required
+                        value={this.state.data.line_manager}
+                        onChange={e => this.handleChangeSelect(e)}
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          margin: "normal"
+                        }}
+                      >
+                        {this.state.users.map(function(data, key) {
+                          return (
+                            <MenuItem name="role" key={key} value={data._id}>
+                              {data.firstname +" "+data.lastname}
+                            </MenuItem>
+                          );
+                        })}
+                      </CustomSelect>
+                    </GridItem>
+                    <GridItem xs={12} sm={12} md={6}>
+                      <CustomSelect
+                        labelText="User Type"
+                        name="type"
+                        required
+                        value={this.state.data.type}
+                        onChange={e => this.handleChangeSelect(e)}
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          margin: "normal"
+                        }}
+                      >
+                        {Types.map(function(data, key) {
+                          return (
+                            <MenuItem name="type" key={key} value={data.value}>
                               {data.name}
                             </MenuItem>
                           );

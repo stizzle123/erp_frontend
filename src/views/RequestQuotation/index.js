@@ -10,7 +10,7 @@ import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-
+import CustomSelect from "components/CustomInput/CustomSelect.jsx";
 // core components
 import GridItem from "../../components/Grid/GridItem.jsx";
 import Table from "../../components/Table/Table.jsx";
@@ -113,16 +113,21 @@ const styles = {
     display: "table-row"
   }
 };
-
+const sortParams = [
+  { value: "0", label: "Date" },
+  { value: "1", label: "Department" },
+  { value: "2", label: "RFQ" }
+];
 class Index extends React.Component {
   constructor(props) {
     super(props);
-    this.handler = this.handler.bind(this);
+   // this.handler = this.handler.bind(this);
     this.state = {
       data: [],
       multipleSelect: [],
       showForm: false,
-      submitRfq : true
+      submitRfq: true,
+      sortByType: "default"
     };
   }
 
@@ -154,6 +159,113 @@ class Index extends React.Component {
     this.fetchQuotes(this.state.selectedPr);
   };
 
+  sortBy = type => {
+    switch (type) {
+      case "date": {
+        const mappedData = []
+          .concat(this.state.data)
+          .sort((a, b) => a.created > b.created)
+          .map((prop, key) => {
+            const date = new Date(prop.created);
+            return (
+              <div
+                className={this.props.classes.boxRow}
+                onClick={() => this.fetchQuotes(prop)}
+              >
+                <div className={this.props.classes.box}>
+                  {prop.requisitionno}
+                </div>
+                <div className={this.props.classes.box}>
+                  {date.toISOString().split("T")[0]}
+                </div>
+              </div>
+            );
+          });
+
+        return mappedData;
+      }
+      case "department": {
+        const mappedData = []
+          .concat(this.state.data)
+          .sort((a, b) => a.department > b.department)
+          .map((prop, key) => {
+            const date = new Date(prop.created);
+            return (
+              <div
+                className={this.props.classes.boxRow}
+                onClick={() => this.fetchQuotes(prop)}
+              >
+                <div className={this.props.classes.box}>
+                  {prop.requisitionno}
+                </div>
+                <div className={this.props.classes.box}>
+                  {date.toISOString().split("T")[0]}
+                </div>
+              </div>
+            );
+          });
+        return mappedData;
+      }
+      case "rfq": {
+        const mappedData = []
+          .concat(this.state.data)
+          .sort((a, b) => a.requisitionno > b.requisitionno)
+          .map((prop, key) => {
+            const date = new Date(prop.created);
+            return (
+              <div
+                className={this.props.classes.boxRow}
+                onClick={() => this.fetchQuotes(prop)}
+              >
+                <div className={this.props.classes.box}>
+                  {prop.requisitionno}
+                </div>
+                <div className={this.props.classes.box}>
+                  {date.toISOString().split("T")[0]}
+                </div>
+              </div>
+            );
+          });
+        return mappedData;
+      }
+      case "default": {
+        const mappedData = this.state.data.map((prop, key) => {
+          const date = new Date(prop.created);
+          return (
+            <div
+              className={this.props.classes.boxRow}
+              onClick={() => this.fetchQuotes(prop)}
+            >
+              <div className={this.props.classes.box}>{prop.requisitionno}</div>
+              <div className={this.props.classes.box}>
+                {date.toISOString().split("T")[0]}
+              </div>
+            </div>
+          );
+        });
+        return mappedData;
+      }
+    }
+  };
+
+  getValue(e) {
+    const type = e.target.value;
+    switch (type) {
+      case "0": {
+        this.setState({ sortByType: "date" });
+        break;
+      }
+      case "1": {
+        this.setState({ sortByType: "department" });
+        break;
+      }
+      case "2": {
+        this.setState({ sortByType: "rfq" });
+        break;
+      }
+    }
+  }
+
   showQuoteForm = () => {
     this.setState({
       alert: (
@@ -171,7 +283,10 @@ class Index extends React.Component {
             this.props.classes.button + " " + this.props.classes.info
           }
         >
-          <AddComponent pr={this.state.selectedPr} submit={this.state.submitRfq} />
+          <AddComponent
+            pr={this.state.selectedPr}
+            submit={this.state.submitRfq}
+          />
         </SweetAlert>
       )
     });
@@ -193,7 +308,6 @@ class Index extends React.Component {
 
   render() {
     const { classes } = this.props;
-
     if (this.props.loader.loading) {
       return (
         <div>
@@ -210,15 +324,6 @@ class Index extends React.Component {
         </div>
       );
     } else {
-      let mappedData = this.state.data.map((prop, key) => {
-        let date = new Date(prop.created);
-        return (
-          <div className={classes.boxRow}  onClick={() => this.fetchQuotes(prop)}>
-            <div className={classes.box}>{prop.requisitionno}</div>
-            <div className={classes.box}>{date.toISOString().split('T')[0]}</div>
-          </div>
-        );
-      });
       return (
         <GridContainer>
           <GridItem xs={12}>
@@ -227,7 +332,7 @@ class Index extends React.Component {
                 <CardIcon color="success">
                   <Language />
                 </CardIcon>
-                <h2 className={classes.cardIconTitle}>Request For Quotation</h2>
+                <h2 className={classes.cardIconTitle}>Request for Quotes</h2>
               </CardHeader>
               <CardBody>
                 <GridContainer justify="space-between">
@@ -242,51 +347,33 @@ class Index extends React.Component {
                           fullWidth
                           className={classes.selectFormControl}
                         >
-                          <InputLabel
-                            htmlFor="multiple-select"
-                            className={classes.selectLabel}
-                          >
-                            Sort By
-                          </InputLabel>
-                          <Select
-                            multiple
-                            value={this.state.multipleSelect}
-                            onChange={this.handleMultiple}
-                            MenuProps={{ className: classes.selectMenu }}
-                            classes={{ select: classes.select }}
-                            inputProps={{
-                              name: "multipleSelect",
-                              id: "multiple-select"
+                          <CustomSelect
+                            labelText="Sort By"
+                            name="sortby"
+                            id="sortby"
+                            onChange={e => {
+                              this.getValue(e);
+                            }}
+                            formControlProps={{
+                              style: {
+                                width: "100%",
+                                padding: "0",
+                                margin: "0"
+                              }
+                            }}
+                            value={this.state.sortByType}
+                            inputProps={{ margin: "normal", id: "shipto" }}
+                            style={{
+                              marginTop: "-3px",
+                              borderBottomWidth: " 1px"
                             }}
                           >
-                            <MenuItem
-                              classes={{
-                                root: classes.selectMenuItem,
-                                selected: classes.selectMenuItemSelected
-                              }}
-                              value="2"
-                            >
-                              Department
-                            </MenuItem>
-                            <MenuItem
-                              classes={{
-                                root: classes.selectMenuItem,
-                                selected: classes.selectMenuItemSelected
-                              }}
-                              value="3"
-                            >
-                              Date
-                            </MenuItem>
-                            <MenuItem
-                              classes={{
-                                root: classes.selectMenuItem,
-                                selected: classes.selectMenuItemSelected
-                              }}
-                              value="4"
-                            >
-                              RFQ
-                            </MenuItem>
-                          </Select>
+                            {sortParams.map(option => (
+                              <MenuItem key={option.value} value={option.value}>
+                                {option.label}
+                              </MenuItem>
+                            ))}
+                          </CustomSelect>
                         </FormControl>
                       </GridItem>
                     </GridContainer>
@@ -294,10 +381,10 @@ class Index extends React.Component {
                     <div className={classes.sidebar}>
                       <div className={classes.boxer}>
                         <div className={classes.boxHeader}>
-                          <div className={classes.box}>REQ</div>
+                          <div className={classes.box}>My RFQ</div>
                           <div className={classes.box}>DATE</div>
                         </div>
-                        {mappedData}
+                        {this.sortBy(this.state.sortByType)}
                       </div>
                     </div>
                   </GridItem>
@@ -312,7 +399,14 @@ class Index extends React.Component {
                       </Button>
                     </div>
                     {this.state.alert}
-                    {(this.state.showRfq)? <QuotesComponent pr={this.state.selectedPr}  quotes={this.state.quotes} />: ""}
+                    {this.state.showRfq ? (
+                      <QuotesComponent
+                        pr={this.state.selectedPr}
+                        quotes={this.state.quotes}
+                      />
+                    ) : (
+                      ""
+                    )}
                   </GridItem>
                 </GridContainer>
               </CardBody>

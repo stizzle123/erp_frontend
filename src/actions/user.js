@@ -117,6 +117,14 @@ export function findAllStaff(props, callback) {
       callback(e);
     });
 }
+export function findManagers(token,callback){
+  let middleware = new MiddleWare(token);
+  middleware.makeConnection('/users/findmanagers/','GET').then((response) => {
+        return response.json();
+  }).then((e)=>{
+    callback(e);
+  })
+}
 
 export function findOnlyStaff(props, callback) {
   let middleware = new MiddleWare(props.user.token);

@@ -18,6 +18,7 @@ class Dashboard extends React.Component {
     } else {
       return (<Admin />);
     }
+    
     /* } else if (this.props.user.role === "vendor"){
       return <Vendor />
     } else if (this.props.user.role === "iac"){
