@@ -246,7 +246,7 @@ class Quote extends React.Component {
         d = (prop.availableDate)? prop.availableDate: d;
          return <TableRow key={k}>
             <TableCell className={classes.td}>
-              {prop.itemdescription}
+              {(prop.description)? prop.description: prop.itemdescription}
             </TableCell>
             <TableCell className={classes.td}>
               {prop.quantity}
