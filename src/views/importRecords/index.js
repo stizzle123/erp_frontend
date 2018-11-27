@@ -23,6 +23,7 @@ export default class Index extends React.Component {
         return "";
     }
   };
+  
   importRecord = () => {
     for (var i = 0; i < record.length; i++) {
       let data = {};

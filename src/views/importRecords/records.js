@@ -38,19 +38,19 @@ const records = [
     "FIELD10": "08033331458",
     "FIELD11": "I"
   },
-  // {
-  //   "FIELD1": "Apparel & Fashion",
-  //   "FIELD2": "BS-AF-004",
-  //   "FIELD3": "BlackSoil Integrated Solutions Ltd",
-  //   "FIELD4": "3 Grace Ntuko Str. Arowojobe EstateMende-Maryland",
-  //   "FIELD5": "Nigeria",
-  //   "FIELD6": "Lagos",
-  //   "FIELD7": "John Membu",
-  //   "FIELD8": "john.membu@gmail.com",
-  //   "FIELD9": "",
-  //   "FIELD10": "08035728224",
-  //   "FIELD11": "I"
-  // },
+  {
+    "FIELD1": "Apparel & Fashion",
+    "FIELD2": "BS-AF-004",
+    "FIELD3": "BlackSoil Integrated Solutions Ltd",
+    "FIELD4": "3 Grace Ntuko Str. Arowojobe EstateMende-Maryland",
+    "FIELD5": "Nigeria",
+    "FIELD6": "Lagos",
+    "FIELD7": "John Membu",
+    "FIELD8": "john.membu@gmail.com",
+    "FIELD9": "",
+    "FIELD10": "08035728224",
+    "FIELD11": "I"
+  },
   // {
   //   "FIELD1": "Apparel & Fashion",
   //   "FIELD2": "JF-PE-017",

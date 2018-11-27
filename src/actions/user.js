@@ -129,6 +129,7 @@ export function findOnlyStaff(props, callback) {
       callback(e);
     });
 }
+
 export function addUser(props, data, callback) {
   let middleware = new MiddleWare(props.user.token);
   middleware
