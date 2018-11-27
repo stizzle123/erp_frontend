@@ -16,10 +16,9 @@ import RegistrationPage from "./views/RegistrationPage/index.js";
 
 const hist = createBrowserHistory();
 const store = configureStore();
-
 ReactDOM.render(
   <Provider store={store}>
-    <Router history={hist}>
+    <Router history={hist} basename={`${process.env.PARENT_FOLDER}`} >
       <Switch>
         <Route path="/login" exact component={LoginPage} />
         <Route path="/resetpassword/:token" exact component={Resetpassword} />

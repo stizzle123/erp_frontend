@@ -12,6 +12,7 @@ import CardHeader from "../../components/Card/CardHeader.jsx";
 import CardAvatar from "../../components/Card/CardAvatar.jsx";
 import CardBody from "../../components/Card/CardBody.jsx";
 import CardFooter from "../../components/Card/CardFooter.jsx";
+import { Link } from 'react-router-dom';
 import avatar from "../../assets/img/faces/marc.jpg";
 import {connect} from 'react-redux';
 import * as userAction from "../../actions/user"
@@ -281,7 +282,17 @@ validate = (type, value) => {
             </CardFooter>
           </Card>
         </GridItem>
-      
+        <GridItem xs={12} sm={12} md={4}>
+          <Card profile>
+            
+            <CardBody profile>
+             
+              <Button color="primary" round  to="/changepassword" component={Link}>
+              Change Password
+              </Button>
+            </CardBody>
+          </Card>
+        </GridItem>
       </Grid>
     </div>
   );

@@ -68,7 +68,28 @@ export function submitQuotation(token, data, callback){
 export function editQuotation(token, id, data, callback){
     let m = new MiddleWare(token);
     return m.makeConnection('/purchase/quotation/update/'+id, m.POST, data).then((result)=>{
-        {{debugger}}
         if(result.ok && result.statusText == "OK" && result.status == 200 )callback(result.ok);
+    }); 
+}
+
+export function fetchUniqueVendorFromQuote(token, callback){
+    let m = new MiddleWare(token);
+    return m.makeConnection('/purchase/quotation/unique_vendor', m.GET).then((result)=>{
+        return result.json();
+    }).then(        
+        (responseJson)=>{
+            callback(responseJson);
+            //props.dispatch(loadAction.LoadingSuccess());
+    }); 
+}
+
+export function fetchAllQuoteforVendor(token, id, callback){
+    let m = new MiddleWare(token);   
+    return m.makeConnection('/purchase/quotation/quotes_for_vendor/'+id, m.GET).then((result)=>{
+        return result.json();
+    }).then(        
+        (responseJson)=>{
+            callback(responseJson);
+            //props.dispatch(loadAction.LoadingSuccess());
     }); 
 }

@@ -89,7 +89,7 @@ class Index extends React.Component {
     this.setState({
       data: data
     });
-  };
+  }
 
   handleChangeSelect = e => {
     this.validate(event.target.id, event.target.value);
@@ -98,28 +98,33 @@ class Index extends React.Component {
     this.setState({
       data: data
     });
-  };
-
-  handleSubmit = () => {
-    departmentAction.updateDepartment(this.props, this.state.data, (json)=>{
-        this.setState({responseMessage:json});          
-        })
-      
-}
-
-  componentDidMount() {
-  departmentAction.findDepartmentById(this.props, this.props.match.params.id,(json)=>{
-    this.setState({data: json[0]})
-  });
-
-//fetch department details
-userAction.findOnlyStaff(this.props, (json)=>{
-  this.setState({users:json});
-});
   }
 
+  /* handleSubmit = () => {
+    departmentAction.updateDepartment(this.props, this.state.data, (json)=>{
+        this.setState({responseMessage:json});          
+    }) 
+  } */
+
+  componentDidMount() {
+    departmentAction.findDepartmentById(this.props, this.props.match.params.id,(json)=>{
+      this.setState({data: json[0]})
+    });
+    userAction.findOnlyStaff(this.props, (json)=>{
+        this.setState({users:json});
+    });
+  }
+
+  submitForm = ()=>{
+      departmentAction.saveDepartment(this.props.user.token, this.props.match.params.id, this.state.data,  (result)=>{
+        if(result.ok && result.statusText == "OK" && result.status == 200 ) {
+          alert("Data Saved");
+        }
+      });
+  }
+
+
   render() {
-    console.log(this.state.data);
     const { classes } = this.props;
     return (
       <div>
@@ -189,9 +194,9 @@ userAction.findOnlyStaff(this.props, (json)=>{
                     <GridItem xs={12} sm={12} md={6}>
                       <CustomSelect
                         labelText="Staff"
-                        name="user"
+                        name="hod"
                         required
-                        value={this.state.data.department}
+                        value={this.state.data.hod}
                         onChange={e => this.handleChangeSelect(e)}
                         formControlProps={{
                           fullWidth: true
@@ -205,7 +210,7 @@ userAction.findOnlyStaff(this.props, (json)=>{
                             <MenuItem
                               name="department"
                               key={key}
-                              value={data.lastname}
+                              value={data._id}
                             >
                               {data.lastname + " "+ data.firstname }
                             </MenuItem>
@@ -216,7 +221,7 @@ userAction.findOnlyStaff(this.props, (json)=>{
                   </Grid>
                 </CardBody>
                 <CardFooter>
-                  <Button color="primary" onClick={this.handleSubmit}>
+                  <Button color="primary" onClick={this.submitForm}>
                     Submit
                   </Button>
                 </CardFooter>

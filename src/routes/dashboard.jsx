@@ -6,6 +6,7 @@ import GridOn from '@material-ui/icons/GridOn';
 import PaymentIcon from '@material-ui/icons/Payment';
 import HomeIcon from '@material-ui/icons/Home';
 import AddIcon from '@material-ui/icons/Add';
+import LibraryBooks from '@material-ui/icons/LibraryBooks';
 import Settings from '@material-ui/icons/Settings';
 import SdStorage from '@material-ui/icons/SdStorage';
 import AccountBalance from '@material-ui/icons/AccountBalanceWallet';
@@ -26,6 +27,8 @@ import VendorList from "../views/Vendor/index.js";
 import AddVendor from "../views/Vendor/add.js";
 import ViewVendor from "../views/Vendor/view.js";
 import PurchaseOrder from "../views/PurchaseOrder/index.js";
+import PurchaseOrderAdd from "../views/PurchaseOrder/add.js";
+import PurchaseOrderView from "../views/PurchaseOrder/view.js";
 import AddPurchaseRequisition from "../views/PurchaseRequisition/add.js";
 import ViewPurchaseRequisition from "../views/PurchaseRequisition/edit.js";
 import ListPurchaseRequisition from "../views/PurchaseRequisition/index.js";
@@ -90,7 +93,7 @@ export const dashboardRoutes = [
   component: EditDepartment
 },
 {
-  path: "/pdf",
+  path: "/pdf/:id",
   component: Pdf
 },
 {
@@ -124,7 +127,15 @@ export const dashboardRoutes = [
   {
     path: "/order",
     component: PurchaseOrder
-  }, 
+  },   
+  {
+    path: "/order/add",
+    component: PurchaseOrderAdd
+  },  
+  {
+    path: "/order/view/:id",
+    component: PurchaseOrderView
+  },
   {
     path: "/changepassword",
     component: ChangePassword
@@ -312,6 +323,19 @@ export const AdminMenu = [
     }
   ]
  },
+];
+
+export const ProcurementMenu = [
+  {
+    path: "/dashboard",
+    name: "Dashboard",
+    icon: HomeIcon,
+  },
+  {
+    path: "/vendor/type/approved",
+    name: "Approved Vendors",
+    icon: LibraryBooks,
+  }
 ];
 
 

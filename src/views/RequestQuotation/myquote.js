@@ -39,7 +39,7 @@ import CustomSelect from "components/CustomInput/CustomSelect.jsx";
 import { connect } from "react-redux";
 import generalStyle from "assets/jss/material-dashboard-pro-react/generalStyle.jsx";
 import tableStyle from "assets/jss/material-dashboard-pro-react/components/tableStyle.jsx";
-
+import * as Uom from "utility/Uom";
 
 const styles = {
   ...generalStyle,
@@ -124,7 +124,7 @@ const styles = {
 };
 
 const creditTerms = [
-  {value: '0', label:'Upfront',},
+  {value: '0', label:'Advance',},
   {value: '1',label: '30 days',},
   {value: '2',label: '45 days',},
   {value: '3',label: '60 days',}
@@ -142,7 +142,8 @@ class Index extends React.Component {
       showForm: false,
       submitRfq : true,
       quote: {lineitems:[]},
-      docs:[]
+      docs:[],
+      expenseheaders:[],
     };
   }
   componentWillMount(){
@@ -169,10 +170,9 @@ class Index extends React.Component {
   }
 
   submitQuote = ()=>{
-    console.log(this.state.data);
     let data = this.state.data;
     rfqActions.submitVendorQuote( this.props.user.token, this.state.quote._id, data, docs=>{
-
+        if(docs)alert("Quote submitted succesfully");
     })
   }
 
@@ -205,6 +205,7 @@ class Index extends React.Component {
       });
 
       const tableData = this.state.quote.lineitems.map((prop, key)=> {
+        const uom = Uom.getUom(prop.uom);
         return (
           <TableRow key={key}>
             <TableCell className={classes.td}>
@@ -214,7 +215,7 @@ class Index extends React.Component {
                 {prop.quantity}
             </TableCell>
             <TableCell className={classes.td}>
-                {prop.unit}   
+                {uom.name}   
             </TableCell> 
             <TableCell className={classes.td}>
               <CustomInput name="price" id="price" type="number" required 

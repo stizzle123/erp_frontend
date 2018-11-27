@@ -28,6 +28,7 @@ import generalStyle from "assets/jss/material-dashboard-pro-react/generalStyle.j
 import DatePicker from 'react-datepicker';
 import * as prActions from '../../actions/purchaserequisition';
 import * as genericActions from 'actions/generic.js';
+import * as Uom from "../../utility/Uom";
 import moment from 'moment';
 import Notification from 'views/Notifications/Index.jsx'
  
@@ -72,6 +73,7 @@ class PurchaseRequisition extends React.Component {
   state = {
     simpleSelect: "",
     type: '',
+    expenseheaders:[],
     rowArray:[1,2],
     data:{
       type:'',
@@ -82,6 +84,7 @@ class PurchaseRequisition extends React.Component {
       dateneeded: "",
       status: 1,
       shipvia: "",
+      isextrabudget: false,
     },
     lineItems:[],
     startDate : moment(),
@@ -99,7 +102,7 @@ class PurchaseRequisition extends React.Component {
 
   handleDatePicker = date =>{
     let data = this.state.data;
-    data["dateneeded"] = date.format("DD-MM-YYYY")
+    data["dateneeded"] = date.format("MM/DD/YYYY")
     this.setState({startDate: date});
     this.setState({data: data});
     this.toggleCalendar();
@@ -192,6 +195,9 @@ class PurchaseRequisition extends React.Component {
     genericActions.fetchAll("departments", this.props.user.token, (items)=>{
       this.setState({departments : items});
     });
+    genericActions.fetchAll("expenseheader", this.props.user.token, (items)=>{
+      this.setState({expenseheaders : items});
+    });
   }
 
 
@@ -210,14 +216,13 @@ class PurchaseRequisition extends React.Component {
     if(mm<10) {
         mm = '0'+mm
     } 
-
+    console.log(Uom);
     today = mm + '/' + dd + '/' + yyyy;
   	const tableData = this.state.rowArray.map((prop, key)=> {
 
       let value;
       if(this.state.lineItems[key]){
         value = this.state.lineItems[key];
-        {{debugger}}
       }
       else{
         value = {};
@@ -239,9 +244,9 @@ class PurchaseRequisition extends React.Component {
                    style={{marginTop: "-3px",   borderBottomWidth:" 1px"
                   }}
                     >
-                        {categories.map(option => (
-                          <MenuItem key={option.value} value={option.value} >
-                            {option.label}
+                        {this.state.expenseheaders.map(option => (
+                          <MenuItem key={option._id} value={option._id} >
+                            {option.name}
                           </MenuItem>
                         ))}
               </CustomSelect>
@@ -262,14 +267,24 @@ class PurchaseRequisition extends React.Component {
                     />
           </TableCell>
           <TableCell className={classes.td}>
-                <CustomInput name="unit" id="unit" type="number" required 
-                    formControlProps={{  
-                      style: {width:"100px", padding:"0", margin:"0"},  
-                      name: "unit"            
-                    }}  
-                    inputProps={{onChange: this.handleLineItemChange(key), 
-                      value:value.unit , name:"unit" }}
-                  />
+                  <CustomSelect labelText="Unit of Measure" id="uom" name="uom" required
+                     onChange={this.handleLineItemChange(key)}
+                     value={value.uom}
+                    formControlProps={{
+                      style: {width:"130px",padding:"0", margin:"0"}              
+                    }} 
+                    inputProps={{
+                      margin:"normal", id:"uom", name:"uom"
+                   }}
+                   style={{marginTop: "-3px",   borderBottomWidth:" 1px"
+                  }}
+                    >
+                        {Uom.List.map(option => (
+                          <MenuItem key={option.slug} value={option.slug} >
+                            {option.name}
+                          </MenuItem>
+                        ))}
+              </CustomSelect>
                   
           </TableCell>      
         </TableRow>
@@ -411,7 +426,7 @@ class PurchaseRequisition extends React.Component {
                         fullWidth: true, }} 
                         onFocus={this.toggleCalendar}
                         inputProps={{
-                            value: this.state.startDate.format("DD-MM-YYYY"),
+                            value: this.state.startDate.format("MM/DD/YYYY"),
                             onFocus: this.toggleCalendar
                         }}
                       />
@@ -469,8 +484,8 @@ class PurchaseRequisition extends React.Component {
               </Grid>
                   <br />  
                   <div style={generalStyle.aboveTable}>
-                  <div style={generalStyle.aboveTableIcon}><span><Checkbox  value="Budgetary" />Budgetary</span>
-                  <span><Checkbox value="Extra Budgetary" />Extra Budgetary</span>
+                  <div style={generalStyle.aboveTableIcon}><span></span>
+                  <span><Checkbox value="true" id="isextrabudget" name="isextrabudget" onChange={this.handleChange}/>Extra Budgetary</span>
                   </div>
                   
 

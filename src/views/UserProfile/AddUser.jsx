@@ -309,7 +309,7 @@ class AddUser extends React.Component {
                             <MenuItem
                               name="department"
                               key={key}
-                              value={data.slug}
+                              value={data._id}
                             >
                               {data.name}
                             </MenuItem>

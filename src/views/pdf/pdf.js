@@ -7,6 +7,9 @@ import generalStyle from "../../assets/jss/material-dashboard-pro-react/generalS
 import Grid from "@material-ui/core/Grid";
 import GridItem from "../../components/Grid/GridItem.jsx";
 import pdfTemplate from "./pdfTemplate";
+import * as poActions from '../../actions/purchaseorder';
+import * as Uom from "utility/Uom";
+import * as Status from 'utility/Status';
 
 const styles = {
   cardCategoryWhite: {
@@ -35,40 +38,8 @@ class Pdf extends Component {
     (this.state = {
       data: [],
       footerHeader: [],
-      products: [
-        {
-          id: 1,
-          refPartNo: "N/A",
-          description: "gas detector",
-          quantity: "1",
-          unitPrice: "2000.99",
-          extendedCost: "2000"
-        },
-        {
-          id: 2,
-          refPartNo: "N/A",
-          description: "gas detector",
-          quantity: "1",
-          unitPrice: "2000.99",
-          extendedCost: "2000"
-        },
-        {
-          id: 3,
-          refPartNo: "N/A",
-          description: "gas detector",
-          quantity: "1",
-          unitPrice: "2000.99",
-          extendedCost: "2000"
-        },
-        {
-          id: 4,
-          refPartNo: "N/A",
-          description: "gas detector",
-          quantity: "1",
-          unitPrice: "2000.99",
-          extendedCost: "2000"
-        }
-      ]
+      items:[],
+      po:[]
     }),
       (this.canvLoaded = false);
   }
@@ -77,19 +48,24 @@ class Pdf extends Component {
     this.po_doc.save();
   };
 
-  componentDidMount() {}
+  componentWillMount() {
+    poActions.fetchPurchaseOrderById(this.props.user.token, this.props.match.params.id,  (doc)=>{ 
+      {{debugger}}
+      this.setState({ po: doc.po, items:doc.items });
+    });
+  }
 
   render() {
     const { classes, data } = this.props;
-    const tableData = this.state.products.map(prop => {
+    const tableData = this.state.items.map( (prop , key) => {
       return (
         <tr>
-          <td style={generalStyle.tableTd}>{prop.id}</td>
-          <td style={generalStyle.tableTd}>{prop.refPartNo}</td>
+          <td style={generalStyle.tableTd}>{key+1}</td>
+          <td style={generalStyle.tableTd}>{"N/A"}</td>
           <td style={generalStyle.tableTd}>{prop.description}</td>
           <td style={generalStyle.tableTd}>{prop.quantity}</td>
-          <td style={generalStyle.tableTd}>{prop.unitPrice}</td>
-          <td style={generalStyle.tableTd}>{prop.extendedCost}</td>
+          <td style={generalStyle.tableTd}>{prop.price}</td>
+          <td style={generalStyle.tableTd}>{prop.quantity*prop.price}</td>
         </tr>
       );
     });
@@ -154,6 +130,7 @@ class Pdf extends Component {
                       style={generalStyle.POinput}
                       type="text"
                       id="your-input"
+                      value={this.state.po.no}
                     />
                   </div>
                   <div style={generalStyle.noPaddingMargin}>
@@ -164,6 +141,7 @@ class Pdf extends Component {
                       style={generalStyle.POinput}
                       type="text"
                       id="your-input"
+                      value={this.state.po.created}
                     />
                   </div>
                   <div style={generalStyle.noPaddingMargin}>
@@ -227,29 +205,29 @@ class Pdf extends Component {
                   <tbody>
                     <tr>
                       <th style={generalStyle.tableTd3}>Discount:</th>
-                      <td style={generalStyle.tableTd2}>00.00</td>
+                      <td style={generalStyle.tableTd2}>{this.state.po.discount}</td>
                     </tr>
                     <tr>
                       <th style={generalStyle.tableTd3}>V.A.T:</th>
-                      <td style={generalStyle.tableTd2}>2,545.00</td>
+                      <td style={generalStyle.tableTd2}>{this.state.po.vat}%</td>
                     </tr>
                     <tr>
                       <th style={generalStyle.tableTd3}>
                         Freight <br />
                         Charges:
                       </th>
-                      <td style={generalStyle.tableTd2}>00.00</td>
+                      <td style={generalStyle.tableTd2}>{this.state.po.freightcharges}</td>
                     </tr>
                     <tr>
                       <th style={generalStyle.tableTd3}>
                         Service <br />
                         Charge:
                       </th>
-                      <td style={generalStyle.tableTd2}>00.00</td>
+                      <td style={generalStyle.tableTd2}>{this.state.po.servicecharge}</td>
                     </tr>
                     <tr>
                       <th style={generalStyle.tableTd3}>Total (USD):</th>
-                      <td style={generalStyle.tableTd2}>53,445.00</td>
+                      <td style={generalStyle.tableTd2}>{this.state.po.total}</td>
                     </tr>
                   </tbody>
                 </table>

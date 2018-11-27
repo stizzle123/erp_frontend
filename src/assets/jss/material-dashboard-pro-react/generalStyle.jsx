@@ -245,7 +245,7 @@ const generalStyle = {
         fontWeight: "bold",
         padding:"10px 0",
         marginTop:"-30px"
-    },
+    },    
     POtitle2: {
         fontWeight: "bold",
         padding:"10px 0",

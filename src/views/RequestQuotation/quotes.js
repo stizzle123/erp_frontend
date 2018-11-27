@@ -34,7 +34,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import sweetAlertStyle from "assets/jss/material-dashboard-pro-react/views/sweetAlertStyle.jsx";
-
+import * as Uom from "utility/Uom";
 
 const styles = {
   ...sweetAlertStyle,
@@ -130,7 +130,7 @@ class Quote extends React.Component {
     constructor(props){
         super(props)
         this.props = props;
-        this.state = {data: {}}
+        this.state = {data: {},expenseheaders:[]}
     }
 
 
@@ -144,27 +144,28 @@ class Quote extends React.Component {
     showQuoteDetails = (quote) => event=> {
       const { classes, tableHeaderColor } = this.props;
       const tableData2 = quote.lineitems.map((prop, key)=> {
-      return (
-        <TableRow key={key}>
-          <TableCell className={classes.td}>
-              {prop.itemdescription }
-          </TableCell>
-          <TableCell className={classes.td}>
-              {prop.quantity}
-          </TableCell>
-          <TableCell className={classes.td}>
-              {prop.unit}   
-          </TableCell> 
-          <TableCell className={classes.td}>
-              {prop.price}
-          </TableCell>      
-        </TableRow>
-        )}
+        const uom = Uom.getUom(prop.uom);
+        return (
+          <TableRow key={key}>
+            <TableCell className={classes.td}>
+                {prop.itemdescription }
+            </TableCell>
+            <TableCell className={classes.td}>
+                {prop.quantity}
+            </TableCell>
+            <TableCell className={classes.td}>
+                {uom.name}   
+            </TableCell> 
+            <TableCell className={classes.td}>
+                {prop.price}
+            </TableCell>      
+          </TableRow>
+          )}
     );
       this.setState({
         alert: (
           <SweetAlert
-            title="Request For Quote"
+            title={"Quote for "+quote.vendor.general_info.company_name}
             onConfirm={() => this.hideAlert()}
             confirmBtnText="Click to Close"
             confirmBtnCssClass={
@@ -203,6 +204,7 @@ class Quote extends React.Component {
 
     render(){
         const { classes } = this.props;
+        let date = new Date(this.props.pr.dateneeded);
         let mappedData = this.props.quotes.map((prop, key) => {
           const dt = new Date(prop.created);
           const status = Status.getStatus(prop.status);
@@ -229,7 +231,7 @@ class Quote extends React.Component {
                         </li>
                         <li className={classes.liStyle}>
                           Date Needed: <br />
-                          <span className={classes.ap}>{this.props.pr.dateneeded}</span>
+                          <span className={classes.ap}>{date.toISOString().split('T')[0]}</span>
                         </li>
                         <li className={classes.liStyle}>
                           Charge To: <br />

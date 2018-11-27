@@ -173,7 +173,7 @@ componentDidMount(){
                     }}       
                   >
                         {this.state.optionsDepartment.map(function(data, key){  return (
-                      <MenuItem name="department" key={key} value={data.slug}>{data.name}</MenuItem>
+                      <MenuItem name="department" key={key} value={data._id}>{data.name}</MenuItem>
                                     )
                   })}
                     </CustomSelect>

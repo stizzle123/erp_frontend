@@ -5,6 +5,8 @@ import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import GridItem from "components/Grid/GridItem.jsx";
 import CustomInput from "components/CustomInput/CustomInput.jsx";
+import CustomSelect from "components/CustomInput/CustomSelect.jsx";
+import MenuItem from "@material-ui/core/MenuItem";
 import Button from "components/CustomButtons/Button.jsx";
 import Card from "components/Card/Card.jsx";
 import CardBody from "components/Card/CardBody.jsx";
@@ -32,7 +34,8 @@ class AddCrud extends React.Component {
         this.state = {
             departments : ['code', 'slug'],
             roles: ['slug'],
-            expenseheader:['slug', 'department'],
+            expenseheader:['slug'],
+            optionsDepartment:[],
             data:{
                 name:'',
             },
@@ -43,11 +46,19 @@ class AddCrud extends React.Component {
                 department:''
             },
             responseMessage: [],
-            responseState: false
-
-
+            responseState: false,
+            department: ""
         }
     }
+
+    handleChangeSelect = e => {
+        let data = this.state.data;
+        data[[e.target.name]] = e.target.value;
+        this.setState({ 
+          data: data
+        });
+        this.validate(event.target.id, event.target.value);
+      };
 
     handleChange = e => {
         this.validate(e.target.id, e.target.value);
@@ -60,44 +71,48 @@ class AddCrud extends React.Component {
 
     validate = (type, value) => {
         switch (type) {
-          case "name":
-            const name = helpers.isEmpty(value) ? false : true;
-            this.setState({
-              validationState: {
-                ...this.state.validationState,
-                name
-              }
-            });
-            break;
+            case "name":
+                const name = helpers.isEmpty(value) ? false : true;
+                this.setState({
+                validationState: {
+                    ...this.state.validationState,
+                    name
+                }
+                });
+                break;
             case "slug":
-            const slug = helpers.isEmpty(value) ? false : true;
-            this.setState({
-              validationState: {
-                ...this.state.validationState,
-                slug
-              }
-            });
-            break;
+                const slug = helpers.isEmpty(value) ? false : true;
+                this.setState({
+                validationState: {
+                    ...this.state.validationState,
+                    slug
+                }
+                });
+                break;
             case "code":
-            const code = helpers.isEmpty(value) ? false : true;
-            this.setState({
-              validationState: {
-                ...this.state.validationState,
-                code
-              }
-            });
-            break;
+                const code = helpers.isEmpty(value) ? false : true;
+                this.setState({
+                validationState: {
+                    ...this.state.validationState,
+                    code
+                }
+                });
+                break;
 
         }
     }   
-    handleSubmit = () => {
-        genericActions.saveItem(this.props.match.params.type, this.props.user.token, this.state.data, (json)=>{
-            this.setState({responseMessage:json});          
-            })
-          
+    handleSubmit = e => {
+        genericActions.saveItem(this.props.match.params.type, this.props.user.token, this.state.data,  (json)=>{
+            this.setState({
+                data:json, 
+            });
+          });
     }
 
     componentDidMount(){
+        genericActions.fetchAll("departments", this.props.user.token, items => {
+            this.setState({ optionsDepartment: items });
+          });
         this.setState({ type: this.props.match.params.type });
     }
 
@@ -175,6 +190,37 @@ class AddCrud extends React.Component {
                                     />
                                 </GridItem>
                                 {additionalFields}
+                                {
+                                    (this.props.match.params.type== "expenseheader")? 
+                                    <GridItem xs={12} sm={12} md={6}>
+                                    <CustomSelect
+                                      labelText="Department"
+                                      name="department"
+                                      required
+                                      value={this.state.data.department}
+                                      onChange={e => this.handleChangeSelect(e)}
+                                      formControlProps={{
+                                        fullWidth: true
+                                      }}
+                                      inputProps={{
+                                        margin: "normal"
+                                      }}
+                                    >
+                                      {this.state.optionsDepartment.map(function(data, key) {
+                                        return (
+                                          <MenuItem
+                                            name="department"
+                                            key={key}
+                                            value={data._id}
+                                          >
+                                            {data.name}
+                                          </MenuItem>
+                                        );
+                                      })}
+                                    </CustomSelect>
+                                  </GridItem> :
+                                  ""
+                                }
                             </Grid>
 
                         </CardBody>
