@@ -38,6 +38,9 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import CustomSelect from "components/CustomInput/CustomSelect.jsx";
 import MenuItem from "@material-ui/core/MenuItem";
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 import sweetAlertStyle from "assets/jss/material-dashboard-pro-react/views/sweetAlertStyle.jsx";
 import * as Uom from "utility/Uom";
 
@@ -207,8 +210,16 @@ class Quote extends React.Component {
     const data = {};
     data.accepted = this.state.accepted;
     data.id = this.props.quotes[0]._id;
+    data.meetQuality = this.state.meetQuality;
+    data.meetSpec = this.state.meetSpec;
+    data.onTime = this.state.onTime;
+    data.rfqTime = this.state.rfqTime;
     data.rejection_reason = this.state.rejection_reason;
-    rfqActions.submitAcceptQuote(this.props.user.token, data, () => {});
+    rfqActions.submitAcceptQuote(this.props.user.token, data, (result) => {
+        if(result){
+          alert("Quote updated");
+        }
+    });
   };
 
   rejectionInputField = val => {
@@ -230,9 +241,19 @@ class Quote extends React.Component {
   };
 
   showQuoteDetails = (key) => {
-    debugger
-    this.setState({ open: true, openkey:key });
+    this.props.quotes.map((prop, k) => {
+      if(key == k){
+        this.setState({ open: true, openkey:key, meetQuality:prop.meetQuality,
+        meetSpec:prop.meetSpec, onTime:prop.onTime, rfqTime:prop.rfqTime });
+      }
+    });
   };
+
+ /*  componentDidUpdate(prevProps) {
+    if (this.props.quotes.length !== prevProps.quotes.length) {
+      console.log(this.props.quotes);
+    }
+  } */
 
   render() {
     const { classes } = this.props;
@@ -240,13 +261,12 @@ class Quote extends React.Component {
       const dt = new Date(prop.created);
       const status = Status.getStatus(prop.status);
       let tableBody = ""
-      let d=new Date();
        tableBody= prop.lineitems.map((prop,k) => {
         const uom = Uom.getUom(prop.uom);
-        d = (prop.availableDate)? prop.availableDate: d;
+        let d = (prop.availableDate)? new Date(prop.availableDate): new Date();
          return <TableRow key={k}>
             <TableCell className={classes.td}>
-              {prop.itemdescription}
+              {(prop.description)? prop.description: prop.itemdescription}
             </TableCell>
             <TableCell className={classes.td}>
               {prop.quantity}
@@ -259,18 +279,16 @@ class Quote extends React.Component {
             </TableCell>
             <TableCell className={classes.td}>
               {
-                (prop.availablity)?
+                (prop.availability === true)?
                   "In Stock"
                 :
-                (prop.price)?
                 "Out of Stock till - "+d.toISOString().split("T")[0]
-                : ""
                 }
             </TableCell>
           </TableRow>
       })
       return [
-        key + 1,
+        prop.no,
         prop.vendor.general_info.company_name,
         dt.toISOString().split("T")[0],
         status,
@@ -369,10 +387,49 @@ class Quote extends React.Component {
                     </TableBody>
                   </TableCore>
                   <br />
-                  {this.rejectionInputField(this.state.accepted)}
-                </CardBody>
-                <CardFooter>
-                  <div />
+                  <FormGroup row>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={this.state.meetQuality}
+                        onChange={()=>{ this.setState({meetQuality:!this.state.meetQuality})}}
+                        value={this.state.meetQuality}
+                      />
+                    }
+                    label="Meets Quality"
+                  />
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={this.state.meetSpec}
+                        onChange={()=>{ this.setState({meetSpec:!this.state.meetSpec})}}
+                        value={this.state.meetSpec}
+                      />
+                    }
+                    label="Meet Defined Specification"
+                  />
+                  <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={this.state.onTime}
+                      onChange={()=>{ this.setState({onTime:!this.state.onTime})}} 
+                      value={this.state.onTime}
+                    />
+                  }
+                  label="Ontime Delivery"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={this.state.rfqTime}
+                      onChange={()=>{ this.setState({rfqTime:!this.state.rfqTime})}} 
+                      value={this.state.rfqTime}
+                    />
+                  }
+                  label="Ability to meet RFG response time"
+                />
+                  </FormGroup>
+                  <br />
                   <select
                     id="accepted"
                     name="accepted"
@@ -398,7 +455,10 @@ class Quote extends React.Component {
                       </option>
                     ))}
                   </select>
-
+                  {this.rejectionInputField(this.state.accepted)}
+                </CardBody>
+                <CardFooter>
+                
                   <Button color="yellowgreen" onClick={this.submitAccepted}>
                     submit
                   </Button>

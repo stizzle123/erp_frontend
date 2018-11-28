@@ -256,7 +256,7 @@ class Index extends React.Component {
       const uom = Uom.getUom(prop.uom);
       return (
         <TableRow key={key}>
-          <TableCell className={classes.td}>{prop.itemdescription}</TableCell>
+          <TableCell className={classes.td}>{(prop.description)? prop.description: prop.itemdescription}</TableCell>
           <TableCell className={classes.td}>{prop.quantity}</TableCell>
           <TableCell className={classes.td}>{uom.name}</TableCell>
           <TableCell className={classes.td}>
