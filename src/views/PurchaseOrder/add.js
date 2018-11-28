@@ -499,12 +499,7 @@ handleChange = event => {
                 </CardBody>
                 <CardFooter>
                   <Grid container>
-                    <GridItem
-                      xs={12}
-                      sm={6}
-                      md={2}
-                      additionalclass={classes.removeDivPadding}
-                    >
+                    <GridItem xs={12} sm={6} md={2} additionalclass={classes.removeDivPadding}>
                       <Button color="primary" onClick={this.handleSave}>
                         Save
                       </Button>
