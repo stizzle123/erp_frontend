@@ -38,9 +38,9 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import CustomSelect from "components/CustomInput/CustomSelect.jsx";
 import MenuItem from "@material-ui/core/MenuItem";
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
+import FormGroup from "@material-ui/core/FormGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
 import sweetAlertStyle from "assets/jss/material-dashboard-pro-react/views/sweetAlertStyle.jsx";
 import * as Uom from "utility/Uom";
 
@@ -172,7 +172,8 @@ const styles = {
     position: "fixed",
     top: "50%",
     left: "50%",
-    transform: "translate(-50%, -50%)"
+    transform: "translate(-50%, -50%)",
+    outline: "none"
   }
 };
 const yesNo = [
@@ -189,7 +190,7 @@ class Quote extends React.Component {
       accepted: true,
       rejection_reason: "",
       open: false,
-      openkey:""
+      openkey: ""
     };
   }
   hideAlert() {
@@ -207,6 +208,9 @@ class Quote extends React.Component {
     });
   };
   submitAccepted = () => {
+    const vendorEmail = this.props.quotes.map(prop => {
+      return prop.vendor.general_info.contact_email;
+    });
     const data = {};
     data.accepted = this.state.accepted;
     data.id = this.props.quotes[0]._id;
@@ -215,10 +219,11 @@ class Quote extends React.Component {
     data.onTime = this.state.onTime;
     data.rfqTime = this.state.rfqTime;
     data.rejection_reason = this.state.rejection_reason;
-    rfqActions.submitAcceptQuote(this.props.user.token, data, (result) => {
-        if(result){
-          alert("Quote updated");
-        }
+    data.vendorEmail = vendorEmail;
+    rfqActions.submitAcceptQuote(this.props.user.token, data, result => {
+      if (result) {
+        alert("Quote updated");
+      }
     });
   };
 
@@ -240,16 +245,22 @@ class Quote extends React.Component {
     }
   };
 
-  showQuoteDetails = (key) => {
+  showQuoteDetails = key => {
     this.props.quotes.map((prop, k) => {
-      if(key == k){
-        this.setState({ open: true, openkey:key, meetQuality:prop.meetQuality,
-        meetSpec:prop.meetSpec, onTime:prop.onTime, rfqTime:prop.rfqTime });
+      if (key == k) {
+        this.setState({
+          open: true,
+          openkey: key,
+          meetQuality: prop.meetQuality,
+          meetSpec: prop.meetSpec,
+          onTime: prop.onTime,
+          rfqTime: prop.rfqTime
+        });
       }
     });
   };
 
- /*  componentDidUpdate(prevProps) {
+  /*  componentDidUpdate(prevProps) {
     if (this.props.quotes.length !== prevProps.quotes.length) {
       console.log(this.props.quotes);
     }
@@ -260,216 +271,223 @@ class Quote extends React.Component {
     let mappedData = this.props.quotes.map((prop, key) => {
       const dt = new Date(prop.created);
       const status = Status.getStatus(prop.status);
-      let tableBody = ""
-       tableBody= prop.lineitems.map((prop,k) => {
+      let tableBody = "";
+      tableBody = prop.lineitems.map((prop, k) => {
         const uom = Uom.getUom(prop.uom);
-        let d = (prop.availableDate)? new Date(prop.availableDate): new Date();
-         return <TableRow key={k}>
+        let d = prop.availableDate ? new Date(prop.availableDate) : new Date();
+        return (
+          <TableRow key={k}>
             <TableCell className={classes.td}>
-              {(prop.description)? prop.description: prop.itemdescription}
+              {prop.description ? prop.description : prop.itemdescription}
             </TableCell>
+            <TableCell className={classes.td}>{prop.quantity}</TableCell>
+            <TableCell className={classes.td}>{uom.name}</TableCell>
+            <TableCell className={classes.td}>{prop.price}</TableCell>
             <TableCell className={classes.td}>
-              {prop.quantity}
-            </TableCell>
-            <TableCell className={classes.td}>
-              {uom.name}
-            </TableCell>
-            <TableCell className={classes.td}>
-              {prop.price}
-            </TableCell>
-            <TableCell className={classes.td}>
-              {
-                (prop.availability === true)?
-                  "In Stock"
-                :
-                "Out of Stock till - "+d.toISOString().split("T")[0]
-                }
+              {prop.availability === true
+                ? "In Stock"
+                : "Out of Stock till - " + d.toISOString().split("T")[0]}
             </TableCell>
           </TableRow>
-      })
+        );
+      });
       return [
         prop.no,
         prop.vendor.general_info.company_name,
         dt.toISOString().split("T")[0],
         status,
-        <Button color="yellowgreen" onClick={()=>{this.showQuoteDetails(key)}}>
+        <Button
+          color="yellowgreen"
+          onClick={() => {
+            this.showQuoteDetails(key);
+          }}
+        >
           View
         </Button>,
-        (this.state.openkey==key)?
-        <Modal className={this.props.classes.pr} open={this.state.open}>
-          {prop.lineitems.length > 0 ? (
-            <div className={classes.positionCenter}>
-              <Card>
-                <CardHeader>
-                  <h3>Quote for {prop.vendor.general_info.company_name}</h3>
-                  <Close
-                    onClick={() => this.hideAlert()}
-                    className={classes.closeButtonSetting}
-                  />
-                </CardHeader>
-                <CardBody>
-                  <TableCore className={classes.table}>
-                    <TableHead
-                      className={classes.tableHeaderColor}
-                      style={{
-                        marginTop: "10px",
-                        color: "blue",
-                        borderBottomColor: "#333",
-                        borderBottomStyle: "solid",
-                        borderBottomWidth: "1px"
-                      }}
-                    >
-                      <TableRow>
-                        <TableCell
-                          className={
-                            classes.tableCell +
-                            " " +
-                            classes.tableHeadCell +
-                            " " +
-                            classes.td
-                          }
-                          style={{ color: "blue" }}
-                        >
-                          Description
-                        </TableCell>
-                        <TableCell
-                          className={
-                            classes.tableCell +
-                            " " +
-                            classes.tableHeadCell +
-                            " " +
-                            classes.td
-                          }
-                          style={{ color: "blue", width: "70px" }}
-                        >
-                          Qty
-                        </TableCell>
-                        <TableCell
-                          className={
-                            classes.tableCell +
-                            " " +
-                            classes.tableHeadCell +
-                            " " +
-                            classes.td
-                          }
-                          style={{ color: "blue" }}
-                        >
-                          UOM
-                        </TableCell>
-                        <TableCell
-                          className={
-                            classes.tableCell +
-                            " " +
-                            classes.tableHeadCell +
-                            " " +
-                            classes.td
-                          }
-                          style={{ color: "blue" }}
-                        >
-                          Price
-                        </TableCell>
-                        <TableCell
-                          className={
-                            classes.tableCell +
-                            " " +
-                            classes.tableHeadCell +
-                            " " +
-                            classes.td
-                          }
-                          style={{ color: "blue" }}
-                        >
-                          Is Available
-                        </TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {tableBody}
-                    </TableBody>
-                  </TableCore>
-                  <br />
-                  <FormGroup row>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={this.state.meetQuality}
-                        onChange={()=>{ this.setState({meetQuality:!this.state.meetQuality})}}
-                        value={this.state.meetQuality}
-                      />
-                    }
-                    label="Meets Quality"
-                  />
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={this.state.meetSpec}
-                        onChange={()=>{ this.setState({meetSpec:!this.state.meetSpec})}}
-                        value={this.state.meetSpec}
-                      />
-                    }
-                    label="Meet Defined Specification"
-                  />
-                  <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={this.state.onTime}
-                      onChange={()=>{ this.setState({onTime:!this.state.onTime})}} 
-                      value={this.state.onTime}
+        this.state.openkey == key ? (
+          <Modal className={this.props.classes.pr} open={this.state.open}>
+            {prop.lineitems.length > 0 ? (
+              <div className={classes.positionCenter}>
+                <Card>
+                  <CardHeader>
+                    <h3>Quote for {prop.vendor.general_info.company_name}</h3>
+                    <Close
+                      onClick={() => this.hideAlert()}
+                      className={classes.closeButtonSetting}
                     />
-                  }
-                  label="Ontime Delivery"
-                />
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={this.state.rfqTime}
-                      onChange={()=>{ this.setState({rfqTime:!this.state.rfqTime})}} 
-                      value={this.state.rfqTime}
-                    />
-                  }
-                  label="Ability to meet RFG response time"
-                />
-                  </FormGroup>
-                  <br />
-                  <select
-                    id="accepted"
-                    name="accepted"
-                    required
-                    className={this.props.classes.select}
-                    onChange={this.handleChangeSelect}
-                  >
-                    <option
-                      value=""
-                      disabled
-                      defaultValue
-                      className={this.props.classes.option}
+                  </CardHeader>
+                  <CardBody>
+                    <TableCore className={classes.table}>
+                      <TableHead
+                        className={classes.tableHeaderColor}
+                        style={{
+                          marginTop: "10px",
+                          color: "blue",
+                          borderBottomColor: "#333",
+                          borderBottomStyle: "solid",
+                          borderBottomWidth: "1px"
+                        }}
+                      >
+                        <TableRow>
+                          <TableCell
+                            className={
+                              classes.tableCell +
+                              " " +
+                              classes.tableHeadCell +
+                              " " +
+                              classes.td
+                            }
+                            style={{ color: "blue" }}
+                          >
+                            Description
+                          </TableCell>
+                          <TableCell
+                            className={
+                              classes.tableCell +
+                              " " +
+                              classes.tableHeadCell +
+                              " " +
+                              classes.td
+                            }
+                            style={{ color: "blue", width: "70px" }}
+                          >
+                            Qty
+                          </TableCell>
+                          <TableCell
+                            className={
+                              classes.tableCell +
+                              " " +
+                              classes.tableHeadCell +
+                              " " +
+                              classes.td
+                            }
+                            style={{ color: "blue" }}
+                          >
+                            UOM
+                          </TableCell>
+                          <TableCell
+                            className={
+                              classes.tableCell +
+                              " " +
+                              classes.tableHeadCell +
+                              " " +
+                              classes.td
+                            }
+                            style={{ color: "blue" }}
+                          >
+                            Price
+                          </TableCell>
+                          <TableCell
+                            className={
+                              classes.tableCell +
+                              " " +
+                              classes.tableHeadCell +
+                              " " +
+                              classes.td
+                            }
+                            style={{ color: "blue" }}
+                          >
+                            Is Available
+                          </TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>{tableBody}</TableBody>
+                    </TableCore>
+                    <br />
+                    <FormGroup row>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={this.state.meetQuality}
+                            onChange={() => {
+                              this.setState({
+                                meetQuality: !this.state.meetQuality
+                              });
+                            }}
+                            value={this.state.meetQuality}
+                          />
+                        }
+                        label="Meets Quality"
+                      />
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={this.state.meetSpec}
+                            onChange={() => {
+                              this.setState({ meetSpec: !this.state.meetSpec });
+                            }}
+                            value={this.state.meetSpec}
+                          />
+                        }
+                        label="Meet Defined Specification"
+                      />
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={this.state.onTime}
+                            onChange={() => {
+                              this.setState({ onTime: !this.state.onTime });
+                            }}
+                            value={this.state.onTime}
+                          />
+                        }
+                        label="Ontime Delivery"
+                      />
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={this.state.rfqTime}
+                            onChange={() => {
+                              this.setState({ rfqTime: !this.state.rfqTime });
+                            }}
+                            value={this.state.rfqTime}
+                          />
+                        }
+                        label="Ability to meet RFG response time"
+                      />
+                    </FormGroup>
+                    <br />
+                    <select
+                      id="accepted"
+                      name="accepted"
+                      required
+                      className={this.props.classes.select}
+                      onChange={this.handleChangeSelect}
                     >
-                      Accept/Reject
-                    </option>
-                    {yesNo.map(option => (
                       <option
-                        value={option.value}
-                        key={option.value}
+                        value=""
+                        disabled
+                        defaultValue
                         className={this.props.classes.option}
                       >
-                        {option.label}
+                        Accept/Reject
                       </option>
-                    ))}
-                  </select>
-                  {this.rejectionInputField(this.state.accepted)}
-                </CardBody>
-                <CardFooter>
-                
-                  <Button color="yellowgreen" onClick={this.submitAccepted}>
-                    submit
-                  </Button>
-                </CardFooter>
-              </Card>
-            </div>
-          ) : (
-            ""
-          )}
-        </Modal>
-        : ""  
+                      {yesNo.map(option => (
+                        <option
+                          value={option.value}
+                          key={option.value}
+                          className={this.props.classes.option}
+                        >
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                    {this.rejectionInputField(this.state.accepted)}
+                  </CardBody>
+                  <CardFooter>
+                    <Button color="yellowgreen" onClick={this.submitAccepted}>
+                      submit
+                    </Button>
+                  </CardFooter>
+                </Card>
+              </div>
+            ) : (
+              ""
+            )}
+          </Modal>
+        ) : (
+          ""
+        )
       ];
     });
     return (
