@@ -32,11 +32,11 @@ import * as poActions from "../../actions/purchaseorder";
 import * as rfqActions from "../../actions/requestforquotation";
 import * as locationAction from "../../actions/location";
 import Notification from "views/Notifications/Index.jsx";
+import * as Util from "../../utility/Util";
 
 const styles = theme => ({
   ...tableStyle,
   ...regularFormsStyle,
-
   td: {
     border: "none",
     margin: "0 10px",
@@ -65,10 +65,11 @@ class Add extends React.Component {
     locations: [],
     address: "",
     checkeditemsprice:{},
-    cummulativeprice: 0
+    cummulativeprice: 0,
+    isvatable:false
   };
 
-handleChange = event => {
+  handleChange = event => {
     let data = this.state.data;
     data[[event.target.name]] = event.target.value;
     this.setState({
@@ -96,9 +97,11 @@ handleChange = event => {
   handleCheckedItems = i => {
     let checkeditems = this.state.checkeditems;
     let index = checkeditems.indexOf(i);
-    if (index > 0) {
+    let cummulativeprice = 0;
+    if(index > -1){
       checkeditems.splice(index, 1);
-    } else {
+      cummulativeprice  = this.state.cummulativeprice - parseInt(this.state.checkeditemsprice[i]);
+    }else{
       checkeditems.push(i);
       cummulativeprice  = this.state.cummulativeprice + parseInt(this.state.checkeditemsprice[i]);
     }
@@ -106,97 +109,102 @@ handleChange = event => {
       checkeditems, cummulativeprice
     });
     this.calcPrice( "", cummulativeprice);
-}
+  }
 
-  handleItemChange = event => {
-    const { classes } = this.props;
+  handleItemChange= event =>{
+    const { classes} = this.props;
     this.handleChange(event);
-    rfqActions.fetchAllQuoteforVendor(
-      this.props.user.token,
-      event.target.value,
-      quotes => {
-        this.setState({ quotes });
+    let itemsprice = this.state.checkeditemsprice;
+    rfqActions.fetchAllQuoteforVendor(this.props.user.token, event.target.value, (quotes)=>{
+        this.setState({quotes});
         let grandTotal = this.state.data.grand_total;
-        const table_data = this.state.quotes.map((prop, key) => {
-          grandTotal = grandTotal + prop.price * prop.quantity;
-          return (
-            <TableRow key={key}>
-              <TableCell
-                component="th"
-                style={{
-                  border: "none",
-                  padding: "0",
-                  width: "20px",
-                  textAlign: "center"
-                }}
-              >
-                <FormControlLabel
+        const table_data = this.state.quotes.map((prop, key)=> {
+          itemsprice[prop._id] = ((prop.price*prop.quantity)/100).toFixed(2);
+            return (
+            <TableRow key={key}> 
+                <TableCell component="th" style={{border: "none", padding: "0", width: "20px", textAlign: "center"}}>                   
+                  <FormControlLabel
                   control={
                     <Checkbox
-                      tabIndex={-1}
-                      onClick={() => this.handleCheckedItems(prop._id)}
-                      checkedIcon={<Check className={classes.checkedIcon} />}
-                      icon={<Check className={classes.uncheckedIcon} />}
-                      classes={{
-                        checked: classes.checked
-                      }}
+                        tabIndex={-1}
+                        onClick={() => this.handleCheckedItems(prop._id)}
+                        checkedIcon={
+                          <Check className={classes.checkedIcon} />
+                        }
+                        icon={<Check className={classes.uncheckedIcon} />}
+                        classes={{
+                          checked: classes.checked
+                        }}
                     />
                   }
-                  classes={{
-                    label: classes.label
-                  }}
-                />
-                {key + 1}
-              </TableCell>
-              <TableCell className={classes.td}>{prop.description}</TableCell>
-              <TableCell className={classes.td}>{prop.quantity}</TableCell>
-              <TableCell className={classes.td}>{prop.unit}</TableCell>
-              <TableCell className={classes.td}>{prop.price}</TableCell>
-              <TableCell className={classes.td}>
-                {prop.price * prop.quantity}
-              </TableCell>
+                      classes={{
+                        label: classes.label
+                      }}
+                  />
+                    {key+1}
+                </TableCell>
+                <TableCell className={classes.td}>
+                    {prop.description }
+                </TableCell>
+                <TableCell className={classes.td}>
+                    {prop.quantity}
+                </TableCell>
+                <TableCell className={classes.td}>
+                    {prop.unit}   
+                </TableCell>   
+                <TableCell className={classes.td}>
+                    {(prop.price/100).toFixed(2)}   
+                </TableCell>   
+                <TableCell className={classes.td}>
+                    {((prop.price*prop.quantity)/100).toFixed(2)}   
+                </TableCell> 
             </TableRow>
-          );
-        });
-        let data = this.state.data;
-        data.grand_total = grandTotal;
-        this.setState({ data, table_data });
-      }
-    );
-  };
+            )}
+        );
 
-  formulatePricing = event => {
-    const name = event.target.name;
-    const grandTotal = this.state.data.grand_total;
-    let data = this.state.data;
-    switch (name) {
-      case "vat":
-        const vat = event.target.value
-          ? event.target.value
-          : this.state.data.vat;
-        data.grand_total =
-          parseInt(grandTotal) + grandTotal * (parseInt(vat) / 100);
-        data.vat = vat;
-        break;
-      case "discount":
-        data.grand_total = grandTotal - event.target.value;
-        data.discount = event.target.value;
-        break;
-      case "freightcharges":
-        data.grand_total = parseInt(grandTotal) + parseInt(event.target.value);
-        data.frieghtcharges = event.target.value;
-        break;
-      case "servicecharge":
-        data.grand_total = parseInt(grandTotal) + parseInt(event.target.value);
-        data.servicecharge = event.target.value;
-        break;
-    }
-    this.setState({ data });
-  };
+        let data = this.state.data;
+        this.setState({data, table_data, itemsprice });
+    });
+}
+
   selectedLocation(e) {
     locationAction.getAddress(this.props, e.target.value, json => {
       this.setState({ address: json });
     });
+  }
+
+  formulatePricing = event => {
+    const name = event.target.name;
+    this.calcPrice(name, this.state.cummulativeprice);
+  };
+
+  calcPrice = (name, currentPrice)=>{
+    const grandTotal = currentPrice;
+    let data = this.state.data;
+    if(!this.state.isvatable){
+      //const vat = event.target.value? event.target.values: this.state.data.vat;
+      data.grand_total = parseInt(grandTotal) + (grandTotal * (5/100));
+    }else{
+      data.grand_total = parseInt(grandTotal) - (grandTotal * (5/100));
+    }
+    switch (name){
+        case "discount":
+            const discount = (event.target.value)? event.target.value: this.state.data.discount;
+            data.grand_total=grandTotal-parseInt(discount);
+            data.discount = discount;
+            break;
+        case "freightcharges":
+            const freightcharges = (event.target.value)? event.target.value: this.state.data.freightcharges;
+            data.grand_total = parseInt(grandTotal)+parseInt(freightcharges);
+            data.freightcharges = event.target.value;
+            break;
+        case "servicecharge":
+            const servicecharge = (event.target.value)? event.target.value: this.state.data.servicecharge;
+            data.grand_total = parseInt(grandTotal)+parseInt(servicecharge);
+            data.servicecharge = event.target.value;
+            break;
+    }
+    this.setState({ data });
   }
 
   componentDidMount() {
@@ -328,7 +336,15 @@ handleChange = event => {
                     </GridItem>
                   </Grid>
                   <br />
-                  <div style={{ overflowX: "scroll" }}>
+                  <FormControlLabel
+                      control={
+                        <Checkbox checked={this.state.isvatable}
+                          onChange={(e)=>{ this.setState({isvatable: !this.state.isvatable}); this.formulatePricing(e)}}
+                      />
+                      }
+                      label="Check if VAT apply"
+                    />
+                   <div style={{ overflowX: "scroll" }}>
                     <Table>
                       <TableHead
                         className={classes[tableHeaderColor + "TableHeader"]}
@@ -375,7 +391,7 @@ handleChange = event => {
                             }
                             style={{ color: "#1b4aa5", width: "70px" }}
                           >
-                            Quantity
+                            Qty
                           </TableCell>
                           <TableCell
                             className={
@@ -436,18 +452,7 @@ handleChange = event => {
                       />
                     </GridItem>
                     <GridItem xs={3}>
-                      <CustomInput
-                        labelText="VAT"
-                        id="vat"
-                        formControlProps={{
-                          style: { width: "100%" }
-                        }}
-                        inputProps={{
-                          placeholder: this.state.data.vat + " %",
-                          name: "vat",
-                          onBlur: this.formulatePricing
-                        }}
-                      />
+                   
                     </GridItem>
                     <GridItem xs={3}>
                       <CustomInput

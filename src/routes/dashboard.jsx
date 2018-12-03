@@ -11,6 +11,7 @@ import Settings from '@material-ui/icons/Settings';
 import SdStorage from '@material-ui/icons/SdStorage';
 import AccountBalance from '@material-ui/icons/AccountBalanceWallet';
 import CreditCard from '@material-ui/icons/CreditCard';
+import VendorEvaluation from "../views/Vendor/evaluation";
 import RequestQuotation from "../views/RequestQuotation/index.js";
 import AddQuotation from "../views/RequestQuotation/add.js";
 import MyQuotation from "../views/RequestQuotation/myquote.js";
@@ -57,6 +58,10 @@ export const dashboardRoutes = [
   {
     path: "/import-records",
     component: importRecords
+   },
+   {
+     path: "/vendorevaluation",
+     component: VendorEvaluation
    },
    {
     path: "/user",

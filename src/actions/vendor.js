@@ -129,3 +129,14 @@ export function deleteVendor(props, user){
       console.log("the error" + e);
     })
 }
+
+export function getVendorEvaluation(token, vendorId, callback){
+    let middleware = new MiddleWare(token);
+    return middleware.makeConnection('/vendorevaluation/view/'+vendorId,'GET').then((response) => {
+        return response.json()
+    }).then(        
+        (responseJson)=>{
+            callback(responseJson);
+        }
+    );
+}

@@ -29,6 +29,7 @@ import { Link } from "react-router-dom";
 import Table from "components/Table/Table.jsx";
 import * as Status from "utility/Status";
 import * as rfqActions from "../../actions/requestforquotation";
+import * as vendorActions from "../../actions/vendor";
 import { connect } from "react-redux";
 import SweetAlert from "react-bootstrap-sweetalert";
 import TableCore from "@material-ui/core/Table";
@@ -151,7 +152,7 @@ const styles = {
     outline: " none",
     height: " 3rem",
     lineHeight: "3rem",
-    width: "200px",
+    width: "100%",
     fontSize: "16px",
     margin: "0 0 8px 0",
     padding: "0",
@@ -189,7 +190,12 @@ class Quote extends React.Component {
       accepted: true,
       rejection_reason: "",
       open: false,
-      openkey:""
+      openkey:"",
+      meetQuality:"",
+      meetSpec:"",
+      rfqTime:"",
+      onTime:"",
+      vendorRating:{}
     };
   }
   hideAlert() {
@@ -210,10 +216,11 @@ class Quote extends React.Component {
     const data = {};
     data.accepted = this.state.accepted;
     data.id = this.props.quotes[0]._id;
+    data.meetDefineSpecification = this.state.meetDefineSpecification;
     data.meetQuality = this.state.meetQuality;
-    data.meetSpec = this.state.meetSpec;
-    data.onTime = this.state.onTime;
-    data.rfqTime = this.state.rfqTime;
+    data.meetRfqResponseTime = this.state.meetRfqResponseTime;
+    data.onTimeDelivery = this.state.onTimeDelivery;
+    data.adaptiveness = this.state.adaptiveness;
     data.rejection_reason = this.state.rejection_reason;
     rfqActions.submitAcceptQuote(this.props.user.token, data, (result) => {
         if(result){
@@ -247,13 +254,10 @@ class Quote extends React.Component {
         meetSpec:prop.meetSpec, onTime:prop.onTime, rfqTime:prop.rfqTime });
       }
     });
+    vendorActions.getVendorEvaluation(this.props.user.token, this.props.quotes[0].vendor._id, (result)=>{
+      this.setState({vendorRating: result});
+    })
   };
-
- /*  componentDidUpdate(prevProps) {
-    if (this.props.quotes.length !== prevProps.quotes.length) {
-      console.log(this.props.quotes);
-    }
-  } */
 
   render() {
     const { classes } = this.props;
@@ -387,78 +391,153 @@ class Quote extends React.Component {
                     </TableBody>
                   </TableCore>
                   <br />
-                  <FormGroup row>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={this.state.meetQuality}
-                        onChange={()=>{ this.setState({meetQuality:!this.state.meetQuality})}}
-                        value={this.state.meetQuality}
-                      />
-                    }
-                    label="Meets Quality"
-                  />
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={this.state.meetSpec}
-                        onChange={()=>{ this.setState({meetSpec:!this.state.meetSpec})}}
-                        value={this.state.meetSpec}
-                      />
-                    }
-                    label="Meet Defined Specification"
-                  />
-                  <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={this.state.onTime}
-                      onChange={()=>{ this.setState({onTime:!this.state.onTime})}} 
-                      value={this.state.onTime}
-                    />
+                  {
+                    (!this.state.vendorRating.meetQuality || !this.state.vendorRating.meetDefineSpecification || !this.state.vendorRating.meetRfqResponseTime || !this.state.vendorRating.onTimeDelivery)?
+                  <Grid container>
+                    <GridItem xs={12} sm={4} md={4}>
+                      <CustomSelect labelText="Meets Quality" name="meetQuality" id="meetQuality" required
+                            onChange={(e)=>{ this.setState({meetQuality:e.target.value})}}
+                            formControlProps={{
+                              fullWidth:true    
+                            }} 
+                            value={this.state.meetQuality}
+                            inputProps={{margin:"normal",  id:"meetQuality" }}>
+                                {[...Array(7)].map((x, i) =>
+                                  <MenuItem key={i} value={i+1} >
+                                  {i+1}
+                                  </MenuItem>
+                                )}
+                                  
+                                ))}
+                      </CustomSelect>                    
+                    </GridItem>
+                    <GridItem xs={12} sm={4} md={4}>
+                      <CustomSelect labelText="Meets Define Specification" name="meetDefineSpecification" id="meetDefineSpecification" required
+                            onChange={(e)=>{ this.setState({meetDefineSpecification:e.target.value})}}
+                            formControlProps={{
+                              fullWidth:true       
+                            }} 
+                            value={this.state.meetDefineSpecification}
+                            inputProps={{margin:"normal",  id:"meetDefineSpecification" }}>
+                                {[...Array(7)].map((x, i) =>
+                                  <MenuItem key={i} value={i+1} >
+                                  {i+1}
+                                  </MenuItem>
+                                )}
+                                  
+                                ))}
+                      </CustomSelect>                    
+                    </GridItem>
+                    <GridItem xs={12} sm={4} md={4}>
+                      <CustomSelect labelText="On Time Delivery" name="onTimeDelivery" id="onTimeDelivery" required
+                            onChange={(e)=>{ this.setState({onTimeDelivery:e.target.value})}}
+                            formControlProps={{
+                              fullWidth:true
+                            }} 
+                            value={this.state.onTimeDelivery}
+                            inputProps={{margin:"normal",  id:"onTimeDelivery"}}>
+                                {[...Array(7)].map((x, i) =>
+                                  <MenuItem key={i} value={i+1} >
+                                  {i+1}
+                                  </MenuItem>
+                                )}
+                      </CustomSelect>
+                    </GridItem>
+                    <GridItem xs={12} sm={4} md={4}>
+                      <CustomSelect labelText="Ability to meet RFQ response time" name="meetRfqResponseTime" id="meetRfqResponseTime" required
+                            onChange={(e)=>{ this.setState({meetRfqResponseTime:e.target.value})}}
+                            formControlProps={{
+                              fullWidth:true 
+                            }} 
+                            value={this.state.meetRfqResponseTime}
+                            inputProps={{margin:"normal",  id:"meetRfqResponseTime" }}>
+                                {[...Array(7)].map((x, i) =>
+                                  <MenuItem key={i} value={i+1} >
+                                  {i+1}
+                                  </MenuItem>
+                                )}
+                                  
+                                ))}
+                      </CustomSelect>    
+                    </GridItem>  
+                    <GridItem xs={12} sm={4} md={4}>
+                      <CustomSelect labelText="Adaptiveness" name="adaptiveness" id="adaptiveness" required
+                            onChange={(e)=>{ this.setState({adaptiveness:e.target.value})}}
+                            formControlProps={{
+                              fullWidth:true    
+                            }} 
+                            value={this.state.adaptiveness}
+                            inputProps={{margin:"normal",  id:"adaptiveness" }}>
+                                {[...Array(7)].map((x, i) =>
+                                  <MenuItem key={i} value={i+1} >
+                                  {i+1}
+                                  </MenuItem>
+                                )}
+                                  
+                                ))}
+                      </CustomSelect>                    
+                    </GridItem>        
+                  </Grid> :
+                  <table>
+                      <thead>
+                        <tr>
+                          <th>Meets Quality</th>
+                          <th>Meets Define Specification</th>
+                          <th>Meet RFQ Response Time</th>
+                          <th>On-Time Delivery</th>
+                          <th>Adaptiveness</th>
+                          <th>Avg</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>
+                            {this.state.vendorRating.meetQuality}
+                          </td>
+                          <td>
+                            {this.state.vendorRating.meetDefineSpecification}
+                          </td>
+                          <td>
+                            {this.state.vendorRating.meetRfqResponseTime}
+                          </td>
+                          <td>{this.state.vendorRating.onTimeDelivery}</td>
+                          <td>{this.state.vendorRating.adaptiveness}</td>
+                          <td>{this.state.vendorRating.avg}</td>
+                        </tr>
+                      </tbody>
+                  </table>
                   }
-                  label="Ontime Delivery"
-                />
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={this.state.rfqTime}
-                      onChange={()=>{ this.setState({rfqTime:!this.state.rfqTime})}} 
-                      value={this.state.rfqTime}
-                    />
-                  }
-                  label="Ability to meet RFG response time"
-                />
-                  </FormGroup>
-                  <br />
-                  <select
-                    id="accepted"
-                    name="accepted"
-                    required
-                    className={this.props.classes.select}
-                    onChange={this.handleChangeSelect}
-                  >
-                    <option
-                      value=""
-                      disabled
-                      defaultValue
-                      className={this.props.classes.option}
-                    >
-                      Accept/Reject
-                    </option>
-                    {yesNo.map(option => (
-                      <option
-                        value={option.value}
-                        key={option.value}
-                        className={this.props.classes.option}
-                      >
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
-                  {this.rejectionInputField(this.state.accepted)}
+                  <Grid container>
+                    <GridItem xs={12} sm={3} md={3}>
+                      <select
+                        id="accepted"
+                        name="accepted"
+                        required
+                        className={this.props.classes.select}
+                        onChange={this.handleChangeSelect}>
+                        <option
+                          value=""
+                          disabled
+                          defaultValue
+                          className={this.props.classes.option}>
+                          Accept/Reject
+                        </option>
+                          {yesNo.map(option => (
+                            <option
+                              value={option.value}
+                              key={option.value}
+                              className={this.props.classes.option}>
+                                {option.label}
+                            </option>
+                          ))}
+                    </select>
+                    </GridItem>
+                    <GridItem xs={12} sm={9} md={9}>
+                      {this.rejectionInputField(this.state.accepted)}
+                    </GridItem>
+                  </Grid>
                 </CardBody>
                 <CardFooter>
-                
                   <Button color="yellowgreen" onClick={this.submitAccepted}>
                     submit
                   </Button>
