@@ -39,9 +39,9 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import CustomSelect from "components/CustomInput/CustomSelect.jsx";
 import MenuItem from "@material-ui/core/MenuItem";
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
+import FormGroup from "@material-ui/core/FormGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
 import sweetAlertStyle from "assets/jss/material-dashboard-pro-react/views/sweetAlertStyle.jsx";
 import * as Uom from "utility/Uom";
 
@@ -173,7 +173,8 @@ const styles = {
     position: "fixed",
     top: "50%",
     left: "50%",
-    transform: "translate(-50%, -50%)"
+    transform: "translate(-50%, -50%)",
+    outline: "none"
   }
 };
 const yesNo = [
@@ -213,6 +214,9 @@ class Quote extends React.Component {
     });
   };
   submitAccepted = () => {
+    const vendorEmail = this.props.quotes.map(prop => {
+      return prop.vendor.general_info.contact_email;
+    });
     const data = {};
     data.accepted = this.state.accepted;
     data.id = this.props.quotes[0]._id;
@@ -222,10 +226,11 @@ class Quote extends React.Component {
     data.onTimeDelivery = this.state.onTimeDelivery;
     data.adaptiveness = this.state.adaptiveness;
     data.rejection_reason = this.state.rejection_reason;
-    rfqActions.submitAcceptQuote(this.props.user.token, data, (result) => {
-        if(result){
-          alert("Quote updated");
-        }
+    data.vendorEmail = vendorEmail;
+    rfqActions.submitAcceptQuote(this.props.user.token, data, result => {
+      if (result) {
+        alert("Quote updated");
+      }
     });
   };
 
@@ -247,11 +252,17 @@ class Quote extends React.Component {
     }
   };
 
-  showQuoteDetails = (key) => {
+  showQuoteDetails = key => {
     this.props.quotes.map((prop, k) => {
-      if(key == k){
-        this.setState({ open: true, openkey:key, meetQuality:prop.meetQuality,
-        meetSpec:prop.meetSpec, onTime:prop.onTime, rfqTime:prop.rfqTime });
+      if (key == k) {
+        this.setState({
+          open: true,
+          openkey: key,
+          meetQuality: prop.meetQuality,
+          meetSpec: prop.meetSpec,
+          onTime: prop.onTime,
+          rfqTime: prop.rfqTime
+        });
       }
     });
     vendorActions.getVendorEvaluation(this.props.user.token, this.props.quotes[0].vendor._id, (result)=>{
@@ -259,44 +270,48 @@ class Quote extends React.Component {
     })
   };
 
+  /*  componentDidUpdate(prevProps) {
+    if (this.props.quotes.length !== prevProps.quotes.length) {
+      console.log(this.props.quotes);
+    }
+  } */
+
   render() {
     const { classes } = this.props;
     let mappedData = this.props.quotes.map((prop, key) => {
       const dt = new Date(prop.created);
       const status = Status.getStatus(prop.status);
-      let tableBody = ""
-       tableBody= prop.lineitems.map((prop,k) => {
+      let tableBody = "";
+      tableBody = prop.lineitems.map((prop, k) => {
         const uom = Uom.getUom(prop.uom);
-        let d = (prop.availableDate)? new Date(prop.availableDate): new Date();
-         return <TableRow key={k}>
+        let d = prop.availableDate ? new Date(prop.availableDate) : new Date();
+        return (
+          <TableRow key={k}>
             <TableCell className={classes.td}>
-              {(prop.description)? prop.description: prop.itemdescription}
+              {prop.description ? prop.description : prop.itemdescription}
             </TableCell>
+            <TableCell className={classes.td}>{prop.quantity}</TableCell>
+            <TableCell className={classes.td}>{uom.name}</TableCell>
+            <TableCell className={classes.td}>{prop.price}</TableCell>
             <TableCell className={classes.td}>
-              {prop.quantity}
-            </TableCell>
-            <TableCell className={classes.td}>
-              {uom.name}
-            </TableCell>
-            <TableCell className={classes.td}>
-              {prop.price}
-            </TableCell>
-            <TableCell className={classes.td}>
-              {
-                (prop.availability === true)?
-                  "In Stock"
-                :
-                "Out of Stock till - "+d.toISOString().split("T")[0]
-                }
+              {prop.availability === true
+                ? "In Stock"
+                : "Out of Stock till - " + d.toISOString().split("T")[0]}
             </TableCell>
           </TableRow>
-      })
+        );
+      });
       return [
         prop.no,
         prop.vendor.general_info.company_name,
         dt.toISOString().split("T")[0],
         status,
-        <Button color="yellowgreen" onClick={()=>{this.showQuoteDetails(key)}}>
+        <Button
+          color="yellowgreen"
+          onClick={() => {
+            this.showQuoteDetails(key);
+          }}
+        >
           View
         </Button>,
         (this.state.openkey==key)?

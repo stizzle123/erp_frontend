@@ -57,6 +57,7 @@ class Pdf extends Component {
 
   render() {
     const { classes, data } = this.props;
+    const numberWords = require('number-words');
     const tableData = this.state.items.map( (prop , key) => {
       return (
         <tr>
@@ -69,6 +70,11 @@ class Pdf extends Component {
         </tr>
       );
     });
+    const amountInWord = this.state.items.map( (prop) => {
+      return  numberWords.convert(prop.quantity*prop.price)
+    });
+   
+
     return (
       <div
         style={{
@@ -234,20 +240,16 @@ class Pdf extends Component {
                 <div style={{ clear: "right" }}>
                   <br />
                   <p>
-                    <strong>Amount In words: </strong> Fifty Three Thousand Four
-                    Hundred And Forty Five US Dollars Only
+                    <strong>Amount In words: </strong> {amountInWord}
                   </p>
                 </div>
               </div>
               <div>
                 <p style={generalStyle.POtitle2}>Additional Terms:</p>
 
-                <p>
-                  Total order value excludes VAT which is remitted directly to
-                  FIRS.
-                  <br /> This purchase order is subject to the Terms and
-                  Conditions as attached.
-                </p>
+                <span>
+                  {this.state.po.additional_terms}
+                </span>
 
                 <p>Credit Terms: 5 days upon receipt of payment from Chevron</p>
                 <div style={generalStyle.divider} />
@@ -378,7 +380,7 @@ class Pdf extends Component {
                   <p>
                     <strong>
                       Address: RusselSmith Nigeria Ltd. Cheryn’s Place, 3 Swiss
-                      Trade Drive, Ikota Lekki, Lagos{" "}
+                      Trade Drive, Ikota Lekki, Lagos
                     </strong>
                   </p>
                 </div>
