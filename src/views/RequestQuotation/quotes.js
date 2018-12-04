@@ -524,19 +524,15 @@ class Quote extends React.Component {
                   }
                   <Grid container>
                     <GridItem xs={12} sm={3} md={3}>
+                    <label>Accept or Reject</label>
                       <select
                         id="accepted"
                         name="accepted"
                         required
+                        labelText="Accept / Reject" 
                         className={this.props.classes.select}
                         onChange={this.handleChangeSelect}>
-                        <option
-                          value=""
-                          disabled
-                          defaultValue
-                          className={this.props.classes.option}>
-                          Accept/Reject
-                        </option>
+                        
                           {yesNo.map(option => (
                             <option
                               value={option.value}

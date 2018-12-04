@@ -180,7 +180,7 @@ class Index extends React.Component {
           .map((prop, key) => {
             const date = new Date(prop.created);
             return (
-              <div
+              <a
                 className={this.props.classes.boxRow + "  " + (this.state.active === key ? 'active' : '')}
                 onClick={() => this.fetchQuotes(prop)}
               >
@@ -190,7 +190,7 @@ class Index extends React.Component {
                 <div className={this.props.classes.box}>
                   {date.toISOString().split("T")[0]}
                 </div>
-              </div>
+              </a>
             );
           });
 
@@ -203,7 +203,7 @@ class Index extends React.Component {
           .map((prop, key) => {
             const date = new Date(prop.created);
             return (
-              <div
+              <a
                 className={this.props.classes.boxRow + "  " + (this.state.active === key ? 'active' : '')}
                 onClick={() => this.fetchQuotes(prop)}
               >
@@ -213,7 +213,7 @@ class Index extends React.Component {
                 <div className={this.props.classes.box}>
                   {date.toISOString().split("T")[0]}
                 </div>
-              </div>
+              </a>
             );
           });
         return mappedData;
@@ -225,7 +225,7 @@ class Index extends React.Component {
           .map((prop, key) => {
             const date = new Date(prop.created);
             return (
-              <div
+              <a
                 className={this.props.classes.boxRow + "  " + (this.state.active === key ? 'active' : '')}
                 onClick={() => this.fetchQuotes(prop)}
               >
@@ -235,7 +235,7 @@ class Index extends React.Component {
                 <div className={this.props.classes.box}>
                   {date.toISOString().split("T")[0]}
                 </div>
-              </div>
+              </a>
             );
           });
         return mappedData;
@@ -244,7 +244,7 @@ class Index extends React.Component {
         const mappedData = this.state.data.map((prop, key) => {
           const date = new Date(prop.created);
           return (
-            <div
+            <a
               className={this.props.classes.boxRow + "  " + (this.state.active === key ? 'active' : '')}
                onClick={()=> {
                           this.fetchQuotes(prop);
@@ -255,7 +255,7 @@ class Index extends React.Component {
               <div className={this.props.classes.box}>
                 {date.toISOString().split("T")[0]}
               </div>
-            </div>
+            </a>
           );
         });
         return mappedData;
