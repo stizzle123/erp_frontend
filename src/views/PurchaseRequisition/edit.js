@@ -376,7 +376,7 @@ class Edit extends React.Component {
                         }}
                     inputProps={{ 
                       disabled: true,
-                      value:"Required: "+ this.props.user.firstname +" "+ this.props.user.lastname                 
+                      value:"Required: "+ this.state.data.requestor.firstname +" "+ this.state.data.requestor.lastname                 
                         }}
                       />
                   </GridItem>
@@ -385,7 +385,7 @@ class Edit extends React.Component {
                         formControlProps={{
                           fullWidth: true
                         }} inputProps={{
-                          disabled: true, value: "Employee ID: " +this.props.user.eid                
+                          disabled: true, value: "Employee ID: " +this.state.data.requestor.eid                
                         }}
                       />
                   </GridItem>   

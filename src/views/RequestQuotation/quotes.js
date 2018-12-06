@@ -220,11 +220,11 @@ class Quote extends React.Component {
     const data = {};
     data.accepted = this.state.accepted;
     data.id = this.props.quotes[0]._id;
-    data.meetDefineSpecification = this.state.meetDefineSpecification;
+/*     data.meetDefineSpecification = this.state.meetDefineSpecification;
     data.meetQuality = this.state.meetQuality;
     data.meetRfqResponseTime = this.state.meetRfqResponseTime;
     data.onTimeDelivery = this.state.onTimeDelivery;
-    data.adaptiveness = this.state.adaptiveness;
+    data.adaptiveness = this.state.adaptiveness; */
     data.rejection_reason = this.state.rejection_reason;
     data.vendorEmail = vendorEmail;
     rfqActions.submitAcceptQuote(this.props.user.token, data, result => {
@@ -257,17 +257,13 @@ class Quote extends React.Component {
       if (key == k) {
         this.setState({
           open: true,
-          openkey: key,
-          meetQuality: prop.meetQuality,
-          meetSpec: prop.meetSpec,
-          onTime: prop.onTime,
-          rfqTime: prop.rfqTime
+          openkey: key
         });
       }
     });
-    vendorActions.getVendorEvaluation(this.props.user.token, this.props.quotes[0].vendor._id, (result)=>{
+  /*   vendorActions.getVendorEvaluation(this.props.user.token, this.props.quotes[0].vendor._id, (result)=>{
       this.setState({vendorRating: result});
-    })
+    }) */
   };
 
   /*  componentDidUpdate(prevProps) {
@@ -406,122 +402,6 @@ class Quote extends React.Component {
                     </TableBody>
                   </TableCore>
                   <br />
-                  {
-                    (!this.state.vendorRating.meetQuality || !this.state.vendorRating.meetDefineSpecification || !this.state.vendorRating.meetRfqResponseTime || !this.state.vendorRating.onTimeDelivery)?
-                  <Grid container>
-                    <GridItem xs={12} sm={4} md={4}>
-                      <CustomSelect labelText="Meets Quality" name="meetQuality" id="meetQuality" required
-                            onChange={(e)=>{ this.setState({meetQuality:e.target.value})}}
-                            formControlProps={{
-                              fullWidth:true    
-                            }} 
-                            value={this.state.meetQuality}
-                            inputProps={{margin:"normal",  id:"meetQuality" }}>
-                                {[...Array(7)].map((x, i) =>
-                                  <MenuItem key={i} value={i+1} >
-                                  {i+1}
-                                  </MenuItem>
-                                )}
-                                  
-                                ))}
-                      </CustomSelect>                    
-                    </GridItem>
-                    <GridItem xs={12} sm={4} md={4}>
-                      <CustomSelect labelText="Meets Define Specification" name="meetDefineSpecification" id="meetDefineSpecification" required
-                            onChange={(e)=>{ this.setState({meetDefineSpecification:e.target.value})}}
-                            formControlProps={{
-                              fullWidth:true       
-                            }} 
-                            value={this.state.meetDefineSpecification}
-                            inputProps={{margin:"normal",  id:"meetDefineSpecification" }}>
-                                {[...Array(7)].map((x, i) =>
-                                  <MenuItem key={i} value={i+1} >
-                                  {i+1}
-                                  </MenuItem>
-                                )}
-                                  
-                                ))}
-                      </CustomSelect>                    
-                    </GridItem>
-                    <GridItem xs={12} sm={4} md={4}>
-                      <CustomSelect labelText="On Time Delivery" name="onTimeDelivery" id="onTimeDelivery" required
-                            onChange={(e)=>{ this.setState({onTimeDelivery:e.target.value})}}
-                            formControlProps={{
-                              fullWidth:true
-                            }} 
-                            value={this.state.onTimeDelivery}
-                            inputProps={{margin:"normal",  id:"onTimeDelivery"}}>
-                                {[...Array(7)].map((x, i) =>
-                                  <MenuItem key={i} value={i+1} >
-                                  {i+1}
-                                  </MenuItem>
-                                )}
-                      </CustomSelect>
-                    </GridItem>
-                    <GridItem xs={12} sm={4} md={4}>
-                      <CustomSelect labelText="Ability to meet RFQ response time" name="meetRfqResponseTime" id="meetRfqResponseTime" required
-                            onChange={(e)=>{ this.setState({meetRfqResponseTime:e.target.value})}}
-                            formControlProps={{
-                              fullWidth:true 
-                            }} 
-                            value={this.state.meetRfqResponseTime}
-                            inputProps={{margin:"normal",  id:"meetRfqResponseTime" }}>
-                                {[...Array(7)].map((x, i) =>
-                                  <MenuItem key={i} value={i+1} >
-                                  {i+1}
-                                  </MenuItem>
-                                )}
-                                  
-                                ))}
-                      </CustomSelect>    
-                    </GridItem>  
-                    <GridItem xs={12} sm={4} md={4}>
-                      <CustomSelect labelText="Adaptiveness" name="adaptiveness" id="adaptiveness" required
-                            onChange={(e)=>{ this.setState({adaptiveness:e.target.value})}}
-                            formControlProps={{
-                              fullWidth:true    
-                            }} 
-                            value={this.state.adaptiveness}
-                            inputProps={{margin:"normal",  id:"adaptiveness" }}>
-                                {[...Array(7)].map((x, i) =>
-                                  <MenuItem key={i} value={i+1} >
-                                  {i+1}
-                                  </MenuItem>
-                                )}
-                                  
-                                ))}
-                      </CustomSelect>                    
-                    </GridItem>        
-                  </Grid> :
-                  <table>
-                      <thead>
-                        <tr>
-                          <th>Meets Quality</th>
-                          <th>Meets Define Specification</th>
-                          <th>Meet RFQ Response Time</th>
-                          <th>On-Time Delivery</th>
-                          <th>Adaptiveness</th>
-                          <th>Avg</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>
-                            {this.state.vendorRating.meetQuality}
-                          </td>
-                          <td>
-                            {this.state.vendorRating.meetDefineSpecification}
-                          </td>
-                          <td>
-                            {this.state.vendorRating.meetRfqResponseTime}
-                          </td>
-                          <td>{this.state.vendorRating.onTimeDelivery}</td>
-                          <td>{this.state.vendorRating.adaptiveness}</td>
-                          <td>{this.state.vendorRating.avg}</td>
-                        </tr>
-                      </tbody>
-                  </table>
-                  }
                   <Grid container>
                     <GridItem xs={12} sm={3} md={3}>
                       <select

@@ -260,9 +260,9 @@ class View extends React.Component {
           <TableCell className={classes.td}>{prop.description}</TableCell>
           <TableCell className={classes.td}>{prop.quantity}</TableCell>
           <TableCell className={classes.td}>{uom.name}</TableCell>
-          <TableCell className={classes.td}>{prop.price}</TableCell>
+          <TableCell className={classes.td}>{prop.price/100}</TableCell>
           <TableCell className={classes.td}>
-            {prop.price * prop.quantity}
+            {(prop.price * prop.quantity)/100}
           </TableCell>
         </TableRow>
       );

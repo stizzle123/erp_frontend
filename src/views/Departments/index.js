@@ -92,7 +92,7 @@ class Index extends React.Component {
   }
 
   handleChangeSelect = e => {
-    this.validate(event.target.id, event.target.value);
+    this.validate(e.target.id, e.target.value);
     let data = this.state.data;
     data[[e.target.name]] = e.target.value;
     this.setState({
@@ -110,7 +110,7 @@ class Index extends React.Component {
     departmentAction.findDepartmentById(this.props, this.props.match.params.id,(json)=>{
       this.setState({data: json[0]})
     });
-    userAction.findOnlyStaff(this.props, (json)=>{
+    userAction.findAllStaff(this.props, (json)=>{
         this.setState({users:json});
     });
   }
@@ -192,9 +192,7 @@ class Index extends React.Component {
                       />
                     </GridItem>
                     <GridItem xs={12} sm={12} md={6}>
-                      <CustomSelect
-                        labelText="Staff"
-                        name="hod"
+                      <CustomSelect labelText="Staff" name="hod" id="hod" 
                         required
                         value={this.state.data.hod}
                         onChange={e => this.handleChangeSelect(e)}
@@ -202,7 +200,8 @@ class Index extends React.Component {
                           fullWidth: true
                         }}
                         inputProps={{
-                          margin: "normal"
+                          margin: "normal",
+                          id: "hod"
                         }}
                       >
                         {this.state.users.map(function(data, key) {
