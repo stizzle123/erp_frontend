@@ -31,6 +31,7 @@ import * as genericActions from "actions/generic.js";
 import * as Uom from "../../utility/Uom";
 import moment from "moment";
 import Notification from "views/Notifications/Index.jsx";
+import Clear from "@material-ui/icons/Clear";
 
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -106,18 +107,27 @@ class PurchaseRequisition extends React.Component {
 
   increaseRow = event => {
     let rowArray = this.state.rowArray;
+    let lineItemsError = this.state.error.lineitems;
     rowArray.push(Date.now());
-    this.setState({ rowArray: rowArray });
+    let error = this.state.error;
+    lineItemsError.push(this.computeLineItemError());
+    error.lineitems = lineItemsError;
+    this.setState({ rowArray: rowArray, error });
   };
 
   removeRow = i => event => {
+    debugger;
     let rowArray = this.state.rowArray;
+    let lineItemsError = this.state.error.lineitems;
+    lineItemsError.splice(i, 1);
+    let error = this.state.error;
+    error.lineitems = lineItemsError;
+    this.setState({error});
     rowArray.splice(i, 1);
-    this.setState({ rowArray: rowArray });
+    this.setState({ rowArray});
   };
 
   handleLineItemChange = i => event => {
-    debugger
     let lineItems = this.state.lineItems;
     let lineItemsError = this.state.error.lineitems;
     let lineItemsKey;
@@ -159,6 +169,34 @@ class PurchaseRequisition extends React.Component {
     let data = this.state.data;
     data.lineitems = this.state.lineItems;
     data.status = "01";
+    let error = false;
+    let lineItemsError = this.state.error.lineitems;
+    this.state.lineItems.map((e,i)=>{
+      debugger
+      let lineItemsKeyError=lineItemsError[i];
+      if(!e.itemdescription){
+        lineItemsKeyError['itemdescription'] = true
+        error = true;
+      }
+      if(!e.category){
+        lineItemsKeyError['category'] = true
+        error = true;        
+      }
+      if(!e.quantity){
+        lineItemsKeyError['quantity'] = true
+        error = true;         
+      }
+      if(!e.uom){
+        lineItemsKeyError['uom'] = true
+        error = true;           
+      }
+      lineItemsError[i] = lineItemsKeyError;
+    });
+    if(error){
+      let error = this.state.error ;
+      error.lineitems = lineItemsError;
+      return;
+    }
     debugger
     return;
     prActions.submitRequisition(this.props.user.token, data, isOk => {
@@ -183,6 +221,15 @@ class PurchaseRequisition extends React.Component {
     });
   };
 
+  computeLineItemError = ()=>{
+    let itemsError = {};
+    itemsError.category="";
+    itemsError.itemdescription="";
+    itemsError.uom = "";
+    itemsError.quantity = "";
+    return itemsError;
+  }
+
   componentDidMount() {
     let data = this.state.data;
     data.requestor = this.props.user._id;
@@ -190,11 +237,7 @@ class PurchaseRequisition extends React.Component {
     data.eid = this.props.user.eid;
     let lineitemsError =[];
     this.state.rowArray.map((i)=>{
-      let itemsError = {};
-      itemsError.category="";
-      itemsError.itemdescription="";
-      itemsError.uom = "";
-      itemsError.quantity = "";
+      const itemsError = this.computeLineItemError();
       lineitemsError.push(itemsError);
     })
     let error = {lineitems:lineitemsError}
@@ -205,7 +248,6 @@ class PurchaseRequisition extends React.Component {
     genericActions.fetchAll("expenseheader", this.props.user.token, items => {
       this.setState({ expenseheaders: items });
     });
-    debugger
   }
 
   render() {
@@ -242,7 +284,7 @@ class PurchaseRequisition extends React.Component {
               textAlign: "center"
             }}
           >
-            {key + 1}
+            <Clear className={classes.feedback + " " + classes.labelRootError} onClick={this.removeRow(key)}/> {key + 1} 
           </TableCell>
           <TableCell style={generalStyle.removeBorder}>
             <CustomSelect
@@ -251,6 +293,7 @@ class PurchaseRequisition extends React.Component {
               name="category"
               required
               onChange={this.handleLineItemChange(key)}
+              onBlur={this.handleLineItemChange(key)}
               value={value.category}
               error={(error.category)? true: false}
               formControlProps={{
@@ -277,6 +320,7 @@ class PurchaseRequisition extends React.Component {
               inputProps={{
                 name: "itemdescription",
                 onChange: this.handleLineItemChange(key),
+                onBlur: this.handleLineItemChange(key),
                 value: value.itemdescription
               }}
             />
@@ -293,6 +337,7 @@ class PurchaseRequisition extends React.Component {
               inputProps={{
                 name: "quantity",
                 onChange: this.handleLineItemChange(key),
+                onBlur: this.handleLineItemChange(key),
                 value: value.quantity
               }}
             />
@@ -304,6 +349,7 @@ class PurchaseRequisition extends React.Component {
               name="uom"
               required
               onChange={this.handleLineItemChange(key)}
+              onBlur={this.handleLineItemChange(key)}
               value={value.uom}
               formControlProps={{
                 style: { width: "130px", padding: "0", margin: "0" }
