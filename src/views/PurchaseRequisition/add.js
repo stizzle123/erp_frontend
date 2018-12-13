@@ -66,7 +66,7 @@ class PurchaseRequisition extends React.Component {
     simpleSelect: "",
     type: "",
     expenseheaders: [],
-    rowArray: [1, 2],
+    rowArray: [1],
     data: {
       type: "",
       requestedby: "",
@@ -81,7 +81,8 @@ class PurchaseRequisition extends React.Component {
     lineItems: [],
     startDate: moment(),
     departments: [],
-    error: {lineitems:[]}
+    error: {lineitems:[]},
+    errorState: false
   };
 
   handleChange = event => {
@@ -108,23 +109,25 @@ class PurchaseRequisition extends React.Component {
   increaseRow = event => {
     let rowArray = this.state.rowArray;
     let lineItemsError = this.state.error.lineitems;
+    let lineItems = this.state.lineItems;
     rowArray.push(Date.now());
+    lineItems.push({itemdescription:"",category:"", quantity:"", uom:"" })
     let error = this.state.error;
     lineItemsError.push(this.computeLineItemError());
     error.lineitems = lineItemsError;
-    this.setState({ rowArray: rowArray, error });
+    this.setState({ rowArray, error , lineItems});
   };
 
   removeRow = i => event => {
-    debugger;
     let rowArray = this.state.rowArray;
     let lineItemsError = this.state.error.lineitems;
+    let lineItems = this.state.lineItems;
     lineItemsError.splice(i, 1);
+    lineItems.splice(i,1);
     let error = this.state.error;
     error.lineitems = lineItemsError;
-    this.setState({error});
     rowArray.splice(i, 1);
-    this.setState({ rowArray});
+    this.setState({ rowArray,error,lineItems});
   };
 
   handleLineItemChange = i => event => {
@@ -165,14 +168,13 @@ class PurchaseRequisition extends React.Component {
     this.setState({ data: data });
   };
 
-  handleSubmitForm = e => {
-    let data = this.state.data;
-    data.lineitems = this.state.lineItems;
-    data.status = "01";
+  formHasError = e =>{
     let error = false;
     let lineItemsError = this.state.error.lineitems;
+    if(this.state.lineItems.length < 1){
+      error = true;
+    }
     this.state.lineItems.map((e,i)=>{
-      debugger
       let lineItemsKeyError=lineItemsError[i];
       if(!e.itemdescription){
         lineItemsKeyError['itemdescription'] = true
@@ -192,21 +194,41 @@ class PurchaseRequisition extends React.Component {
       }
       lineItemsError[i] = lineItemsKeyError;
     });
-    if(error){
-      let error = this.state.error ;
-      error.lineitems = lineItemsError;
-      return;
+    let errorState = this.state.error ;
+    if(!this.state.data.dateneeded){
+      errorState.dateneeded = true;
+      error = true;  
+    }else if(!this.state.data.department){
+      errorState.department = true;
+      error = true;  
+    }else if(!this.state.data.shipvia){
+      errorState.shipvia = true;
+      error = true;  
+    }else if(!this.state.data.type){
+      errorState.type = true;
+      error = true;  
     }
-    debugger
-    return;
+
+    if(error){
+      errorState.lineitems = lineItemsError;
+      this.setState({error:errorState, showError:true, message:"Kindly fill all form fields"});
+    }
+    return error;
+  }
+
+  handleSubmitForm = e => {
+    let data = this.state.data;
+    data.lineitems = this.state.lineItems;
+    data.status = "01";
+    if(this.formHasError()) return;
     prActions.submitRequisition(this.props.user.token, data, isOk => {
       if (isOk) {
         this.setState({
           message: "Purchase requisition has been submitted.",
-          error: false
+          showError: false
         });
       } else{
-        this.setState({ message: "Error processing request.", error: true });
+        this.setState({ message: "Error processing request.", showError: true });
       }
     });
   };
@@ -251,6 +273,7 @@ class PurchaseRequisition extends React.Component {
   }
 
   render() {
+    console.log(this.state);
     const { classes, tableHeaderColor } = this.props;
     var today = new Date();
     var dd = today.getDate();
@@ -372,11 +395,14 @@ class PurchaseRequisition extends React.Component {
         </TableRow>
       );
     });
-
+    const error = (this.state.error)? this.state.error: {};
     return (
       <div>
         <Grid container>
-          <Notification error={this.state.error} message={this.state.message} />
+          {
+            (this.state.message)?
+              <Notification error={this.state.showError} message={this.state.message} /> : ""
+          }
           <GridItem xs={12} sm={12} md={12}>
             <form className={classes.container} noValidate autoComplete="off">
               <Card>
@@ -414,6 +440,7 @@ class PurchaseRequisition extends React.Component {
                             name: "simpleSelect",
                             id: "type"
                           }}
+                          error={(error.type)? true: false}
                         >
                           <MenuItem
                             disabled
@@ -500,6 +527,7 @@ class PurchaseRequisition extends React.Component {
                         formControlProps={{
                           style: { width: "130px", padding: "0", margin: "0" }
                         }}
+                        error={(error.department)? true: false}
                         value={this.state.data.department}
                         inputProps={{ margin: "normal" }}
                         style={{ marginTop: "-3px", borderBottomWidth: " 1px" }}
@@ -532,6 +560,7 @@ class PurchaseRequisition extends React.Component {
                         formControlProps={{
                           fullWidth: true
                         }}
+                        error={(error.dateneeded)? true: false}
                         onFocus={this.toggleCalendar}
                         inputProps={{
                           value: this.state.startDate.format("MM/DD/YYYY"),
@@ -567,6 +596,7 @@ class PurchaseRequisition extends React.Component {
                         name="shipvia"
                         required
                         onChange={e => this.handleSelectItem(e)}
+                        error={(error.shipvia)? true: false}
                         formControlProps={{
                           style: { width: "130px", padding: "0", margin: "0" }
                         }}

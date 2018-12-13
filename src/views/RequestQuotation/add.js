@@ -82,8 +82,10 @@ class Add extends React.Component {
       this.setState({departments : items});
     });
     vendorActions.searchVendor(this.props.user.token,"", (vendors)=>{
-      let options = vendors.map((v)=>{
-          return {value:v._id, label: v.general_info.company_name}
+      let options = vendors.filter((v)=>{
+          if(typeof v.general_info.company_name !== undefined){
+            return {value:v._id, label: v.general_info.company_name}
+          }
       })
       this.setState({options});
     })

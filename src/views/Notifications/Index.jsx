@@ -13,7 +13,6 @@ class Index extends React.Component {
     state ={tr:true}
     render() {
         const { classes } = this.props;
-        if(!this.props.message)return "";
         let color = (this.props.error)? "danger" : "info";
        return(
             <Snackbar
