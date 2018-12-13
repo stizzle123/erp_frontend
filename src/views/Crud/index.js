@@ -95,7 +95,7 @@ class ListCrud extends React.Component {
                   <Dvr />
                 </Link>
               ) : (
-                ""
+                <Link to={"/crud/edit/"+this.props.match.params.type +"/" + prop[0]}>edit</Link>
               )}
             </Button>
             <Button
@@ -127,7 +127,7 @@ class ListCrud extends React.Component {
             >
               <Close />
             </Button>
-            <Link to={"/crud/edit/"+this.props.match.params.type +"/" + prop[0]}>edit</Link>
+           
             {this.props.match.params.type == "roles" ? (
               <Link to={"/roles/permission/" + prop[0]}>Permission</Link>
             ) : (

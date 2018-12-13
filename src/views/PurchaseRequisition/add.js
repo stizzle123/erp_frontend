@@ -31,6 +31,7 @@ import * as genericActions from "actions/generic.js";
 import * as Uom from "../../utility/Uom";
 import moment from "moment";
 import Notification from "views/Notifications/Index.jsx";
+import Clear from "@material-ui/icons/Clear";
 
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -79,7 +80,8 @@ class PurchaseRequisition extends React.Component {
     },
     lineItems: [],
     startDate: moment(),
-    departments: []
+    departments: [],
+    error: {lineitems:[]}
   };
 
   handleChange = event => {
@@ -105,29 +107,39 @@ class PurchaseRequisition extends React.Component {
 
   increaseRow = event => {
     let rowArray = this.state.rowArray;
+    let lineItemsError = this.state.error.lineitems;
     rowArray.push(Date.now());
-    this.setState({ rowArray: rowArray });
+    let error = this.state.error;
+    lineItemsError.push(this.computeLineItemError());
+    error.lineitems = lineItemsError;
+    this.setState({ rowArray: rowArray, error });
   };
 
   removeRow = i => event => {
+    debugger;
     let rowArray = this.state.rowArray;
+    let lineItemsError = this.state.error.lineitems;
+    lineItemsError.splice(i, 1);
+    let error = this.state.error;
+    error.lineitems = lineItemsError;
+    this.setState({error});
     rowArray.splice(i, 1);
-    this.setState({ rowArray: rowArray });
+    this.setState({ rowArray});
   };
 
   handleLineItemChange = i => event => {
     let lineItems = this.state.lineItems;
+    let lineItemsError = this.state.error.lineitems;
     let lineItemsKey;
-    if (lineItems[i]) {
-      lineItemsKey = lineItems[i];
-    } else {
-      lineItemsKey = {};
-    }
+    let lineItemsKeyError=lineItemsError[i];
+    lineItemsKey = (lineItems[i])?lineItems[i]:{};
+    lineItemsKeyError[[event.target.name]] = (event.target.value)? false: true;
     lineItemsKey[[event.target.name]] = event.target.value;
     lineItems[i] = lineItemsKey;
-    this.setState({
-      lineItems: lineItems
-    });
+    lineItemsError[i] = lineItemsKeyError;
+    let error = this.state.error ;
+    error.lineitems = lineItemsError;
+    this.setState({lineItems, error});
   };
 
   handleSelectItem = event => {
@@ -157,14 +169,45 @@ class PurchaseRequisition extends React.Component {
     let data = this.state.data;
     data.lineitems = this.state.lineItems;
     data.status = "01";
+    let error = false;
+    let lineItemsError = this.state.error.lineitems;
+    this.state.lineItems.map((e,i)=>{
+      debugger
+      let lineItemsKeyError=lineItemsError[i];
+      if(!e.itemdescription){
+        lineItemsKeyError['itemdescription'] = true
+        error = true;
+      }
+      if(!e.category){
+        lineItemsKeyError['category'] = true
+        error = true;        
+      }
+      if(!e.quantity){
+        lineItemsKeyError['quantity'] = true
+        error = true;         
+      }
+      if(!e.uom){
+        lineItemsKeyError['uom'] = true
+        error = true;           
+      }
+      lineItemsError[i] = lineItemsKeyError;
+    });
+    if(error){
+      let error = this.state.error ;
+      error.lineitems = lineItemsError;
+      return;
+    }
+    debugger
+    return;
     prActions.submitRequisition(this.props.user.token, data, isOk => {
       if (isOk) {
         this.setState({
           message: "Purchase requisition has been submitted.",
           error: false
         });
-      } else
+      } else{
         this.setState({ message: "Error processing request.", error: true });
+      }
     });
   };
 
@@ -178,14 +221,27 @@ class PurchaseRequisition extends React.Component {
     });
   };
 
+  computeLineItemError = ()=>{
+    let itemsError = {};
+    itemsError.category="";
+    itemsError.itemdescription="";
+    itemsError.uom = "";
+    itemsError.quantity = "";
+    return itemsError;
+  }
+
   componentDidMount() {
     let data = this.state.data;
     data.requestor = this.props.user._id;
-    data.requestedby =
-      this.props.user.firstname + " " + this.props.user.lastname;
+    data.requestedby = this.props.user.firstname + " " + this.props.user.lastname;
     data.eid = this.props.user.eid;
-
-    this.setState({ data: data });
+    let lineitemsError =[];
+    this.state.rowArray.map((i)=>{
+      const itemsError = this.computeLineItemError();
+      lineitemsError.push(itemsError);
+    })
+    let error = {lineitems:lineitemsError}
+    this.setState({ data: data,error });
     genericActions.fetchAll("departments", this.props.user.token, items => {
       this.setState({ departments: items });
     });
@@ -216,6 +272,7 @@ class PurchaseRequisition extends React.Component {
       } else {
         value = {};
       }
+      const error = (this.state.error.lineitems[key])? this.state.error.lineitems[key]: {};
       return (
         <TableRow key={key}>
           <TableCell
@@ -227,7 +284,7 @@ class PurchaseRequisition extends React.Component {
               textAlign: "center"
             }}
           >
-            {key + 1}
+            <Clear className={classes.feedback + " " + classes.labelRootError} onClick={this.removeRow(key)}/> {key + 1} 
           </TableCell>
           <TableCell style={generalStyle.removeBorder}>
             <CustomSelect
@@ -236,7 +293,9 @@ class PurchaseRequisition extends React.Component {
               name="category"
               required
               onChange={this.handleLineItemChange(key)}
+              onBlur={this.handleLineItemChange(key)}
               value={value.category}
+              error={(error.category)? true: false}
               formControlProps={{
                 style: { width: "130px", padding: "0", margin: "0" }
               }}
@@ -257,9 +316,11 @@ class PurchaseRequisition extends React.Component {
               formControlProps={{
                 style: { width: "300px", padding: "0", margin: "0" }
               }}
+              error={(error.itemdescription)? true: false}
               inputProps={{
                 name: "itemdescription",
                 onChange: this.handleLineItemChange(key),
+                onBlur: this.handleLineItemChange(key),
                 value: value.itemdescription
               }}
             />
@@ -272,9 +333,11 @@ class PurchaseRequisition extends React.Component {
               formControlProps={{
                 style: { width: "100px", padding: "0", margin: "0" }
               }}
+              error={(error.quantity)? true: false}
               inputProps={{
                 name: "quantity",
                 onChange: this.handleLineItemChange(key),
+                onBlur: this.handleLineItemChange(key),
                 value: value.quantity
               }}
             />
@@ -286,10 +349,12 @@ class PurchaseRequisition extends React.Component {
               name="uom"
               required
               onChange={this.handleLineItemChange(key)}
+              onBlur={this.handleLineItemChange(key)}
               value={value.uom}
               formControlProps={{
                 style: { width: "130px", padding: "0", margin: "0" }
               }}
+              error={(error.uom)? true: false}
               inputProps={{
                 margin: "normal",
                 id: "uom",
@@ -629,25 +694,14 @@ class PurchaseRequisition extends React.Component {
                   </div>
                   <div style={generalStyle.mt3}>
                     <span>Add New Line</span>
-                    <Button
-                      justIcon
-                      round
-                      color="twitter"
-                      className={classes.marginRight}
-                      onClick={this.increaseRow}
-                    >
+                    <Button justIcon round color="twitter" className={classes.marginRight} onClick={this.increaseRow}>
                       <Add className={classes.icons} />
                     </Button>
                   </div>
                 </CardBody>
                 <CardFooter>
                   <Grid container>
-                    <GridItem
-                      xs={12}
-                      sm={6}
-                      md={2}
-                      additionalclass={classes.removeDivPadding}
-                    >
+                    <GridItem xs={12} sm={6} md={2} additionalclass={classes.removeDivPadding}>
                       <Button color="primary" onClick={this.handleSaveForm}>
                         Save
                       </Button>
