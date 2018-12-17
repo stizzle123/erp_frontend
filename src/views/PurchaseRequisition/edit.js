@@ -84,6 +84,7 @@ class Edit extends React.Component {
     departments: [],
     action: "",
     reason: "",
+    message: "",
     expenseheaders: [],
     disabled: true,
     department: {},
@@ -173,7 +174,10 @@ class Edit extends React.Component {
   };
   renderRedirect = () => {
     if (this.state.redirect == "yes") {
-      return <Redirect to="/requisition" />;
+      setTimeout(function () {
+      window.location.href = "/requisition";
+    }, 3000);
+
     }
   };
   submitUpdate = () => {
