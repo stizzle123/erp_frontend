@@ -15,6 +15,7 @@ class Index extends React.Component {
         const { classes } = this.props;
         let color = (this.props.error)? "danger" : "info";
        return(
+           (this.props.message)?
             <Snackbar
             place="tr"
             color={color}
@@ -23,6 +24,7 @@ class Index extends React.Component {
             closeNotification={() => this.setState({ tr: false })}
             close
           />
+          :""
         );
     }
 }
