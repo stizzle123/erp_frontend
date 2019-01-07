@@ -177,6 +177,7 @@ class Edit extends React.Component {
       setTimeout(function () {
       window.location.href = "/requisition";
     }, 3000);
+    
 
     }
   };
