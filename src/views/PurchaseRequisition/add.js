@@ -82,7 +82,8 @@ class PurchaseRequisition extends React.Component {
     startDate: moment(),
     departments: [],
     error: {lineitems:[]},
-    errorState: false
+    errorState: false,
+    message:""
   };
 
   handleChange = event => {
@@ -217,6 +218,7 @@ class PurchaseRequisition extends React.Component {
   }
 
   handleSubmitForm = e => {
+    this.setState({message:""})
     let data = this.state.data;
     data.lineitems = this.state.lineItems;
     data.status = "01";
@@ -227,6 +229,7 @@ class PurchaseRequisition extends React.Component {
           message: "Purchase requisition has been submitted.",
           showError: false
         });
+        this.props.history.push('/requisition');
       } else{
         this.setState({ message: "Error processing request.", showError: true });
       }
@@ -273,7 +276,6 @@ class PurchaseRequisition extends React.Component {
   }
 
   render() {
-    console.log(this.state);
     const { classes, tableHeaderColor } = this.props;
     var today = new Date();
     var dd = today.getDate();

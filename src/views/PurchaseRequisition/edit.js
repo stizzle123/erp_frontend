@@ -88,7 +88,8 @@ class Edit extends React.Component {
     expenseheaders: [],
     disabled: true,
     department: {},
-    redirect: ""
+    redirect: "",
+    message:""
   };
 
   handleAction = e => {
@@ -189,7 +190,10 @@ class Edit extends React.Component {
       this.state.data._id,
       data,
       isOk => {
-        if (isOk) this.setState({ message: message, error: false });
+        if (isOk){
+          this.setState({ message: message, error: false });
+          this.props.history.push('/requisition');
+        }
         else
           this.setState({ message: "Error processing request.", error: true });
       }
@@ -233,6 +237,8 @@ class Edit extends React.Component {
       const department = data.department;
       data.department = data.department._id;
       const disabled = data.status == "010" ? false : true;
+      let rowArray = [];
+      
       this.setState({ data, lineItems: data.lineitems, disabled, department });
     });
     genericActions.fetchAll("departments", this.props.user.token, items => {
@@ -259,13 +265,7 @@ class Edit extends React.Component {
     }
 
     today = mm + "/" + dd + "/" + yyyy;
-    const tableData = this.state.rowArray.map((prop, key) => {
-      let value;
-      if (this.state.lineItems[key]) {
-        value = this.state.lineItems[key];
-      } else {
-        value = {};
-      }
+    const tableData = this.state.lineItems.map((value, key) => {
       const uom = Uom.getUom(value.uom);
 
       return (

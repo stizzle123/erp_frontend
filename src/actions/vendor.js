@@ -44,6 +44,8 @@ export function findAllVendors(props, type=''){
         endpoint = endpoint+'/unapproved';
     }else if(type === "blacklisted"){
         endpoint = endpoint+'/blacklisted';
+    }else if(type === "new"){
+        endpoint += '/new';
     }
     props.dispatch(loadAction.Loading());
         return middleware.makeConnection(endpoint ,'GET').then((response) => response.json()).then((responseJson)=>{
