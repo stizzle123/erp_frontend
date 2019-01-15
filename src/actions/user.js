@@ -34,11 +34,29 @@ export function updateProfile(data, callback) {
 export function importUser(data, callback) {
   let middleware = new MiddleWare();
   middleware
-    .makeConnection("/users/import", "POST", data).then(res => {
+    .makeConnection("/users/import", "POST", data)
+    .then(res => {
       return res.json();
-    }).then(e => {
+    })
+    .then(e => {
       callback(e);
-    }).catch(e => {
+    })
+    .catch(e => {
+      console.log("the error" + e);
+    });
+}
+
+export function register(data, callback) {
+  let middleware = new MiddleWare();
+  middleware
+    .makeConnection("/users/register", "POST", data)
+    .then(res => {
+      return res.json();
+    })
+    .then(e => {
+      callback(e);
+    })
+    .catch(e => {
       console.log("the error" + e);
     });
 }
@@ -114,13 +132,16 @@ export function findAllStaff(props, callback) {
       callback(e);
     });
 }
-export function findManagers(token,callback){
+export function findManagers(token, callback) {
   let middleware = new MiddleWare(token);
-  middleware.makeConnection('/users/findmanagers/','GET').then((response) => {
-        return response.json();
-  }).then((e)=>{
-    callback(e);
-  })
+  middleware
+    .makeConnection("/users/findmanagers/", "GET")
+    .then(response => {
+      return response.json();
+    })
+    .then(e => {
+      callback(e);
+    });
 }
 
 export function findOnlyStaff(props, callback) {
