@@ -36,7 +36,7 @@ export function importUser(data, callback) {
   middleware
     .makeConnection("/users/import", "POST", data)
     .then(res => {
-      return res.json();
+      return res.json(); 
     })
     .then(e => {
       callback(e);

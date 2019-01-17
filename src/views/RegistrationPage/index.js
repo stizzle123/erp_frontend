@@ -185,7 +185,7 @@ class RegisterPage extends React.Component {
                           formControlProps={{
                             fullWidth: true,
                             className: classes.customFormControlClasses
-                          }}
+                          }} 
                           id="password"
                           inputProps={{
                             onChange: this.handleChange,
