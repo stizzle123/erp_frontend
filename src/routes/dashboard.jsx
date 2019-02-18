@@ -27,6 +27,7 @@ import VendorList from "../views/Vendor/index.js";
 import AddVendor from "../views/Vendor/add.js";
 import ViewVendor from "../views/Vendor/view.js";
 import RecievingAndInspection from "../views/RecievingAndInspection/index.js";
+import recievingProducts from "../views/RecievingAndInspection/view.js";
 import PurchaseOrder from "../views/PurchaseOrder/index.js";
 import PurchaseOrderAdd from "../views/PurchaseOrder/add.js";
 import PurchaseOrderView from "../views/PurchaseOrder/view.js";
@@ -135,6 +136,10 @@ export const dashboardRoutes = [
     path: "/recieving",
     component: RecievingAndInspection
   }, 
+  {
+    path: "/recieving/:id",
+    component: recievingProducts
+    },
   {
     path: "/order",
     component: PurchaseOrder

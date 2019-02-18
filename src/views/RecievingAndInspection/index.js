@@ -61,7 +61,7 @@ processJson(responseJson){
       actions: (
         // we've added some custom button actions
         <div className="actions-right">
-           <Link to={"/order/view/"+prop._id} >Recieving and Inspection Form</Link>
+           <Link to={"/recieving/"+prop._id} >Recieving and Inspection Form</Link>
         </div>
       )
     };
