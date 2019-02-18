@@ -37,18 +37,25 @@ import SnackbarContent from "components/Snackbar/SnackbarContent.jsx";
 import Typography from "@material-ui/core/Typography";
 import registerPageStyle from "assets/jss/material-dashboard-pro-react/views/registerPageStyle.jsx";
 import Notification from "views/Notifications/Index.jsx";
+import helpers from "../helpers";
 
 class RegisterPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       checked: [],
-      responseMessage: ""
+      responseMessage: "",
+      validationState: {
+        email: "",
+        password: "",
+        coy_name: ""
+      },
     };
     this.handleToggle = this.handleToggle.bind(this);
   }
 
   handleChange = event => {
+    this.validate(event.target.id, event.target.value);   
     this.setState({
       [[event.target.id]]: event.target.value,
       responseMessage: ""
@@ -68,8 +75,45 @@ class RegisterPage extends React.Component {
       checked: newChecked
     });
   }
+
+  validate = (type, value) => {
+    switch (type) {
+      case "coy_name":
+        const coy_name = helpers.isEmpty(value) ? false : true;
+        this.setState({
+          validationState: {
+            ...this.state.validationState,
+            coy_name
+          }
+        });
+        break;
+        case "email":
+        const email = helpers.isEmail(value) ? false : true;
+        this.setState({
+          validationState: {
+            ...this.state.validationState,
+            email
+          }
+        });
+        break;
+        case "password":
+        const password = helpers.isPassword(value) ? false : true;
+        this.setState({
+          validationState: {
+            ...this.state.validationState,
+            password
+          }
+        });
+        break;
+
+    }
+}   
   register = e => {
     e.preventDefault();
+   if (this.state.validationState.coy_name === this.state.validationState.email == this.state.validationState.password ==! false) {
+    this.setState({ showErrorNotice: true });
+    return;
+    }
     if (this.state.checked.length === 0) {
       this.setState({ showCheckNotice: true });
       return;
@@ -92,6 +136,10 @@ class RegisterPage extends React.Component {
       this.setState({ loading: false });
     });
   };
+  hideAlert() {
+    return window.location.href = 'login';
+    ;
+  }
   render() {
     const { classes } = this.props;
     if (this.state.alert) {
@@ -161,6 +209,16 @@ class RegisterPage extends React.Component {
                             ),
                             placeholder: "Company Name..."
                           }}
+                          error={
+                            this.state.validationState.coy_name === ""
+                              ? ""
+                              : this.state.validationState.coy_name
+                          }
+                          success={
+                            this.state.validationState.coy_name === ""
+                              ? ""
+                              : !this.state.validationState.coy_name
+                          }
                         />
                         <CustomInput
                           formControlProps={{
@@ -180,6 +238,16 @@ class RegisterPage extends React.Component {
                             ),
                             placeholder: "Email..."
                           }}
+                          error={
+                            this.state.validationState.email === ""
+                              ? ""
+                              : this.state.validationState.email
+                          }
+                          success={
+                            this.state.validationState.email === ""
+                              ? ""
+                              : !this.state.validationState.email
+                          }
                         />
                         <CustomInput
                           formControlProps={{
@@ -202,6 +270,16 @@ class RegisterPage extends React.Component {
                             ),
                             placeholder: "Password..."
                           }}
+                          error={
+                            this.state.validationState.password === ""
+                              ? ""
+                              : this.state.validationState.password
+                          }
+                          success={
+                            this.state.validationState.password === ""
+                              ? ""
+                              : !this.state.validationState.password
+                          }
                         />
                         {this.state.showCheckNotice ? (
                           <Typography
@@ -211,6 +289,18 @@ class RegisterPage extends React.Component {
                             align="center"
                           >
                             Kindly agree to the terms and condition
+                          </Typography>
+                        ) : (
+                          ""
+                        )}
+                         {this.state.showErrorNotice ? (
+                          <Typography
+                            variant="caption"
+                            color="secondary"
+                            gutterBottom
+                            align="center"
+                          >
+                           Please Enter valid Data
                           </Typography>
                         ) : (
                           ""
@@ -246,7 +336,7 @@ class RegisterPage extends React.Component {
                           </Link>
                         </GridItem>
                         <div className={classes.center}>
-                          <Button round color="primary" onClick={this.register}>
+                          <Button round color="primary" onClick={this.register} >
                             Get started
                           </Button>
                         </div>

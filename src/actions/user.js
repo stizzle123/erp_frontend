@@ -121,6 +121,18 @@ export function checktoken(token, callback) {
     });
 }
 
+export function confirmRegistration(token, callback) {
+  let middleware = new MiddleWare();
+  middleware
+    .makeConnection("/users/confirmregistration/" + token, "GET")
+    .then(response => {
+      return response.json();
+    })
+    .then(e => {
+      callback(e);
+    });
+}
+
 export function findAllStaff(props, callback) {
   let middleware = new MiddleWare(props.user.token);
   middleware

@@ -26,6 +26,7 @@ import EditUser from "../views/UserProfile/EditUser.jsx";
 import VendorList from "../views/Vendor/index.js";
 import AddVendor from "../views/Vendor/add.js";
 import ViewVendor from "../views/Vendor/view.js";
+import RecievingAndInspection from "../views/RecievingAndInspection/index.js";
 import PurchaseOrder from "../views/PurchaseOrder/index.js";
 import PurchaseOrderAdd from "../views/PurchaseOrder/add.js";
 import PurchaseOrderView from "../views/PurchaseOrder/view.js";
@@ -130,6 +131,10 @@ export const dashboardRoutes = [
     path: "/requisition",
     component: ListPurchaseRequisition
   },
+   {
+    path: "/recieving",
+    component: RecievingAndInspection
+  }, 
   {
     path: "/order",
     component: PurchaseOrder
@@ -264,6 +269,13 @@ export const AdminMenu = [
       mini: "PO",
       component: PurchaseOrder,
       actions: ['index','add', 'edit', 'delete', 'admin_view']
+    }, 
+    {
+      path: "/recieving",
+      name: "Recieving & Inspection",
+      mini: "RI",
+      component: RecievingAndInspection,
+      actions: ['index']
     }]
   },
   {

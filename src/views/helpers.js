@@ -9,6 +9,12 @@ isPhoneNumber: function(input) {
     let re = /^[0-9]+$/;
     return re.test(input);
   },
+  isPassword: function(input) {
+    let re = String(input)
+    if (re.length > 3) {
+      return true;
+    }
+  },
   isEmail: function(input) {
     let re = /\S+@\S+\.\S+/;
     return re.test(input);
