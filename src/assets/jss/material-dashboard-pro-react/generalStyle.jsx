@@ -241,6 +241,9 @@ const generalStyle = {
   space20: {
     height: "20px"
   },
+  space50: {
+    height: "50px"
+  },
   noPaddingMargin: {
     display: "block",
     padding: "0",
@@ -490,8 +493,24 @@ const generalStyle = {
     borderSpacing: "0",
     borderTop: "1px solid grey"
   },
-  wik1: {}
-  // tr:hover {background-color:#f5f5f5;}
+  wik1: {
+    height: "325px",
+    textAlign: "left"
+
+  },
+  wik2: {
+    width: "80%",
+    border: "1px solid rgb(204, 204, 204)",
+    padding: "7px",
+    height :" 50px"
+  },
+  wik3: {
+    width: "20%",
+    border: "1px solid rgb(204, 204, 204)",
+    padding: "7px",
+    height :" 50px"
+
+  },
 };
 
 export default generalStyle;
