@@ -24,9 +24,11 @@ import ListUsers from "../views/UserProfile/ListUsers.jsx";
 import AddUser from "../views/UserProfile/AddUser.jsx";
 import EditUser from "../views/UserProfile/EditUser.jsx";
 import VendorList from "../views/Vendor/index.js";
-import AddVendor from "../views/Vendor/add.js";
+import AddVendor from "../views/Vendor/add.js"; 
 import ViewVendor from "../views/Vendor/view.js";
 import RecievingAndInspection from "../views/RecievingAndInspection/index.js";
+import WorkCompletion from "../views/RecievingAndInspection/WorkCompletion.js";
+import RejectionLog from "../views/RecievingAndInspection/RejectionLog.js";
 import recievingView from "../views/RecievingAndInspection/view.js";
 import PurchaseOrder from "../views/PurchaseOrder/index.js";
 import PurchaseOrderAdd from "../views/PurchaseOrder/add.js";
@@ -140,6 +142,14 @@ export const dashboardRoutes = [
     path: "/recieving/:id",
     component: recievingView
     },
+    {
+      path: "/work/completion/:id",
+      component: WorkCompletion
+      },
+      {
+        path: "/rejection/log/:id",
+        component: RejectionLog
+        },
   {
     path: "/order",
     component: PurchaseOrder

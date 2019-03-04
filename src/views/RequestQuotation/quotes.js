@@ -478,13 +478,13 @@ class Quote extends React.Component {
             </li>
             <li className={classes.liStyle}>
               Delivery Mode: <br />
-              <span className={classes.ap}>Digital (Download)</span>
+              <span className={classes.ap}>{this.props.pr.shipvia}</span>
             </li>
             <li className={classes.liStyle}>
               Status:
               <br />
               <span className={classes.ap}>
-                {Status.getStatus(this.props.pr.status)}
+              {Status.getStatus(this.props.pr.status)}
               </span>
             </li>
           </ul>

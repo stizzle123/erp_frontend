@@ -504,7 +504,6 @@ class Edit extends React.Component {
                       <CustomInput
                         labelText="Charge To"
                         id="chargeto"
-                        required
                         formControlProps={{
                           fullWidth: true
                         }}

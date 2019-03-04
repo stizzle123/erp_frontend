@@ -56,13 +56,14 @@ class Add extends React.Component {
       creditterms: "",
       grand_total: 0,
       vat: 5,
-      lineitems: []
+      lineitems: [],
     },
     vendors: [],
     quotes: [],
     table_data: [],
     checkeditems: [],
     locations: [],
+    types: [],
     address: "",
     checkeditemsprice:{},
     cummulativeprice: 0,
@@ -80,6 +81,7 @@ class Add extends React.Component {
   handleSubmit = event => {
     let data = this.state.data;
     data.lineitems = this.state.checkeditems;
+    data.types = this.state.types;
     poActions.submitPO(this.props.user.token, data, isOk => {
       if (isOk) {
         this.setState({
@@ -94,19 +96,22 @@ class Add extends React.Component {
     });
   };
 
-  handleCheckedItems = i => {
+  handleCheckedItems = (i, k) => {
     let checkeditems = this.state.checkeditems;
+    let types = this.state.types;
     let index = checkeditems.indexOf(i);
     let cummulativeprice = 0;
     if(index > -1){
       checkeditems.splice(index, 1);
+      types.splice(index, 1);
       cummulativeprice  = this.state.cummulativeprice - parseInt(this.state.checkeditemsprice[i]);
     }else{
       checkeditems.push(i);
+      types.push(k);
       cummulativeprice  = this.state.cummulativeprice + parseInt(this.state.checkeditemsprice[i]);
     }
     this.setState({
-      checkeditems, cummulativeprice
+      checkeditems, cummulativeprice, types
     });
     this.calcPrice( "", cummulativeprice);
   }
@@ -121,13 +126,13 @@ class Add extends React.Component {
         const table_data = this.state.quotes.map((prop, key)=> {
           itemsprice[prop._id] = ((prop.price*prop.quantity)/100).toFixed(2);
             return (
-            <TableRow key={key}> 
+            <TableRow key={key}>
                 <TableCell component="th" style={{border: "none", padding: "0", width: "20px", textAlign: "center"}}>                   
                   <FormControlLabel
                   control={
                     <Checkbox
                         tabIndex={-1}
-                        onClick={() => this.handleCheckedItems(prop._id)}
+                        onClick={() => this.handleCheckedItems(prop._id, prop.service_type)}
                         checkedIcon={
                           <Check className={classes.checkedIcon} />
                         }
@@ -217,6 +222,7 @@ class Add extends React.Component {
   }
 
   render() {
+    console.log(this.state.types);
     const { classes, tableHeaderColor } = this.props;
     return (
       <div>

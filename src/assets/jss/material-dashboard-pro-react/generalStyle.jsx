@@ -238,6 +238,9 @@ const generalStyle = {
     marginLeft: "",
     width: "70px"
   },
+  space10: {
+    height: "10px"
+  },
   space20: {
     height: "20px"
   },
@@ -322,6 +325,34 @@ const generalStyle = {
     marginTop: " 20px",
     cursor: "pointer"
   },
+  qe_btn2: {
+    color: " #FFFFFF",
+    backgroundColor: "#0a71b0",
+    borderRadius: "5px",
+    padding: "10px 50px",
+    cursor: "pointer",
+    float: "right",
+    textDecoration : "none"
+  },
+  qe_btn3: {
+    color: " #FFFFFF",
+    backgroundColor: "#08BD08",
+    borderRadius: "5px",
+    padding: "10px 50px",
+    cursor: "pointer",
+    float: "right",
+    textDecoration : "none"
+  }, 
+  qe_btn4: {
+    color: " #FFFFFF",
+    backgroundColor: "#F5071F",
+    borderRadius: "5px",
+    padding: "10px 50px",
+    cursor: "pointer",
+    float: "right",
+    textDecoration : "none"
+
+  },
   evaluationTable: {
     borderCollapse: "collapse"
   },
@@ -341,6 +372,17 @@ const generalStyle = {
     border: "1px solid #ccc",
     padding: "4px 10px",
     color: "#444"
+  },
+  etd3: {
+    textAlign: "center",
+    border: "1px solid #000",
+    padding: "10px",
+    color: "#444"
+  },
+  eth3: {
+    textAlign: "left",
+    border: "1px solid #000",
+    padding: "10px",
   },
   eth: {
     textAlign: "left",
@@ -373,11 +415,24 @@ const generalStyle = {
     color: "#fff",
     textTransform: "uppercase"
   },
+  tableTop2: {
+    width: "100%",
+    padding: "30px",
+    textAlign: "left",
+    border: "1px solid rgb(204, 204, 204)",
+    borderCollapse: "collapse",
+    height: "50px"
+  },
   tpcl: {
     padding: "10px",
   },
   tpc2: {
     textAlign: "center"
+  },
+  tpc3: {
+    textAlign: "center",
+    padding: "20px",
+    color: "blue"
   },
   firstCell: {
     backgroundColor: "#f2f2f2",
@@ -390,6 +445,9 @@ const generalStyle = {
   },
   iw: {
     width: " 90px"
+  },
+  iw2: {
+    width: " 100%"
   },
   sw: {
     width: " 60px"
@@ -494,7 +552,6 @@ const generalStyle = {
     borderTop: "1px solid grey"
   },
   wik1: {
-    height: "325px",
     textAlign: "left"
 
   },
@@ -502,15 +559,94 @@ const generalStyle = {
     width: "80%",
     border: "1px solid rgb(204, 204, 204)",
     padding: "7px",
-    height :" 50px"
+    height :" 50px",
+    borderCollapse: "collapse",
+    borderSpacing : "2px"
+
   },
   wik3: {
     width: "20%",
     border: "1px solid rgb(204, 204, 204)",
     padding: "7px",
-    height :" 50px"
+    height :" 50px",
+    borderCollapse: "collapse",
+    borderSpacing : "0"
+
+
 
   },
+ container2: {
+   width:" 900px",
+   margin: "30px auto"
+    
+  },
+  wik4: {
+    border: "1px solid black",
+    borderCollapse: "collapse",
+    width: "100%"
+  },
+  wik4b: {
+    border: "0.3px solid rgb(204, 204, 204)",
+    width: "100%",
+  },
+  wik4c: {
+    border: "0.3px solid rgb(204, 204, 204)",
+  },
+  wik5: {
+    padding: "5px",
+    textAlign: "left",
+    border: "1px solid black",
+    borderCollapse: "collapse",
+    width: "20%",
+    height :" 30px",
+
+
+  },
+  wik6: {
+    padding: "5px",
+    textAlign: "left",
+    border: "1px solid black",
+    borderCollapse: "collapse",
+    width: "80%",
+    height :" 30px",
+  },
+  wik7: {
+    padding: "5px",
+    textAlign: "left",
+    border: "1px solid black",
+    borderCollapse: "collapse",
+    width: "93%",
+    height :" 30px",
+  },
+    wik8: {
+    padding: "5px",
+    textAlign: "left",
+    border: "1px solid black",
+    borderCollapse: "collapse",
+    width: "7%",
+    height :" 30px",
+  },
+    wik8b: {
+    padding: "5px",
+    textAlign: "left",
+    border: "1px solid black",
+    borderCollapse: "collapse",
+    width: "66%",
+    height :" 30px",
+  },
+  wik9: {
+    border: "1px solid black",
+    borderCollapse: "collapse",
+    width: "99.8%",
+  },
+  wik10: {
+    width: "90%",
+    margin: "20px auto",
+    lineHeight: "170%",
+    fontSize: "13px"
+    
+
+  }
 };
 
 export default generalStyle;
