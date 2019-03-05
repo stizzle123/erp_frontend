@@ -7,7 +7,7 @@ export default function vendor(state = data , action){
 
         return action;
         case types.UPDATE_VENDOR:
-            return {...state, ...action.data};
+            return action.data;
         case types.FETCH_VENDOR:
             return action.data;
         case types.RECIEVE_GENERAL_INFO_DATA:

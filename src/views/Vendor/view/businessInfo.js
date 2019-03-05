@@ -120,8 +120,7 @@ class BusinessInfo extends React.Component {
                                 formControlProps={{
                                   fullWidth: true
                                 }} 
-                                inputProps={{margin:"normal",
-                                disabled: true}}
+                                inputProps={{margin:"normal",disabled: true}}
                     >
                     {biz_types.map(option => (
                       <MenuItem key={option.value} value={option.value}>
