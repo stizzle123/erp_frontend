@@ -283,7 +283,6 @@ class View extends React.Component {
 
   render() {
     const { classes, tableHeaderColor } = this.props;
-
     return (
       <div>
         <Notification error={this.state.error} message={this.state.message} />

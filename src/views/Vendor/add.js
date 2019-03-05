@@ -11,8 +11,10 @@ import CustomTabs from "../../components/CustomTabs/CustomTabs.jsx";
 import GridItem from "../../components/Grid/GridItem.jsx";
 import Grid from "@material-ui/core/Grid";
 import BugReport from "@material-ui/icons/BugReport";
-import Code from "@material-ui/icons/Code";
-import Cloud from "@material-ui/icons/Cloud";
+import Work from "@material-ui/icons/list";
+import Payment from "@material-ui/icons/payment";
+import DNS from "@material-ui/icons/dns";
+import Business from "@material-ui/icons/businessCenter";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import purple from '@material-ui/core/colors/purple';
 import {connect} from 'react-redux';
@@ -73,21 +75,21 @@ class AddTabs extends React.Component {
               tabs={[
                 {
                   tabName: "General Information",
-                  tabIcon: BugReport,
+                  tabIcon: DNS,
                   tabContent: (
                     <GeneralInfo data={this.props.vendor.general_info} />
                   ),
                 },
                 {
                   tabName: "Business Information",
-                  tabIcon: Code,
+                  tabIcon: Business,
                   tabContent: (
                     <BusinessInfo />
                   )
                 },
                 {
                   tabName: "Bank Details",
-                  tabIcon: Cloud,
+                  tabIcon: Payment,
                   tabContent: (
                     <BankDetails />
                   )
@@ -101,7 +103,7 @@ class AddTabs extends React.Component {
                 }, */
                 {
                   tabName: "Work Reference",
-                  tabIcon: Cloud,
+                  tabIcon: Work,
                   tabContent: (
                     <WorkReference />
                   )

@@ -5,6 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import GridItem from "../../components/Grid/GridItem.jsx";
 import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 import Button from "../../components/CustomButtons/Button.jsx";
+import CustomSelect from "../../components/CustomInput/CustomSelect.jsx";
 import Card from "../../components/Card/Card.jsx";
 import CardBody from "../../components/Card/CardBody.jsx";
 import CardFooter from "../../components/Card/CardFooter.jsx";
@@ -12,6 +13,9 @@ import Progress from "../../components/Progress/Progress.jsx";
 import * as vendorActions from '../../actions/vendor';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import purple from '@material-ui/core/colors/purple';
+import countries from "../countries";
+import MenuItem from '@material-ui/core/MenuItem';
+
 import {connect} from 'react-redux';
 
 
@@ -62,7 +66,11 @@ class GeneralInfo extends React.Component {
     data[[event.target.id]] = event.target.value; 
     this.props.addDispatch(data);
   };
-  
+  handleCountryChange = event => {
+    let data = this.state.data;
+    data['country'] = event.target.value; 
+    this.props.addDispatch(data);
+  };
   handleSave = e =>{
       e.preventDefault();
       this.props.updateVendor(this); 
@@ -136,13 +144,18 @@ class GeneralInfo extends React.Component {
                   />
                 </GridItem>
                 <GridItem xs={12} sm={12} md={6}>
-                  <CustomInput labelText="Country" id="country" required formControlProps={{
-                      fullWidth: true
-                    }} inputProps={{
-                      onChange: this.handleChange,
-                      value: this.state.data.country
-                    }}
-                  />
+                   <CustomSelect labelText="Country"  id="country" name="country" required
+                                value={this.state.data.country} onChange={(e)=>this.handleCountryChange(e)}
+                                formControlProps={{
+                                  fullWidth: true
+                                }} 
+                    >
+                    {countries.map(option => (
+                      <MenuItem key={option.name} value={option.name}>
+                        {option.name}
+                      </MenuItem>
+                    ))}
+                  </CustomSelect>
                 </GridItem>
                 <GridItem xs={12} sm={12} md={6}>
                   <CustomInput labelText="Company Telephone" id="coy_phone" required formControlProps={{

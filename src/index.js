@@ -10,6 +10,7 @@ import indexRoutes from "./routes/index.jsx";
 import PrivateRoute from "./layouts/PrivateRoute.jsx";
 import LoginPage from "./views/LoginPage/index.js";
 import ForgotPassword from "./views/UserProfile/ForgotPassword.jsx";
+import Confirm from "./views/UserProfile/Confirm.jsx";
 import Resetpassword from "./views/UserProfile/Resetpassword.jsx";
 import RegistrationPage from "./views/RegistrationPage/index.js";
 
@@ -24,6 +25,7 @@ ReactDOM.render(
         <Route path="/resetpassword/:token" exact component={Resetpassword} />
         <Route path="/forgotpassword" exact component={ForgotPassword} />
         <Route path="/register" exact component={RegistrationPage} />
+        <Route path="/confirm/:token" exact component={Confirm} />
 
         {indexRoutes.map((prop, key) => {
           return <PrivateRoute path={prop.path} component={prop.component} key={key} />;

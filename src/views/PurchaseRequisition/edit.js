@@ -89,7 +89,7 @@ class Edit extends React.Component {
     disabled: true,
     department: {},
     redirect: "",
-    message:""
+    message: ""
   };
 
   handleAction = e => {
@@ -175,10 +175,9 @@ class Edit extends React.Component {
   };
   renderRedirect = () => {
     if (this.state.redirect == "yes") {
-      setTimeout(function () {
-      window.location.href = "/requisition";
-    }, 3000);
-
+      setTimeout(function() {
+        window.location.href = "/requisition";
+      }, 3000);
     }
   };
   submitUpdate = () => {
@@ -189,11 +188,10 @@ class Edit extends React.Component {
       this.state.data._id,
       data,
       isOk => {
-        if (isOk){
+        if (isOk) {
           this.setState({ message: message, error: false });
-          this.props.history.push('/requisition');
-        }
-        else
+          this.props.history.push("/requisition");
+        } else
           this.setState({ message: "Error processing request.", error: true });
       }
     );
@@ -237,7 +235,7 @@ class Edit extends React.Component {
       data.department = data.department._id;
       const disabled = data.status == "010" ? false : true;
       let rowArray = [];
-      
+
       this.setState({ data, lineItems: data.lineitems, disabled, department });
     });
     genericActions.fetchAll("departments", this.props.user.token, items => {
@@ -443,9 +441,13 @@ class Edit extends React.Component {
                         formControlProps={{
                           fullWidth: true
                         }}
-                    inputProps={{ 
-                      disabled: true,
-                      value:"Required: "+ this.state.data.requestor.firstname +" "+ this.state.data.requestor.lastname                 
+                        inputProps={{
+                          disabled: true,
+                          value:
+                            "Required: " +
+                            this.state.data.requestor.firstname +
+                            " " +
+                            this.state.data.requestor.lastname
                         }}
                       />
                     </GridItem>
@@ -455,8 +457,10 @@ class Edit extends React.Component {
                         id="eid"
                         formControlProps={{
                           fullWidth: true
-                        }} inputProps={{
-                          disabled: true, value: "Employee ID: " +this.state.data.requestor.eid                
+                        }}
+                        inputProps={{
+                          disabled: true,
+                          value: "Employee ID: " + this.state.data.requestor.eid
                         }}
                       />
                     </GridItem>
@@ -500,7 +504,6 @@ class Edit extends React.Component {
                       <CustomInput
                         labelText="Charge To"
                         id="chargeto"
-                        required
                         formControlProps={{
                           fullWidth: true
                         }}

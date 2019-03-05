@@ -161,7 +161,8 @@ validate = (type, value) => {
             </CardHeader>
             <CardBody>
             <form className={classes.container} noValidate autoComplete="off" >
-            <div><strong>Dept: </strong> <span>{this.state.data.department}</span></div>
+            {this.state.data.role == "vendor" ?  ("") :(
+              <div><strong>Dept: </strong> <span>{this.state.data.department}</span></div>)}
               <Grid container>
                 <GridItem xs={12} sm={12} md={4}>
                   <CustomInput
@@ -223,7 +224,8 @@ validate = (type, value) => {
                 </GridItem> 
               </Grid>
               <Grid container>
-                <GridItem xs={12} sm={12} md={4}>
+              {this.state.data.role == "vendor" ?  ("") :(
+              <GridItem xs={12} sm={12} md={4}>
                   <CustomInput
                     labelText="EID"
                     id="eid"
@@ -246,7 +248,7 @@ validate = (type, value) => {
                         : !this.state.ValidationState.eid
                     }
                   />
-                </GridItem>
+                </GridItem>)}
                 <GridItem xs={12} sm={12} md={4}>
                   <CustomInput
                     labelText="Role"
