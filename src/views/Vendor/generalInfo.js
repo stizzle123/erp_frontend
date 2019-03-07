@@ -42,6 +42,7 @@ class GeneralInfo extends React.Component {
 
   constructor(props) {
     super(props);
+    console.log(props);
     this.state ={
         data: {
           company_name: props.data.company_name,
