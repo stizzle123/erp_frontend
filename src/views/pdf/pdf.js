@@ -10,6 +10,7 @@ import pdfTemplate from "./pdfTemplate";
 import * as poActions from '../../actions/purchaseorder';
 import * as Uom from "utility/Uom";
 import * as Status from 'utility/Status';
+import moment from 'moment'
 
 const styles = {
   cardCategoryWhite: {
@@ -99,7 +100,7 @@ class Pdf extends Component {
           pageTemplate={pdfTemplate}
           paperSize="A4"
           margin="1cm"
-          fileName="_____.pdf"
+          fileName="purchase_order.pdf"
           title=""
           subject=""
           keywords=""
@@ -147,7 +148,7 @@ class Pdf extends Component {
                       style={generalStyle.POinput}
                       type="text"
                       id="your-input"
-                      value={this.state.po.created}
+                      value={moment(this.state.po.created).format("DD/MM/YYYY")}
                     />
                   </div>
                   <div style={generalStyle.noPaddingMargin}>
@@ -232,7 +233,7 @@ class Pdf extends Component {
                       <td style={generalStyle.tableTd2}>{this.state.po.servicecharge}</td>
                     </tr>
                     <tr>
-                      <th style={generalStyle.tableTd3}>Total (USD):</th>
+                      <th style={generalStyle.tableTd3}>Total:</th>
                       <td style={generalStyle.tableTd2}>{this.state.po.total}</td>
                     </tr>
                   </tbody>
@@ -251,17 +252,14 @@ class Pdf extends Component {
                   {this.state.po.additional_terms}
                 </span>
 
-                <p>Credit Terms: 5 days upon receipt of payment from Chevron</p>
                 <div style={generalStyle.divider} />
-                <h4>Invoicing and payment shall be done as follows:</h4>
-                <ul style={{ padding: "0 15px" }}>
-                  <li>US Dollars Portion: Sixty Percent (60%) US$</li>
-                  <li>NGN Portion: Forty Percent (40%) NGN</li>
-                </ul>
+               
 
                 <Grid container>
                   <GridItem xs={7}>
                     <div>
+                    <div  style={generalStyle.space30}/>
+
                       <label style={generalStyle.POLabel2} for="input">
                         Prepared by:
                       </label>
@@ -270,10 +268,14 @@ class Pdf extends Component {
                         type="text"
                         id="your-input"
                       />
+                      <div  style={generalStyle.space10}/>
+
                     </div>
+
                     <div>
                       <span>
                         <strong>Reviewed by:</strong>
+
                         <br />
                       </span>
                       <label style={generalStyle.POLabel2} for="input">
@@ -284,6 +286,8 @@ class Pdf extends Component {
                         type="text"
                         id="your-input"
                       />
+                      <div  style={generalStyle.space10}/>
+
                     </div>
                     <div>
                       <span>
@@ -310,6 +314,8 @@ class Pdf extends Component {
                       />
                     </div>
                     <div>
+                    <div  style={generalStyle.space10}/>
+
                       <span>
                         <strong>Vendor:</strong>
                         <br />
@@ -334,8 +340,10 @@ class Pdf extends Component {
                         type="text"
                         id="your-input"
                       />
+
                     </div>
                     <div style={generalStyle.pt2_5}>
+                    <div  style={generalStyle.space10}/>
                       <label style={generalStyle.POLabel} for="input">
                         Date:
                       </label>
@@ -346,7 +354,18 @@ class Pdf extends Component {
                       />
                     </div>
                     <div>
-                      <br />
+                    <div  style={generalStyle.space30}/>
+                      <label style={generalStyle.POLabel} for="input">
+                        Date:
+                      </label>
+                      <input
+                        style={generalStyle.POinput2}
+                        type="text"
+                        id="your-input"
+                      />
+                    </div>
+                    <div>
+                    <div  style={generalStyle.space10}/>
                       <label style={generalStyle.POLabel} for="input">
                         Date:
                       </label>

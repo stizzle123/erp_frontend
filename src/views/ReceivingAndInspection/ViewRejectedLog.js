@@ -20,9 +20,10 @@ import Language from "@material-ui/icons/Language";
 import Paper from "@material-ui/core/Paper";
 import { connect } from "react-redux";
 import * as poActions from "../../actions/purchaseorder";
-
+import * as riActions from "../../actions/receivingandinspection";
 import generalStyle from "../../assets/jss/material-dashboard-pro-react/generalStyle.jsx";
 import CardFooter from "../../components/Card/CardFooter.jsx";
+import Notification from '../Notifications/Index.jsx'
 
 const styles = {
   cardIconTitle: {
@@ -32,45 +33,43 @@ const styles = {
   }
 };
 
-class RejectionLog extends React.Component {
+class ViewRejectedLog extends React.Component {
   state = {
-    doc: {
-      po: {
-        vendor: {
-          general_info: {}
-        },
-        requestor: {},
-        vat: "",
-        discount: "",
-        servicecharge: "",
-        freightcharges: ""
-      },
-      items: []
-    },
-    vendors: [],
-    quotes: [],
+
     table_data: [],
-    inpection_parameters: {
-      checkedA: false,
-      checkedB: true,
-      checkedF: true
-    }
+    productsData: [],
+  };
+
+  handledChange = e => {
+    let newState = Object.assign({}, this.state);
+    let productsData = this.state.productsData;
+    productsData[e.target.getAttribute("data-tag")][e.target.name] =
+      e.target.value;
+    this.setState(newState);
+
+  }
+
+  submitRejectionLog= () => {
+    let data = this.state;
+    riActions.submitRL(this.props.user.token, data, (json)=>{
+      this.setState({
+          responseMessage:json,
+          rejectionlogged: json.result.success
+      });
+    });
   };
 
   parseRow() {
-    let productItems = this.state.doc.items.filter(function(productItem) {
-      return productItem.service_type.toLowerCase() == "product";
-    });
-    const table_data = productItems.map((prop, key) => {
+    
+    const table_data = this.state.productsData.map((prop, key) => {
       return (
         <tr>
           <td style={generalStyle.eth3}>{prop.description}</td>
-          <td style={generalStyle.etd3}>{prop.quantity}</td>
+          <td style={generalStyle.etd3}>{prop.orderedQuantity}</td>
+          <td style={generalStyle.etd3}>{prop.rejectedQuantity}</td>
           <td style={generalStyle.etd3}>
-            <input type="text" name="no_rejected" style={generalStyle.iw} />
-          </td>
-          <td style={generalStyle.etd3}>
-            <input type="text" name="description" style={generalStyle.iw2} />
+            <input type="text" name="productRejectionReason" data-tag={key} style={generalStyle.iw2} value={prop.productRejectionReason} onChange={this.handledChange}
+   />
           </td>
         </tr>
       );
@@ -81,18 +80,22 @@ class RejectionLog extends React.Component {
     this.setState({ [name]: event.target.checked });
   };
   componentDidMount() {
-    poActions.fetchPurchaseOrderById(
+  
+    riActions.FetchRejectionLog(
       this.props.user.token,
       this.props.match.params.id,
-      doc => {
-        this.setState({ doc });
-        this.parseRow();
+      (json) => {
+          this.setState({ 
+            productsData: json.result.productsData, 
+         });
+         this.parseRow();
       }
     );
+
   }
 
   render() {
-    console.log(this.state.doc);
+    console.log(this.state);
     const { classes } = this.props;
     if (this.props.loader.loading) {
       return (
@@ -115,34 +118,12 @@ class RejectionLog extends React.Component {
           <Paper style={{ width: "100%" }}>
             <Card>
               <CardHeader color="danger">
-                <h4 className={classes.cardTitleWhite}>Rejection Log</h4>
+                <h4 className={classes.cardTitleWhite}>View</h4>
+
               </CardHeader>
             </Card>
             <CardBody>
-              <table style={generalStyle.wik4}>
-                <tr>
-                  <th style={generalStyle.wik5}>PO No:</th>
-                  <td style={generalStyle.wik6}> {this.state.doc.po.no}</td>
-                </tr>
-                <tr>
-                  <th style={generalStyle.wik5}>Vendor Name:</th>
-                  <td style={generalStyle.wik6}>
-                    {this.state.doc.po.vendor.general_info.company_name}
-                  </td>
-                </tr>
-                <tr>
-                  <th style={generalStyle.wik5}>Vendor Contact Name:</th>
-                  <td style={generalStyle.wik6}>
-                    {this.state.doc.po.vendor.general_info.contact_name}
-                  </td>
-                </tr>
-                <tr>
-                  <th style={generalStyle.wik5}>Vendor Phone:</th>
-                  <td style={generalStyle.wik6}>
-                    {this.state.doc.po.vendor.general_info.coy_phone}
-                  </td>
-                </tr>
-              </table>
+              
               <table style={generalStyle.wik4}>
                 <tr>
                   <th style={generalStyle.wik5}>Item</th>
@@ -152,11 +133,7 @@ class RejectionLog extends React.Component {
                 </tr>
                 {this.state.table_data}
               </table>
-              <GridItem xs={12}>
-                <div style={generalStyle.space50} />
-                <a style={generalStyle.qe_btn2}>Submit</a>
-                <div style={generalStyle.space50} />
-              </GridItem>
+            
             </CardBody>
           </Paper>
         </GridContainer>
@@ -175,4 +152,4 @@ function mapStateToProps(state) {
 export default connect(
   mapStateToProps,
   null
-)(withStyles(styles)(RejectionLog));
+)(withStyles(styles)(ViewRejectedLog));

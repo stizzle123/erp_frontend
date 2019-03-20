@@ -25,6 +25,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Language from "@material-ui/icons/Language";
 import { connect } from "react-redux";
 import * as poActions from "../../actions/purchaseorder";
+import * as riActions from "../../actions/receivingandinspection";
+import Notification from '../Notifications/Index.jsx'
 import generalStyle from "../../assets/jss/material-dashboard-pro-react/generalStyle.jsx";
 import CardFooter from "../../components/Card/CardFooter.jsx";
 import { GridList } from "@material-ui/core";
@@ -62,24 +64,42 @@ class View extends React.Component {
     table_data: [],
     showRejectionLog: false,
     inspection_parameters: {
-      checkedA: false,
-      checkedB: false,
-      checkedC: false,
-      checkedD: false,
-      checkedE: false
+      identification: false,
+      quantity: false,
+      damages	: false,
+      goodCondition: false,
+      requiredMarkings : false,
+      documentation: false, 
+      incorrectSpecification: "",
+      expiredGoods:	"",
+      numberOfDamaged: "",
+      poorFinishing:"",
+      functionality: "",
+      SupplyCompliancePecentage: ""
     },
     on_time_delivery: false,
+    comment: "",
     inspection_stage: {
       inspected: false,
       reviewed: false,
-      approved: false
-    }
+      approved: false,
+      inspectedDate: "",
+      reviewedDate: "",
+      approvedDate: "",
+      inspectedBy: "",
+      reviewedBy: "",
+      approvedBy: ""
+    },
+    responseMessage: {},
+    productsInspected: false,
+    productsInspectedID: ""
   };
 
   parseRow() {
     let productItems = this.state.doc.items.filter(function(productItem) {
       return productItem.service_type.toLowerCase() == "product";
     });
+
     let requesters = [];
     let productsData = [];
     let table_data = productItems.map((prop, key) => {
@@ -87,7 +107,7 @@ class View extends React.Component {
         description: prop.description,
         orderedQuantity: prop.quantity,
         deliveredQuantity: "",
-        recievedQuantity: "",
+        receivedQuantity: "",
         inspectedQuantity: "",
         acceptedQuantity: "",
         rejectedQuantity: 0
@@ -97,7 +117,7 @@ class View extends React.Component {
       let uniqueRequesters = [...new Set(requesters)];
       this.setState({
         requesters: uniqueRequesters,
-        productsData: productsData
+        productsData: (this.state.productsInspected == true)? this.state.productsData : productsData
       });
       return (
         <tr>
@@ -122,6 +142,7 @@ class View extends React.Component {
               type="text"
               name="deliveredQuantity"
               style={generalStyle.iw}
+              defaultValue={this.state.productsData[key].deliveredQuantity}
             />
           </td>
           <td style={generalStyle.etd}>
@@ -129,8 +150,9 @@ class View extends React.Component {
               onChange={this.handledChange}
               data-tag={key}
               type="text"
-              name="recievedQuantity"
+              name="receivedQuantity"
               style={generalStyle.iw}
+              defaultValue={this.state.productsData[key].receivedQuantity}
             />
           </td>
           <td style={generalStyle.etd}>
@@ -140,6 +162,8 @@ class View extends React.Component {
               type="text"
               name="inspectedQuantity"
               style={generalStyle.iw}
+              defaultValue={this.state.productsData[key].inspectedQuantity}
+
             />
           </td>
           <td style={generalStyle.etd}>
@@ -149,6 +173,8 @@ class View extends React.Component {
               type="text"
               name="acceptedQuantity"
               style={generalStyle.iw}
+              defaultValue={this.state.productsData[key].acceptedQuantity}
+
             />
           </td>
           <td style={generalStyle.etd}>
@@ -168,15 +194,73 @@ class View extends React.Component {
   }
 
   approvalCheck = e => {
-    let inspection_stage = { ...this.state.inspection_stage };
-    inspection_stage[[e.target.name]] = !this.state.inspection_stage[
-      [e.target.name]
-    ];
-    this.setState({ inspection_stage });
+    let today = new Date();
+    let dd = today.getDate();
+    let mm = today.getMonth() + 1; //January is 0!
+    let yyyy = today.getFullYear();
+
+    if (dd < 10) {
+      dd = "0" + dd;
+    }
+
+    if (mm < 10) {
+      mm = "0" + mm;
+    }
+    today = mm + "/" + dd + "/" + yyyy;
+    this.setApprover(e.target.name, today);
   };
 
-  handleChecked = name => event => {
-    // console.log(this.state.inpection_parameters);
+  setApprover(name, date ) {
+    const inspection_stage = { ...this.state.inspection_stage };
+    const user = this.props.user.lastname +" "+this.props.user.firstname;
+    switch (name) {
+      case "inspected":
+      inspection_stage.inspectedBy = user;
+      inspection_stage[[name]] = !this.state.inspection_stage[[name]];
+      inspection_stage.inspectedDate = date
+      this.setState({
+        inspection_stage    
+      });
+      break;
+      case "reviewed":
+      inspection_stage.reviewedBy = user;
+      inspection_stage[[name]] = !this.state.inspection_stage[[name]];
+      inspection_stage.reviewedDate = date
+      this.setState({
+        inspection_stage    
+      });
+      break;
+    case "approved":
+    inspection_stage.approvedBy = user;
+    inspection_stage[[name]] = !this.state.inspection_stage[[name]];
+    inspection_stage.approvedDate = date
+    this.setState({
+      inspection_stage    
+    });
+    break;  
+     }
+  }
+
+  CheckOnTimeDelivery = () => {
+   
+    this.setState({ on_time_delivery: !this.state.on_time_delivery });
+  };
+
+  handleChecked =  e => {
+    let inspection_parameters = { ...this.state.inspection_parameters };
+    inspection_parameters[[e.target.name]] = !this.state.inspection_parameters[
+      [e.target.name]
+    ];
+    this.setState({ inspection_parameters });
+    };
+
+  handleSpecChange = e => {
+    let inspection_parameters = this.state.inspection_parameters;
+    inspection_parameters[[e.target.name]] = e.target.value;
+    this.setState({ inspection_parameters: inspection_parameters });
+  };
+  getComment =(e) => {
+    this.setState({comment: e.target.value});
   };
 
   handledChange = e => {
@@ -194,6 +278,25 @@ class View extends React.Component {
       this.setState({ showRejectionLog: false });
     }
   };
+
+  handleSubmit = () => {
+    let data = this.state;
+    riActions.submitRIF(this.props.user.token, data, (json)=>{
+      this.setState({
+          responseMessage:json,
+      });
+    });
+  };
+
+  handleUpdate = () => {
+    let data = this.state;
+    riActions.updateRIF(this.props.user.token, this.props.match.params.id, data, (json)=>{
+      this.setState({
+          responseMessage:json,
+      });
+    });
+  };
+
   componentDidMount() {
     poActions.fetchPurchaseOrderById(
       this.props.user.token,
@@ -203,27 +306,33 @@ class View extends React.Component {
         this.parseRow();
       }
     );
+    riActions.getInspectedProduct(
+      this.props.user.token,
+      this.props.match.params.id,
+      (json) => {
+        console.log(json);
+        if(json.result != "nothing") {
+          this.setState({ 
+            inspection_stage: json.result.inspection_stage, 
+            inspection_parameters: json.result.inspection_parameters,
+            on_time_delivery: json.result.on_time_delivery,
+            productsData: json.result.productsData,
+            productsInspected: true,
+            productsInspectedID: json.result._id
+          });
+        }
+      }
+    );
   }
 
   render() {
-    var today = new Date();
-    var dd = today.getDate();
-    var mm = today.getMonth() + 1; //January is 0!
-    var yyyy = today.getFullYear();
-
-    if (dd < 10) {
-      dd = "0" + dd;
-    }
-
-    if (mm < 10) {
-      mm = "0" + mm;
-    }
-    today = mm + "/" + dd + "/" + yyyy;
+    console.log(this.state)
     const { classes } = this.props;
     if (this.props.loader.loading) {
       return (
         <div>
           <Grid container>
+
             <GridItem xs={12} sm={6} md={3} style={{ margin: "20% auto" }}>
               <CircularProgress
                 className={classes.progress}
@@ -242,12 +351,13 @@ class View extends React.Component {
             <Card>
               <CardHeader color="primary">
                 <h4 className={classes.cardTitleWhite}>
-                  Recieving and Inspection Form
+                  Receiving and Inspection Form
                 </h4>
               </CardHeader>
               <CardBody>
                 <div>
                   <Grid container style={generalStyle.wik4b}>
+                  {(this.state.responseMessage.success == true)?<Notification error={false} message={this.state.responseMessage.message} />: ""}
                     <GridItem xs={12} sm={4} md={4} style={generalStyle.wik4c}>
                       <CustomInput
                         labelText="Vendor/Supplier/Sub-contractor"
@@ -361,9 +471,9 @@ class View extends React.Component {
                         On-time Delivery
                       </InputLabel>
                       <Checkbox
-                        checked={this.state.checkedA}
-                        onChange={this.handleChecked("checkedA")}
-                        value="checkedA"
+                        checked={this.state.on_time_delivery}
+                        onChange={this.CheckOnTimeDelivery}
+                        name="on_time_delivery"
                       />
                     </GridItem>
                   </Grid>
@@ -373,16 +483,16 @@ class View extends React.Component {
                     <thead style={generalStyle.tableTop2}>
                       <tr>
                         <th colSpan="10" style={generalStyle.tpc3}>
-                          Recieving Report Table
+                          Receiving Report Table
                         </th>
                       </tr>
                     </thead>
                     <thead>
                       <tr>
-                        <th style={generalStyle.eth}> Description </th>
+                        <th style={generalStyle.eth}>Description </th>
                         <th style={generalStyle.eth}>Ordered Quantity</th>
                         <th style={generalStyle.eth}>Delivered Quantity</th>
-                        <th style={generalStyle.eth}>Recieved Quantity</th>
+                        <th style={generalStyle.eth}>Received Quantity</th>
                         <th style={generalStyle.eth}>Inspected Quantity</th>
                         <th style={generalStyle.eth}>Accepted Quantity</th>
                         <th style={generalStyle.eth}>Rejected Quantity</th>
@@ -399,9 +509,9 @@ class View extends React.Component {
                         <th style={generalStyle.wik2}>Identification</th>
                         <td style={generalStyle.wik3}>
                           <Checkbox
-                            checked={this.state.checkedA}
-                            onChange={this.handleChecked("checkedA")}
-                            value="checkedA"
+                            checked={this.state.inspection_parameters.identification}
+                            onChange={this.handleChecked}
+                            name="identification"
                           />
                         </td>
                       </tr>
@@ -409,9 +519,9 @@ class View extends React.Component {
                         <th style={generalStyle.wik2}>Quantity</th>
                         <td style={generalStyle.wik3}>
                           <Checkbox
-                            checked={this.state.checkedA}
-                            onChange={this.handleChecked("checkedA")}
-                            value="checkedA"
+                            checked={this.state.inspection_parameters.quantity}
+                            onChange={this.handleChecked}
+                            name="quantity"
                           />
                         </td>
                       </tr>
@@ -419,9 +529,9 @@ class View extends React.Component {
                         <th style={generalStyle.wik2}>Damages</th>
                         <td style={generalStyle.wik3}>
                           <Checkbox
-                            checked={this.state.checkedA}
-                            onChange={this.handleChecked("checkedA")}
-                            value="checkedA"
+                            checked={this.state.inspection_parameters.damages}
+                            onChange={this.handleChecked}
+                            name="damages"
                           />
                         </td>
                       </tr>
@@ -429,9 +539,9 @@ class View extends React.Component {
                         <th style={generalStyle.wik2}>Required Markings</th>
                         <td style={generalStyle.wik3}>
                           <Checkbox
-                            checked={this.state.checkedA}
-                            onChange={this.handleChecked("checkedA")}
-                            value="checkedA"
+                            checked={this.state.inspection_parameters.requiredMarkings}
+                            onChange={this.handleChecked}
+                            name="requiredMarkings"
                           />
                         </td>
                       </tr>
@@ -441,9 +551,9 @@ class View extends React.Component {
                         </th>
                         <td style={generalStyle.wik3}>
                           <Checkbox
-                            checked={this.state.checkedA}
-                            onChange={this.handleChecked("checkedA")}
-                            value="checkedA"
+                            checked={this.state.inspection_parameters.goodCondition}
+                            onChange={this.handleChecked}
+                            name="goodCondition"
                           />
                         </td>
                       </tr>
@@ -451,9 +561,9 @@ class View extends React.Component {
                         <th style={generalStyle.wik2}>Documentation</th>
                         <td style={generalStyle.wik3}>
                           <Checkbox
-                            checked={this.state.checkedA}
-                            onChange={this.handleChecked("checkedA")}
-                            value="checkedA"
+                            checked={this.state.inspection_parameters.documentation}
+                            onChange={this.handleChecked}
+                            name="documentation"
                           />
                         </td>
                       </tr>
@@ -467,8 +577,10 @@ class View extends React.Component {
                         </th>
                         <td style={generalStyle.wik3}>
                           <input
+                            onChange={this.handleSpecChange}
                             type="text"
-                            name="benchmark-price"
+                            name="incorrectSpecification"
+                            value= {this.state.inspection_parameters.incorrectSpecification}
                             style={generalStyle.iw}
                           />
                         </td>
@@ -479,8 +591,10 @@ class View extends React.Component {
                         </th>
                         <td style={generalStyle.wik3}>
                           <input
+                            onChange={this.handleSpecChange}
                             type="text"
-                            name="benchmark-price"
+                            name="expiredGoods"
+                            value= {this.state.inspection_parameters.expiredGoods}
                             style={generalStyle.iw}
                           />
                         </td>
@@ -491,8 +605,10 @@ class View extends React.Component {
                         </th>
                         <td style={generalStyle.wik3}>
                           <input
+                            onChange={this.handleSpecChange}
                             type="text"
-                            name="benchmark-price"
+                            name="numberOfDamaged"
+                            value= {this.state.inspection_parameters.numberOfDamaged}
                             style={generalStyle.iw}
                           />
                         </td>
@@ -503,8 +619,10 @@ class View extends React.Component {
                         </th>
                         <td style={generalStyle.wik3}>
                           <input
+                            onChange={this.handleSpecChange}
                             type="text"
-                            name="benchmark-price"
+                            name="poorFinishing"
+                            value= {this.state.inspection_parameters.poorFinishing}
                             style={generalStyle.iw}
                           />
                         </td>
@@ -515,8 +633,10 @@ class View extends React.Component {
                         </th>
                         <td style={generalStyle.wik3}>
                           <input
+                            onChange={this.handleSpecChange}
                             type="text"
-                            name="benchmark-price"
+                            name="functionality"
+                            value= {this.state.inspection_parameters.functionality}
                             style={generalStyle.iw}
                           />
                         </td>
@@ -527,8 +647,10 @@ class View extends React.Component {
                         </th>
                         <td style={generalStyle.wik3}>
                           <input
+                            onChange={this.handleSpecChange}
                             type="text"
-                            name="benchmark-price"
+                            name="SupplyCompliancePecentage"
+                            value= {this.state.inspection_parameters.SupplyCompliancePecentage}
                             style={generalStyle.iw}
                           />
                         </td>
@@ -553,7 +675,7 @@ class View extends React.Component {
                     />
                   </GridItem>
                   <GridItem xs={12} sm={12} md={12}>
-                    <CustomInput
+                  {this.state.showRejectionLog == true ? ( <CustomInput
                       labelText="Reason for Rejection/Comment:	"
                       id="comment"
                       required
@@ -561,9 +683,10 @@ class View extends React.Component {
                         fullWidth: true
                       }}
                       inputProps={{
-                        value: ""
+                        onChange: this.getComment,
+                        value: this.state.comment
                       }}
-                    />
+                  />) : "" }
                   </GridItem>
                 </Grid>
                 <div style={generalStyle.space50} />
@@ -594,11 +717,7 @@ class View extends React.Component {
                         fullWidth: true
                       }}
                       inputProps={{
-                        value:
-                          " " +
-                          this.props.user.lastname +
-                          " " +
-                          this.props.user.firstname,
+                        value:this.state.inspection_stage.inspectedBy,
                         disabled: true
                       }}
                     />
@@ -614,23 +733,20 @@ class View extends React.Component {
                       checked={this.state.inspection_stage.inspected}
                       onChange={this.approvalCheck}
                       name="inspected"
+                      id="inspectedDate"
                     />
                   </GridItem>
                   <GridItem xs={12} sm={2} md={2}>
-                    {this.state.inspection_stage.inspected === true ? (
-                      <CustomInput
+                  <CustomInput
                         required
                         formControlProps={{
                           fullWidth: true
                         }}
                         inputProps={{
                           disabled: true,
-                          value: today
+                          value: this.state.inspection_stage.inspectedDate
                         }}
                       />
-                    ) : (
-                      ""
-                    )}
                   </GridItem>
                   <GridItem xs={12} sm={7} md={7}>
                     <CustomInput
@@ -642,11 +758,8 @@ class View extends React.Component {
                         fullWidth: true
                       }}
                       inputProps={{
-                        value:
-                          " " +
-                          this.props.user.lastname +
-                          " " +
-                          this.props.user.firstname,
+                        value:this.state.inspection_stage.reviewedBy,
+
                         disabled: true
                       }}
                     />
@@ -662,25 +775,23 @@ class View extends React.Component {
                       checked={this.state.inspection_stage.reviewed}
                       onChange={this.approvalCheck}
                       name="reviewed"
+                      id="reviewedDate"
                     />
                   </GridItem>
                   <GridItem xs={12} sm={2} md={2}>
-                    {this.state.inspection_stage.reviewed === true ? (
-                      <CustomInput
+                  <CustomInput
                         required
                         formControlProps={{
                           fullWidth: true
                         }}
                         inputProps={{
                           disabled: true,
-                          value: today
+                          value: this.state.inspection_stage.reviewedDate
                         }}
                       />
-                    ) : (
-                      ""
-                    )}
                   </GridItem>
-                  <GridItem xs={12} sm={7} md={7}>
+                  </Grid> 
+                  { this.props.user.eid == "701000104"  ? ( <Grid container><GridItem xs={12} sm={8} md={8}>
                     <CustomInput
                       labelText="Approved By:	"
                       id="approved_by"
@@ -689,74 +800,43 @@ class View extends React.Component {
                         fullWidth: true
                       }}
                       inputProps={{
-                        value: "hello ",
+                        value:this.state.inspection_stage.approvedBy,
                         disabled: true
                       }}
                     />
                   </GridItem>
-                  <GridItem xs={12} sm={3} md={3}>
-                    <FormControl
-                      fullWidth
-                      className={classes.selectFormControl}
-                    >
-                      <InputLabel
-                        htmlFor="simple-select"
-                        className={classes.selectLabel}
-                      >
-                        Choose Action
-                      </InputLabel>
-                      <Select
-                        MenuProps={{
-                          className: classes.selectMenu
-                        }}
-                        classes={{
-                          select: classes.select
-                        }}
-                        value={this.state.action}
-                        inputProps={{
-                          name: "simpleSelect",
-                          id: "type"
-                        }}
-                        onChange={this.handleAction}
-                      >
-                        <MenuItem
-                          classes={{
-                            root: classes.selectMenuItem,
-                            selected: classes.selectMenuItemSelected
-                          }}
-                          value="approve"
-                        >
-                          Approve
-                        </MenuItem>
-                        <MenuItem
-                          classes={{
-                            root: classes.selectMenuItem,
-                            selected: classes.selectMenuItemSelected
-                          }}
-                          value="disapprove"
-                        >
-                          Reject
-                        </MenuItem>
-                      </Select>
-                    </FormControl>
-                  </GridItem>
                   <GridItem xs={12} sm={2} md={2}>
-                    <CustomInput
-                      required
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        disabled: true,
-                        value: today
-                      }}
+                  <InputLabel
+                      htmlFor="simple-select"
+                      className={classes.selectLabel}
+                    >
+                      Approve
+                    </InputLabel>
+                    <Checkbox
+                      checked={this.state.inspection_stage.approved}
+                      onChange={this.approvalCheck}
+                      name="approved"
+                      id="approvedDate"
                     />
                   </GridItem>
-                </Grid>
+                  <GridItem xs={12} sm={2} md={2}>
+                  <CustomInput
+                        required
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          disabled: true,
+                          value: this.state.inspection_stage.approvedDate
+                        }}
+                      />
+                     
+                  </GridItem></Grid>) : ""}
+                 
                 <Grid container>
                   <GridItem xs={12}>
                     <div style={generalStyle.space50} />
-                    <a style={generalStyle.qe_btn3}>Submit Form</a>
+                    {(this.state.productsInspected == true)?<a style={generalStyle.qe_btn3} onClick={this.handleUpdate}>Update Form</a>: <a style={generalStyle.qe_btn3} onClick={this.handleSubmit}>Submit Form</a>}
                     <div style={generalStyle.space10} />
                   </GridItem>
                   <GridItem xs={12}>
@@ -764,7 +844,7 @@ class View extends React.Component {
                     {this.state.showRejectionLog == true ? (
                       <Link
                         style={generalStyle.qe_btn4}
-                        to={`/rejection/log/` + this.state.doc.po._id}
+                        to={`/log/` + this.state.doc.po._id}
                       >
                         Fill Rejection Log
                       </Link>
@@ -776,7 +856,7 @@ class View extends React.Component {
                   <GridItem xs={12}>
                     <div style={generalStyle.space10} />
 
-                    {this.state.doc.po.types.includes("service") ? (
+                    {this.state.doc.po.types.includes("Service") ? (
                       <Link
                         style={generalStyle.qe_btn2}
                         to={`/work/completion/` + this.state.doc.po._id}

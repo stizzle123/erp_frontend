@@ -1,5 +1,6 @@
 import React from 'react';
 import generalStyle from "../../assets/jss/material-dashboard-pro-react/generalStyle.jsx";
+import moment from 'moment'
 
 export default class PdfTemplate extends React.Component {
     render() {
@@ -11,8 +12,9 @@ export default class PdfTemplate extends React.Component {
                   <tr>
                     <td rowSpan="2" width="20%" style={generalStyle.POTopth}>
                       <img
-                        src="https://yt3.ggpht.com/a-/AJLlDp1AuBq98VdMQejTaohdCOu0NxYe0twL_rKNCw=s900-mo-c-c0xffffffff-rj-k-no"
-                        alt=""
+                      ref={(image) => this.image = image}
+                        src="https://russelsmithgroup.com/wp-content/uploads/2015/07/RuselSmith_Group_Asset_Integrity_Management_Logo.png"
+                        alt=" ruseel smith image"
                         width="50%"
                       />
                     </td>
@@ -35,7 +37,7 @@ export default class PdfTemplate extends React.Component {
                       Revision: 16
                     </td>
                     <td style={generalStyle.text6} width="40%">
-                      Effective Date: 23 May 2018
+                      Effective Date: {moment(new Date()).format("DD/MM/YYYY")}
                     </td>
                   </tr>
                 </tbody>

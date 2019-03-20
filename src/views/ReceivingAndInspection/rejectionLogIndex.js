@@ -23,6 +23,8 @@ import { cardTitle } from "assets/jss/material-dashboard-pro-react.jsx";
 import generalStyle from "assets/jss/material-dashboard-pro-react/generalStyle.jsx";
 import * as Status from "utility/Status";
 import { connect } from "react-redux";
+import * as riActions from "../../actions/receivingandinspection";
+
 
 const styles = {
   cardIconTitle: {
@@ -31,16 +33,43 @@ const styles = {
     marginBottom: "0px"
   }
 };
-class Index extends React.Component {
+class RejectionLogIndex extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: []
+      data: [],
+      vendors: [],
+      docs: []
     };
   }
 
+  getVendorName(poID) {
+  poActions.fetchPurchaseOrderById(
+      this.props.user.token,
+      poID,
+      (doc) => {
+        console.log("doc")
+      })  
+    }
+
+  getOrderedSum(arr){
+    var sum = 0;
+    for (var i = 0; i < arr.length; i++) {
+      sum +=  parseInt(arr[i].orderedQuantity);
+    }
+    return sum;
+  }
+
+  getrejectedSum(arr){
+    var sum = 0;
+    for (var i = 0; i < arr.length; i++) {
+      sum +=  parseInt(arr[i].rejectedQuantity);
+    }
+    return sum;
+  }
+
   componentDidMount() {
-    poActions.fetchAllPurchaseOrder(this.props.user.token, docs => {
+    riActions.fetchAllRejectionLogs(this.props.user.token, docs => {
       this.setState({ data: docs });
     });
   }
@@ -50,27 +79,26 @@ class Index extends React.Component {
       //vendorActions.findAllVendors(this.props, this.props.match.params.type);
     }
   }
+
+
+
   processJson(responseJson) {
     return responseJson.map((prop, key) => {
       let date = new Date(prop.created);
-      let types = prop.types.map(v => v.toLowerCase());
+      let vendor_name = this.getVendorName(prop.purchaseOrder)
       return {
-        id: prop.no,
-        vendor: prop.vendor.general_info.company_name,
-        order_date: date.toISOString().split("T")[0],
-        completion_rate: "partially completed",
+        id: prop.purchaseOrder,
+        vendor: "Robson Nig Ltd" + vendor_name,
+        date: date.toISOString().split("T")[0],
+        no_purchased: this.getOrderedSum(prop.productsData),
+        no_rejected: this.getrejectedSum(prop.productsData),
         actions: (
           // we've added some custom button actions
           <div className="actions-right">
-            {types.includes("product") ? (
-              <Link to={"/recieving/" + prop._id}>
-                Recieving and Inspection Form
+              <Link to={"/rejection/log/" + prop._id}>
+                View Log
               </Link>
-            ) : (
-              <Link to={"/work/completion/" + prop._id}>
-                Work Completion Certificate
-              </Link>
-            )}
+          
           </div>
         )
       };
@@ -78,6 +106,7 @@ class Index extends React.Component {
   }
 
   render() {
+    console.log(this.state.data);
     const { classes } = this.props;
     if (this.props.loader.loading) {
       return (
@@ -108,7 +137,7 @@ class Index extends React.Component {
                   <Assignment />
                 </CardIcon>
                 <h3 className={classes.cardIconTitle}>
-                  Recieving and Inspection
+                Rejection Logs
                 </h3>
               </CardHeader>
               <CardBody>
@@ -125,13 +154,17 @@ class Index extends React.Component {
                       accessor: "vendor"
                     },
                     {
-                      Header: "Order Date",
-                      accessor: "order_date"
+                      Header: "Date",
+                      accessor: "date"
                     },
                     {
-                      Header: "Completion Rate",
-                      accessor: "completion_rate"
+                      Header: "No of Items Purchased",
+                      accessor: "no_purchased"
                     },
+                    {
+                        Header: "No of Items Rejected",
+                        accessor: "no_rejected"
+                      },
                     {
                       Header: "Actions",
                       accessor: "actions",
@@ -153,12 +186,12 @@ class Index extends React.Component {
   }
 }
 
-Index.propTypes = {
+RejectionLogIndex.propTypes = {
   vendorActions: PropTypes.object,
   data: PropTypes.object
 };
 
-Index.defaultProps = {
+RejectionLogIndex.defaultProps = {
   data: { dataRows: {} }
 };
 function mapStateToProps(state) {
@@ -171,4 +204,4 @@ function mapStateToProps(state) {
 export default connect(
   mapStateToProps,
   null
-)(withStyles(styles)(Index));
+)(withStyles(styles)(RejectionLogIndex));

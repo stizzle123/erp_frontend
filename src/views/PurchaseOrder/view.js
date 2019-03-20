@@ -282,6 +282,7 @@ class View extends React.Component {
   }
 
   render() {
+    console.log(this.state);
     const { classes, tableHeaderColor } = this.props;
     return (
       <div>

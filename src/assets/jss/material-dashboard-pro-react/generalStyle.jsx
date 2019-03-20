@@ -236,13 +236,19 @@ const generalStyle = {
     borderColor: "#000",
     marginBottom: "5px",
     marginLeft: "",
-    width: "70px"
+    width: "100px",
+    fontSize: "9px",
+    padding: "8px"
+
   },
   space10: {
     height: "10px"
   },
   space20: {
     height: "20px"
+  },
+  space30: {
+    height: "30px"
   },
   space50: {
     height: "50px"
@@ -353,6 +359,15 @@ const generalStyle = {
     textDecoration : "none"
 
   },
+  qe_btn5: {
+    color: " #FFFFFF",
+    backgroundColor: "#e53935",
+    borderRadius: "5px",
+    padding: "10px 50px",
+    cursor: "pointer",
+    float: "right",
+    textDecoration : "none"
+  }, 
   evaluationTable: {
     borderCollapse: "collapse"
   },

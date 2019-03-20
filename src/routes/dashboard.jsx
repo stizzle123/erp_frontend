@@ -26,10 +26,12 @@ import EditUser from "../views/UserProfile/EditUser.jsx";
 import VendorList from "../views/Vendor/index.js";
 import AddVendor from "../views/Vendor/add.js"; 
 import ViewVendor from "../views/Vendor/view.js";
-import RecievingAndInspection from "../views/RecievingAndInspection/index.js";
-import WorkCompletion from "../views/RecievingAndInspection/WorkCompletion.js";
-import RejectionLog from "../views/RecievingAndInspection/RejectionLog.js";
-import recievingView from "../views/RecievingAndInspection/view.js";
+import ReceivingAndInspection from "../views/ReceivingAndInspection/index.js";
+import WorkCompletion from "../views/ReceivingAndInspection/WorkCompletion.js";
+import RejectionLog from "../views/ReceivingAndInspection/RejectionLog.js";
+import ViewRejectedLog from "../views/ReceivingAndInspection/ViewRejectedLog.js";
+import receivingView from "../views/ReceivingAndInspection/view.js";
+import rejectionLogIndex from "../views/ReceivingAndInspection/rejectionLogIndex.js";
 import PurchaseOrder from "../views/PurchaseOrder/index.js";
 import PurchaseOrderAdd from "../views/PurchaseOrder/add.js";
 import PurchaseOrderView from "../views/PurchaseOrder/view.js";
@@ -135,19 +137,27 @@ export const dashboardRoutes = [
     component: ListPurchaseRequisition
   },
    {
-    path: "/recieving",
-    component: RecievingAndInspection
+    path: "/receiving",
+    component: ReceivingAndInspection
   }, 
   {
-    path: "/recieving/:id",
-    component: recievingView
+    path: "/rejection/log/index",
+    component: rejectionLogIndex
+  }, 
+  {
+    path: "/rejection/log/:id",
+    component: ViewRejectedLog
+  }, 
+  {
+    path: "/receiving/:id",
+    component: receivingView
     },
     {
       path: "/work/completion/:id",
       component: WorkCompletion
       },
       {
-        path: "/rejection/log/:id",
+        path: "/log/:id",
         component: RejectionLog
         },
   {
@@ -286,12 +296,20 @@ export const AdminMenu = [
       actions: ['index','add', 'edit', 'delete', 'admin_view']
     }, 
     {
-      path: "/recieving",
-      name: "Recieving & Inspection",
+      path: "/receiving",
+      name: "Receiving & Inspection",
       mini: "RI",
-      component: RecievingAndInspection,
+      component: ReceivingAndInspection,
       actions: ['index']
-    }]
+    }, 
+    {
+      path: "/rejection/log/index",
+      name: "Rejection Logs",
+      mini: "RL",
+      component: rejectionLogIndex,
+      actions: ['index']
+    }
+  ]
   },
   {
     collapse: true,

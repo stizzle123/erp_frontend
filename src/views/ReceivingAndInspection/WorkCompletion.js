@@ -24,9 +24,10 @@ import { cardTitle } from "assets/jss/material-dashboard-pro-react.jsx";
 import Language from "@material-ui/icons/Language";
 import { connect } from "react-redux";
 import * as poActions from "../../actions/purchaseorder";
-
+import * as riActions from "../../actions/receivingandinspection";
 import generalStyle from "../../assets/jss/material-dashboard-pro-react/generalStyle.jsx";
 import CardFooter from "../../components/Card/CardFooter.jsx";
+import Notification from '../Notifications/Index.jsx'
 
 const styles = {
   cardIconTitle: {
@@ -54,11 +55,23 @@ class WorkCompletion extends React.Component {
     vendors: [],
     quotes: [],
     table_data: [],
+    requesters: [],
     work_completion: {
       inspected: false,
       reviewed: false,
-      approved: false
-    }
+      approved: false,
+      inspectedDate: "",
+      reviewedDate: "",
+      approvedDate: "",
+      preparedBy: "",
+      reviewedBy: "",
+      approvedBy: ""
+    },
+    services: "",
+    servicesInspectedID: "",
+    serviceInspected: false,
+    responseMessage: {},
+
   };
 
   parseRow() {
@@ -71,7 +84,8 @@ class WorkCompletion extends React.Component {
       requesters.push(prop.requester);
       let uniqueRequesters = [...new Set(requesters)];
       this.setState({
-        requesters: uniqueRequesters
+        requesters: uniqueRequesters,
+        services: services
       });
       return (
         <tr>
@@ -84,13 +98,70 @@ class WorkCompletion extends React.Component {
   }
 
   approvalCheck = e => {
-    let work_completion = { ...this.state.work_completion };
-    work_completion[[e.target.name]] = !this.state.work_completion[
-      [e.target.name]
-    ];
-    this.setState({ work_completion });
-    console.log(work_completion);
+    let today = new Date();
+    let dd = today.getDate();
+    let mm = today.getMonth() + 1; //January is 0!
+    let yyyy = today.getFullYear();
+
+    if (dd < 10) {
+      dd = "0" + dd;
+    }
+
+    if (mm < 10) {
+      mm = "0" + mm;
+    }
+    today = mm + "/" + dd + "/" + yyyy;
+    this.setApprover(e.target.name, today);
   };
+
+  handleSubmit = () => {
+    let data = this.state;
+    riActions.submitWCF(this.props.user.token, data, (json)=>{
+      this.setState({
+          responseMessage:json,
+      });
+    });
+  };
+
+  handleUpdate = () => {
+    let data = this.state;
+    riActions.updateWCF(this.props.user.token, this.props.match.params.id, data, (json)=>{
+      this.setState({
+          responseMessage:json,
+      });
+    });
+  };
+
+  setApprover(name, date ) {
+    const work_completion = { ...this.state.work_completion };
+    const user = this.props.user.lastname +" "+this.props.user.firstname;
+    switch (name) {
+      case "inspected":
+      work_completion.preparedBy = user;
+      work_completion[[name]] = !this.state.work_completion[[name]];
+      work_completion.inspectedDate = date
+      this.setState({
+        work_completion    
+      });
+      break;
+      case "reviewed":
+      work_completion.reviewedBy = user;
+      work_completion[[name]] = !this.state.work_completion[[name]];
+      work_completion.reviewedDate = date
+      this.setState({
+        work_completion    
+      });
+      break;
+    case "approved":
+    work_completion.approvedBy = user;
+    work_completion[[name]] = !this.state.work_completion[[name]];
+    work_completion.approvedDate = date
+    this.setState({
+      work_completion    
+    });
+    break;  
+     }
+  }
 
   componentDidMount() {
     poActions.fetchPurchaseOrderById(
@@ -101,21 +172,24 @@ class WorkCompletion extends React.Component {
         this.parseRow();
       }
     );
+
+    riActions.getIssuedWorkCompletion(
+      this.props.user.token,
+      this.props.match.params.id,
+      (json) => {
+        console.log(json);
+        if(json.result != "nothing") {
+          this.setState({ 
+            work_completion: json.result.work_completion, 
+            serviceInspected: true,
+            servicesInspectedID: json.result._id
+          });
+        }
+      }
+    );
   }
   render() {
-    var today = new Date();
-    var dd = today.getDate();
-    var mm = today.getMonth() + 1; //January is 0!
-    var yyyy = today.getFullYear();
-
-    if (dd < 10) {
-      dd = "0" + dd;
-    }
-
-    if (mm < 10) {
-      mm = "0" + mm;
-    }
-    today = mm + "/" + dd + "/" + yyyy;
+   
     console.log(this.state);
     const { classes } = this.props;
     if (this.props.loader.loading) {
@@ -144,6 +218,8 @@ class WorkCompletion extends React.Component {
                 </h4>
               </CardHeader>
               <CardBody style={generalStyle.container2}>
+              {(this.state.responseMessage.success == true)?<Notification error={false} message={this.state.responseMessage.message} />: ""}
+
                 <table style={generalStyle.wik4}>
                   <tr>
                     <th style={generalStyle.wik5}>Project Description:</th>
@@ -209,7 +285,7 @@ class WorkCompletion extends React.Component {
                         fullWidth: true
                       }}
                       inputProps={{
-                        // value: " " + this.state.requesters.join(),
+                        value: " " + this.state.requesters.join(),
                         disabled: true
                       }}
                     />
@@ -225,11 +301,7 @@ class WorkCompletion extends React.Component {
                         fullWidth: true
                       }}
                       inputProps={{
-                        value:
-                          " " +
-                          this.props.user.lastname +
-                          " " +
-                          this.props.user.firstname,
+                        value:this.state.work_completion.preparedBy,
                         disabled: true
                       }}
                     />
@@ -245,10 +317,10 @@ class WorkCompletion extends React.Component {
                       checked={this.state.work_completion.inspected}
                       onChange={this.approvalCheck}
                       name="inspected"
+                      id="inspectedDate"
                     />
                   </GridItem>
                   <GridItem xs={12} sm={2} md={2}>
-                    {this.state.work_completion.inspected === true ? (
                       <CustomInput
                         required
                         formControlProps={{
@@ -256,12 +328,9 @@ class WorkCompletion extends React.Component {
                         }}
                         inputProps={{
                           disabled: true,
-                          value: today
+                          value: this.state.work_completion.inspectedDate
                         }}
                       />
-                    ) : (
-                      ""
-                    )}
                   </GridItem>
                   <GridItem xs={12} sm={7} md={7}>
                     <CustomInput
@@ -273,11 +342,7 @@ class WorkCompletion extends React.Component {
                         fullWidth: true
                       }}
                       inputProps={{
-                        value:
-                          " " +
-                          this.props.user.lastname +
-                          " " +
-                          this.props.user.firstname,
+                        value:this.state.work_completion.reviewedBy,
                         disabled: true
                       }}
                     />
@@ -293,10 +358,10 @@ class WorkCompletion extends React.Component {
                       checked={this.state.work_completion.reviewed}
                       onChange={this.approvalCheck}
                       name="reviewed"
+                      id="reviewedDate"
                     />
                   </GridItem>
                   <GridItem xs={12} sm={2} md={2}>
-                    {this.state.work_completion.reviewed === true ? (
                       <CustomInput
                         required
                         formControlProps={{
@@ -304,14 +369,13 @@ class WorkCompletion extends React.Component {
                         }}
                         inputProps={{
                           disabled: true,
-                          value: today
+                          value: this.state.work_completion.reviewedDate
                         }}
                       />
-                    ) : (
-                      ""
-                    )}
                   </GridItem>
-                  <GridItem xs={12} sm={7} md={7}>
+                  </Grid> 
+                  { this.props.user.eid == "701000104"  ? ( <Grid container style={generalStyle.wik4}>
+                  <GridItem xs={12} sm={8} md={8}>
                     <CustomInput
                       labelText="Approved By:	"
                       id="approved_by"
@@ -320,74 +384,42 @@ class WorkCompletion extends React.Component {
                         fullWidth: true
                       }}
                       inputProps={{
-                        value: "hello ",
+                        value: this.state.work_completion.approvedBy,
                         disabled: true
                       }}
                     />
                   </GridItem>
-                  <GridItem xs={12} sm={3} md={3}>
-                    <FormControl
-                      fullWidth
-                      className={classes.selectFormControl}
-                    >
-                      <InputLabel
-                        htmlFor="simple-select"
-                        className={classes.selectLabel}
-                      >
-                        Choose Action
-                      </InputLabel>
-                      <Select
-                        MenuProps={{
-                          className: classes.selectMenu
-                        }}
-                        classes={{
-                          select: classes.select
-                        }}
-                        value={this.state.action}
-                        inputProps={{
-                          name: "simpleSelect",
-                          id: "type"
-                        }}
-                        onChange={this.handleAction}
-                      >
-                        <MenuItem
-                          classes={{
-                            root: classes.selectMenuItem,
-                            selected: classes.selectMenuItemSelected
-                          }}
-                          value="approve"
-                        >
-                          Approve
-                        </MenuItem>
-                        <MenuItem
-                          classes={{
-                            root: classes.selectMenuItem,
-                            selected: classes.selectMenuItemSelected
-                          }}
-                          value="disapprove"
-                        >
-                          Reject
-                        </MenuItem>
-                      </Select>
-                    </FormControl>
-                  </GridItem>
                   <GridItem xs={12} sm={2} md={2}>
-                    <CustomInput
-                      required
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        disabled: true,
-                        value: today
-                      }}
+                  <InputLabel
+                      htmlFor="simple-select"
+                      className={classes.selectLabel}
+                    >
+                      Approve
+                    </InputLabel>
+                    <Checkbox
+                      checked={this.state.work_completion.approved}
+                      onChange={this.approvalCheck}
+                      name="approved"
+                      id="approvedDate"
                     />
                   </GridItem>
-                </Grid>
+                  <GridItem xs={12} sm={2} md={2}>
+                      <CustomInput
+                        required
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          disabled: true,
+                          value: this.state.work_completion.approvedDate
+                        }}
+                      />
+                  </GridItem>
+                  </Grid>) : ""}
                 <Grid container>
                   <GridItem xs={12}>
                     <div style={generalStyle.space50} />
-                    <a style={generalStyle.qe_btn3}>Submit Form</a>
+                      {(this.state.serviceInspected == true)?<a style={generalStyle.qe_btn3} onClick={this.handleUpdate}>Update Form</a>: <a style={generalStyle.qe_btn3}  onClick={this.handleSubmit}>Submit Form</a> }
                     <div style={generalStyle.space10} />
                   </GridItem>
                 </Grid>
