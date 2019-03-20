@@ -153,6 +153,8 @@ class View extends React.Component {
                   </Button>
               </Grid>
               : ""}
+              {
+            ((this.props.user.role == "iac") && (typeof this.props.data.status != "undefined"))?
             <Grid
                 container
                 spacing={16}
@@ -169,7 +171,8 @@ class View extends React.Component {
                 <Unapprove />
                 Reject
               </Button>
-              </Grid>
+              </Grid> : ""
+              }
           </GridItem>
       </Grid>
     );

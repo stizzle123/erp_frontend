@@ -41,7 +41,7 @@ TabContainer.propTypes = {
 };
 class AddTabs extends React.Component {
 
-  componentWillMount(){
+  componentDidMount(){
     const userId = this.props.user._id;
     vendorActions.findVendorByUserId(this.props, userId);
   }
@@ -51,6 +51,7 @@ class AddTabs extends React.Component {
   }
 
   render() {
+    //console.log(this.props);
     const { classes } = this.props;
     if(this.props.loading){
       return (
