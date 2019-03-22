@@ -10,6 +10,7 @@ import pdfTemplate from "./pdfTemplate";
 import * as poActions from "../../actions/purchaseorder";
 import * as Uom from "utility/Uom";
 import * as Status from "utility/Status";
+import * as Util from "utility/Util"
 import moment from "moment";
 
 const styles = {
@@ -52,17 +53,13 @@ class Pdf extends Component {
   exportPDF = () => {
     this.po_doc.save();
   };
-  divideByHundred(val) {
-    let realValue = val / 100;
-    return realValue;
-  }
 
   getTotal(arr) {
     let sum = 0;
     for (var i = 0; i < arr.length; i++) {
       sum += parseInt(arr[i].price * arr[i].quantity);
     }
-    let realSum = sum / 100;
+    let realSum = Util.financial(sum);
 
     return realSum;
   }
@@ -82,7 +79,6 @@ class Pdf extends Component {
   }
 
   render() {
-    console.log(this.state.items);
     const { classes, data } = this.props;
     const numberWords = require("number-words");
     const tableData = this.state.items.map((prop, key) => {
@@ -93,10 +89,10 @@ class Pdf extends Component {
           <td style={generalStyle.tableTd}>{prop.description}</td>
           <td style={generalStyle.tableTd}>{prop.quantity}</td>
           <td style={generalStyle.tableTd}>
-            {this.divideByHundred(prop.price)}
+            {Util.financial(prop.price)}
           </td>
           <td style={generalStyle.tableTd}>
-            {this.divideByHundred(prop.quantity * prop.price)}
+            {Util.financial(prop.quantity * prop.price)}
           </td>
         </tr>
       );
