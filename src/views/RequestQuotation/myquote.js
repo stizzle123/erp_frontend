@@ -42,6 +42,7 @@ import generalStyle from "assets/jss/material-dashboard-pro-react/generalStyle.j
 import tableStyle from "assets/jss/material-dashboard-pro-react/components/tableStyle.jsx";
 import * as Uom from "utility/Uom";
 import moment from "moment";
+import { CURRENCIES } from "../../utility/Currencies.js";
 
 const styles = {
   ...generalStyle,
@@ -134,13 +135,6 @@ const creditTerms = [
   { value: "1", label: "30 days" },
   { value: "2", label: "45 days" },
   { value: "3", label: "60 days" }
-];
-const currencies = [
-  { value: "0", label: "₦" },
-  { value: "1", label: "$" },
-  { value: "2", label: "£" },
-  { value: "3", label: "€" },
-  { value: "4", label: "₹" }
 ];
 class Index extends React.Component {
   constructor(props) {
@@ -241,7 +235,7 @@ class Index extends React.Component {
   }
 
   render() {
-    console.log(this.state);
+   // console.log(this.state);
     const { classes, tableHeaderColor } = this.props;
     let mappedData = this.state.docs.map((prop, key) => {
       let date = new Date(prop.created);
@@ -298,7 +292,7 @@ class Index extends React.Component {
                 borderBottomWidth: " 1px"
               }}
             >
-              {currencies.map(option => (
+              {CURRENCIES.map(option => (
                 <MenuItem key={option.value} value={option.value}>
                   {option.label}
                 </MenuItem>

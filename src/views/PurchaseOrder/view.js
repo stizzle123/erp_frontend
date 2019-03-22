@@ -37,6 +37,7 @@ import * as rfqActions from "../../actions/requestforquotation";
 import Notification from "views/Notifications/Index.jsx";
 import * as Uom from "utility/Uom";
 import * as Status from "utility/Status";
+import * as currencies from "../../utility/Currencies.js";
 
 const shipto = [
   { slug: "lagos", name: "Lagos Office" },
@@ -260,9 +261,9 @@ class View extends React.Component {
           <TableCell className={classes.td}>{prop.description}</TableCell>
           <TableCell className={classes.td}>{prop.quantity}</TableCell>
           <TableCell className={classes.td}>{uom.name}</TableCell>
-          <TableCell className={classes.td}>{prop.price/100}</TableCell>
+          <TableCell className={classes.td}>{currencies.getCurrency(prop.currency)}{" "}{prop.price/100}</TableCell>
           <TableCell className={classes.td}>
-            {(prop.price * prop.quantity)/100}
+          {currencies.getCurrency(prop.currency)}{" "}{(prop.price * prop.quantity)/100}
           </TableCell>
         </TableRow>
       );
