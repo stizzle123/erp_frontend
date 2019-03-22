@@ -7,10 +7,10 @@ import generalStyle from "../../assets/jss/material-dashboard-pro-react/generalS
 import Grid from "@material-ui/core/Grid";
 import GridItem from "../../components/Grid/GridItem.jsx";
 import pdfTemplate from "./pdfTemplate";
-import * as poActions from '../../actions/purchaseorder';
+import * as poActions from "../../actions/purchaseorder";
 import * as Uom from "utility/Uom";
-import * as Status from 'utility/Status';
-import moment from 'moment'
+import * as Status from "utility/Status";
+import moment from "moment";
 
 const styles = {
   cardCategoryWhite: {
@@ -39,8 +39,12 @@ class Pdf extends Component {
     (this.state = {
       data: [],
       footerHeader: [],
-      items:[],
-      po:[]
+      items: [],
+      po: {
+        vendor: {
+          general_info: []
+        }
+      }
     }),
       (this.canvLoaded = false);
   }
@@ -48,33 +52,55 @@ class Pdf extends Component {
   exportPDF = () => {
     this.po_doc.save();
   };
+  divideByHundred(val) {
+    let realValue = val / 100;
+    return realValue;
+  }
 
+  getTotal(arr) {
+    let sum = 0;
+    for (var i = 0; i < arr.length; i++) {
+      sum += parseInt(arr[i].price * arr[i].quantity);
+    }
+    let realSum = sum / 100;
+
+    return realSum;
+  }
   componentWillMount() {
-    poActions.fetchPurchaseOrderById(this.props.user.token, this.props.match.params.id,  (doc)=>{ 
-      {{debugger}}
-      this.setState({ po: doc.po, items:doc.items });
-    });
+    poActions.fetchPurchaseOrderById(
+      this.props.user.token,
+      this.props.match.params.id,
+      doc => {
+        {
+          {
+            debugger;
+          }
+        }
+        this.setState({ po: doc.po, items: doc.items });
+      }
+    );
   }
 
   render() {
+    console.log(this.state.items);
     const { classes, data } = this.props;
-    const numberWords = require('number-words');
-    const tableData = this.state.items.map( (prop , key) => {
+    const numberWords = require("number-words");
+    const tableData = this.state.items.map((prop, key) => {
       return (
         <tr>
-          <td style={generalStyle.tableTd}>{key+1}</td>
+          <td style={generalStyle.tableTd}>{key + 1}</td>
           <td style={generalStyle.tableTd}>{"N/A"}</td>
           <td style={generalStyle.tableTd}>{prop.description}</td>
           <td style={generalStyle.tableTd}>{prop.quantity}</td>
-          <td style={generalStyle.tableTd}>{prop.price}</td>
-          <td style={generalStyle.tableTd}>{prop.quantity*prop.price}</td>
+          <td style={generalStyle.tableTd}>
+            {this.divideByHundred(prop.price)}
+          </td>
+          <td style={generalStyle.tableTd}>
+            {this.divideByHundred(prop.quantity * prop.price)}
+          </td>
         </tr>
       );
     });
-    const amountInWord = this.state.items.map( (prop) => {
-      return  numberWords.convert(prop.quantity*prop.price)
-    });
-   
 
     return (
       <div
@@ -148,7 +174,7 @@ class Pdf extends Component {
                       style={generalStyle.POinput}
                       type="text"
                       id="your-input"
-                      value={moment(this.state.po.created).format("DD/MM/YYYY")}
+                      value={moment(this.state.po.created).format("DD-MM-YYYY")}
                     />
                   </div>
                   <div style={generalStyle.noPaddingMargin}>
@@ -181,9 +207,13 @@ class Pdf extends Component {
                 <GridItem xs={7} style={generalStyle.alignLeft}>
                   <span style={generalStyle.strong7}>To:</span>
                   <br />
-                  Skysite offshore access west Africa, <br /> 25A Theophilus
-                  Orji street,
-                  <br /> Lekki, Lagos
+                  {this.state.po.vendor.general_info.company_name}
+                  <br />
+                  {this.state.po.vendor.general_info.office_address}
+                  <br />
+                  {this.state.po.vendor.general_info.city +
+                    ", " +
+                    this.state.po.vendor.general_info.country}
                 </GridItem>
                 <GridItem xs={5}>
                   <span style={generalStyle.strong7}>Ship To:</span>
@@ -212,53 +242,61 @@ class Pdf extends Component {
                   <tbody>
                     <tr>
                       <th style={generalStyle.tableTd3}>Discount:</th>
-                      <td style={generalStyle.tableTd2}>{this.state.po.discount}</td>
+                      <td style={generalStyle.tableTd2}>
+                        {this.state.po.discount}
+                      </td>
                     </tr>
                     <tr>
                       <th style={generalStyle.tableTd3}>V.A.T:</th>
-                      <td style={generalStyle.tableTd2}>{this.state.po.vat}%</td>
+                      <td style={generalStyle.tableTd2}>
+                        {this.state.po.vat}%
+                      </td>
                     </tr>
                     <tr>
                       <th style={generalStyle.tableTd3}>
                         Freight <br />
                         Charges:
                       </th>
-                      <td style={generalStyle.tableTd2}>{this.state.po.freightcharges}</td>
+                      <td style={generalStyle.tableTd2}>
+                        {this.state.po.freightcharges}
+                      </td>
                     </tr>
                     <tr>
                       <th style={generalStyle.tableTd3}>
                         Service <br />
                         Charge:
                       </th>
-                      <td style={generalStyle.tableTd2}>{this.state.po.servicecharge}</td>
+                      <td style={generalStyle.tableTd2}>
+                        {this.state.po.servicecharge}
+                      </td>
                     </tr>
                     <tr>
                       <th style={generalStyle.tableTd3}>Total:</th>
-                      <td style={generalStyle.tableTd2}>{this.state.po.total}</td>
+                      <td style={generalStyle.tableTd2}>
+                        {this.getTotal(this.state.items)}
+                      </td>
                     </tr>
                   </tbody>
                 </table>
                 <div style={{ clear: "right" }}>
                   <br />
                   <p>
-                    <strong>Amount In words: </strong> {amountInWord}
+                    <strong>Amount In words: </strong>{" "}
+                    {numberWords.convert(this.getTotal(this.state.items))}
                   </p>
                 </div>
               </div>
               <div>
                 <p style={generalStyle.POtitle2}>Additional Terms:</p>
 
-                <span>
-                  {this.state.po.additional_terms}
-                </span>
+                <span>{this.state.po.additional_terms}</span>
 
                 <div style={generalStyle.divider} />
-               
 
                 <Grid container>
                   <GridItem xs={7}>
                     <div>
-                    <div  style={generalStyle.space30}/>
+                      <div style={generalStyle.space30} />
 
                       <label style={generalStyle.POLabel2} for="input">
                         Prepared by:
@@ -268,8 +306,7 @@ class Pdf extends Component {
                         type="text"
                         id="your-input"
                       />
-                      <div  style={generalStyle.space10}/>
-
+                      <div style={generalStyle.space10} />
                     </div>
 
                     <div>
@@ -286,8 +323,7 @@ class Pdf extends Component {
                         type="text"
                         id="your-input"
                       />
-                      <div  style={generalStyle.space10}/>
-
+                      <div style={generalStyle.space10} />
                     </div>
                     <div>
                       <span>
@@ -314,7 +350,7 @@ class Pdf extends Component {
                       />
                     </div>
                     <div>
-                    <div  style={generalStyle.space10}/>
+                      <div style={generalStyle.space10} />
 
                       <span>
                         <strong>Vendor:</strong>
@@ -340,10 +376,9 @@ class Pdf extends Component {
                         type="text"
                         id="your-input"
                       />
-
                     </div>
                     <div style={generalStyle.pt2_5}>
-                    <div  style={generalStyle.space10}/>
+                      <div style={generalStyle.space10} />
                       <label style={generalStyle.POLabel} for="input">
                         Date:
                       </label>
@@ -354,7 +389,7 @@ class Pdf extends Component {
                       />
                     </div>
                     <div>
-                    <div  style={generalStyle.space30}/>
+                      <div style={generalStyle.space30} />
                       <label style={generalStyle.POLabel} for="input">
                         Date:
                       </label>
@@ -365,7 +400,7 @@ class Pdf extends Component {
                       />
                     </div>
                     <div>
-                    <div  style={generalStyle.space10}/>
+                      <div style={generalStyle.space10} />
                       <label style={generalStyle.POLabel} for="input">
                         Date:
                       </label>
