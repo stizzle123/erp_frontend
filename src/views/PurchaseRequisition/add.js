@@ -276,6 +276,7 @@ class PurchaseRequisition extends React.Component {
   }
 
   render() {
+    console.log(this.state.errorState);
     const { classes, tableHeaderColor } = this.props;
     var today = new Date();
     var dd = today.getDate();
@@ -402,7 +403,7 @@ class PurchaseRequisition extends React.Component {
       <div>
         <Grid container>
           {
-            (this.state.message)?
+            (this.state.showError == true)?
               <Notification error={this.state.showError} message={this.state.message} /> : ""
           }
           <GridItem xs={12} sm={12} md={12}>

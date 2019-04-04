@@ -63,6 +63,12 @@ class Pdf extends Component {
 
     return realSum;
   }
+  getVAT(vat, total){
+    let val = (total * vat)/100;
+    let realVat = (parseInt(total) + parseInt(val));
+    return realVat
+  }
+
   componentWillMount() {
     poActions.fetchPurchaseOrderById(
       this.props.user.token,
@@ -153,10 +159,10 @@ class Pdf extends Component {
                 <GridItem xs={5} style={generalStyle.alignLeft}>
                   <div style={generalStyle.noPaddingMargin}>
                     <label style={generalStyle.POLabel} for="input">
-                      PO Number:
+                      Purchase Order:
                     </label>
                     <input
-                      style={generalStyle.POinput}
+                      style={generalStyle.POinput3}
                       type="text"
                       id="your-input"
                       value={this.state.po.no}
@@ -167,7 +173,7 @@ class Pdf extends Component {
                       Order Date:
                     </label>
                     <input
-                      style={generalStyle.POinput}
+                      style={generalStyle.POinput3}
                       type="text"
                       id="your-input"
                       value={moment(this.state.po.created).format("DD-MM-YYYY")}
@@ -178,7 +184,7 @@ class Pdf extends Component {
                       Delivery Date:
                     </label>
                     <input
-                      style={generalStyle.POinput}
+                      style={generalStyle.POinput3}
                       type="text"
                       id="your-input"
                     />
@@ -188,7 +194,7 @@ class Pdf extends Component {
                       Credit Terms:
                     </label>
                     <input
-                      style={generalStyle.POinput}
+                      style={generalStyle.POinput3}
                       type="text"
                       id="your-input"
                     />
@@ -243,9 +249,9 @@ class Pdf extends Component {
                       </td>
                     </tr>
                     <tr>
-                      <th style={generalStyle.tableTd3}>V.A.T:</th>
+                      <th style={generalStyle.tableTd3}>V.A.T ({this.state.po.vat}%):</th>
                       <td style={generalStyle.tableTd2}>
-                        {this.state.po.vat}%
+                      {this.getVAT(this.state.po.vat, this.getTotal(this.state.items))}
                       </td>
                     </tr>
                     <tr>

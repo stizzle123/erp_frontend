@@ -38,7 +38,7 @@ export default class PdfTemplate extends React.Component {
                   Revision: 16
                 </td>
                 <td style={generalStyle.text6} width="40%">
-                  Effective Date: {moment(new Date()).format("DD-MM-YYYY")}
+                  Effective Date: {moment(new Date()).format("D MMMM YYYY")}
                 </td>
               </tr>
             </tbody>

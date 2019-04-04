@@ -239,7 +239,18 @@ const generalStyle = {
     width: "100px",
     fontSize: "9px",
     padding: "8px"
-
+  },
+  POinput3: {
+    float: "none",
+    display: "inline-block",
+    verticalAlign: "middle",
+    outline: "0",
+    borderWidth: "0",
+    borderColor: "#000",
+    maxWidth: "70px",
+    margin: "9px 0",
+    fontSize: "8px",
+    padding: "0 4px"
   },
   space10: {
     height: "10px"
