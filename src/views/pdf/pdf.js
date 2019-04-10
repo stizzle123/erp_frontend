@@ -12,6 +12,7 @@ import * as Uom from "utility/Uom";
 import * as Status from "utility/Status";
 import * as Util from "utility/Util"
 import moment from "moment";
+import * as currencies from "../../utility/Currencies.js";
 
 const styles = {
   cardCategoryWhite: {
@@ -41,6 +42,7 @@ class Pdf extends Component {
       data: [],
       footerHeader: [],
       items: [],
+      currency: "",
       po: {
         vendor: {
           general_info: []
@@ -68,11 +70,6 @@ class Pdf extends Component {
       this.props.user.token,
       this.props.match.params.id,
       doc => {
-        {
-          {
-            debugger;
-          }
-        }
         this.setState({ po: doc.po, items: doc.items });
       }
     );
@@ -80,8 +77,10 @@ class Pdf extends Component {
 
   render() {
     const { classes, data } = this.props;
+    let currency = "";
     const numberWords = require("number-words");
     const tableData = this.state.items.map((prop, key) => {
+      currency = prop.currency;
       return (
         <tr>
           <td style={generalStyle.tableTd}>{key + 1}</td>
@@ -89,10 +88,10 @@ class Pdf extends Component {
           <td style={generalStyle.tableTd}>{prop.description}</td>
           <td style={generalStyle.tableTd}>{prop.quantity}</td>
           <td style={generalStyle.tableTd}>
-            {Util.financial(prop.price)}
+          {currencies.getCurrencyCode(prop.currency)}{" "}{Util.financial(prop.price)}
           </td>
           <td style={generalStyle.tableTd}>
-            {Util.financial(prop.quantity * prop.price)}
+          {currencies.getCurrencyCode(prop.currency)}{" "}{Util.financial(prop.quantity * prop.price)}
           </td>
         </tr>
       );
@@ -269,7 +268,7 @@ class Pdf extends Component {
                     <tr>
                       <th style={generalStyle.tableTd3}>Total:</th>
                       <td style={generalStyle.tableTd2}>
-                        {this.getTotal(this.state.items)}
+                      {currencies.getCurrencyCode(currency)}{" "}{this.getTotal(this.state.items)}
                       </td>
                     </tr>
                   </tbody>
