@@ -42,11 +42,8 @@ import generalStyle from "assets/jss/material-dashboard-pro-react/generalStyle.j
 import tableStyle from "assets/jss/material-dashboard-pro-react/components/tableStyle.jsx";
 import * as Uom from "utility/Uom";
 import moment from "moment";
-<<<<<<< HEAD
 import Notification from "views/Notifications/Index.jsx";
-=======
 import { CURRENCIES } from "../../utility/Currencies.js";
->>>>>>> 66fc49f19de18f9276b9943f9e9dca169c39a8f8
 
 const styles = {
   ...generalStyle,

@@ -68,7 +68,6 @@ class Add extends React.Component {
     address: "",
     checkeditemsprice:{},
     cummulativeprice: 0,
-<<<<<<< HEAD
     isvatable:false, 
     redirect: ""
   };
@@ -79,9 +78,7 @@ class Add extends React.Component {
         window.location.href = "/order";
       }, 3000);
     }
-=======
     isvatable:true
->>>>>>> 66fc49f19de18f9276b9943f9e9dca169c39a8f8
   };
 
   handleChange = event => {
@@ -241,10 +238,6 @@ class Add extends React.Component {
     }
   }
   render() {
-<<<<<<< HEAD
-=======
-    console.log(this.props);
->>>>>>> 66fc49f19de18f9276b9943f9e9dca169c39a8f8
     const { classes, tableHeaderColor } = this.props;
     return (
       <div>
