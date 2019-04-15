@@ -42,6 +42,7 @@ import generalStyle from "assets/jss/material-dashboard-pro-react/generalStyle.j
 import tableStyle from "assets/jss/material-dashboard-pro-react/components/tableStyle.jsx";
 import * as Uom from "utility/Uom";
 import moment from "moment";
+import Notification from "views/Notifications/Index.jsx";
 
 const styles = {
   ...generalStyle,
@@ -159,7 +160,8 @@ class Index extends React.Component {
       quote: { lineitems: [] },
       docs: [],
       startDate: moment(),
-      expenseheaders:[]
+      expenseheaders:[],
+      showNotification: false
     };
   }
   componentWillMount() {
@@ -206,7 +208,11 @@ class Index extends React.Component {
   submitQuote = ()=>{
     let data = this.state.data;
     rfqActions.submitVendorQuote( this.props.user.token, this.state.quote._id, data, docs=>{
-        if(docs)alert("Quote submitted succesfully");
+        if(docs) {
+          this.setState({
+            showNotification: true
+          });
+        }
     })
   }
 
@@ -366,6 +372,10 @@ class Index extends React.Component {
 
     return (
       <GridContainer>
+          {
+            (this.state.showNotification == true)?
+              <Notification error={false} message={"Quote submitted succesfully"} /> : ""
+          }
         <GridItem xs={12}>
           <Card>
             <CardHeader color="success" icon>
@@ -595,7 +605,6 @@ class Index extends React.Component {
                   ) : (
                     ""
                   )}
-                  {this.state.alert}
                 </GridItem>
               </GridContainer>
             </CardBody>

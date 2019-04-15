@@ -67,7 +67,16 @@ class Add extends React.Component {
     address: "",
     checkeditemsprice:{},
     cummulativeprice: 0,
-    isvatable:false
+    isvatable:false, 
+    redirect: ""
+  };
+
+  renderRedirect = () => {
+    if (this.state.redirect == "yes") {
+      setTimeout(function() {
+        window.location.href = "/order";
+      }, 3000);
+    }
   };
 
   handleChange = event => {
@@ -86,7 +95,8 @@ class Add extends React.Component {
       if (isOk) {
         this.setState({
           message: "Purchase Order created succesfully",
-          error: false
+          error: false,
+          redirect: "yes" 
         });
       } else
         this.setState({
@@ -222,10 +232,10 @@ class Add extends React.Component {
   }
 
   render() {
-    console.log(this.state.types);
     const { classes, tableHeaderColor } = this.props;
     return (
       <div>
+        {this.renderRedirect()}
         <Notification error={this.state.error} message={this.state.message} />
         <Grid container>
           <GridItem xs={12} sm={12} md={12}>

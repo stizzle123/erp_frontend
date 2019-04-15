@@ -359,7 +359,7 @@ class Edit extends React.Component {
 
     return (
       <div>
-        {this.renderRedirect()}
+      {this.renderRedirect()}
         <Grid container>
           <Notification error={this.state.error} message={this.state.message} />
           <GridItem xs={12} sm={12} md={12}>

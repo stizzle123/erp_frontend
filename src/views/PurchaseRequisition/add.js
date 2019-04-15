@@ -83,7 +83,8 @@ class PurchaseRequisition extends React.Component {
     departments: [],
     error: {lineitems:[]},
     errorState: false,
-    message:""
+    message:"",
+    redirect: ""
   };
 
   handleChange = event => {
@@ -169,6 +170,14 @@ class PurchaseRequisition extends React.Component {
     this.setState({ data: data });
   };
 
+  renderRedirect = () => {
+    if (this.state.redirect == "yes") {
+      setTimeout(function() {
+        window.location.href = "/requisition";
+      }, 3000);
+    }
+  };
+
   formHasError = e =>{
     let error = false;
     let lineItemsError = this.state.error.lineitems;
@@ -227,9 +236,9 @@ class PurchaseRequisition extends React.Component {
       if (isOk) {
         this.setState({
           message: "Purchase requisition has been submitted.",
-          showError: false
+          showError: false,
+          redirect: "yes" 
         });
-        this.props.history.push('/requisition');
       } else{
         this.setState({ message: "Error processing request.", showError: true });
       }
@@ -401,6 +410,7 @@ class PurchaseRequisition extends React.Component {
     const error = (this.state.error)? this.state.error: {};
     return (
       <div>
+      {this.renderRedirect()}
         <Grid container>
           {
             (this.state.showError == true)?
