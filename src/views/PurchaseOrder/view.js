@@ -37,6 +37,7 @@ import * as rfqActions from "../../actions/requestforquotation";
 import Notification from "views/Notifications/Index.jsx";
 import * as Uom from "utility/Uom";
 import * as Status from "utility/Status";
+import * as currencies from "../../utility/Currencies.js";
 
 const shipto = [
   { slug: "lagos", name: "Lagos Office" },
@@ -176,7 +177,8 @@ class View extends React.Component {
     reason: "",
     action: "",
     open: false,
-    additional_terms: ""
+    additional_terms: "",
+    currency: ""
   };
 
   handleOpen = () => {
@@ -242,8 +244,10 @@ class View extends React.Component {
 
   parseRow() {
     const { classes } = this.props;
+    let currency = "";
     const table_data = this.state.doc.items.map((prop, key) => {
       const uom = Uom.getUom(prop.uom);
+      currency = prop.currency;
       return (
         <TableRow key={key}>
           <TableCell
@@ -260,14 +264,14 @@ class View extends React.Component {
           <TableCell className={classes.td}>{prop.description}</TableCell>
           <TableCell className={classes.td}>{prop.quantity}</TableCell>
           <TableCell className={classes.td}>{uom.name}</TableCell>
-          <TableCell className={classes.td}>{prop.price/100}</TableCell>
+          <TableCell className={classes.td}>{currencies.getCurrency(prop.currency)}{" "}{prop.price/100}</TableCell>
           <TableCell className={classes.td}>
-            {(prop.price * prop.quantity)/100}
+            {currencies.getCurrency(prop.currency)}{" "}{(prop.price * prop.quantity)/100}
           </TableCell>
         </TableRow>
       );
     });
-    this.setState({ table_data });
+    this.setState({ table_data, currency });
   }
 
   componentDidMount() {
@@ -282,7 +286,6 @@ class View extends React.Component {
   }
 
   render() {
-    console.log(this.state);
     const { classes, tableHeaderColor } = this.props;
     return (
       <div>
@@ -520,7 +523,7 @@ class View extends React.Component {
                         fontWeight: "700"
                       }}
                     >
-                      {this.state.doc.po.grand_total}
+                     {currencies.getCurrencyCode(this.state.currency)}{" "} {this.state.doc.po.grand_total}
                     </span>
                   </div>
                   <Button onClick={this.handleOpen} color="yellowgreen">

@@ -154,7 +154,7 @@ class View extends React.Component {
               </Grid>
               : ""}
               {
-            ((this.props.user.role == "iac") && (typeof this.props.data.status != "undefined"))?
+            ((this.props.user.role == "iac") && (this.props.data.status == "PENDING"))?
             <Grid
                 container
                 spacing={16}

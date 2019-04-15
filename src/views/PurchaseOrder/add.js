@@ -33,6 +33,7 @@ import * as rfqActions from "../../actions/requestforquotation";
 import * as locationAction from "../../actions/location";
 import Notification from "views/Notifications/Index.jsx";
 import * as Util from "../../utility/Util";
+import * as currencies from "../../utility/Currencies.js";
 
 const styles = theme => ({
   ...tableStyle,
@@ -67,6 +68,7 @@ class Add extends React.Component {
     address: "",
     checkeditemsprice:{},
     cummulativeprice: 0,
+<<<<<<< HEAD
     isvatable:false, 
     redirect: ""
   };
@@ -77,6 +79,9 @@ class Add extends React.Component {
         window.location.href = "/order";
       }, 3000);
     }
+=======
+    isvatable:true
+>>>>>>> 66fc49f19de18f9276b9943f9e9dca169c39a8f8
   };
 
   handleChange = event => {
@@ -168,10 +173,10 @@ class Add extends React.Component {
                     {prop.unit}   
                 </TableCell>   
                 <TableCell className={classes.td}>
-                    {(prop.price/100).toFixed(2)}   
+                    {currencies.getCurrency(prop.currency)} {" "} {(prop.price/100).toFixed(2)}   
                 </TableCell>   
                 <TableCell className={classes.td}>
-                    {((prop.price*prop.quantity)/100).toFixed(2)}   
+                {currencies.getCurrency(prop.currency)} {" "} {((prop.price*prop.quantity)/100).toFixed(2)}   
                 </TableCell> 
             </TableRow>
             )}
@@ -196,11 +201,11 @@ class Add extends React.Component {
   calcPrice = (name, currentPrice)=>{
     const grandTotal = currentPrice;
     let data = this.state.data;
-    if(!this.state.isvatable){
+    if(this.state.isvatable){
       //const vat = event.target.value? event.target.values: this.state.data.vat;
       data.grand_total = parseInt(grandTotal) + (grandTotal * (5/100));
     }else{
-      data.grand_total = parseInt(grandTotal) - (grandTotal * (5/100));
+      data.grand_total = parseInt(grandTotal);
     }
     switch (name){
         case "discount":
@@ -230,8 +235,16 @@ class Add extends React.Component {
       this.setState({ locations: json });
     });
   }
-
+  componentDidUpdate(prevProps, prevState){
+    if(prevState.isvatable != this.state.isvatable){
+      this.calcPrice("isvatable", this.state.cummulativeprice);
+    }
+  }
   render() {
+<<<<<<< HEAD
+=======
+    console.log(this.props);
+>>>>>>> 66fc49f19de18f9276b9943f9e9dca169c39a8f8
     const { classes, tableHeaderColor } = this.props;
     return (
       <div>
@@ -355,7 +368,7 @@ class Add extends React.Component {
                   <FormControlLabel
                       control={
                         <Checkbox checked={this.state.isvatable}
-                          onChange={(e)=>{ this.setState({isvatable: !this.state.isvatable}); this.formulatePricing(e)}}
+                          onChange={(e)=>{ this.setState({isvatable: !this.state.isvatable})}}
                       />
                       }
                       label="Check if VAT apply"
@@ -468,7 +481,21 @@ class Add extends React.Component {
                       />
                     </GridItem>
                     <GridItem xs={3}>
-                   
+                   {
+                     this.state.isvatable && <CustomInput
+                     labelText="VAT Applies"
+                     id="vat"
+                     formControlProps={{
+                       style: { width: "100%" },
+                       disabled:true
+                     }}
+                     inputProps={{
+                       name: "vat",
+                       onBlur: this.formulatePricing,
+                       disabled:true
+                     }}
+                   />
+                   }
                     </GridItem>
                     <GridItem xs={3}>
                       <CustomInput
