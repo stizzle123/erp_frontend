@@ -80,7 +80,7 @@ class EditUser extends React.Component {
   handleSave = e => {
     e.preventDefault();
     let data = this.state.data;
-    console.log("Data Edited Log");
+    console.log("Data Edited Log", data);
 
     userAction.updateProfile(data, json => {
       // console.log("Data Edited Successfully");
@@ -93,7 +93,7 @@ class EditUser extends React.Component {
         responseMessage: json.message
       });
       if (this.state.responseMessage) {
-        alert("profile updated");
+        alert(`${this.state.responseMessage}`);
       }
     });
   };
