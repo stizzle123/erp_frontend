@@ -19,11 +19,12 @@ export function getProfileDetails(props, id, callback) {
 export function updateProfile(data, callback) {
   let middleware = new MiddleWare();
   middleware
-    .makeConnection("/users/updateprofiledata", "PUT", data)
+    .makeConnection(`/users/updateprofiledata`, "PATCH", data)
     .then(res => {
       return res.json();
     })
     .then(e => {
+      console.log(e);
       callback(e);
     })
     .catch(e => {
@@ -36,7 +37,7 @@ export function importUser(data, callback) {
   middleware
     .makeConnection("/users/import", "POST", data)
     .then(res => {
-      return res.json(); 
+      return res.json();
     })
     .then(e => {
       callback(e);

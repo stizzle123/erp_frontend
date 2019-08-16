@@ -100,7 +100,7 @@ class EditUser extends React.Component {
   componentDidMount() {
     {
       {
-        debugger;
+        // debugger;
       }
     }
     userAction.getProfileDetails(
@@ -109,7 +109,7 @@ class EditUser extends React.Component {
       json => {
         {
           {
-            debugger;
+            // debugger;
           }
         }
         this.setState({ data: json });
@@ -127,8 +127,8 @@ class EditUser extends React.Component {
     });
   }
   render() {
-    console.log(this.state.data, "my data");
     const { classes, data } = this.props;
+    // console.log(this.state.data.type);
     return (
       <div>
         <Grid container>
