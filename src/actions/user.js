@@ -146,6 +146,11 @@ export function findAllStaff(props, callback) {
     });
 }
 export function findManagers(token, callback) {
+  {
+    {
+      debugger;
+    }
+  }
   let middleware = new MiddleWare(token);
   middleware
     .makeConnection("/users/findmanagers/", "GET")
