@@ -158,6 +158,7 @@ export function findManagers(token, callback) {
       return response.json();
     })
     .then(e => {
+      console.log(e);
       callback(e);
     });
 }

@@ -85,9 +85,9 @@ class AddUser extends React.Component {
       data: data
     });
     if (e.target.name == "line_manager") {
-      /* userAction.findManagers(this.props.user.token, users=>{
-        this.setState({users});
-      }) */
+      userAction.findManagers(this.props.user.token, users => {
+        this.setState({ users });
+      });
     }
     this.validate(event.target.id, event.target.value);
   };
@@ -141,12 +141,19 @@ class AddUser extends React.Component {
         break;
       case "role":
         const role = helpers.isEmpty(value) ? false : true;
-        this.setState({
+        // this.setState({
+        //   validationState: {
+        //     ...this.state.validationState,
+        //     role
+        //   }
+        // });
+
+        this.setState(state => ({
           validationState: {
-            ...this.state.validationState,
+            ...state.validationState,
             role
           }
-        });
+        }));
     }
   };
 
@@ -182,7 +189,8 @@ class AddUser extends React.Component {
   }
 
   render() {
-    console.log(this.state.data);
+    // console.log(this.state.data);
+    // console.log(this.state.optionsRole);
     const { classes } = this.props;
     return (
       <div>
