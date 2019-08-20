@@ -50,10 +50,20 @@ class Index extends React.Component {
     console.log(type, id);
   }
 
+  /**
+   * @author Idowu
+   * @summary Modified prActions.fetchAllRequisition by returning docs
+   * @summary then update the state within the `.then` call
+   */
   componentDidMount() {
-    prActions.fetchAllRequistion(this.props.user.token, docs => {
-      this.setState({ data: docs });
-    });
+    prActions
+      .fetchAllRequistion(this.props.user.token, docs => {
+        // this.setState({ data: docs });
+        return docs;
+      })
+      .then(data => {
+        this.setState({ data });
+      });
   }
 
   componentDidUpdate(prevProps) {
