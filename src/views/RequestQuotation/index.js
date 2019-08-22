@@ -267,6 +267,7 @@ class Index extends React.Component {
                 this.fetchQuotes(prop);
                 this.addActiveClass(key);
               }}
+              key={key}
             >
               <div className={this.props.classes.box}>{prop.requisitionno}</div>
               <div className={this.props.classes.box}>
